@@ -143,7 +143,7 @@
                             renderFiles();
                         }
                     } else {
-                        alert('Yuklashda xatolik yuz berdi! Bot ruxsatlarini yoki tarmoqni tekshiring.');
+                        alert('Yuklashda xatolik yuz berdi!');
                     }
                     progressContainer.classList.add('hidden');
                     progressBar.style.width = '0%';
@@ -158,6 +158,29 @@
 
                 xhr.send(formData);
             });
+        }
+
+        async function downloadFile(fileId, fileName) {
+            try {
+                const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`);
+                const data = await res.json();
+                if (data.ok) {
+                    const filePath = data.result.file_path;
+                    const downloadUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${filePath}`;
+                    
+                    const a = document.createElement('a');
+                    a.href = downloadUrl;
+                    a.download = fileName;
+                    a.target = '_blank';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                } else {
+                    alert("Fayl yo'lini olishda xatolik yuz berdi.");
+                }
+            } catch (err) {
+                alert("Yuklab olishda xatolik yuz berdi.");
+            }
         }
 
         function renderFiles() {
@@ -175,9 +198,14 @@
                             <p class="text-xs text-slate-400">${file.size} • ${file.date}</p>
                         </div>
                     </div>
-                    <button onclick="deleteFile(${index})" class="text-red-400 hover:text-red-300 p-2">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="downloadFile('${file.id}', '${file.name}')" title="Yuklab olish" class="text-blue-400 hover:text-blue-300 p-2">
+                            <i class="fa-solid fa-download"></i>
+                        </button>
+                        <button onclick="deleteFile(${index})" title="O'chirish" class="text-red-400 hover:text-red-300 p-2">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
             `).join('');
         }
