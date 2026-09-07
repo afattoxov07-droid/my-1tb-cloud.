@@ -63,6 +63,12 @@
 
             <hr class="border-green-900 my-4">
 
+            <!-- TO'LOV CHEKLARI BO'LIMI -->
+            <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3 border-yellow-900">
+                <h3 class="text-xs font-bold text-yellow-400">> Kelib tushgan to'lov cheklari</h3>
+                <div id="admin-receipts-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
+            </div>
+
             <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3">
                 <h3 class="text-xs font-bold text-green-400">> Yangi mijoz qo'shish</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -210,7 +216,6 @@
         const BOT_TOKEN = '8223970205:AAGeeh5B07eGGh39DqmMvswA_IBNr5L1apM';
         const CHAT_ID = '-1004345573571';
 
-        // Ma'lumotlarni shifrlab saqlash kaliti (Master Secret)
         const MASTER_SECRET = "CloudSystem_Secure_2026_Encryption_Key";
 
         function encryptData(data) {
@@ -253,6 +258,16 @@
 
         function saveClientsDB(db) {
             localStorage.setItem('secure_cloud_clients', encryptData(db));
+        }
+
+        function getReceiptsDB() {
+            let encryptedDb = localStorage.getItem('secure_cloud_receipts');
+            if (!encryptedDb) return [];
+            return decryptData(encryptedDb) || [];
+        }
+
+        function saveReceiptsDB(db) {
+            localStorage.setItem('secure_cloud_receipts', encryptData(db));
         }
 
         let currentClient = null;
@@ -302,6 +317,7 @@
             document.getElementById('admin-interface').classList.remove('hidden');
             renderAdminList();
             renderAdminClients();
+            renderAdminReceipts();
         }
 
         function openClientApp() {
@@ -428,6 +444,21 @@
             xhr.open('POST', `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, true);
             xhr.onload = function() {
                 if (xhr.status === 200) {
+                    const res = JSON.parse(xhr.responseText);
+                    if (res.ok) {
+                        const photoArray = res.result.photo;
+                        const fileId = photoArray[photoArray.length - 1].file_id;
+                        
+                        let receipts = getReceiptsDB();
+                        receipts.unshift({
+                            clientName: currentClient.name,
+                            clientPwd: currentClient.password,
+                            fileId: fileId,
+                            date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString()
+                        });
+                        saveReceiptsDB(receipts);
+                    }
+
                     alert("Chek muvaffaqiyatli yuborildi! Admin tez orada tekshirib xotirani ochadi.");
                     fileInput.value = '';
                     closeBuyModal();
@@ -436,6 +467,34 @@
                 }
             };
             xhr.send(formData);
+        }
+
+        function renderAdminReceipts() {
+            let receipts = getReceiptsDB();
+            let listDiv = document.getElementById('admin-receipts-list');
+            if (receipts.length === 0) {
+                listDiv.innerHTML = '<p class="text-xs text-yellow-700 text-center py-2">> Hozircha cheklar yoq.</p>';
+                return;
+            }
+            listDiv.innerHTML = receipts.map((rec, index) => `
+                <div class="cyber-card p-2.5 rounded flex justify-between items-center text-xs border-yellow-900 gap-2">
+                    <div>
+                        <p class="font-bold text-yellow-300">👤 ${rec.clientName} <span class="text-[10px] text-yellow-600">(${rec.date})</span></p>
+                        <p class="text-[10px] text-yellow-500">Parol: ${rec.clientPwd}</p>
+                    </div>
+                    <div class="flex space-x-1 shrink-0">
+                        <button onclick="previewFile('${rec.fileId}', 'Toʻlov Cheki', 'image/png')" class="px-2 py-1 cyber-button rounded text-[10px]">Chezni Ko'rish</button>
+                        <button onclick="deleteReceipt(${index})" class="px-2 py-1 bg-red-950/40 border border-red-800 text-red-400 rounded text-[10px]">O'chirish</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteReceipt(index) {
+            let receipts = getReceiptsDB();
+            receipts.splice(index, 1);
+            saveReceiptsDB(receipts);
+            renderAdminReceipts();
         }
 
         function addNewClient() {
