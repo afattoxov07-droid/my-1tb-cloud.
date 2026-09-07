@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mening 1TB Bulutim - Cloud Storage</title>
+<style>
+* {margin: 0;padding: 0;box-sizing: border-box;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+body {background-color: #0f172a;color: #f8fafc;display: flex;height: 100vh;}
+aside {width: 260px;background-color: #1e293b;padding: 20px;display: flex;flex-direction: column;justify-content: space-between;border-right: 1px solid #334155;}
+.logo {font-size: 20px;font-weight: bold;color: #38bdf8;margin-bottom: 30px;}
+.menu-item {padding: 12px 15px;margin-bottom: 8px;border-radius: 8px;cursor: pointer;transition: 0.2s;}
+.menu-item:hover, .menu-item.active {background-color: #334155;color: #38bdf8;}
+.storage-info {background-color: #0f172a;padding: 15px;border-radius: 10px;}
+.progress-bar {width: 100%;height: 8px;background-color: #334155;border-radius: 4px;margin-top: 10px;overflow: hidden;}
+.progress {width: 1%;height: 100%;background-color: #38bdf8;}
+main {flex: 1;padding: 40px;overflow-y: auto;}
+header {display: flex;justify-content: space-between;align-items: center;margin-bottom: 30px;}
+.upload-box {border: 2px dashed #475569;padding: 30px;text-align: center;border-radius: 12px;background-color: #1e293b;cursor: pointer;transition: 0.3s;margin-bottom: 30px;}
+.upload-box:hover {border-color: #38bdf8;background-color: #1e293b88;}
+.file-list {background-color: #1e293b;border-radius: 12px;padding: 20px;}
+h3 { margin-bottom: 15px; color: #94a3b8; }
+.file-item {display: flex;justify-content: space-between;padding: 12px;border-bottom: 1px solid #334155;align-items: center;}
+.file-item:last-child { border-bottom: none; }
+.btn-upload {background-color: #38bdf8;color: #0f172a;border: none;padding: 10px 20px;font-weight: bold;border-radius: 6px;cursor: pointer;}
+.btn-upload:hover { background-color: #0ea5e9; }
+</style>
+</head>
+<body>
+<aside>
+<div>
+<div class="logo">☁️ 1TB Cloud Storage</div>
+<div class="menu-item active">📁 Barcha fayllar</div>
+<div class="menu-item">🖼 Rasmlar</div>
+<div class="menu-item">🎥 Videolar</div>
+<div class="menu-item">📄 Hujjatlar</div>
+</div>
+<div class="storage-info">
+<small>1 TB dan 0 MB ishlatildi</small>
+<div class="progress-bar"><div class="progress"></div></div>
+</div>
+</aside>
+<main>
+<header>
+<h2>Shaxsiy Bulutli Fayl Menejeri</h2>
+<button class="btn-upload" onclick="document.getElementById('fileInput').click()">+ Fayl yuklash</button>
+<input type="file" id="fileInput" style="display: none;" multiple>
+</header>
+<div class="upload-box" onclick="document.getElementById('fileInput').click()">
+<p>Fayllarni bu yerga tashlang yoki yuklash uchun bosing</p>
+<small style="color: #64748b;">Kompyuter xotirasi band qilinmaydi</small>
+</div>
+<div class="file-list">
+<h3>Yuklangan fayllar</h3>
+<div id="filesContainer">
+<p style="color: #64748b; text-align: center; padding: 20px;">Hozircha fayllar yo'q</p>
+</div>
+</div>
+</main>
+<script>
+const fileInput = document.getElementById('fileInput');
+const filesContainer = document.getElementById('filesContainer');
+fileInput.addEventListener('change', (e) => {
+  const files = e.target.files;
+  if (files.length > 0) {
+    filesContainer.innerHTML = '';
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const fileDiv = document.createElement('div');
+      fileDiv.className = 'file-item';
+      fileDiv.innerHTML = `<span>📄 ${file.name}</span><span style="color: #64748b;">${(file.size / (1024*1024)).toFixed(2)} MB</span>`;
+      filesContainer.appendChild(fileDiv);
+    }
+  }
+});
+</script>
+</body>
+</html>
