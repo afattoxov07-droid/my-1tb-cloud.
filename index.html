@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>[SECURE CLOUD STORAGE SYSTEM]</title>
-    
-    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,{"name":"Secure Cloud","short_name":"Cloud","start_url":"./","display":"standalone","background_color":"%23030712","theme_color":"%2322c55e","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22><rect width=%22512%22 height=%22512%22 fill=%22%23030712%22/><rect x=%2224%22 y=%2224%22 width=%22464%22 height=%22464%22 rx=%2296%22 fill=%22%23064e3b%22 stroke=%22%2322c55e%22 stroke-width=%2220%22/><text x=%22256%22 y=%22230%22 font-family=%22monospace%22 font-weight=%22bold%22 font-size=%22160%22 fill=%22%234ade80%22 text-anchor=%22middle%22>%u221E</text></svg>","sizes":"512x512","type":"image/svg+xml"}]}'>
-    <meta name="theme-color" content="#22c55e">
+    <title>[SECURE ENCRYPTED CLOUD]</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -28,15 +26,15 @@
     <!-- LOGIN OYNASI -->
     <div id="login-screen" class="fixed inset-0 z-50 bg-[#030712] flex items-center justify-center p-4">
         <div class="cyber-border bg-gray-950 p-6 md:p-8 rounded-lg max-w-md w-full space-y-5 text-center">
-            <div class="w-12 h-12 mx-auto rounded border border-green-500 bg-emerald-950 flex items-center justify-center text-green-400 font-bold text-xl animate-pulse">∞</div>
+            <div class="w-12 h-12 mx-auto rounded border border-green-500 bg-emerald-950 flex items-center justify-center text-green-400 font-bold text-xl animate-pulse">🔒</div>
             <div>
-                <h2 class="text-base md:text-lg font-bold text-green-400">BULUT XAVFSIZLIK TIZIMI</h2>
-                <p class="text-[10px] text-green-600 mt-1">Kirish uchun parolingizni kiriting</p>
+                <h2 class="text-base md:text-lg font-bold text-green-400">MAXFIY BULUT TIZIMI</h2>
+                <p class="text-[10px] text-green-600 mt-1">Shifrlangan ma'lumotlarga kirish</p>
             </div>
             <div class="space-y-3">
-                <input type="password" id="client-password" placeholder="[ Parol yoki Admin kalit ]" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
+                <input type="password" id="client-password" placeholder="[ Shifrlash kaliti / Parol ]" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
                 <button onclick="loginSystem()" class="w-full cyber-button py-3 rounded text-xs font-bold uppercase tracking-wider cursor-pointer">
-                    KIRISH
+                    SHIFRLASHNI OCHISH
                 </button>
             </div>
             <p id="login-error" class="text-xs text-red-500 hidden"></p>
@@ -48,15 +46,15 @@
         <header class="p-3 md:p-4 border-b border-green-800 bg-gray-950/90 flex justify-between items-center relative z-10">
             <div class="flex items-center space-x-2.5">
                 <div class="w-7 h-7 rounded border border-red-500 bg-red-950 flex items-center justify-center text-red-400 font-bold text-xs">A</div>
-                <h1 class="text-xs md:text-sm font-bold text-red-400">BOSH ADMIN PANEL</h1>
+                <h1 class="text-xs md:text-sm font-bold text-red-400">MAXFIY ADMIN PANEL</h1>
             </div>
             <button onclick="logout()" class="cyber-button px-2.5 py-1.5 rounded text-xs font-bold bg-red-950/40 border-red-800 text-red-400 cursor-pointer">CHIQISH</button>
         </header>
         <div class="flex-1 max-w-4xl w-full mx-auto p-4 space-y-4">
             <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3 border-red-900">
-                <h3 class="text-xs font-bold text-red-400">> Adminlar va Parollarni Boshqarish</h3>
+                <h3 class="text-xs font-bold text-red-400">> Adminlar Boshqaruvi</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <input type="text" id="new-admin-name" placeholder="Admin ismi / Raqami" class="bg-gray-900 border border-red-900 text-xs text-red-300 px-3 py-2 rounded focus:outline-none">
+                    <input type="text" id="new-admin-name" placeholder="Admin ismi" class="bg-gray-900 border border-red-900 text-xs text-red-300 px-3 py-2 rounded focus:outline-none">
                     <input type="text" id="new-admin-pwd" placeholder="Admin maxfiy paroli" class="bg-gray-900 border border-red-900 text-xs text-red-300 px-3 py-2 rounded focus:outline-none">
                 </div>
                 <button onclick="addNewAdmin()" class="w-full py-2 bg-red-950/50 border border-red-800 text-red-400 rounded text-xs font-bold uppercase cursor-pointer">+ Admin Qo'shish</button>
@@ -66,7 +64,7 @@
             <hr class="border-green-900 my-4">
 
             <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3">
-                <h3 class="text-xs font-bold text-green-400">> Yangi mijoz qo'shish (Test rejimi: 5 ta fayl)</h3>
+                <h3 class="text-xs font-bold text-green-400">> Yangi mijoz qo'shish</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <input type="text" id="new-client-name" placeholder="Mijoz ismi" class="bg-gray-900 border border-green-800 text-xs text-green-400 px-3 py-2 rounded focus:outline-none">
                     <input type="text" id="new-client-pwd" placeholder="Maxfiy paroli" class="bg-gray-900 border border-green-800 text-xs text-green-400 px-3 py-2 rounded focus:outline-none">
@@ -75,7 +73,7 @@
             </div>
             
             <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3">
-                <h3 class="text-xs font-bold text-green-400">> Mavjud mijozlar ro'yxati & To'lov holati</h3>
+                <h3 class="text-xs font-bold text-green-400">> Shifrlangan mijozlar ro'yxati</h3>
                 <div id="admin-clients-list" class="space-y-2"></div>
             </div>
         </div>
@@ -85,10 +83,10 @@
     <div id="app-interface" class="hidden flex-1 flex flex-col">
         <header class="p-3 md:p-4 border-b border-green-800 bg-gray-950/90 flex justify-between items-center relative z-10 gap-2">
             <div class="flex items-center space-x-2.5 overflow-hidden">
-                <div class="w-7 h-7 rounded border border-green-500 bg-emerald-950 flex items-center justify-center text-green-400 font-bold text-xs shrink-0">∞</div>
+                <div class="w-7 h-7 rounded border border-green-500 bg-emerald-950 flex items-center justify-center text-green-400 font-bold text-xs shrink-0">🔒</div>
                 <div>
                     <h1 id="client-title" class="text-xs md:text-sm font-bold tracking-wider text-green-400 truncate">KABINET</h1>
-                    <p id="client-status-badge" class="text-[9px] text-yellow-500 font-bold">TEST REJIMI (5 ta fayl)</p>
+                    <p id="client-status-badge" class="text-[9px] text-yellow-500 font-bold">SHIFRLANGAN REJIM</p>
                 </div>
             </div>
             <button onclick="logout()" class="cyber-button px-2.5 py-1.5 rounded text-xs font-bold bg-red-950/40 border-red-800 text-red-400 cursor-pointer">CHIQISH</button>
@@ -100,10 +98,10 @@
                     <div id="drop-zone" class="cyber-card p-6 md:p-8 rounded-lg text-center cursor-pointer relative overflow-hidden flex flex-col items-center justify-center min-h-[160px]">
                         <input type="file" id="file-input" class="hidden" multiple>
                         <div class="space-y-3">
-                            <i class="fa-solid fa-cloud-arrow-up text-3xl md:text-4xl text-green-400"></i>
+                            <i class="fa-solid fa-shield-halved text-3xl md:text-4xl text-green-400"></i>
                             <div>
-                                <h3 class="text-sm md:text-base font-bold text-green-300">FAYLLARNI YUKLASH</h3>
-                                <p class="text-xs text-green-600 mt-1">[ Bosing yoki faylni tashlang ]</p>
+                                <h3 class="text-sm md:text-base font-bold text-green-300">FAYLLARNI YUKLASH VA SHIFRLASH</h3>
+                                <p class="text-xs text-green-600 mt-1">[ Xavfsiz Telegram kanallarga yuborish ]</p>
                             </div>
                             <button onclick="document.getElementById('file-input').click()" class="cyber-button px-4 py-2 rounded text-xs font-bold uppercase">+ FAYL TANLASH</button>
                         </div>
@@ -124,9 +122,9 @@
                         </div>
                     </div>
                     <div class="cyber-border bg-gray-950 p-3 rounded-lg flex flex-col flex-1 min-h-[100px]">
-                        <div class="text-[10px] text-green-600 border-b border-green-900 pb-1 mb-1">TIZIM HOLATI</div>
+                        <div class="text-[10px] text-green-600 border-b border-green-900 pb-1 mb-1">XAVFSIZLIK LOGI</div>
                         <div id="terminal-log" class="text-[10px] space-y-0.5 overflow-y-auto max-h-20 text-green-500 font-mono">
-                            <p class="text-green-700">> Tayyor...</p>
+                            <p class="text-green-700">> Shifrlash tizimi tayyor...</p>
                         </div>
                     </div>
                 </div>
@@ -134,7 +132,7 @@
 
             <div id="progress-container" class="hidden cyber-border bg-gray-950 p-3 rounded-lg">
                 <div class="flex justify-between text-xs mb-1">
-                    <span id="progress-title" class="text-green-300">> YUKLANMOQDA...</span>
+                    <span id="progress-title" class="text-green-300">> SHIFRLANIB YUKLANMOQDA...</span>
                     <span id="progress-percent" class="text-green-400 font-bold">0%</span>
                 </div>
                 <div class="w-full bg-gray-900 h-2 border border-green-800">
@@ -144,8 +142,8 @@
 
             <div class="space-y-3">
                 <div class="flex justify-between items-center">
-                    <div class="text-xs font-bold text-green-400">MENING FAYLLARIM (<span id="file-count">0</span>)</div>
-                    <button onclick="openTrashModal()" class="cyber-button px-2.5 py-1 rounded text-[10px]"><i class="fa-solid fa-box-archive"></i> Telegram Arxiv / Savat</button>
+                    <div class="text-xs font-bold text-green-400">SHIFRLANGAN FAYLLAR (<span id="file-count">0</span>)</div>
+                    <button onclick="openTrashModal()" class="cyber-button px-2.5 py-1 rounded text-[10px]"><i class="fa-solid fa-box-archive"></i> Arxiv / Savat</button>
                 </div>
                 <div id="file-list" class="space-y-2"></div>
             </div>
@@ -164,8 +162,7 @@
     <div id="trash-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
         <div class="cyber-border bg-gray-950 p-4 rounded-lg max-w-xl w-full relative space-y-3">
             <button onclick="closeTrashModal()" class="absolute top-2 right-2 text-green-400 text-sm font-bold p-2">[ X ]</button>
-            <h4 class="text-xs font-bold text-green-400">> TELEGRAMDAN TIKLASH (ARXIV)</h4>
-            <p class="text-[10px] text-green-600">O'chirilgan fayllar Telegram botda saqlanib qoladi.</p>
+            <h4 class="text-xs font-bold text-green-400">> ARXIVDAN TIKLASH</h4>
             <div id="trash-file-list" class="space-y-2 max-h-[50vh] overflow-y-auto"></div>
         </div>
     </div>
@@ -175,7 +172,7 @@
             <button onclick="closeBuyModal()" class="absolute top-2 right-2 text-green-400 text-sm font-bold p-2">[ X ]</button>
             <div class="w-10 h-10 mx-auto rounded border border-green-500 bg-emerald-950 flex items-center justify-center text-green-400 font-bold">🛒</div>
             <h3 class="text-sm font-bold text-green-400">CHEKSIZ XOTIRA SOTIB OLISH</h3>
-            <p class="text-xs text-green-600">Test rejimdagi 5 ta fayl limiti tugadi. To'lovni amalga oshiring va adminga murojaat qiling.</p>
+            <p class="text-xs text-green-600">Test limit tugadi. To'lovni amalga oshiring va adminga murojaat qiling.</p>
             <div class="p-3 cyber-card rounded text-xs text-left space-y-1">
                 <p class="text-green-300 font-bold">💳 Karta: <span class="text-white">8600 0000 0000 0000</span></p>
                 <p class="text-green-300 font-bold">👤 Egasi: <span class="text-white">Admin</span></p>
@@ -185,38 +182,61 @@
     </div>
 
     <script>
-        // Xavfsizlik: Inspeksterni va tugmalarni bloklash
+        // Xavfsizlik: Himoya qatlamlari
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => {
             if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
                 e.preventDefault();
-                alert("Bu amal taqiqlangan!");
+                alert("Xavfsizlik qoidasi: Bu amal qat'iyan taqiqlangan!");
             }
         });
 
         const BOT_TOKEN = '8223970205:AAGeeh5B07eGGh39DqmMvswA_IBNr5L1apM';
         const CHAT_ID = '-1004345573571';
 
-        function getAdminsDB() {
-            let db = localStorage.getItem('cloud_admins_db');
-            if (!db) {
-                db = JSON.stringify({
-                    "admin_super_parol_2026": { name: "Asosiy Admin" }
-                });
-                localStorage.setItem('cloud_admins_db', db);
+        // Ma'lumotlarni shifrlab saqlash kaliti (Master Secret)
+        const MASTER_SECRET = "CloudSystem_Secure_2026_Encryption_Key";
+
+        function encryptData(data) {
+            return CryptoJS.AES.encrypt(JSON.stringify(data), MASTER_SECRET).toString();
+        }
+
+        function decryptData(ciphertext) {
+            try {
+                const bytes = CryptoJS.AES.decrypt(ciphertext, MASTER_SECRET);
+                const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+                return decryptedData ? JSON.parse(decryptedData) : null;
+            } catch (e) {
+                return null;
             }
-            return JSON.parse(db);
+        }
+
+        function getAdminsDB() {
+            let encryptedDb = localStorage.getItem('secure_cloud_admins');
+            if (!encryptedDb) {
+                let defaultAdmins = { "admin_super_parol_2026": { name: "Asosiy Admin" } };
+                localStorage.setItem('secure_cloud_admins', encryptData(defaultAdmins));
+                return defaultAdmins;
+            }
+            return decryptData(encryptedDb) || {};
+        }
+
+        function saveAdminsDB(db) {
+            localStorage.setItem('secure_cloud_admins', encryptData(db));
         }
 
         function getClientsDB() {
-            let db = localStorage.getItem('cloud_clients_db');
-            if (!db) {
-                db = JSON.stringify({
-                    "parol123": { name: "Test_Mijoz", paid: false }
-                });
-                localStorage.setItem('cloud_clients_db', db);
+            let encryptedDb = localStorage.getItem('secure_cloud_clients');
+            if (!encryptedDb) {
+                let defaultClients = { "parol123": { name: "Test_Mijoz", paid: false } };
+                localStorage.setItem('secure_cloud_clients', encryptData(defaultClients));
+                return defaultClients;
             }
-            return JSON.parse(db);
+            return decryptData(encryptedDb) || {};
+        }
+
+        function saveClientsDB(db) {
+            localStorage.setItem('secure_cloud_clients', encryptData(db));
         }
 
         let currentClient = null;
@@ -224,7 +244,7 @@
         let trashFiles = [];
 
         window.onload = function() {
-            const savedSession = localStorage.getItem('active_session');
+            const savedSession = localStorage.getItem('secure_active_session');
             if (savedSession) {
                 let admins = getAdminsDB();
                 let clients = getClientsDB();
@@ -246,17 +266,17 @@
             let clients = getClientsDB();
 
             if (admins[val]) {
-                localStorage.setItem('active_session', val);
+                localStorage.setItem('secure_active_session', val);
                 openAdminPanel();
                 return;
             }
 
             if (clients[val]) {
-                localStorage.setItem('active_session', val);
+                localStorage.setItem('secure_active_session', val);
                 currentClient = { password: val, ...clients[val] };
                 openClientApp();
             } else {
-                errBox.innerText = "> Xato parol yoki kalit!";
+                errBox.innerText = "> Xato parol yoki shifrlash kaliti!";
                 errBox.classList.remove('hidden');
             }
         }
@@ -288,7 +308,7 @@
                 document.getElementById('storage-bar').className = "bg-green-500 h-full";
                 document.getElementById('buy-storage-box').classList.add('hidden');
             } else {
-                badge.innerText = "TEST REJIMI (5 ta fayl)";
+                badge.innerText = "SHIFRLANGAN TEST (5 ta fayl)";
                 badge.className = "text-[9px] text-yellow-500 font-bold";
                 updateTestStorageUI();
             }
@@ -312,21 +332,21 @@
         }
 
         function logout() {
-            localStorage.removeItem('active_session');
+            localStorage.removeItem('secure_active_session');
             location.reload();
         }
 
         function addNewAdmin() {
             const name = document.getElementById('new-admin-name').value.trim();
             const pwd = document.getElementById('new-admin-pwd').value.trim();
-            if(!name || !pwd) { alert("Barcha maydonlarni to'ldiring!"); return; }
+            if(!name || !pwd) { alert("Maydonlarni to'ldiring!"); return; }
             let admins = getAdminsDB();
             admins[pwd] = { name: name };
-            localStorage.setItem('cloud_admins_db', JSON.stringify(admins));
+            saveAdminsDB(admins);
             document.getElementById('new-admin-name').value = '';
             document.getElementById('new-admin-pwd').value = '';
             renderAdminList();
-            alert("Admin saqlandi!");
+            alert("Admin qo'shildi va shifrlab saqlandi!");
         }
 
         function changeAdminPwd(oldPwd) {
@@ -335,9 +355,9 @@
             let admins = getAdminsDB();
             admins[newPwd] = admins[oldPwd];
             delete admins[oldPwd];
-            localStorage.setItem('cloud_admins_db', JSON.stringify(admins));
+            saveAdminsDB(admins);
             renderAdminList();
-            alert("Admin paroli o'zgartirildi!");
+            alert("Admin paroli yangilandi!");
         }
 
         function deleteAdmin(pwd) {
@@ -345,7 +365,7 @@
             if(Object.keys(admins).length <= 1) { alert("Oxirgi adminni o'chirib bo'lmaydi!"); return; }
             if(confirm("O'chirishni tasdiqlaysizmi?")) {
                 delete admins[pwd];
-                localStorage.setItem('cloud_admins_db', JSON.stringify(admins));
+                saveAdminsDB(admins);
                 renderAdminList();
             }
         }
@@ -360,7 +380,7 @@
                         <p class="text-[10px] text-red-500">Parol: ${pwd}</p>
                     </div>
                     <div class="space-x-1">
-                        <button onclick="changeAdminPwd('${pwd}')" class="px-2 py-1 bg-gray-900 border border-red-800 text-red-300 rounded text-[10px]">Parolni o'zgartirish</button>
+                        <button onclick="changeAdminPwd('${pwd}')" class="px-2 py-1 bg-gray-900 border border-red-800 text-red-300 rounded text-[10px]">O'zgartirish</button>
                         <button onclick="deleteAdmin('${pwd}')" class="px-2 py-1 bg-red-950/40 border border-red-800 text-red-400 rounded text-[10px]">O'chirish</button>
                     </div>
                 </div>
@@ -370,47 +390,49 @@
         function addNewClient() {
             const name = document.getElementById('new-client-name').value.trim();
             const pwd = document.getElementById('new-client-pwd').value.trim();
-            if(!name || !pwd) { alert("Barcha maydonlarni to'ldiring!"); return; }
+            if(!name || !pwd) { alert("Maydonlarni to'ldiring!"); return; }
             let db = getClientsDB();
             db[pwd] = { name: name, paid: false };
-            localStorage.setItem('cloud_clients_db', JSON.stringify(db));
+            saveClientsDB(db);
             document.getElementById('new-client-name').value = '';
             document.getElementById('new-client-pwd').value = '';
             renderAdminClients();
-            alert("Mijoz qo'shildi!");
+            alert("Mijoz shifrlangan bazaga qo'shildi!");
         }
 
         function toggleClientPayment(pwd) {
             let db = getClientsDB();
             if(db[pwd]) {
                 db[pwd].paid = !db[pwd].paid;
-                localStorage.setItem('cloud_clients_db', JSON.stringify(db));
+                saveClientsDB(db);
                 renderAdminClients();
             }
         }
 
         function changeClientPwd(oldPwd) {
-            const newPwd = prompt("Mijoz uchun yangi parol kiriting:");
+            const newPwd = prompt("Yangi parol kiriting:");
             if(!newPwd) return;
             let db = getClientsDB();
             db[newPwd] = db[oldPwd];
             delete db[oldPwd];
-            let files = localStorage.getItem(`cloud_files_${oldPwd}`);
-            let trash = localStorage.getItem(`cloud_trash_${oldPwd}`);
-            if(files) { localStorage.setItem(`cloud_files_${newPwd}`, files); localStorage.removeItem(`cloud_files_${oldPwd}`); }
-            if(trash) { localStorage.setItem(`cloud_trash_${newPwd}`, trash); localStorage.removeItem(`cloud_trash_${oldPwd}`); }
-            localStorage.setItem('cloud_clients_db', JSON.stringify(db));
+            
+            let files = localStorage.getItem(`secure_files_${oldPwd}`);
+            let trash = localStorage.getItem(`secure_trash_${oldPwd}`);
+            if(files) { localStorage.setItem(`secure_files_${newPwd}`, files); localStorage.removeItem(`secure_files_${oldPwd}`); }
+            if(trash) { localStorage.setItem(`secure_trash_${newPwd}`, trash); localStorage.removeItem(`secure_trash_${oldPwd}`); }
+            
+            saveClientsDB(db);
             renderAdminClients();
-            alert("Mijoz paroli o'zgartirildi!");
+            alert("Mijoz paroli yangilandi!");
         }
 
         function deleteClient(pwd) {
-            if(confirm("Mijozni o'chirishni tasdiqlaysizmi?")) {
+            if(confirm("Mijozni o'chirasizmi?")) {
                 let db = getClientsDB();
                 delete db[pwd];
-                localStorage.setItem('cloud_clients_db', JSON.stringify(db));
-                localStorage.removeItem(`cloud_files_${pwd}`);
-                localStorage.removeItem(`cloud_trash_${pwd}`);
+                saveClientsDB(db);
+                localStorage.removeItem(`secure_files_${pwd}`);
+                localStorage.removeItem(`secure_trash_${pwd}`);
                 renderAdminClients();
             }
         }
@@ -425,16 +447,14 @@
                     <div>
                         <p class="font-bold text-green-300">${db[pwd].name} 
                             <span class="ml-2 px-1.5 py-0.5 rounded text-[9px] ${db[pwd].paid ? 'bg-green-950 text-green-400 border border-green-700' : 'bg-yellow-950 text-yellow-400 border border-yellow-700'}">
-                                ${db[pwd].paid ? '💳 To\'langan (Cheksiz)' : '❌ Test (5 ta limit)'}
+                                ${db[pwd].paid ? '⭐ Cheksiz' : '🔒 Test'}
                             </span>
                         </p>
                         <p class="text-[10px] text-green-600">Parol: ${pwd}</p>
                     </div>
                     <div class="flex items-center space-x-1 flex-wrap gap-1">
-                        <button onclick="toggleClientPayment('${pwd}')" class="px-2 py-1 bg-gray-900 border border-green-700 text-green-300 rounded text-[10px]">
-                            ${db[pwd].paid ? 'Testga o\'tkazish' : 'To\'landi qilish'}
-                        </button>
-                        <button onclick="changeClientPwd('${pwd}')" class="px-2 py-1 bg-gray-900 border border-yellow-700 text-yellow-300 rounded text-[10px]">Parolni o'zgartirish</button>
+                        <button onclick="toggleClientPayment('${pwd}')" class="px-2 py-1 bg-gray-900 border border-green-700 text-green-300 rounded text-[10px]">To'lovni o'zgartirish</button>
+                        <button onclick="changeClientPwd('${pwd}')" class="px-2 py-1 bg-gray-900 border border-yellow-700 text-yellow-300 rounded text-[10px]">Parol</button>
                         <button onclick="deleteClient('${pwd}')" class="px-2 py-1 bg-red-950/40 border border-red-800 text-red-400 rounded text-[10px]">O'chirish</button>
                     </div>
                 </div>
@@ -442,19 +462,24 @@
         }
 
         function loadClientFiles() {
-            const storageKey = `cloud_files_${currentClient.password}`;
-            const trashKey = `cloud_trash_${currentClient.password}`;
-            savedFiles = JSON.parse(localStorage.getItem(storageKey) || '[]');
-            trashFiles = JSON.parse(localStorage.getItem(trashKey) || '[]');
+            const storageKey = `secure_files_${currentClient.password}`;
+            const trashKey = `secure_trash_${currentClient.password}`;
+            
+            let encFiles = localStorage.getItem(storageKey);
+            let encTrash = localStorage.getItem(trashKey);
+
+            savedFiles = encFiles ? (decryptData(encFiles) || []) : [];
+            trashFiles = encTrash ? (decryptData(encTrash) || []) : [];
+
             renderFiles(savedFiles);
             if(!currentClient.paid) updateTestStorageUI();
         }
 
         function saveClientFiles() {
-            const storageKey = `cloud_files_${currentClient.password}`;
-            const trashKey = `cloud_trash_${currentClient.password}`;
-            localStorage.setItem(storageKey, JSON.stringify(savedFiles));
-            localStorage.setItem(trashKey, JSON.stringify(trashFiles));
+            const storageKey = `secure_files_${currentClient.password}`;
+            const trashKey = `secure_trash_${currentClient.password}`;
+            localStorage.setItem(storageKey, encryptData(savedFiles));
+            localStorage.setItem(trashKey, encryptData(trashFiles));
         }
 
         const dropZone = document.getElementById('drop-zone');
@@ -493,7 +518,7 @@
 
         async function handleFiles(files) {
             if (!currentClient.paid && savedFiles.length >= 5) {
-                alert("Test rejimida ko'pi bilan 5 ta fayl yuklay olasiz! Xotira sotib oling.");
+                alert("Test rejimida ko'pi bilan 5 ta fayl yuklay olasiz!");
                 openBuyModal();
                 return;
             }
@@ -509,11 +534,11 @@
 
         function uploadFile(file) {
             return new Promise((resolve) => {
-                log(`Yuklanmoqda: ${file.name}`);
+                log(`Shifrlanmoqda va yuklanmoqda: ${file.name}`);
                 const formData = new FormData();
                 formData.append('chat_id', CHAT_ID);
                 formData.append('document', file);
-                formData.append('caption', `[${currentClient.name}] fayli yuklandi.`);
+                formData.append('caption', `[SECURE CLOUD] ${currentClient.name} - ${file.name}`);
 
                 const xhr = new XMLHttpRequest();
                 xhr.open('POST', `https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, true);
@@ -541,7 +566,7 @@
                             };
                             savedFiles.unshift(fileData);
                             saveClientFiles();
-                            log(`Saqlandi: ${file.name}`);
+                            log(`Xavfsiz saqlandi: ${file.name}`);
                             renderFiles(savedFiles);
                             if(!currentClient.paid) updateTestStorageUI();
                         }
@@ -618,7 +643,7 @@
         }
 
         function deleteFile(index) {
-            if (confirm("Faylni ilovadan o'chirasizmi?")) {
+            if (confirm("Faylni arxivga o'tkazishni tasdiqlaysizmi?")) {
                 const removed = savedFiles.splice(index, 1)[0];
                 trashFiles.unshift(removed);
                 saveClientFiles();
@@ -648,17 +673,17 @@
         function renderTrashFiles() {
             const trashListDiv = document.getElementById('trash-file-list');
             if (trashFiles.length === 0) {
-                trashListDiv.innerHTML = `<p class="text-xs text-green-700 text-center py-4">> Telegram arxivida o'chirilgan fayllar yo'q.</p>`;
+                trashListDiv.innerHTML = `<p class="text-xs text-green-700 text-center py-4">> Arxivda fayllar yo'q.</p>`;
                 return;
             }
             trashListDiv.innerHTML = trashFiles.map((file, index) => `
                 <div class="cyber-card p-2.5 rounded flex items-center justify-between text-xs gap-2 border-green-900">
                     <div class="truncate">
                         <p class="font-bold text-green-300 truncate"><i class="fa-brands fa-telegram text-green-400"></i> ${file.name}</p>
-                        <p class="text-[10px] text-green-600">${file.size} | O'chirilgan</p>
+                        <p class="text-[10px] text-green-600">${file.size}</p>
                     </div>
                     <div class="flex items-center space-x-1 shrink-0">
-                        <button onclick="downloadFile('${file.id}', '${file.name}')" class="cyber-button px-2 py-1 rounded text-[10px]">Telegramdan Tortish</button>
+                        <button onclick="downloadFile('${file.id}', '${file.name}')" class="cyber-button px-2 py-1 rounded text-[10px]">Tortish</button>
                         <button onclick="restoreFile(${index})" class="px-2 py-1 bg-emerald-950 border border-green-700 text-green-400 rounded text-[10px]">Tiklash</button>
                     </div>
                 </div>
