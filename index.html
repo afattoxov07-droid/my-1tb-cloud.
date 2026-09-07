@@ -23,29 +23,19 @@
 <body class="min-h-screen flex flex-col relative overflow-x-hidden text-sm md:text-base" onclick="initAudioContext()">
     <div class="pointer-events-none fixed inset-0 z-50 scanline opacity-30"></div>
 
-    <!-- LOGIN OYNASI -->
+    <!-- LOGIN OYNASI (OTP olib tashlandi, to'g'ridan-to'g'ri kirish) -->
     <div id="login-screen" class="fixed inset-0 z-50 bg-[#030712] flex items-center justify-center p-4">
         <div class="cyber-border bg-gray-950 p-6 md:p-8 rounded-lg max-w-md w-full space-y-5 text-center">
             <div class="w-12 h-12 mx-auto rounded border border-green-500 bg-emerald-950 flex items-center justify-center text-green-400 font-bold text-xl animate-pulse">🔒</div>
             <div>
                 <h2 class="text-base md:text-lg font-bold text-green-400">CYBER SECURE CLOUD PRO</h2>
-                <p class="text-[10px] text-green-600 mt-1">2FA Himoyalangan Shifrlangan Tizim</p>
+                <p class="text-[10px] text-green-600 mt-1">Shifrlangan Bulutli Tizim</p>
             </div>
             
-            <!-- 1-Qadam: Parol kiritish -->
-            <div id="step-password-box" class="space-y-3">
+            <div class="space-y-3">
                 <input type="password" id="client-password" placeholder="[ Shifrlash kaliti / Parol ]" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
-                <button onclick="requestOTP()" class="w-full cyber-button py-3 rounded text-xs font-bold uppercase tracking-wider cursor-pointer">
-                    OTP KODNI OLISH (TELEGRAM)
-                </button>
-            </div>
-
-            <!-- 2-Qadam: OTP Kodni tasdiqlash -->
-            <div id="step-otp-box" class="space-y-3 hidden">
-                <p class="text-xs text-yellow-400 font-bold">> Telegram botingizga 6 xonali tasdiqlash kodi yuborildi!</p>
-                <input type="text" id="otp-code-input" placeholder="[ 6 xonali OTP Kod ]" maxlength="6" class="w-full bg-gray-900 border border-yellow-800 text-sm text-yellow-300 px-4 py-3 rounded text-center tracking-widest font-bold focus:outline-none focus:border-yellow-400">
-                <button onclick="verifyOTP()" class="w-full py-3 bg-yellow-950/60 border border-yellow-600 text-yellow-300 rounded text-xs font-bold uppercase tracking-wider cursor-pointer">
-                    KODNI TASDIQLASH & KIRISH
+                <button onclick="directLogin()" class="w-full cyber-button py-3 rounded text-xs font-bold uppercase tracking-wider cursor-pointer">
+                    TIZIMGA KIRISH
                 </button>
             </div>
 
@@ -130,7 +120,6 @@
                                 <h3 class="text-sm md:text-base font-bold text-green-300">FAYLLARNI YUKLASH VA SHIFRLASH</h3>
                                 <p class="text-xs text-green-600 mt-1">[ Self-Destruct va muddatli saqlash ]</p>
                             </div>
-                            <!-- Muddatni tanlash -->
                             <div class="flex justify-center items-center gap-2 pt-2">
                                 <span class="text-[10px] text-green-500">Muddati:</span>
                                 <select id="file-expire-days" class="bg-gray-900 border border-green-800 text-xs text-green-300 px-2 py-1 rounded focus:outline-none">
@@ -257,7 +246,6 @@
     </div>
 
     <script>
-        // Xavfsizlik: Himoya qatlamlari
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => {
             if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
@@ -266,7 +254,6 @@
             }
         });
 
-        // Kibernetik Ovozlar Generatori (Web Audio API)
         let audioCtx = null;
         function initAudioContext() {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -375,8 +362,6 @@
         let currentClient = null;
         let savedFiles = [];
         let trashFiles = [];
-        let pendingLoginVal = null;
-        let generatedOTP = null;
 
         window.onload = function() {
             const savedSession = localStorage.getItem('secure_active_session');
@@ -394,7 +379,8 @@
             }
         };
 
-        function requestOTP() {
+        // Telegram OTP olib tashlandi, to'g'ridan-to'g'ri tekshirib kirish funksiyasi
+        function directLogin() {
             const val = document.getElementById('client-password').value.trim();
             const errBox = document.getElementById('login-error');
 
@@ -408,38 +394,15 @@
             }
 
             errBox.classList.add('hidden');
-            pendingLoginVal = val;
-            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-
-            let targetName = admins[val] ? admins[val].name : clients[val].name;
-            notifyTelegram(`🔐 2FA KIRISH KODI (OTP):\n\n👤 Foydalanuvchi: ${targetName}\n🔑 Tasdiqlash kodi: <b>${generatedOTP}</b>`);
-
-            document.getElementById('step-password-box').classList.add('hidden');
-            document.getElementById('step-otp-box').classList.remove('hidden');
-        }
-
-        function verifyOTP() {
-            const enteredOTP = document.getElementById('otp-code-input').value.trim();
-            const errBox = document.getElementById('login-error');
-
-            if (enteredOTP !== generatedOTP) {
-                errBox.innerText = "> Xato OTP kod kiritildi!";
-                errBox.classList.remove('hidden');
-                return;
-            }
-
             playCyberSound('success');
-            localStorage.setItem('secure_active_session', pendingLoginVal);
+            localStorage.setItem('secure_active_session', val);
 
-            let admins = getAdminsDB();
-            let clients = getClientsDB();
-
-            if (admins[pendingLoginVal]) {
-                currentClient = { password: pendingLoginVal, ...admins[pendingLoginVal] };
+            if (admins[val]) {
+                currentClient = { password: val, ...admins[val] };
                 logSession(currentClient.name, 'Admin');
                 openAdminPanel();
-            } else if (clients[pendingLoginVal]) {
-                currentClient = { password: pendingLoginVal, ...clients[pendingLoginVal] };
+            } else if (clients[val]) {
+                currentClient = { password: val, ...clients[val] };
                 logSession(currentClient.name, 'Mijoz');
                 openClientApp();
             }
@@ -748,7 +711,6 @@
             localStorage.setItem(trashKey, encryptData(trashFiles));
         }
 
-        // Self-Destruct tekshiruvi (Muddatni tekshirish)
         function checkSelfDestructFiles() {
             const now = new Date().getTime();
             let changed = false;
@@ -784,7 +746,6 @@
             terminalLog.scrollTop = terminalLog.scrollHeight;
         }
 
-        // Terminal buyruqlarini qayta ishlash
         function handleTerminalCommand(e) {
             if (e.key === 'Enter') {
                 const input = document.getElementById('terminal-input');
@@ -970,7 +931,6 @@
             }
         }
 
-        // Secure Notes funksiyalari
         function openNotesModal() {
             renderNotes();
             document.getElementById('notes-modal').classList.remove('hidden');
@@ -990,7 +950,7 @@
             let notes = getNotesDB();
             notes.unshift({
                 title: title,
-                content: encryptData(content), // Matnni ham AES bilan shifrlash
+                content: encryptData(content),
                 date: new Date().toLocaleDateString()
             });
             localStorage.setItem(`secure_notes_${currentClient.password}`, encryptData(notes));
