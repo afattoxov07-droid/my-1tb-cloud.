@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>[NEURAL-CLOUD 10B TB]</title>
     
-    <!-- To'g'rilangan PWA Manifest va Ikonka -->
-    <link rel="manifest" href='data:application/manifest+json,{"name":"NEURAL-CLOUD [10,000,000,000 TB]","short_name":"NeuralCloud","start_url":"/","display":"standalone","background_color":"#030712","theme_color":"#22c55e","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/2920/2920325.png","sizes":"512x512","type":"image/png"}]}'>
+    <!-- Ichki bazaviy kiber-ikonka (Hech qanday tashqi xatolik bermaydi) -->
+    <link rel="manifest" href='data:application/manifest+json,{"name":"NEURAL-CLOUD [10,000,000,000 TB]","short_name":"NeuralCloud","start_url":"/","display":"standalone","background_color":"#030712","theme_color":"#22c55e","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 512 512\'><rect width=\'512\' height=\'512\' fill=\'%23030712\'/><rect x=\'32\' y=\'32\' width=\'448\' height=\'448\' rx=\'96\' fill=\'%23064e3b\' stroke=\'%2322c55e\' stroke-width=\'24\'/><text x=\'256\' y=\'230\' font-family=\'monospace\' font-weight=\'bold\' font-size=\'160\' fill=\'%234ade80\' text-anchor=\'middle\'>∞</text><text x=\'256\' y=\'340\' font-family=\'monospace\' font-weight=\'bold\' font-size=\'65\' fill=\'%2322c55e\' text-anchor=\'middle\'>10B TB</text></svg>","sizes":"512x512","type":"image/svg+xml"}]}'>
     <meta name="theme-color" content="#22c55e">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -28,7 +28,7 @@
     <!-- Header -->
     <header class="p-3 md:p-4 border-b border-green-800 bg-gray-950/90 flex justify-between items-center relative z-10 gap-2">
         <div class="flex items-center space-x-2.5 overflow-hidden">
-            <img src="https://cdn-icons-png.flaticon.com/512/2920/2920325.png" class="w-7 h-7 rounded border border-green-500 object-cover shrink-0 animate-pulse" alt="Logo">
+            <div class="w-7 h-7 rounded border border-green-500 bg-emerald-950 flex items-center justify-center text-green-400 font-bold text-xs shrink-0 animate-pulse">∞</div>
             <div>
                 <h1 class="text-xs md:text-sm font-bold tracking-wider text-green-400 truncate">
                     NEURAL_STORAGE_10B_TB
@@ -272,7 +272,7 @@
             } catch (err) { log(`Xatolik.`); }
         }
 
-        closeModal = function() {
+        function closeModal() {
             document.getElementById('media-modal').classList.add('hidden');
             document.getElementById('modal-content').innerHTML = '';
         }
