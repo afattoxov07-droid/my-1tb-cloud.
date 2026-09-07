@@ -12,7 +12,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Fira Code', monospace; background-color: #030712; color: #22c55e; -webkit-text-size-adjust: 100%; }
+        body { font-family: 'Fira Code', monospace; background-color: #030712; color: #22c55e; -webkit-text-size-adjust: 100%; user-select: none; }
+        input, textarea { user-select: text; }
         .scanline { background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.3)); background-size: 100% 4px; }
         .cyber-border { border: 1px solid #15803d; box-shadow: 0 0 10px rgba(34, 197, 94, 0.15), inset 0 0 10px rgba(34, 197, 94, 0.1); }
         .cyber-card { background: rgba(6, 78, 59, 0.1); border: 1px solid #166534; transition: all 0.2s ease; }
@@ -52,21 +53,18 @@
             <button onclick="logout()" class="cyber-button px-2.5 py-1.5 rounded text-xs font-bold bg-red-950/40 border-red-800 text-red-400 cursor-pointer">CHIQISH</button>
         </header>
         <div class="flex-1 max-w-4xl w-full mx-auto p-4 space-y-4">
-            
-            <!-- Adminlar Ro'yxati va Parolni o'zgartirish -->
             <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3 border-red-900">
                 <h3 class="text-xs font-bold text-red-400">> Adminlar va Parollarni Boshqarish</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <input type="text" id="new-admin-name" placeholder="Admin ismi / Raqami" class="bg-gray-900 border border-red-900 text-xs text-red-300 px-3 py-2 rounded focus:outline-none">
                     <input type="text" id="new-admin-pwd" placeholder="Admin maxfiy paroli" class="bg-gray-900 border border-red-900 text-xs text-red-300 px-3 py-2 rounded focus:outline-none">
                 </div>
-                <button onclick="addNewAdmin()" class="w-full py-2 bg-red-950/50 border border-red-800 text-red-400 rounded text-xs font-bold uppercase cursor-pointer hover:bg-red-900/40">+ Admin Qo'shish</button>
+                <button onclick="addNewAdmin()" class="w-full py-2 bg-red-950/50 border border-red-800 text-red-400 rounded text-xs font-bold uppercase cursor-pointer">+ Admin Qo'shish</button>
                 <div id="admin-list-container" class="space-y-2 mt-3"></div>
             </div>
 
             <hr class="border-green-900 my-4">
 
-            <!-- Yangi mijoz qo'shish -->
             <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3">
                 <h3 class="text-xs font-bold text-green-400">> Yangi mijoz qo'shish (Test rejimi: 5 ta fayl)</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -154,7 +152,7 @@
         </div>
     </div>
 
-    <!-- Media Preview Modal -->
+    <!-- Modallar -->
     <div id="media-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
         <div class="cyber-border bg-gray-950 p-4 rounded-lg max-w-lg w-full relative">
             <button onclick="closeModal()" class="absolute top-2 right-2 text-green-400 text-sm font-bold p-2">[ X ]</button>
@@ -163,33 +161,39 @@
         </div>
     </div>
 
-    <!-- Telegram Arxiv Modal -->
     <div id="trash-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
         <div class="cyber-border bg-gray-950 p-4 rounded-lg max-w-xl w-full relative space-y-3">
             <button onclick="closeTrashModal()" class="absolute top-2 right-2 text-green-400 text-sm font-bold p-2">[ X ]</button>
             <h4 class="text-xs font-bold text-green-400">> TELEGRAMDAN TIKLASH (ARXIV)</h4>
-            <p class="text-[10px] text-green-600">O'chirilgan fayllar Telegram botda saqlanib qoladi va ularni bu yerdan qayta olishingiz mumkin.</p>
+            <p class="text-[10px] text-green-600">O'chirilgan fayllar Telegram botda saqlanib qoladi.</p>
             <div id="trash-file-list" class="space-y-2 max-h-[50vh] overflow-y-auto"></div>
         </div>
     </div>
 
-    <!-- Xotira Sotib Olish Modal -->
     <div id="buy-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
         <div class="cyber-border bg-gray-950 p-5 rounded-lg max-w-md w-full relative space-y-4 text-center">
             <button onclick="closeBuyModal()" class="absolute top-2 right-2 text-green-400 text-sm font-bold p-2">[ X ]</button>
             <div class="w-10 h-10 mx-auto rounded border border-green-500 bg-emerald-950 flex items-center justify-center text-green-400 font-bold">🛒</div>
             <h3 class="text-sm font-bold text-green-400">CHEKSIZ XOTIRA SOTIB OLISH</h3>
-            <p class="text-xs text-green-600">Test rejimdagi 5 ta fayl limiti tugadi. To'liq cheksiz xotiradan foydalanish uchun to'lovni amalga oshiring va adminga murojaat qiling.</p>
+            <p class="text-xs text-green-600">Test rejimdagi 5 ta fayl limiti tugadi. To'lovni amalga oshiring va adminga murojaat qiling.</p>
             <div class="p-3 cyber-card rounded text-xs text-left space-y-1">
                 <p class="text-green-300 font-bold">💳 Karta: <span class="text-white">8600 0000 0000 0000</span></p>
                 <p class="text-green-300 font-bold">👤 Egasi: <span class="text-white">Admin</span></p>
-                <p class="text-yellow-400 text-[10px] mt-1">* To'lov qilgach, chekni adminga yuboring va admin profilingizni "To'langan" holatiga o'tkazadi.</p>
             </div>
             <button onclick="closeBuyModal()" class="w-full cyber-button py-2.5 rounded text-xs font-bold">TUSHUNARLI</button>
         </div>
     </div>
 
     <script>
+        // Xavfsizlik: Inspeksterni va tugmalarni bloklash
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+                alert("Bu amal taqiqlangan!");
+            }
+        });
+
         const BOT_TOKEN = '8223970205:AAGeeh5B07eGGh39DqmMvswA_IBNr5L1apM';
         const CHAT_ID = '-1004345573571';
 
@@ -269,7 +273,6 @@
             document.getElementById('app-interface').classList.remove('hidden');
             document.getElementById('client-title').innerText = currentClient.name;
             
-            // To'lov holatini tekshirish
             let clients = getClientsDB();
             if(clients[currentClient.password]) {
                 currentClient.paid = clients[currentClient.password].paid;
@@ -313,7 +316,6 @@
             location.reload();
         }
 
-        // Adminni o'zgartirish yoki qo'shish
         function addNewAdmin() {
             const name = document.getElementById('new-admin-name').value.trim();
             const pwd = document.getElementById('new-admin-pwd').value.trim();
@@ -365,7 +367,6 @@
             `).join('');
         }
 
-        // Mijoz qo'shish va boshqarish
         function addNewClient() {
             const name = document.getElementById('new-client-name').value.trim();
             const pwd = document.getElementById('new-client-pwd').value.trim();
@@ -376,7 +377,7 @@
             document.getElementById('new-client-name').value = '';
             document.getElementById('new-client-pwd').value = '';
             renderAdminClients();
-            alert("Mijoz qo'shildi (Test rejimida 5 ta fayl yuklay oladi)!");
+            alert("Mijoz qo'shildi!");
         }
 
         function toggleClientPayment(pwd) {
@@ -394,7 +395,6 @@
             let db = getClientsDB();
             db[newPwd] = db[oldPwd];
             delete db[oldPwd];
-            // Fayllar kalitini ham ko'chiramiz
             let files = localStorage.getItem(`cloud_files_${oldPwd}`);
             let trash = localStorage.getItem(`cloud_trash_${oldPwd}`);
             if(files) { localStorage.setItem(`cloud_files_${newPwd}`, files); localStorage.removeItem(`cloud_files_${oldPwd}`); }
@@ -492,7 +492,6 @@
         }
 
         async function handleFiles(files) {
-            // Test rejimini tekshirish (Limit 5 ta fayl)
             if (!currentClient.paid && savedFiles.length >= 5) {
                 alert("Test rejimida ko'pi bilan 5 ta fayl yuklay olasiz! Xotira sotib oling.");
                 openBuyModal();
@@ -619,7 +618,7 @@
         }
 
         function deleteFile(index) {
-            if (confirm("Faylni ilovadan o'chirasizmi? (Telegram arxivda saqlanib qoladi)")) {
+            if (confirm("Faylni ilovadan o'chirasizmi?")) {
                 const removed = savedFiles.splice(index, 1)[0];
                 trashFiles.unshift(removed);
                 saveClientFiles();
