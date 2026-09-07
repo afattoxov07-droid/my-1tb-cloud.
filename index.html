@@ -522,12 +522,15 @@ function logout() {
 function renderAdminClients() {
     let db = getClientsDB();
     document.getElementById('admin-clients-list').innerHTML = Object.keys(db).length ? Object.keys(db).map(pwd => `
-        <div class="cyber-card p-2 rounded text-xs flex justify-between items-center">
-            <span><b>${db[pwd].name}</b> (${db[pwd].phone}) [Kod: ${pwd}] - <b class="${db[pwd].paid ? 'text-green-400' : 'text-yellow-400'}">${db[pwd].paid ? 'Cheksiz' : 'Test (' + (db[pwd].totalUploaded||0) + '/5)'}</b></span>
-            <div class="space-x-2">
-                <button onclick="adminRenewPassword('${pwd}')" class="px-2.5 py-1 bg-yellow-950 border border-yellow-700 text-yellow-300 rounded cursor-pointer font-bold">Parol berish</button>
-                <button onclick="toggleClientPayment('${pwd}')" class="px-2 py-0.5 bg-gray-900 border border-green-700 text-green-300 rounded cursor-pointer">To'lov</button>
-                <button onclick="deleteClient('${pwd}')" class="text-red-400 cursor-pointer">O'chirish</button>
+        <div class="cyber-card p-3 rounded text-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div class="space-y-0.5">
+                <p><b>${db[pwd].name}</b> <span class="text-gray-400">(${db[pwd].phone})</span></p>
+                <p class="text-[11px] text-gray-400">Kod: <span class="text-yellow-400 font-mono">${pwd}</span> | Status: <b class="${db[pwd].paid ? 'text-green-400' : 'text-yellow-400'}">${db[pwd].paid ? 'Cheksiz' : 'Test (' + (db[pwd].totalUploaded||0) + '/5)'}</b></p>
+            </div>
+            <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <button onclick="adminRenewPassword('${pwd}')" class="px-2.5 py-1.5 bg-yellow-950/80 border border-yellow-600 text-yellow-300 rounded cursor-pointer font-bold text-[11px] hover:bg-yellow-900">Parol berish</button>
+                <button onclick="toggleClientPayment('${pwd}')" class="px-2.5 py-1.5 bg-gray-900 border border-green-600 text-green-300 rounded cursor-pointer text-[11px] hover:bg-gray-800">To'lov</button>
+                <button onclick="deleteClient('${pwd}')" class="px-2.5 py-1.5 bg-red-950/40 border border-red-800 text-red-400 rounded cursor-pointer text-[11px] hover:bg-red-900/60">O'chirish</button>
             </div>
         </div>
     `).join('') : '<p class="text-xs text-gray-500">Mijozlar yoq</p>';
@@ -570,7 +573,7 @@ function renderAdminReceipts() {
     document.getElementById('admin-receipts-list').innerHTML = receipts.length ? receipts.map((r, idx) => `
         <div class="cyber-card p-2 rounded text-xs flex justify-between items-center">
             <span><b>${r.clientName}</b> (${r.clientPhone}) - ${r.date}</span>
-            <button onclick="openReceiptModal(${idx})" class="cyber-button px-2 py-1 rounded cursor-pointer">Tekshirish</button>
+            <button onclick="openReceiptModal(${idx})" class="cyber-button px-2.5 py-1 rounded cursor-pointer">Tekshirish</button>
         </div>
     `).join('') : '<p class="text-xs text-yellow-700">Cheklar yoq</p>';
 }
