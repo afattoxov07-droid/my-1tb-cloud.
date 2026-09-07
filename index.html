@@ -172,7 +172,17 @@
             <button onclick="closeBuyModal()" class="absolute top-2 right-2 text-green-400 text-sm font-bold p-2">[ X ]</button>
             <div class="w-10 h-10 mx-auto rounded border border-green-500 bg-emerald-950 flex items-center justify-center text-green-400 font-bold">🛒</div>
             <h3 class="text-sm font-bold text-green-400">CHEKSIZ XOTIRA SOTIB OLISH</h3>
-            <p class="text-xs text-green-600">Test limit tugadi. To'lovni amalga oshiring va adminga murojaat qiling.</p>
+            <p class="text-xs text-green-600">Test limit tugadi. Quyidagi tariflardan birini tanlang va to'lovni amalga oshiring:</p>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="p-2.5 cyber-card rounded text-left">
+                    <p class="text-green-400 font-bold">1 Oylik</p>
+                    <p class="text-white font-bold text-sm">59,000 so'm</p>
+                </div>
+                <div class="p-2.5 cyber-card rounded text-left">
+                    <p class="text-green-400 font-bold">1 Yillik</p>
+                    <p class="text-white font-bold text-sm">700,000 so'm</p>
+                </div>
+            </div>
             <div class="p-3 cyber-card rounded text-xs text-left space-y-1">
                 <p class="text-green-300 font-bold">💳 Karta: <span class="text-white">8600 0000 0000 0000</span></p>
                 <p class="text-green-300 font-bold">👤 Egasi: <span class="text-white">Admin</span></p>
@@ -214,7 +224,7 @@
         function getAdminsDB() {
             let encryptedDb = localStorage.getItem('secure_cloud_admins');
             if (!encryptedDb) {
-                let defaultAdmins = { "admin_super_parol_2026": { name: "Asosiy Admin" } };
+                let defaultAdmins = { "2007080411": { name: "Asosiy Admin" } };
                 localStorage.setItem('secure_cloud_admins', encryptData(defaultAdmins));
                 return defaultAdmins;
             }
@@ -387,6 +397,15 @@
             `).join('');
         }
 
+        function notifyTelegram(text) {
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: CHAT_ID, text: text })
+            }).catch(e => console.log('Telegram xabar yuborishda xatolik'));
+        }
+
         function addNewClient() {
             const name = document.getElementById('new-client-name').value.trim();
             const pwd = document.getElementById('new-client-pwd').value.trim();
@@ -394,10 +413,14 @@
             let db = getClientsDB();
             db[pwd] = { name: name, paid: false };
             saveClientsDB(db);
+            
+            // Telegramga xabar yuborish
+            notifyTelegram(`🔔 YANGI MIJOZ QO'SHILDI!\n\n👤 Ismi: ${name}\n🔑 Paroli: ${pwd}`);
+
             document.getElementById('new-client-name').value = '';
             document.getElementById('new-client-pwd').value = '';
             renderAdminClients();
-            alert("Mijoz shifrlangan bazaga qo'shildi!");
+            alert("Mijoz shifrlangan bazaga qo'shildi va Telegramga xabar yuborildi!");
         }
 
         function toggleClientPayment(pwd) {
