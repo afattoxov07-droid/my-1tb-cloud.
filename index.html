@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>[NEURAL-CLOUD 10.000.000.000 TB]</title>
+    <title>[NEURAL-CLOUD 10B TB]</title>
     
-    <!-- Single-file Web App Manifest -->
-    <link rel="manifest" href='data:application/manifest+json,{"name":"Neural Cloud 10,000,000,000 TB","short_name":"NeuralCloud","start_url":"/","display":"standalone","background_color":"#030712","theme_color":"#22c55e","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/6124/6124993.png","sizes":"512x512","type":"image/png"}]}'>
+    <!-- Cheksiz xotira rasmi aks etgan PWA Manifest -->
+    <link rel="manifest" href='data:application/manifest+json,{"name":"NEURAL-CLOUD [10,000,000,000 TB]","short_name":"NeuralCloud","start_url":"/","display":"standalone","background_color":"#030712","theme_color":"#22c55e","icons":[{"src":"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=512&auto=format&fit=crop&q=80","sizes":"512x512","type":"image/png"}]}'>
     <meta name="theme-color" content="#22c55e">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -27,11 +27,14 @@
 
     <!-- Header -->
     <header class="p-3 md:p-4 border-b border-green-800 bg-gray-950/90 flex justify-between items-center relative z-10 gap-2">
-        <div class="flex items-center space-x-2 overflow-hidden">
-            <span class="inline-block w-2.5 h-2.5 bg-green-500 rounded-full animate-ping shrink-0"></span>
-            <h1 class="text-xs md:text-sm font-bold tracking-wider text-green-400 truncate">
-                NEURAL_STORAGE_10,000,000,000_TB
-            </h1>
+        <div class="flex items-center space-x-2.5 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100&auto=format&fit=crop&q=80" class="w-7 h-7 rounded border border-green-500 object-cover shrink-0 animate-pulse" alt="Logo">
+            <div>
+                <h1 class="text-xs md:text-sm font-bold tracking-wider text-green-400 truncate">
+                    NEURAL_STORAGE_10B_TB
+                </h1>
+                <p class="text-[9px] text-green-600">UNLIMITED MATRIX CLOUD</p>
+            </div>
         </div>
         <div class="flex items-center space-x-2 shrink-0">
             <button id="install-btn" class="hidden cyber-button px-2.5 py-1.5 rounded text-xs font-bold animate-bounce flex items-center gap-1 cursor-pointer">
@@ -66,12 +69,15 @@
             <!-- Storage Info & Console -->
             <div class="space-y-4 flex flex-col">
                 <div class="cyber-border bg-gray-950 p-3.5 rounded-lg space-y-2">
-                    <div class="text-[11px] text-green-600 font-bold">XOTIRA HOLATI</div>
+                    <div class="text-[11px] text-green-600 font-bold flex justify-between">
+                        <span>XOTIRA HOLATI</span>
+                        <span class="text-green-400">∞ CHEKSIZ</span>
+                    </div>
                     <div class="text-lg md:text-xl font-bold text-green-400 tracking-tight">10,000,000,000 TB</div>
                     <div class="w-full bg-gray-900 h-1.5 border border-green-800 overflow-hidden">
                         <div class="bg-green-500 h-full w-full animate-pulse"></div>
                     </div>
-                    <p class="text-[10px] text-green-700">> Xavfsiz bulut (To'liq ochiq)</p>
+                    <p class="text-[10px] text-green-700">> Kvant bulut tarmoq (0% band)</p>
                 </div>
 
                 <div class="cyber-border bg-gray-950 p-3 rounded-lg flex flex-col flex-1 min-h-[120px]">
@@ -80,7 +86,7 @@
                         <span onclick="document.getElementById('terminal-log').innerHTML=''" class="cursor-pointer hover:text-green-300">[cls]</span>
                     </div>
                     <div id="terminal-log" class="text-[10px] space-y-0.5 overflow-y-auto max-h-24 text-green-500 font-mono">
-                        <p class="text-green-700">> Tizim tayyor...</p>
+                        <p class="text-green-700">> Tizim tayyor. 10B TB faol...</p>
                     </div>
                 </div>
             </div>
@@ -301,7 +307,7 @@
         function renderFiles(filesToRender) {
             fileCount.innerText = filesToRender.length;
             if (filesToRender.length === 0) {
-                fileList.innerHTML = `<div class="text-center py-6 cyber-border bg-gray-950 text-xs text-green-700">> XOTIRA BO'SH</div>`;
+                fileList.innerHTML = `<div class="text-center py-6 cyber-border bg-gray-950 text-xs text-green-700">> XOTIRA BO'SH (CHEKSIZ IMKONIYAT)</div>`;
                 return;
             }
             fileList.innerHTML = filesToRender.map((file, index) => `
