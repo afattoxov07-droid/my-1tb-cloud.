@@ -248,6 +248,8 @@ input, textarea { user-select: text; }
 <div class="p-3 cyber-card rounded text-xs text-left space-y-1">
 <p class="text-green-300 font-bold">💳 Karta (UZS): <span class="text-white">4023 0605 1984 4434</span></p>
 <p class="text-green-300 font-bold">👤 Egasi: <span class="text-white">ABDULLOH FATTOXOV</span></p>
+<p class="text-green-300 font-bold mt-2">💳 Karta (UZS): <span class="text-white">4073 4200 8225 8769</span></p>
+<p class="text-green-300 font-bold">👤 Egasi: <span class="text-white">DORIPOVA KAMOLA</span></p>
 <p class="text-green-300 font-bold mt-2">💳 Visa (UZS): <span class="text-white">4466 1369 1010 0990</span></p>
 <p class="text-green-300 font-bold">👤 Egasi: <span class="text-white">ABDULLOKH FATTOKHOV</span></p>
 <p class="text-green-300 font-bold mt-2">💳 Visa (USD): <span class="text-white">4231 2000 9209 3193</span></p>
@@ -337,7 +339,7 @@ function saveSupportDB(db) { localStorage.setItem('secure_support_tickets', encr
 
 let currentClient = null;
 let savedFiles = [];
-let totalUploadedCount = 0; // Fayl o'chirilsa ham limit to'lib turishi uchun
+let totalUploadedCount = 0; 
 let activeReceiptIndex = null;
 
 window.onload = function() {
@@ -361,7 +363,19 @@ function openPublicSection(section) {
     const body = document.getElementById('public-modal-body');
     if (section === 'tariffs') {
         title.innerText = "> TARIFLAR REJASI";
-        body.innerHTML = `<div class="cyber-card p-3 rounded space-y-2"><p class="font-bold text-yellow-400">1. Test Rejimi</p><p class="text-[11px] text-green-300">Bepul. Jami 5 ta fayl yuklash limiti.</p></div><div class="cyber-card p-3 rounded space-y-2"><p class="font-bold text-green-400">2. Cheksiz Xotira</p><p class="text-[11px] text-white font-bold">59,000 so'm / oy</p></div>`;
+        body.innerHTML = `
+            <div class="cyber-card p-3 rounded space-y-2">
+                <p class="font-bold text-yellow-400">1. Test Rejimi</p>
+                <p class="text-[11px] text-green-300">Bepul. Jami 5 ta fayl yuklash limiti.</p>
+            </div>
+            <div class="cyber-card p-3 rounded space-y-2">
+                <p class="font-bold text-green-400">2. Oylik Cheksiz Tarif</p>
+                <p class="text-[11px] text-white font-bold">59,000 so'm / oy</p>
+            </div>
+            <div class="cyber-card p-3 rounded space-y-2 border-emerald-500">
+                <p class="font-bold text-cyan-400">3. Yillik Cheksiz Tarif (Tavsiya etiladi)</p>
+                <p class="text-[11px] text-white font-bold">700,000 so'm / yil</p>
+            </div>`;
     } else if (section === 'rules') {
         title.innerText = "> TIZIM QOIDALARI";
         body.innerHTML = `<div class="cyber-card p-3 rounded space-y-2"><p class="font-bold text-green-400">Xavfsizlik</p><p class="text-[11px] text-green-300">Barcha fayllar AES-256 orqali himoyalanadi.</p></div>`;
@@ -422,7 +436,6 @@ function clientRegisterOrLogin() {
 
     let clients = getClientsDB();
     if(clients[pwd]) {
-        // Mavjud mijoz
         errBox.classList.add('hidden');
         playCyberSound('success');
         localStorage.setItem('secure_active_session', pwd);
@@ -430,7 +443,6 @@ function clientRegisterOrLogin() {
         logClientActivity(currentClient.name, currentClient.phone);
         openClientApp();
     } else {
-        // Yangi mijoz avtomatik ro'yxatdan o'tadi
         clients[pwd] = { name: name, phone: phone, paid: false, totalUploaded: 0 };
         saveClientsDB(clients);
         errBox.classList.add('hidden');
@@ -529,7 +541,6 @@ function adminRenewPassword(oldPwd) {
         delete db[oldPwd];
         saveClientsDB(db);
         
-        // Agar joriy sessiya shu bo'lsa yangilaymiz
         document.getElementById('generated-new-pwd').value = newPwd;
         document.getElementById('new-password-modal').classList.remove('hidden');
         renderAdminClients();
@@ -587,7 +598,6 @@ if(approveBtn) {
                 db[r.clientPwd].paid = true;
                 saveClientsDB(db);
                 
-                // Yangi parol yaratib beramiz va ko'rsatamiz
                 let newPwd = Math.floor(100000 + Math.random() * 900000).toString();
                 db[newPwd] = db[r.clientPwd];
                 delete db[r.clientPwd];
