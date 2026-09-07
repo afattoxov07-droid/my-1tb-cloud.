@@ -134,17 +134,6 @@ input, textarea { user-select: text; }
 </div>
 </div>
 
-<!-- PAROLNI O'ZGARTIRISH / YANGI PAROL BERISH MODALI -->
-<div id="new-password-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
-<div class="cyber-border bg-gray-950 p-4 rounded-lg max-w-sm w-full relative space-y-3 text-center border-green-500">
-<button onclick="closeNewPasswordModal()" class="absolute top-2 right-2 text-green-400 text-sm font-bold p-2">[ X ]</button>
-<h4 class="text-xs font-bold text-green-400">> MIJOZGA YANGI PAROL</h4>
-<p class="text-xs text-green-300">To'lov tasdiqlandi. Quyida ushbu mijoz uchun yangi shaxsiy parol shakllantirildi:</p>
-<input type="text" id="generated-new-pwd" readonly class="w-full bg-gray-900 border border-green-500 text-sm font-bold text-yellow-400 p-2 rounded text-center">
-<p class="text-[10px] text-gray-400">Mijozga ushbu parolni yetkazing!</p>
-</div>
-</div>
-
 <!-- MIJOZ KABINETI -->
 <div id="app-interface" class="hidden flex-1 flex flex-col">
 <header class="p-3 md:p-4 border-b border-green-800 bg-gray-950/90 flex justify-between items-center relative z-10 gap-2">
@@ -156,7 +145,7 @@ input, textarea { user-select: text; }
 </div>
 </div>
 <div class="flex items-center space-x-2">
-<button onclick="openClientSupportModal()" class="cyber-button px-2.5 py-1.5 rounded text-xs font-bold bg-emerald-950/60 cursor-pointer"><i class="fa-solid fa-headset"></i> Yordam</button>
+<button onclick="openClientSupportModal()" class="cyber-button px-2.5 py-1.5 rounded text-xs font-bold bg-emerald-950/60 cursor-pointer relative"><i class="fa-solid fa-headset"></i> Yordam <span id="client-unread-dot" class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full hidden"></span></button>
 <button onclick="openNotesModal()" class="cyber-button px-2.5 py-1.5 rounded text-xs font-bold cursor-pointer"><i class="fa-solid fa-note-sticky"></i> Matnlar</button>
 <button onclick="logout()" class="cyber-button px-2.5 py-1.5 rounded text-xs font-bold bg-red-950/40 border-red-800 text-red-400 cursor-pointer">CHIQISH</button>
 </div>
@@ -218,7 +207,7 @@ input, textarea { user-select: text; }
 <div id="client-support-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
 <div class="cyber-border bg-gray-950 p-5 rounded-lg max-w-md w-full relative space-y-4 flex flex-col max-h-[85vh]">
 <button onclick="closeClientSupportModal()" class="absolute top-2 right-2 text-green-400 text-sm font-bold p-2">[ X ]</button>
-<h3 class="text-xs font-bold text-green-400">> Texnik Yordam va Savollar</h3>
+<h3 class="text-xs font-bold text-green-400">> Texnik Yordam va Parollar</h3>
 <div id="client-messages-history" class="space-y-2 overflow-y-auto flex-1 max-h-[45vh] p-2 bg-gray-900/50 rounded border border-green-900 text-xs"></div>
 <div class="space-y-2 border-t border-green-900 pt-3">
 <textarea id="client-question-input" placeholder="Savolingizni shu yerga yozing..." class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded h-20 focus:outline-none resize-none"></textarea>
@@ -417,7 +406,7 @@ function sendPublicSupportTicket() {
     const msg = document.getElementById('public-guest-msg').value.trim();
     if(!name || !msg) { alert("Maydonlarni to'ldiring!"); return; }
     let tickets = getSupportDB();
-    tickets.unshift({ user: name, id: 'guest', type: 'Mehmon', message: msg, reply: '', date: new Date().toLocaleString() });
+    tickets.unshift({ user: name, phone: 'guest', type: 'Mehmon', message: msg, reply: '', date: new Date().toLocaleString() });
     saveSupportDB(tickets);
     alert("Yuborildi!");
     closePublicModal();
@@ -525,6 +514,8 @@ function openClientApp() {
     let clients = getClientsDB();
     if(clients[currentClient.password]) {
         currentClient.paid = clients[currentClient.password].paid;
+        currentClient.phone = clients[currentClient.password].phone;
+        currentClient.name = clients[currentClient.password].name;
         totalUploadedCount = clients[currentClient.password].totalUploaded || 0;
     }
     
@@ -541,6 +532,7 @@ function openClientApp() {
         updateTestStorageUI();
     }
     loadClientFiles();
+    checkClientNotifications();
 }
 
 function updateTestStorageUI() {
@@ -577,17 +569,28 @@ function renderAdminClients() {
 function adminRenewPassword(oldPwd) {
     let db = getClientsDB();
     if(db[oldPwd]) {
+        let clientInfo = db[oldPwd];
         let newPwd = Math.floor(100000 + Math.random() * 900000).toString();
-        db[newPwd] = db[oldPwd];
+        db[newPwd] = clientInfo;
         delete db[oldPwd];
         saveClientsDB(db);
         
-        document.getElementById('generated-new-pwd').value = newPwd;
-        document.getElementById('new-password-modal').classList.remove('hidden');
+        // Mijozga avtomatik xabar sifatida yuborish
+        let tickets = getSupportDB();
+        tickets.unshift({ 
+            user: clientInfo.name, 
+            phone: clientInfo.phone, 
+            type: 'Tizim (Parol)', 
+            message: `Admin tomonidan yangi shaxsiy parol berildi: ${newPwd}`, 
+            reply: 'Sizning yangi parolingiz ushbu xabarda ko\'rsatildi.', 
+            date: new Date().toLocaleString() 
+        });
+        saveSupportDB(tickets);
+
         renderAdminClients();
+        alert(`Mijozga (${clientInfo.name}) yangi parol berildi va chatiga yuborildi: ${newPwd}`);
     }
 }
-function closeNewPasswordModal() { document.getElementById('new-password-modal').classList.add('hidden'); }
 
 function deleteClient(pwd) {
     if(confirm("Mijozni o'chirishni tasdiqlaysizmi?")) {
@@ -637,19 +640,30 @@ if(approveBtn) {
             let db = getClientsDB();
             if(db[r.clientPwd]) {
                 db[r.clientPwd].paid = true;
-                saveClientsDB(db);
+                let clientInfo = db[r.clientPwd];
                 
                 let newPwd = Math.floor(100000 + Math.random() * 900000).toString();
-                db[newPwd] = db[r.clientPwd];
+                db[newPwd] = clientInfo;
                 delete db[r.clientPwd];
                 saveClientsDB(db);
+                
+                // Chek tasdiqlanganda ham yangi parol yuboriladi
+                let tickets = getSupportDB();
+                tickets.unshift({ 
+                    user: clientInfo.name, 
+                    phone: clientInfo.phone, 
+                    type: 'Tizim (To\'lov)', 
+                    message: `To'lovingiz tasdiqlandi! Yangi parolingiz: ${newPwd}`, 
+                    reply: 'Cheksiz xotira yoqildi.', 
+                    date: new Date().toLocaleString() 
+                });
+                saveSupportDB(tickets);
                 
                 closeReceiptModal();
                 renderAdminReceipts();
                 renderAdminClients();
                 
-                document.getElementById('generated-new-pwd').value = newPwd;
-                document.getElementById('new-password-modal').classList.remove('hidden');
+                alert(`To'lov tasdiqlandi! Mijozga yangi parol yuborildi: ${newPwd}`);
             }
             receipts.splice(activeReceiptIndex, 1);
             saveReceiptsDB(receipts);
@@ -657,25 +671,39 @@ if(approveBtn) {
     }
 }
 
-function openClientSupportModal() { renderClientMessages(); document.getElementById('client-support-modal').classList.remove('hidden'); }
+function openClientSupportModal() { 
+    renderClientMessages(); 
+    document.getElementById('client-support-modal').classList.remove('hidden'); 
+    document.getElementById('client-unread-dot').classList.add('hidden');
+}
 function closeClientSupportModal() { document.getElementById('client-support-modal').classList.add('hidden'); }
+
 function sendClientQuestion() {
     const text = document.getElementById('client-question-input').value.trim();
     if(!text) return;
     let tickets = getSupportDB();
-    tickets.unshift({ user: currentClient.name, id: currentClient.password, type: 'Mijoz', message: text, reply: '', date: new Date().toLocaleString() });
+    tickets.unshift({ user: currentClient.name, phone: currentClient.phone, type: 'Mijoz', message: text, reply: '', date: new Date().toLocaleString() });
     saveSupportDB(tickets);
     document.getElementById('client-question-input').value = '';
     renderClientMessages();
 }
+
 function renderClientMessages() {
-    let tickets = getSupportDB().filter(t => t.id === currentClient.password);
+    let tickets = getSupportDB().filter(t => t.phone === currentClient.phone || t.user === currentClient.name);
     document.getElementById('client-messages-history').innerHTML = tickets.length ? tickets.map(t => `
         <div class="cyber-card p-2 rounded space-y-1">
-            <div><b>Siz:</b> ${t.message}</div>
-            ${t.reply ? `<div class="text-yellow-400 border-t border-green-900 pt-1"><b>Admin:</b> ${t.reply}</div>` : ''}
+            <div class="text-[10px] text-yellow-500">${t.date} (${t.type})</div>
+            <div><b>Xabar:</b> ${t.message}</div>
+            ${t.reply ? `<div class="text-green-400 border-t border-green-900 pt-1"><b>Javob:</b> ${t.reply}</div>` : ''}
         </div>
     `).join('') : '<p class="text-xs text-green-700">Xabarlar yoq</p>';
+}
+
+function checkClientNotifications() {
+    let tickets = getSupportDB().filter(t => (t.phone === currentClient.phone || t.user === currentClient.name) && t.type.includes('Tizim'));
+    if(tickets.length > 0) {
+        document.getElementById('client-unread-dot').classList.remove('hidden');
+    }
 }
 
 function openAdminSupportModal() {
@@ -693,8 +721,8 @@ function renderAdminChat() {
     document.getElementById('admin-chat-list').innerHTML = tickets.length ? tickets.map((t, idx) => `
         <div class="cyber-card p-2 rounded text-xs space-y-1 cursor-pointer" onclick="selectChatUser('${t.user}')">
             <div class="flex justify-between text-[10px] text-yellow-500"><span>${t.user} (${t.type})</span><span>${t.date}</span></div>
-            <div><b>Savol:</b> ${t.message}</div>
-            ${t.reply ? `<div class="text-green-400"><b>Javob:</b> ${t.reply}</div>` : '<div class="text-red-400 text-[10px]">Javob berilmagan</div>'}
+            <div><b>Xabar:</b> ${t.message}</div>
+            ${t.reply ? `<div class="text-green-400"><b>Qo'shimcha:</b> ${t.reply}</div>` : '<div class="text-red-400 text-[10px]">Javob berilmagan</div>'}
         </div>
     `).join('') : '<p class="text-xs text-yellow-700">Murojaat yoq</p>';
 }
