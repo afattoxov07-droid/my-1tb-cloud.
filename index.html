@@ -31,15 +31,8 @@ input, textarea { user-select: text; }
 <p class="text-[10px] text-green-600 mt-1">Shifrlangan Bulutli Tizim</p>
 </div>
 
-<!-- BIR MARTALIK KOD (OTP) -->
-<div class="cyber-card p-3 rounded space-y-2 border-green-800">
-<p class="text-[10px] text-green-500 uppercase">> Maxfiy Seans / Bir Martalik Kod:</p>
-<div id="otp-display-box" class="text-xl font-bold text-green-300 tracking-widest bg-gray-900 py-2 rounded border border-green-900 animate-pulse">--- ---</div>
-<p class="text-[9px] text-green-600">Tizimga kirish uchun yuqoridagi bir martalik kodni yoki shaxsiy parolingizni kiriting.</p>
-</div>
-
-<div class="space-y-3">
-<input type="password" id="client-password" placeholder="[ Bir martalik kod yoki Parol ]" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
+<div class="space-y-3 pt-2">
+<input type="password" id="client-password" placeholder="[ Shaxsiy Parol ]" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
 <button onclick="directLogin()" class="w-full cyber-button py-3 rounded text-xs font-bold uppercase tracking-wider">PROFILGA KIRISH</button>
 </div>
 <p id="login-error" class="text-xs text-red-500 hidden"></p>
@@ -336,17 +329,15 @@ function saveSupportDB(db) { localStorage.setItem('secure_support_tickets', encr
 
 let currentClient = null;
 let savedFiles = [];
-let currentOneTimeCode = "";
 let activeReceiptIndex = null;
 
 window.onload = function() {
-    generateOneTimeCode();
     const savedSession = localStorage.getItem('secure_active_session');
     if (savedSession) {
         let admins = getAdminsDB();
         let clients = getClientsDB();
-        if (admins[savedSession] || savedSession === currentOneTimeCode) {
-            currentClient = { password: savedSession, name: "Admin (Seans)" };
+        if (admins[savedSession]) {
+            currentClient = { password: savedSession, ...admins[savedSession] };
             openAdminPanel();
         } else if (clients[savedSession]) {
             currentClient = { password: savedSession, ...clients[savedSession] };
@@ -354,13 +345,6 @@ window.onload = function() {
         }
     }
 };
-
-function generateOneTimeCode() {
-    const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
-    currentOneTimeCode = randomCode;
-    const box = document.getElementById('otp-display-box');
-    if(box) box.innerText = `${randomCode.slice(0,3)} ${randomCode.slice(3,6)}`;
-}
 
 function openPublicSection(section) {
     const modal = document.getElementById('public-modal');
@@ -399,10 +383,9 @@ function directLogin() {
     const errBox = document.getElementById('login-error');
     let admins = getAdminsDB();
     let clients = getClientsDB();
-    let isOtpMatch = (val === currentOneTimeCode);
 
-    if (!admins[val] && !clients[val] && !isOtpMatch) {
-        errBox.innerText = "> Xato parol yoki bir martalik kod!";
+    if (!admins[val] && !clients[val]) {
+        errBox.innerText = "> Xato parol!";
         errBox.classList.remove('hidden');
         return;
     }
@@ -411,8 +394,8 @@ function directLogin() {
 
     localStorage.setItem('secure_active_session', val);
 
-    if (isOtpMatch || admins[val]) {
-        currentClient = { password: val, ...(admins[val] || { name: "OTP Admin" }) };
+    if (admins[val]) {
+        currentClient = { password: val, ...admins[val] };
         openAdminPanel();
     } else if (clients[val]) {
         currentClient = { password: val, ...clients[val] };
