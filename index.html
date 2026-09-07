@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>[NEURAL-CLOUD 10B TB]</title>
     
-    <!-- Ikonkada to'liq nollar chiqishi uchun yangilangan SVG manifest -->
-    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,{"name":"NEURAL-CLOUD 10,000,000,000 TB","short_name":"NeuralCloud","start_url":"./","display":"standalone","background_color":"%23030712","theme_color":"%2322c55e","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22><rect width=%22512%22 height=%22512%22 fill=%22%23030712%22/><rect x=%2224%22 y=%2224%22 width=%22464%22 height=%22464%22 rx=%2296%22 fill=%22%23064e3b%22 stroke=%22%2322c55e%22 stroke-width=%2220%22/><text x=%22256%22 y=%22210%22 font-family=%22monospace%22 font-weight=%22bold%22 font-size=%22140%22 fill=%22%234ade80%22 text-anchor=%22middle%22>%u221E</text><text x=%22256%22 y=%22295%22 font-family=%22monospace%22 font-weight=%22bold%22 font-size=%2242%22 fill=%22%2322c55e%22 text-anchor=%22middle%22>10,000,000,000</text><text x=%22256%22 y=%22350%22 font-family=%22monospace%22 font-weight=%22bold%22 font-size=%2245%22 fill=%22%2322c55e%22 text-anchor=%22middle%22>TB</text></svg>","sizes":"512x512","type":"image/svg+xml"}]}'>
+    <!-- Statik va kafolatlangan PWA manifest -->
+    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,{"name":"NEURAL-CLOUD 10B TB","short_name":"NeuralCloud","start_url":"./","display":"standalone","background_color":"%23030712","theme_color":"%2322c55e","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22><rect width=%22512%22 height=%22512%22 fill=%22%23030712%22/><rect x=%2232%22 y=%2232%22 width=%22448%22 height=%22448%22 rx=%2296%22 fill=%22%23064e3b%22 stroke=%22%2322c55e%22 stroke-width=%2224%22/><text x=%22256%22 y=%22230%22 font-family=%22monospace%22 font-weight=%22bold%22 font-size=%22160%22 fill=%22%234ade80%22 text-anchor=%22middle%22>%u221E</text><text x=%22256%22 y=%22340%22 font-family=%22monospace%22 font-weight=%22bold%22 font-size=%2265%22 fill=%22%2322c55e%22 text-anchor=%22middle%22>10B TB</text></svg>","sizes":"512x512","type":"image/svg+xml"}]}'>
     <meta name="theme-color" content="#22c55e">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -291,11 +291,56 @@
         async function downloadFile(fileId, fileName) {
             try {
                 const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`);
-                const data = var data = await res.json();
-                // ...
-            } catch (err) {}
+                const data = await res.json();
+                if (data.ok) {
+                    const a = document.createElement('a');
+                    a.href = `https://api.telegram.org/file/bot${BOT_TOKEN}/${data.result.file_path}`;
+                    a.download = fileName;
+                    a.target = '_blank';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }
+            } catch (err) { log(`Yuklab bo'lmadi.`); }
         }
-        // ... (qolgan funksiyalar o'zgarishsiz qoldi)
+
+        function renderFiles(filesToRender) {
+            fileCount.innerText = filesToRender.length;
+            if (filesToRender.length === 0) {
+                fileList.innerHTML = `<div class="text-center py-6 cyber-border bg-gray-950 text-xs text-green-700">> XOTIRA BO'SH (CHEKSIZ IMKONIYAT)</div>`;
+                return;
+            }
+            fileList.innerHTML = filesToRender.map((file, index) => `
+                <div class="cyber-card p-2.5 md:p-3 rounded flex items-center justify-between text-xs gap-2">
+                    <div class="flex items-center space-x-2.5 overflow-hidden">
+                        <i class="fa-solid fa-file-code text-green-400 shrink-0"></i>
+                        <div class="truncate">
+                            <p class="font-bold text-green-300 truncate">${file.name}</p>
+                            <p class="text-[10px] text-green-600">${file.size} | ${file.date}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-1 shrink-0">
+                        <button onclick="previewFile('${file.id}', '${file.name}', '${file.type || ''}')" class="cyber-button p-1.5 rounded text-[10px]" title="Ko'rish"><i class="fa-solid fa-eye"></i></button>
+                        <button onclick="copyShareLink('${file.id}')" class="cyber-button p-1.5 rounded text-[10px]" title="Ulashish"><i class="fa-solid fa-share-nodes"></i></button>
+                        <button onclick="downloadFile('${file.id}', '${file.name}')" class="cyber-button p-1.5 rounded text-[10px]" title="Yuklab olish"><i class="fa-solid fa-download"></i></button>
+                        <button onclick="deleteFile(${index})" class="p-1.5 bg-red-950/40 border border-red-800 text-red-400 rounded text-[10px]" title="O'chirish"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function searchFiles() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            renderFiles(savedFiles.filter(f => f.name.toLowerCase().includes(query)));
+        }
+
+        function deleteFile(index) {
+            if (confirm("O'chirishni tasdiqlaysizmi?")) {
+                savedFiles.splice(index, 1);
+                localStorage.setItem('my_cloud_files', JSON.stringify(savedFiles));
+                renderFiles(savedFiles);
+            }
+        }
     </script>
 </body>
 </html>
