@@ -3,140 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>10,000 MLRD TB Cloud Storage</title>
+    <title>[NEURAL-CLOUD] v4.0.1 - Cheksiz Ombor</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background: radial-gradient(circle at top left, #0f172a, #090d16, #020617);
+            font-family: 'Fira Code', monospace;
+            background-color: #030712;
+            color: #22c55e;
         }
-        .glass {
-            background: rgba(30, 41, 59, 0.4);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        .scanline {
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.3));
+            background-size: 100% 4px;
         }
-        .glass-card {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .cyber-border {
+            border: 1px solid #15803d;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.15), inset 0 0 15px rgba(34, 197, 94, 0.1);
         }
-        .glass-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(59, 130, 246, 0.4);
-            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3);
+        .cyber-card {
+            background: rgba(6, 78, 59, 0.1);
+            border: 1px solid #166534;
+            transition: all 0.2s ease;
         }
-        .glow-button {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        .cyber-card:hover {
+            border-color: #22c55e;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+            transform: scale(1.01);
         }
-        .glow-button:hover {
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.7);
+        .cyber-button {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid #22c55e;
+            color: #4ade80;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+        }
+        .cyber-button:hover {
+            background: #22c55e;
+            color: #000;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.8);
         }
         .drag-active {
-            border-color: #3b82f6 !important;
-            background-color: rgba(59, 130, 246, 0.15) !important;
-            box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.3);
+            border-color: #4ade80 !important;
+            background: rgba(34, 197, 94, 0.25) !important;
         }
     </style>
 </head>
-<body class="text-slate-100 min-h-screen flex flex-col font-sans selection:bg-blue-500 selection:text-white">
+<body class="min-h-screen flex flex-col relative overflow-x-hidden">
+    <!-- Overlay Effects -->
+    <div class="pointer-events-none fixed inset-0 z-50 scanline opacity-40"></div>
 
     <!-- Header -->
-    <header class="glass sticky top-0 z-50 px-6 py-4 flex justify-between items-center border-b border-slate-800">
+    <header class="p-4 border-b border-green-800 bg-gray-950/80 flex justify-between items-center relative z-10">
         <div class="flex items-center space-x-3">
-            <div class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white shadow-lg shadow-blue-500/30">
-                <i class="fa-solid fa-cloud text-xl"></i>
-            </div>
-            <div>
-                <h1 class="text-lg font-bold tracking-wide bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent">
-                    10,000 MLRD TB Cloud
-                </h1>
-                <p class="text-[10px] text-slate-400 font-medium tracking-wider uppercase">Cheksiz Telegram Ombori</p>
-            </div>
+            <span class="inline-block w-3 h-3 bg-green-500 rounded-full animate-ping"></span>
+            <h1 class="text-sm md:text-base font-bold tracking-widest text-green-400">
+                SYSTEM://NEURAL_STORAGE_10B_TB
+            </h1>
         </div>
-        <div class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-full border border-slate-800 text-xs">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span class="text-slate-300">Tizim holati: <strong class="text-emerald-400 font-semibold">Cheksiz</strong></span>
+        <div class="text-xs text-green-600 hidden sm:block">
+            STATUS: <span class="text-green-400 font-bold">ONLINE [1 TB+]</span>
         </div>
     </header>
 
-    <!-- Main Body -->
-    <div class="flex flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 gap-8">
+    <!-- Main Grid -->
+    <div class="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
         
-        <!-- Sidebar Navigation -->
-        <aside class="w-64 space-y-6 hidden lg:block">
-            <div class="glass p-4 rounded-2xl space-y-1">
-                <p class="text-xs font-semibold text-slate-400 px-3 uppercase tracking-wider mb-2">Kategoriyalar</p>
-                <button onclick="filterCategory('all')" class="w-full flex items-center space-x-3 bg-blue-600/20 text-blue-400 px-3 py-2.5 rounded-xl font-medium text-sm transition-all">
-                    <i class="fa-solid fa-layer-group text-base"></i>
-                    <span>Barcha fayllar</span>
-                </button>
-            </div>
-
-            <!-- Stats Widget -->
-            <div class="glass p-5 rounded-2xl border border-slate-800/80 relative overflow-hidden">
-                <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-blue-600/10 rounded-full blur-xl"></div>
-                <h4 class="text-xs font-medium text-slate-400 mb-1">Xotira holati</h4>
-                <div class="text-xl font-bold text-slate-200 mb-2"> Cheksiz GB</div>
-                <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden mb-2">
-                    <div class="bg-gradient-to-r from-blue-500 to-indigo-500 h-full rounded-full w-full animate-pulse"></div>
+        <!-- Left Column: Controls & Console -->
+        <div class="space-y-6">
+            <!-- Terminal Log Window -->
+            <div class="cyber-border bg-gray-950 p-4 rounded-lg">
+                <div class="flex items-center justify-between border-b border-green-900 pb-2 mb-3 text-xs text-green-600">
+                    <span>TERMINAL_LOG</span>
+                    <span>v4.0.1</span>
                 </div>
-                <p class="text-[11px] text-slate-400">Noutbuk xotirasi mutlaqo ishlatilmaydi</p>
+                <div id="terminal-log" class="text-[11px] space-y-1 h-32 overflow-y-auto text-green-500 font-mono">
+                    <p class="text-green-700">> Tizim ishga tushirildi...</p>
+                    <p class="text-green-700">> Telegram neyron tarmog'i ulangan.</p>
+                    <p class="text-green-400">> Buyruq kutilmoqda...</p>
+                </div>
             </div>
-        </aside>
 
-        <!-- Main Workspace -->
-        <main class="flex-1 flex flex-col space-y-6">
+            <!-- Stats -->
+            <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3">
+                <div class="text-xs text-green-600 font-bold">XOTIRA HOLATI</div>
+                <div class="text-2xl font-bold text-green-400">10,000,000,000 TB</div>
+                <div class="w-full bg-gray-900 h-2 border border-green-800 overflow-hidden">
+                    <div class="bg-green-500 h-full w-full animate-pulse"></div>
+                </div>
+                <p class="text-[10px] text-green-700">> Noutbuk xotirasi xavfsiz (0 KB band)</p>
+            </div>
+        </div>
 
-            <!-- Drag & Drop Upload Zone -->
-            <div id="drop-zone" class="glass-card border-2 border-dashed border-slate-700/80 rounded-3xl p-8 md:p-10 text-center relative overflow-hidden group cursor-pointer">
+        <!-- Right Column: Main Area -->
+        <div class="lg:col-span-2 space-y-6">
+            
+            <!-- Cyber Upload Area -->
+            <div id="drop-zone" class="cyber-card p-8 rounded-lg text-center cursor-pointer relative overflow-hidden group">
                 <input type="file" id="file-input" class="hidden" multiple>
-                <div class="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-purple-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                
-                <div class="relative z-10 flex flex-col items-center">
-                    <div class="w-16 h-16 mb-4 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-xl">
-                        <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
+                <div class="space-y-4">
+                    <i class="fa-solid fa-terminal text-4xl text-green-400 group-hover:scale-110 transition-transform"></i>
+                    <div>
+                        <h3 class="text-sm md:text-base font-bold text-green-300">FAYLLARNI BU YERGA TASHLANG</h3>
+                        <p class="text-xs text-green-600 mt-1">[ Yoki tugmani bosib tanlang ]</p>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-100 mb-1">Fayllarni shu yerga tashlang yoki tanlang</h3>
-                    <p class="text-xs text-slate-400 max-w-sm mb-6">Maksimal fayl hajmi: 2 GB gacha (Telegram tezkor serverlarida saqlanadi)</p>
-                    
-                    <button onclick="document.getElementById('file-input').click()" class="glow-button bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-sm font-semibold px-6 py-3 rounded-xl transition-all flex items-center space-x-2">
-                        <i class="fa-solid fa-plus"></i>
-                        <span>Fayl yuklash</span>
+                    <button onclick="document.getElementById('file-input').click()" class="cyber-button px-6 py-2 rounded text-xs font-bold uppercase transition-all">
+                        + FAYL_YUKLASH
                     </button>
                 </div>
             </div>
 
-            <!-- Upload Progress Bar -->
-            <div id="progress-container" class="hidden glass p-4 rounded-2xl border border-blue-500/30">
-                <div class="flex justify-between items-center text-xs mb-2">
-                    <span id="progress-title" class="font-semibold text-slate-200 truncate max-w-md">Yuklanmoqda...</span>
-                    <span id="progress-percent" class="text-blue-400 font-bold">0%</span>
+            <!-- Progress Bar -->
+            <div id="progress-container" class="hidden cyber-border bg-gray-950 p-4 rounded-lg">
+                <div class="flex justify-between text-xs mb-2">
+                    <span id="progress-title" class="truncate max-w-xs text-green-300">> YUKLANMOQDA...</span>
+                    <span id="progress-percent" class="text-green-400 font-bold">0%</span>
                 </div>
-                <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
-                    <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-indigo-400 h-full rounded-full transition-all duration-200" style="width: 0%"></div>
-                </div>
-            </div>
-
-            <!-- Controls & Search -->
-            <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
-                <h2 class="text-base font-bold text-slate-200 flex items-center space-x-2">
-                    <span>Yuklangan fayllar</span>
-                    <span id="file-count" class="bg-slate-800 text-blue-400 text-xs px-2 py-0.5 rounded-full border border-slate-700">0</span>
-                </h2>
-                
-                <div class="relative flex-1 max-w-xs">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
-                    <input type="text" id="search-input" oninput="searchFiles()" placeholder="Fayllarni qidirish..." class="w-full bg-slate-900/90 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/50 transition-all">
+                <div class="w-full bg-gray-900 h-2 border border-green-800">
+                    <div id="progress-bar" class="bg-green-500 h-full transition-all duration-200" style="width: 0%"></div>
                 </div>
             </div>
 
-            <!-- File List Grid -->
-            <div id="file-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Files dynamically loaded here -->
+            <!-- File List Header & Search -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div class="text-xs font-bold text-green-400 flex items-center space-x-2">
+                    <span>> YUKLANGAN_FAYLLAR</span>
+                    <span id="file-count" class="px-2 py-0.5 bg-green-950 border border-green-800 rounded text-[10px]">0</span>
+                </div>
+                <input type="text" id="search-input" oninput="searchFiles()" placeholder="[ Qidirish... ]" class="bg-gray-950 border border-green-800 text-xs text-green-400 px-3 py-1.5 rounded focus:outline-none focus:border-green-400 w-full sm:w-48">
             </div>
 
-        </main>
+            <!-- File Grid -->
+            <div id="file-list" class="space-y-2">
+                <!-- Dynamic Content -->
+            </div>
+
+        </div>
     </div>
 
     <script>
@@ -151,11 +152,19 @@
         const progressTitle = document.getElementById('progress-title');
         const fileList = document.getElementById('file-list');
         const fileCount = document.getElementById('file-count');
+        const terminalLog = document.getElementById('terminal-log');
 
         let savedFiles = JSON.parse(localStorage.getItem('my_cloud_files') || '[]');
         renderFiles(savedFiles);
 
-        // Drag & Drop Handlers
+        function log(msg) {
+            const p = document.createElement('p');
+            p.innerText = `> ${msg}`;
+            terminalLog.appendChild(p);
+            terminalLog.scrollTop = terminalLog.scrollHeight;
+        }
+
+        // Drag & Drop
         dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-active'); });
         dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-active'));
         dropZone.addEventListener('drop', (e) => {
@@ -173,6 +182,7 @@
 
         function uploadToTelegram(file) {
             return new Promise((resolve) => {
+                log(`Fayl tayyorlanmoqda: ${file.name}`);
                 const formData = new FormData();
                 formData.append('chat_id', CHAT_ID);
                 formData.append('document', file);
@@ -181,7 +191,7 @@
                 xhr.open('POST', `https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, true);
 
                 progressContainer.classList.remove('hidden');
-                progressTitle.innerText = `${file.name} yuklanmoqda...`;
+                progressTitle.innerText = `> PROSESSING: ${file.name}`;
 
                 xhr.upload.onprogress = (e) => {
                     if (e.lengthComputable) {
@@ -200,14 +210,15 @@
                                 id: fileId,
                                 name: file.name,
                                 size: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
-                                date: new Date().toLocaleDateString(),
-                                type: getFileType(file.name)
+                                date: new Date().toLocaleDateString()
                             };
                             savedFiles.unshift(fileData);
                             localStorage.setItem('my_cloud_files', JSON.stringify(savedFiles));
+                            log(`Muvaffaqiyatli saqlandi: ${file.name}`);
                             renderFiles(savedFiles);
                         }
                     } else {
+                        log(`XATOLIK: Fayl yuklanmadi!`);
                         alert('Yuklashda xatolik yuz berdi!');
                     }
                     progressContainer.classList.add('hidden');
@@ -216,7 +227,7 @@
                 };
 
                 xhr.onerror = function() {
-                    alert('Tarmoq xatosi bor.');
+                    log(`TARMOQ XATOSI!`);
                     progressContainer.classList.add('hidden');
                     resolve();
                 };
@@ -226,6 +237,7 @@
         }
 
         async function downloadFile(fileId, fileName) {
+            log(`Fayl manbasi qidirilmoqda...`);
             try {
                 const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`);
                 const data = await res.json();
@@ -233,6 +245,7 @@
                     const filePath = data.result.file_path;
                     const downloadUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${filePath}`;
                     
+                    log(`Yuklab olish boshlandi: ${fileName}`);
                     const a = document.createElement('a');
                     a.href = downloadUrl;
                     a.download = fileName;
@@ -241,29 +254,10 @@
                     a.click();
                     document.body.removeChild(a);
                 } else {
-                    alert("Fayl yo'lini olishda xatolik yuz berdi.");
+                    log(`XATOLIK: Manba topilmadi.`);
                 }
             } catch (err) {
-                alert("Yuklab olishda xatolik yuz berdi.");
-            }
-        }
-
-        function getFileType(fileName) {
-            const ext = fileName.split('.').pop().toLowerCase();
-            if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) return 'image';
-            if (['mp4', 'mkv', 'avi', 'mov'].includes(ext)) return 'video';
-            if (['mp3', 'wav', 'ogg'].includes(ext)) return 'audio';
-            if (['zip', 'rar', '7z'].includes(ext)) return 'archive';
-            return 'document';
-        }
-
-        function getFileIcon(type) {
-            switch(type) {
-                case 'image': return { icon: 'fa-file-image', color: 'text-emerald-400 bg-emerald-500/10' };
-                case 'video': return { icon: 'fa-file-video', color: 'text-purple-400 bg-purple-500/10' };
-                case 'audio': return { icon: 'fa-file-audio', color: 'text-amber-400 bg-amber-500/10' };
-                case 'archive': return { icon: 'fa-file-zipper', color: 'text-rose-400 bg-rose-500/10' };
-                default: return { icon: 'fa-file-lines', color: 'text-blue-400 bg-blue-500/10' };
+                log(`XATOLIK: Yuklab bo'lmadi.`);
             }
         }
 
@@ -272,36 +266,31 @@
 
             if (filesToRender.length === 0) {
                 fileList.innerHTML = `
-                    <div class="col-span-full text-center py-12 glass rounded-2xl border border-slate-800">
-                        <i class="fa-regular fa-folder-open text-4xl text-slate-600 mb-3"></i>
-                        <p class="text-sm text-slate-400">Hozircha hech qanday fayl yo'q</p>
+                    <div class="text-center py-8 cyber-border bg-gray-950 text-xs text-green-700">
+                        > XOTIRA BO'SH (FAYLLAR YO'Q)
                     </div>`;
                 return;
             }
 
-            fileList.innerHTML = filesToRender.map((file, index) => {
-                const iconInfo = getFileIcon(file.type);
-                return `
-                <div class="glass-card p-4 rounded-2xl flex items-center justify-between group">
+            fileList.innerHTML = filesToRender.map((file, index) => `
+                <div class="cyber-card p-3 rounded flex items-center justify-between text-xs">
                     <div class="flex items-center space-x-3 overflow-hidden">
-                        <div class="w-10 h-10 rounded-xl ${iconInfo.color} flex items-center justify-center shrink-0">
-                            <i class="fa-solid ${iconInfo.icon} text-lg"></i>
-                        </div>
+                        <i class="fa-solid fa-file-code text-green-400"></i>
                         <div class="truncate">
-                            <p class="font-semibold text-xs text-slate-200 truncate group-hover:text-blue-400 transition-colors" title="${file.name}">${file.name}</p>
-                            <p class="text-[10px] text-slate-500 mt-0.5">${file.size} • ${file.date}</p>
+                            <p class="font-bold text-green-300 truncate">${file.name}</p>
+                            <p class="text-[10px] text-green-600">${file.size} | ${file.date}</p>
                         </div>
                     </div>
-                    <div class="flex items-center space-x-1 shrink-0">
-                        <button onclick="downloadFile('${file.id}', '${file.name}')" title="Yuklab olish" class="w-8 h-8 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all flex items-center justify-center">
-                            <i class="fa-solid fa-download text-xs"></i>
+                    <div class="flex items-center space-x-2 shrink-0">
+                        <button onclick="downloadFile('${file.id}', '${file.name}')" title="GET_FILE" class="cyber-button px-2 py-1 rounded text-[10px]">
+                            <i class="fa-solid fa-download"></i>
                         </button>
-                        <button onclick="deleteFile(${index})" title="O'chirish" class="w-8 h-8 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all flex items-center justify-center">
-                            <i class="fa-solid fa-trash text-xs"></i>
+                        <button onclick="deleteFile(${index})" title="DELETE" class="px-2 py-1 bg-red-950/40 border border-red-800 text-red-400 rounded hover:bg-red-900/60 text-[10px]">
+                            <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
                 </div>
-            `}).join('');
+            `).join('');
         }
 
         function searchFiles() {
@@ -311,7 +300,8 @@
         }
 
         function deleteFile(index) {
-            if (confirm("Ushbu faylni ro'yxatdan o'chirmoqchimisiz?")) {
+            if (confirm("Ushbu faylni o'chirishni tasdiqlaysizmi?")) {
+                log(`Fayl o'chirildi.`);
                 savedFiles.splice(index, 1);
                 localStorage.setItem('my_cloud_files', JSON.stringify(savedFiles));
                 renderFiles(savedFiles);
