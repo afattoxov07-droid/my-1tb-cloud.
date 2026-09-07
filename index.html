@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>[NEURAL-CLOUD 10B TB]</title>
     
-    <!-- Statik va kafolatlangan PWA manifest -->
-    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,{"name":"NEURAL-CLOUD 10B TB","short_name":"NeuralCloud","start_url":"./","display":"standalone","background_color":"%23030712","theme_color":"%2322c55e","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22><rect width=%22512%22 height=%22512%22 fill=%22%23030712%22/><rect x=%2232%22 y=%2232%22 width=%22448%22 height=%22448%22 rx=%2296%22 fill=%22%23064e3b%22 stroke=%22%2322c55e%22 stroke-width=%2224%22/><text x=%22256%22 y=%22230%22 font-family=%22monospace%22 font-weight=%22bold%22 font-size=%22160%22 fill=%22%234ade80%22 text-anchor=%22middle%22>%u221E</text><text x=%22256%22 y=%22340%22 font-family=%22monospace%22 font-weight=%22bold%22 font-size=%2265%22 fill=%22%2322c55e%22 text-anchor=%22middle%22>10B TB</text></svg>","sizes":"512x512","type":"image/svg+xml"}]}'>
     <meta name="theme-color" content="#22c55e">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -21,6 +19,24 @@
         .cyber-button:active { background: #22c55e; color: #000; }
         .drag-active { border-color: #4ade80 !important; background: rgba(34, 197, 94, 0.25) !important; }
     </style>
+    <script>
+        // Manifestni xatosiz ulash uchun dinamik skript
+        const svgIcon = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%23030712'/><rect x='32' y='32' width='448' height='448' rx='96' fill='%23064e3b' stroke='%2322c55e' stroke-width='24'/><text x='256' y='230' font-family='monospace' font-weight='bold' font-size='160' fill='%234ade80' text-anchor='middle'>∞</text><text x='256' y='340' font-family='monospace' font-weight='bold' font-size='65' fill='%2322c55e' text-anchor='middle'>10B TB</text></svg>";
+        const manifestData = {
+            name: "NEURAL-CLOUD [10,000,000,000 TB]",
+            short_name: "NeuralCloud",
+            start_url: "/",
+            display: "standalone",
+            background_color: "#030712",
+            theme_color: "#22c55e",
+            icons: [{ src: svgIcon, sizes: "512x512", type: "image/svg+xml" }]
+        };
+        const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/manifest+json' });
+        const manifestLink = document.createElement('link');
+        manifestLink.rel = 'manifest';
+        manifestLink.href = URL.createObjectURL(manifestBlob);
+        document.head.appendChild(manifestLink);
+    </script>
 </head>
 <body class="min-h-screen flex flex-col relative overflow-x-hidden text-sm md:text-base">
     <div class="pointer-events-none fixed inset-0 z-50 scanline opacity-30"></div>
