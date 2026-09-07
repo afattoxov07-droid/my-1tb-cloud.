@@ -360,8 +360,18 @@ function openPublicSection(section) {
         title.innerText = "> ONLAYN YORDAM";
         body.innerHTML = `<div class="space-y-3"><input type="text" id="public-guest-name" placeholder="Ismingiz" class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded"><textarea id="public-guest-msg" placeholder="Murojaatingiz..." class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded h-24"></textarea><button onclick="sendPublicSupportTicket()" class="w-full cyber-button py-2 rounded text-xs font-bold uppercase cursor-pointer">YUBORISH</button></div>`;
     } else if (section === 'author') {
-        title.innerText = "> MUALLIF";
-        body.innerHTML = `<div class="cyber-card p-3.5 rounded space-y-2"><p class="text-cyan-400 font-bold">Fattoxov Abdulloh Toxirjon o'g'li</p><p class="text-white text-[11px]">Toshkent Menejment va Iqtisodiyot Instituti Farg'ona Campusi, Kompyuter injiniringi, 2-kurs.</p></div>`;
+        title.innerText = "> MUALLIF VA LOYIHA HAQIDA";
+        body.innerHTML = `
+            <div class="cyber-card p-3.5 rounded space-y-3">
+                <div>
+                    <p class="text-cyan-400 font-bold text-sm">Fattoxov Abdulloh Toxirjon o'g'li</p>
+                    <p class="text-white text-[11px] mt-1">Toshkent Menejment va Iqtisodiyot Instituti Farg'ona Campusi, Kompyuter injiniringi yo'nalishi, 2-kurs talabasi.</p>
+                </div>
+                <div class="border-t border-green-900/60 pt-2 space-y-1">
+                    <p class="text-green-400 font-bold text-[11px]">> Loyiha Haqida:</p>
+                    <p class="text-green-300 text-[11px] leading-relaxed">Ushbu dastur maxfiy ma'lumotlar, hujjatlar va shifrlangan fayllarni xavfsiz saqlash hamda boshqarishga mo'ljallangan zamonaviy kibertexnologik bulutli tizim hisoblanadi. AES-256 shifrlash standartlari asosida ishlaydi.</p>
+                </div>
+            </div>`;
     }
     modal.classList.remove('hidden');
 }
