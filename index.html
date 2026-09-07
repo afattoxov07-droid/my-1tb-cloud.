@@ -28,19 +28,15 @@ input, textarea { user-select: text; }
 <div class="w-12 h-12 mx-auto rounded border border-green-500 bg-emerald-950 flex items-center justify-center text-green-400 font-bold text-xl animate-pulse">🔒</div>
 <div>
 <h2 class="text-base md:text-lg font-bold text-green-400">CYBER SECURE CLOUD PRO</h2>
-<p class="text-[10px] text-green-600 mt-1">Shifrlangan Bulutli Tizim</p>
+<p class="text-[10px] text-green-600 mt-1">Ism va Telefon Raqam Orqali Kirish</p>
 </div>
 
-<!-- BIR MARTALIK KOD NAMOJISH QILISH QISMI -->
-<div class="p-3 bg-emerald-950/40 border border-green-800 rounded text-center space-y-1">
-<p class="text-[10px] text-green-400">Mijoz uchun bir martalik kirish kodi:</p>
-<div id="one-time-code-display" class="text-base font-bold text-yellow-400 tracking-widest">---</div>
-<button onclick="generateNewOneTimeCode()" class="text-[9px] text-green-500 underline cursor-pointer mt-1">Kodni yangilash</button>
-</div>
-
+<!-- KIRISH FORMASI -->
 <div class="space-y-3 pt-2">
-<input type="password" id="client-password" placeholder="[ Parol yoki Bir martalik kod ]" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
-<button onclick="directLogin()" class="w-full cyber-button py-3 rounded text-xs font-bold uppercase tracking-wider">PROFILGA KIRISH</button>
+<input type="text" id="client-login-name" placeholder="[ Ismingizni kiriting ]" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
+<input type="text" id="client-login-phone" placeholder="[ Telefon raqam: +998... ]" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
+<input type="password" id="client-login-pwd" placeholder="[ Shaxsiy Kodingiz / Parolingiz ]" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
+<button onclick="clientRegisterOrLogin()" class="w-full cyber-button py-3 rounded text-xs font-bold uppercase tracking-wider">PROFILGA KIRISH / OCHISH</button>
 </div>
 <p id="login-error" class="text-xs text-red-500 hidden"></p>
 </div>
@@ -84,29 +80,18 @@ input, textarea { user-select: text; }
 </div>
 </header>
 <div class="flex-1 max-w-4xl w-full mx-auto p-4 space-y-4">
-<div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3 border-red-900">
-<h3 class="text-xs font-bold text-red-400">> Adminlar Boshqaruvi</h3>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-<input type="text" id="new-admin-name" placeholder="Admin ismi" class="bg-gray-900 border border-red-900 text-xs text-red-300 px-3 py-2 rounded focus:outline-none">
-<input type="text" id="new-admin-pwd" placeholder="Admin maxfiy paroli" class="bg-gray-900 border border-red-900 text-xs text-red-300 px-3 py-2 rounded focus:outline-none">
+<!-- KIRGAN MIJOZLAR TARIXI -->
+<div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3 border-cyan-900">
+<h3 class="text-xs font-bold text-cyan-400">> Profilga Kirgan Mijozlar Tarixi (Real-time)</h3>
+<div id="admin-activity-list" class="space-y-2 max-h-40 overflow-y-auto"></div>
 </div>
-<button onclick="addNewAdmin()" class="w-full py-2 bg-red-950/50 border border-red-800 text-red-400 rounded text-xs font-bold uppercase cursor-pointer">+ Admin Qo'shish</button>
-<div id="admin-list-container" class="space-y-2 mt-3"></div>
-</div>
+
 <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3 border-yellow-900">
 <h3 class="text-xs font-bold text-yellow-400">> Kelib tushgan to'lov cheklari</h3>
 <div id="admin-receipts-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
 </div>
 <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3">
-<h3 class="text-xs font-bold text-green-400">> Yangi mijoz qo'shish</h3>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-<input type="text" id="new-client-name" placeholder="Mijoz ismi" class="bg-gray-900 border border-green-800 text-xs text-green-400 px-3 py-2 rounded focus:outline-none">
-<input type="text" id="new-client-pwd" placeholder="Maxfiy paroli" class="bg-gray-900 border border-green-800 text-xs text-green-400 px-3 py-2 rounded focus:outline-none">
-</div>
-<button onclick="addNewClient()" class="w-full cyber-button py-2 rounded text-xs font-bold uppercase cursor-pointer">+ Mijoz Qo'shish</button>
-</div>
-<div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3">
-<h3 class="text-xs font-bold text-green-400">> Shifrlangan mijozlar ro'yxati</h3>
+<h3 class="text-xs font-bold text-green-400">> Shifrlangan mijozlar ro'yxati va Parol yangilash</h3>
 <div id="admin-clients-list" class="space-y-2"></div>
 </div>
 </div>
@@ -134,7 +119,18 @@ input, textarea { user-select: text; }
 <button onclick="closeReceiptModal()" class="absolute top-2 right-2 text-yellow-400 text-sm font-bold p-2">[ X ]</button>
 <h4 class="text-xs font-bold text-yellow-400">> TO'LOV CHEKI</h4>
 <div id="receipt-modal-content" class="py-2"></div>
-<button id="approve-payment-btn" class="w-full py-2 bg-emerald-950 border border-green-500 text-green-300 rounded text-xs font-bold uppercase cursor-pointer">TO'LOVNI TASDIQLASH (CHEKSIZ BERISH)</button>
+<button id="approve-payment-btn" class="w-full py-2 bg-emerald-950 border border-green-500 text-green-300 rounded text-xs font-bold uppercase cursor-pointer">TO'LOVNI TASDIQLASH (CHEKSIZ XOTIRA VA YANGI PAROL BERISH)</button>
+</div>
+</div>
+
+<!-- PAROLNI O'ZGARTIRISH / YANGI PAROL BERISH MODALI -->
+<div id="new-password-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
+<div class="cyber-border bg-gray-950 p-4 rounded-lg max-w-sm w-full relative space-y-3 text-center border-green-500">
+<button onclick="closeNewPasswordModal()" class="absolute top-2 right-2 text-green-400 text-sm font-bold p-2">[ X ]</button>
+<h4 class="text-xs font-bold text-green-400">> MIJOZGA YANGI PAROL</h4>
+<p class="text-xs text-green-300">To'lov tasdiqlandi. Quyida ushbu mijoz uchun yangi shaxsiy parol shakllantirildi:</p>
+<input type="text" id="generated-new-pwd" readonly class="w-full bg-gray-900 border border-green-500 text-sm font-bold text-yellow-400 p-2 rounded text-center">
+<p class="text-[10px] text-gray-400">Mijozga ushbu parolni yetkazing!</p>
 </div>
 </div>
 
@@ -188,7 +184,7 @@ input, textarea { user-select: text; }
 </div>
 </div>
 
-<!-- OCHIQ BO'LIMLAR (KABINET ICHIDA HAM MAVJUD) -->
+<!-- OCHIQ BO'LIMLAR (KABINET ICHIDA) -->
 <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3 text-left">
 <div class="flex justify-between items-center border-b border-green-900 pb-2">
 <h3 class="text-xs font-bold text-green-400">> Qo'shimcha Bo'limlar va Ma'lumotlar</h3>
@@ -200,10 +196,6 @@ input, textarea { user-select: text; }
 <button onclick="openPublicSection('author')" class="w-full py-2.5 px-3 bg-cyan-950 border border-cyan-600 text-cyan-300 rounded text-xs font-bold text-left flex justify-between items-center cursor-pointer"><span class="pointer-events-none"><i class="fa-solid fa-user-code mr-2"></i> Muallif va Loyiha Haqida</span><span class="text-[10px] text-cyan-400">Ma'lumot</span></button>
 </div>
 
-<div id="progress-container" class="hidden cyber-border bg-gray-950 p-3 rounded-lg">
-<div class="flex justify-between text-xs mb-1"><span id="progress-title" class="text-green-300">> SHIFRLANIB YUKLANMOQDA...</span><span id="progress-percent" class="text-green-400 font-bold">0%</span></div>
-<div class="w-full bg-gray-900 h-2 border border-green-800"><div id="progress-bar" class="bg-green-500 h-full" style="width: 0%"></div></div>
-</div>
 <div class="space-y-3">
 <div class="flex justify-between items-center"><div class="text-xs font-bold text-green-400">SHIFRLANGAN FAYLLAR (<span id="file-count">0</span>)</div><button onclick="openTrashModal()" class="cyber-button px-2.5 py-1 rounded text-[10px] cursor-pointer"><i class="fa-solid fa-box-archive"></i> Arxiv / Savat</button></div>
 <div id="file-list" class="space-y-2"></div>
@@ -313,18 +305,23 @@ function getAdminsDB() {
     }
     return decryptData(encryptedDb) || {};
 }
-function saveAdminsDB(db) { localStorage.setItem('secure_cloud_admins', encryptData(db)); }
 
 function getClientsDB() {
-    let encryptedDb = localStorage.getItem('secure_cloud_clients');
+    let encryptedDb = localStorage.getItem('secure_cloud_clients_v2');
     if (!encryptedDb) {
-        let defaultClients = { "parol123": { name: "Test_Mijoz", paid: false } };
-        localStorage.setItem('secure_cloud_clients', encryptData(defaultClients));
+        let defaultClients = {};
+        localStorage.setItem('secure_cloud_clients_v2', encryptData(defaultClients));
         return defaultClients;
     }
     return decryptData(encryptedDb) || {};
 }
-function saveClientsDB(db) { localStorage.setItem('secure_cloud_clients', encryptData(db)); }
+function saveClientsDB(db) { localStorage.setItem('secure_cloud_clients_v2', encryptData(db)); }
+
+function getActivityDB() {
+    let enc = localStorage.getItem('secure_client_activities');
+    return enc ? (decryptData(enc) || []) : [];
+}
+function saveActivityDB(db) { localStorage.setItem('secure_client_activities', encryptData(db)); }
 
 function getReceiptsDB() {
     let enc = localStorage.getItem('secure_cloud_receipts');
@@ -340,11 +337,10 @@ function saveSupportDB(db) { localStorage.setItem('secure_support_tickets', encr
 
 let currentClient = null;
 let savedFiles = [];
+let totalUploadedCount = 0; // Fayl o'chirilsa ham limit to'lib turishi uchun
 let activeReceiptIndex = null;
-let currentOneTimeCode = "";
 
 window.onload = function() {
-    generateNewOneTimeCode();
     const savedSession = localStorage.getItem('secure_active_session');
     if (savedSession) {
         let admins = getAdminsDB();
@@ -352,18 +348,12 @@ window.onload = function() {
         if (admins[savedSession]) {
             currentClient = { password: savedSession, ...admins[savedSession] };
             openAdminPanel();
-        } else if (savedSession === currentOneTimeCode || clients[savedSession]) {
-            currentClient = { password: savedSession, name: clients[savedSession] ? clients[savedSession].name : "Mijoz (Bir martalik)", paid: clients[savedSession] ? clients[savedSession].paid : false };
+        } else if (clients[savedSession]) {
+            currentClient = { password: savedSession, ...clients[savedSession] };
             openClientApp();
         }
     }
 };
-
-function generateNewOneTimeCode() {
-    currentOneTimeCode = Math.floor(100000 + Math.random() * 900000).toString();
-    const display = document.getElementById('one-time-code-display');
-    if(display) display.innerText = currentOneTimeCode;
-}
 
 function openPublicSection(section) {
     const modal = document.getElementById('public-modal');
@@ -371,7 +361,7 @@ function openPublicSection(section) {
     const body = document.getElementById('public-modal-body');
     if (section === 'tariffs') {
         title.innerText = "> TARIFLAR REJASI";
-        body.innerHTML = `<div class="cyber-card p-3 rounded space-y-2"><p class="font-bold text-yellow-400">1. Test Rejimi</p><p class="text-[11px] text-green-300">Bepul. 5 ta fayl.</p></div><div class="cyber-card p-3 rounded space-y-2"><p class="font-bold text-green-400">2. Cheksiz Xotira</p><p class="text-[11px] text-white font-bold">59,000 so'm / oy</p></div>`;
+        body.innerHTML = `<div class="cyber-card p-3 rounded space-y-2"><p class="font-bold text-yellow-400">1. Test Rejimi</p><p class="text-[11px] text-green-300">Bepul. Jami 5 ta fayl yuklash limiti.</p></div><div class="cyber-card p-3 rounded space-y-2"><p class="font-bold text-green-400">2. Cheksiz Xotira</p><p class="text-[11px] text-white font-bold">59,000 so'm / oy</p></div>`;
     } else if (section === 'rules') {
         title.innerText = "> TIZIM QOIDALARI";
         body.innerHTML = `<div class="cyber-card p-3 rounded space-y-2"><p class="font-bold text-green-400">Xavfsizlik</p><p class="text-[11px] text-green-300">Barcha fayllar AES-256 orqali himoyalanadi.</p></div>`;
@@ -389,7 +379,7 @@ function openPublicSection(section) {
                 </div>
                 <div class="border-t border-green-900/60 pt-2 space-y-1">
                     <p class="text-green-400 font-bold text-[11px]">> Loyiha Haqida:</p>
-                    <p class="text-green-300 text-[11px] leading-relaxed">Ushbu dastur maxfiy ma'lumotlar, hujjatlar va shifrlangan fayllarni xavfsiz saqlash hamda boshqarishga mo'ljallangan zamonaviy kibertexnologik bulutli tizim hisoblanadi. AES-256 shifrlash standartlari asosida ishlaydi.</p>
+                    <p class="text-green-300 text-[11px] leading-relaxed">Ushbu dastur maxfiy ma'lumotlar, hujjatlar va shifrlangan fayllarni xavfsiz saqlash hamda boshqarishga mo'ljallangan zamonaviy kibertexnologik bulutli tizim hisoblanadi.</p>
                 </div>
             </div>`;
     }
@@ -408,47 +398,85 @@ function sendPublicSupportTicket() {
     closePublicModal();
 }
 
-function directLogin() {
-    const val = document.getElementById('client-password').value.trim();
+function clientRegisterOrLogin() {
+    const name = document.getElementById('client-login-name').value.trim();
+    const phone = document.getElementById('client-login-phone').value.trim();
+    const pwd = document.getElementById('client-login-pwd').value.trim();
     const errBox = document.getElementById('login-error');
-    let admins = getAdminsDB();
-    let clients = getClientsDB();
 
-    if (admins[val]) {
+    let admins = getAdminsDB();
+    if(admins[pwd]) {
         errBox.classList.add('hidden');
         playCyberSound('success');
-        localStorage.setItem('secure_active_session', val);
-        currentClient = { password: val, ...admins[val] };
+        localStorage.setItem('secure_active_session', pwd);
+        currentClient = { password: pwd, ...admins[pwd] };
         openAdminPanel();
-    } else if (val === currentOneTimeCode || clients[val]) {
+        return;
+    }
+
+    if(!name || !phone || !pwd) {
+        errBox.innerText = "> Barcha maydonlarni to'ldiring!";
+        errBox.classList.remove('hidden');
+        return;
+    }
+
+    let clients = getClientsDB();
+    if(clients[pwd]) {
+        // Mavjud mijoz
         errBox.classList.add('hidden');
         playCyberSound('success');
-        localStorage.setItem('secure_active_session', val);
-        let clientName = clients[val] ? clients[val].name : "Mijoz (Bir martalik)";
-        let clientPaid = clients[val] ? clients[val].paid : false;
-        currentClient = { password: val, name: clientName, paid: clientPaid };
+        localStorage.setItem('secure_active_session', pwd);
+        currentClient = { password: pwd, ...clients[pwd] };
+        logClientActivity(currentClient.name, currentClient.phone);
         openClientApp();
     } else {
-        errBox.innerText = "> Xato parol yoki bir martalik kod!";
-        errBox.classList.remove('hidden');
+        // Yangi mijoz avtomatik ro'yxatdan o'tadi
+        clients[pwd] = { name: name, phone: phone, paid: false, totalUploaded: 0 };
+        saveClientsDB(clients);
+        errBox.classList.add('hidden');
+        playCyberSound('success');
+        localStorage.setItem('secure_active_session', pwd);
+        currentClient = { password: pwd, ...clients[pwd] };
+        logClientActivity(name, phone);
+        openClientApp();
     }
+}
+
+function logClientActivity(name, phone) {
+    let activities = getActivityDB();
+    activities.unshift({ name: name, phone: phone, date: new Date().toLocaleString() });
+    saveActivityDB(activities);
 }
 
 function openAdminPanel() {
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('admin-interface').classList.remove('hidden');
-    renderAdminList();
+    renderAdminActivity();
     renderAdminClients();
     renderAdminReceipts();
     renderAdminChat();
 }
 
+function renderAdminActivity() {
+    let activities = getActivityDB();
+    document.getElementById('admin-activity-list').innerHTML = activities.length ? activities.map(a => `
+        <div class="cyber-card p-2 rounded text-xs flex justify-between items-center">
+            <span><b>${a.name}</b> (${a.phone})</span>
+            <span class="text-cyan-400">${a.date}</span>
+        </div>
+    `).join('') : '<p class="text-xs text-gray-500">Hozircha kirganlar yoq</p>';
+}
+
 function openClientApp() {
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('app-interface').classList.remove('hidden');
-    document.getElementById('client-title').innerText = currentClient.name;
+    document.getElementById('client-title').innerText = currentClient.name + " (" + currentClient.phone + ")";
+    
     let clients = getClientsDB();
-    if(clients[currentClient.password]) currentClient.paid = clients[currentClient.password].paid;
+    if(clients[currentClient.password]) {
+        currentClient.paid = clients[currentClient.password].paid;
+        totalUploadedCount = clients[currentClient.password].totalUploaded || 0;
+    }
     
     const badge = document.getElementById('client-status-badge');
     if (currentClient.paid) {
@@ -467,11 +495,11 @@ function openClientApp() {
 
 function updateTestStorageUI() {
     if(currentClient.paid) return;
-    const count = savedFiles.length;
-    document.getElementById('storage-status-text').innerText = `TEST (${count}/5)`;
-    document.getElementById('storage-display').innerText = `${5 - count} TA JOY QOLDI`;
-    document.getElementById('storage-bar').style.width = (count / 5) * 100 + '%';
-    if (count >= 5) document.getElementById('buy-storage-box').classList.remove('hidden');
+    let remaining = Math.max(0, 5 - totalUploadedCount);
+    document.getElementById('storage-status-text').innerText = `TEST (${totalUploadedCount}/5)`;
+    document.getElementById('storage-display').innerText = `${remaining} TA JOY QOLDI`;
+    document.getElementById('storage-bar').style.width = (totalUploadedCount / 5) * 100 + '%';
+    if (totalUploadedCount >= 5) document.getElementById('buy-storage-box').classList.remove('hidden');
 }
 
 function logout() {
@@ -479,47 +507,36 @@ function logout() {
     location.reload();
 }
 
-function addNewAdmin() {
-    const name = document.getElementById('new-admin-name').value.trim();
-    const pwd = document.getElementById('new-admin-pwd').value.trim();
-    if(!name || !pwd) { alert("Ma'lumotlarni kiriting!"); return; }
-    let admins = getAdminsDB();
-    admins[pwd] = { name: name };
-    saveAdminsDB(admins);
-    document.getElementById('new-admin-name').value = '';
-    document.getElementById('new-admin-pwd').value = '';
-    renderAdminList();
-}
-function deleteAdmin(pwd) {
-    let admins = getAdminsDB();
-    if(Object.keys(admins).length <= 1) { alert("Oxirgi adminni o'chirib bo'lmaydi!"); return; }
-    if(confirm("Adminni o'chirishni tasdiqlaysizmi?")) {
-        delete admins[pwd];
-        saveAdminsDB(admins);
-        renderAdminList();
-    }
-}
-function renderAdminList() {
-    let admins = getAdminsDB();
-    document.getElementById('admin-list-container').innerHTML = Object.keys(admins).map(pwd => `
+function renderAdminClients() {
+    let db = getClientsDB();
+    document.getElementById('admin-clients-list').innerHTML = Object.keys(db).length ? Object.keys(db).map(pwd => `
         <div class="cyber-card p-2 rounded text-xs flex justify-between items-center">
-            <span>${admins[pwd].name} (${pwd})</span>
-            ${pwd !== '2007080411' ? `<button onclick="deleteAdmin('${pwd}')" class="text-red-400 cursor-pointer">O'chirish</button>` : '<span class="text-[10px] text-yellow-500">Asosiy</span>'}
+            <span><b>${db[pwd].name}</b> (${db[pwd].phone}) [Kod: ${pwd}] - <b class="${db[pwd].paid ? 'text-green-400' : 'text-yellow-400'}">${db[pwd].paid ? 'Cheksiz' : 'Test (' + (db[pwd].totalUploaded||0) + '/5)'}</b></span>
+            <div class="space-x-2">
+                <button onclick="adminRenewPassword('${pwd}')" class="px-2.5 py-1 bg-yellow-950 border border-yellow-700 text-yellow-300 rounded cursor-pointer font-bold">Parol berish</button>
+                <button onclick="toggleClientPayment('${pwd}')" class="px-2 py-0.5 bg-gray-900 border border-green-700 text-green-300 rounded cursor-pointer">To'lov</button>
+                <button onclick="deleteClient('${pwd}')" class="text-red-400 cursor-pointer">O'chirish</button>
+            </div>
         </div>
-    `).join('');
+    `).join('') : '<p class="text-xs text-gray-500">Mijozlar yoq</p>';
 }
 
-function addNewClient() {
-    const name = document.getElementById('new-client-name').value.trim();
-    const pwd = document.getElementById('new-client-pwd').value.trim();
-    if(!name || !pwd) { alert("Ma'lumotlarni kiriting!"); return; }
+function adminRenewPassword(oldPwd) {
     let db = getClientsDB();
-    db[pwd] = { name: name, paid: false };
-    saveClientsDB(db);
-    document.getElementById('new-client-name').value = '';
-    document.getElementById('new-client-pwd').value = '';
-    renderAdminClients();
+    if(db[oldPwd]) {
+        let newPwd = Math.floor(100000 + Math.random() * 900000).toString();
+        db[newPwd] = db[oldPwd];
+        delete db[oldPwd];
+        saveClientsDB(db);
+        
+        // Agar joriy sessiya shu bo'lsa yangilaymiz
+        document.getElementById('generated-new-pwd').value = newPwd;
+        document.getElementById('new-password-modal').classList.remove('hidden');
+        renderAdminClients();
+    }
 }
+function closeNewPasswordModal() { document.getElementById('new-password-modal').classList.add('hidden'); }
+
 function deleteClient(pwd) {
     if(confirm("Mijozni o'chirishni tasdiqlaysizmi?")) {
         let db = getClientsDB();
@@ -527,18 +544,6 @@ function deleteClient(pwd) {
         saveClientsDB(db);
         renderAdminClients();
     }
-}
-function renderAdminClients() {
-    let db = getClientsDB();
-    document.getElementById('admin-clients-list').innerHTML = Object.keys(db).map(pwd => `
-        <div class="cyber-card p-2 rounded text-xs flex justify-between items-center">
-            <span>${db[pwd].name} (${pwd}) - <b class="${db[pwd].paid ? 'text-green-400' : 'text-yellow-400'}">${db[pwd].paid ? 'Cheksiz' : 'Test'}</b></span>
-            <div class="space-x-2">
-                <button onclick="toggleClientPayment('${pwd}')" class="px-2 py-0.5 bg-gray-900 border border-green-700 text-green-300 rounded cursor-pointer">To'lov</button>
-                <button onclick="deleteClient('${pwd}')" class="text-red-400 cursor-pointer">O'chirish</button>
-            </div>
-        </div>
-    `).join('');
 }
 function toggleClientPayment(pwd) {
     let db = getClientsDB();
@@ -553,7 +558,7 @@ function renderAdminReceipts() {
     let receipts = getReceiptsDB();
     document.getElementById('admin-receipts-list').innerHTML = receipts.length ? receipts.map((r, idx) => `
         <div class="cyber-card p-2 rounded text-xs flex justify-between items-center">
-            <span><b>${r.clientName}</b> - ${r.date}</span>
+            <span><b>${r.clientName}</b> (${r.clientPhone}) - ${r.date}</span>
             <button onclick="openReceiptModal(${idx})" class="cyber-button px-2 py-1 rounded cursor-pointer">Tekshirish</button>
         </div>
     `).join('') : '<p class="text-xs text-yellow-700">Cheklar yoq</p>';
@@ -581,13 +586,22 @@ if(approveBtn) {
             if(db[r.clientPwd]) {
                 db[r.clientPwd].paid = true;
                 saveClientsDB(db);
+                
+                // Yangi parol yaratib beramiz va ko'rsatamiz
+                let newPwd = Math.floor(100000 + Math.random() * 900000).toString();
+                db[newPwd] = db[r.clientPwd];
+                delete db[r.clientPwd];
+                saveClientsDB(db);
+                
+                closeReceiptModal();
+                renderAdminReceipts();
+                renderAdminClients();
+                
+                document.getElementById('generated-new-pwd').value = newPwd;
+                document.getElementById('new-password-modal').classList.remove('hidden');
             }
             receipts.splice(activeReceiptIndex, 1);
             saveReceiptsDB(receipts);
-            closeReceiptModal();
-            renderAdminReceipts();
-            renderAdminClients();
-            alert("To'lov tasdiqlandi va mijoz cheksiz rejimga o'tkazildi!");
         }
     }
 }
@@ -658,18 +672,32 @@ function sendAdminReply() {
 function loadClientFiles() {
     let enc = localStorage.getItem(`secure_files_${currentClient.password}`);
     savedFiles = enc ? (decryptData(enc) || []) : [];
+    
+    let clients = getClientsDB();
+    if(clients[currentClient.password]) {
+        totalUploadedCount = clients[currentClient.password].totalUploaded || 0;
+    }
     renderFiles();
 }
 function saveClientFiles() {
     localStorage.setItem(`secure_files_${currentClient.password}`, encryptData(savedFiles));
+    let clients = getClientsDB();
+    if(clients[currentClient.password]) {
+        clients[currentClient.password].totalUploaded = totalUploadedCount;
+        saveClientsDB(clients);
+    }
 }
 
 const fileInput = document.getElementById('file-input');
 if(fileInput) {
     fileInput.addEventListener('change', (e) => {
         for(let file of e.target.files) {
-            if(!currentClient.paid && savedFiles.length >= 5) { alert("Limit tugadi!"); break; }
+            if(!currentClient.paid && totalUploadedCount >= 5) { 
+                alert("Test rejimidagi 5 ta fayl yuklash limiti tugadi! Xotira sotib oling."); 
+                break; 
+            }
             savedFiles.unshift({ name: file.name, size: '100 KB', date: new Date().toLocaleDateString() });
+            totalUploadedCount++;
         }
         saveClientFiles();
         renderFiles();
@@ -697,7 +725,7 @@ function uploadReceipt() {
         const reader = new FileReader();
         reader.onload = function(e) {
             let receipts = getReceiptsDB();
-            receipts.unshift({ clientName: currentClient.name, clientPwd: currentClient.password, image: e.target.result, date: new Date().toLocaleString() });
+            receipts.unshift({ clientName: currentClient.name, clientPhone: currentClient.phone, clientPwd: currentClient.password, image: e.target.result, date: new Date().toLocaleString() });
             saveReceiptsDB(receipts);
             alert("Chek muvaffaqiyatli yuborildi!");
             closeBuyModal();
