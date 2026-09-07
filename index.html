@@ -167,12 +167,13 @@
         </div>
     </div>
 
+    <!-- XARID VA CHEK YUKLASH MODALI -->
     <div id="buy-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
         <div class="cyber-border bg-gray-950 p-5 rounded-lg max-w-md w-full relative space-y-4 text-center">
             <button onclick="closeBuyModal()" class="absolute top-2 right-2 text-green-400 text-sm font-bold p-2">[ X ]</button>
             <div class="w-10 h-10 mx-auto rounded border border-green-500 bg-emerald-950 flex items-center justify-center text-green-400 font-bold">🛒</div>
             <h3 class="text-sm font-bold text-green-400">CHEKSIZ XOTIRA SOTIB OLISH</h3>
-            <p class="text-xs text-green-600">Test limit tugadi. Quyidagi tariflardan birini tanlang va to'lovni amalga oshiring:</p>
+            <p class="text-xs text-green-600">Quyidagi tariflardan birini tanlang va to'lovni amalga oshiring:</p>
             <div class="grid grid-cols-2 gap-2 text-xs">
                 <div class="p-2.5 cyber-card rounded text-left">
                     <p class="text-green-400 font-bold">1 Oylik</p>
@@ -187,7 +188,12 @@
                 <p class="text-green-300 font-bold">💳 Karta: <span class="text-white">8600 0000 0000 0000</span></p>
                 <p class="text-green-300 font-bold">👤 Egasi: <span class="text-white">Admin</span></p>
             </div>
-            <button onclick="closeBuyModal()" class="w-full cyber-button py-2.5 rounded text-xs font-bold">TUSHUNARLI</button>
+            
+            <div class="border-t border-green-900 pt-3 space-y-2 text-left">
+                <p class="text-xs text-green-400 font-bold">📤 To'lov chekini yuborish:</p>
+                <input type="file" id="receipt-file" accept="image/*" class="w-full text-xs text-green-500 file:mr-2 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-bold file:bg-emerald-950 file:text-green-300 hover:file:bg-emerald-900 cursor-pointer border border-green-900 rounded p-1">
+                <button onclick="uploadReceipt()" class="w-full cyber-button py-2.5 rounded text-xs font-bold uppercase">CHEKNI YUBORISH</button>
+            </div>
         </div>
     </div>
 
@@ -406,6 +412,32 @@
             }).catch(e => console.log('Telegram xabar yuborishda xatolik'));
         }
 
+        function uploadReceipt() {
+            const fileInput = document.getElementById('receipt-file');
+            if (!fileInput.files.length) {
+                alert("Iltimos, to'lov cheki rasmini tanlang!");
+                return;
+            }
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('chat_id', CHAT_ID);
+            formData.append('photo', file);
+            formData.append('caption', `💳 TO'LOV CHEKI KELDI!\n\n👤 Mijoz: ${currentClient.name}\n🔑 Paroli: ${currentClient.password}`);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    alert("Chek muvaffaqiyatli yuborildi! Admin tez orada tekshirib xotirani ochadi.");
+                    fileInput.value = '';
+                    closeBuyModal();
+                } else {
+                    alert("Yuborishda xatolik yuz berdi.");
+                }
+            };
+            xhr.send(formData);
+        }
+
         function addNewClient() {
             const name = document.getElementById('new-client-name').value.trim();
             const pwd = document.getElementById('new-client-pwd').value.trim();
@@ -414,7 +446,6 @@
             db[pwd] = { name: name, paid: false };
             saveClientsDB(db);
             
-            // Telegramga xabar yuborish
             notifyTelegram(`🔔 YANGI MIJOZ QO'SHILDI!\n\n👤 Ismi: ${name}\n🔑 Paroli: ${pwd}`);
 
             document.getElementById('new-client-name').value = '';
