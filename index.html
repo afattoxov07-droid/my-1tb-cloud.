@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>[NEURAL-CLOUD 10B TB]</title>
     
-    <!-- Cheksiz xotira rasmi aks etgan PWA Manifest -->
-    <link rel="manifest" href='data:application/manifest+json,{"name":"NEURAL-CLOUD [10,000,000,000 TB]","short_name":"NeuralCloud","start_url":"/","display":"standalone","background_color":"#030712","theme_color":"#22c55e","icons":[{"src":"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=512&auto=format&fit=crop&q=80","sizes":"512x512","type":"image/png"}]}'>
+    <!-- To'g'rilangan PWA Manifest va Ikonka -->
+    <link rel="manifest" href='data:application/manifest+json,{"name":"NEURAL-CLOUD [10,000,000,000 TB]","short_name":"NeuralCloud","start_url":"/","display":"standalone","background_color":"#030712","theme_color":"#22c55e","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/2920/2920325.png","sizes":"512x512","type":"image/png"}]}'>
     <meta name="theme-color" content="#22c55e">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -28,7 +28,7 @@
     <!-- Header -->
     <header class="p-3 md:p-4 border-b border-green-800 bg-gray-950/90 flex justify-between items-center relative z-10 gap-2">
         <div class="flex items-center space-x-2.5 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100&auto=format&fit=crop&q=80" class="w-7 h-7 rounded border border-green-500 object-cover shrink-0 animate-pulse" alt="Logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/2920/2920325.png" class="w-7 h-7 rounded border border-green-500 object-cover shrink-0 animate-pulse" alt="Logo">
             <div>
                 <h1 class="text-xs md:text-sm font-bold tracking-wider text-green-400 truncate">
                     NEURAL_STORAGE_10B_TB
@@ -272,7 +272,7 @@
             } catch (err) { log(`Xatolik.`); }
         }
 
-        function closeModal() {
+        closeModal = function() {
             document.getElementById('media-modal').classList.add('hidden');
             document.getElementById('modal-content').innerHTML = '';
         }
