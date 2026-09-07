@@ -17,7 +17,6 @@
         .scanline { background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.3)); background-size: 100% 4px; }
         .cyber-border { border: 1px solid #15803d; box-shadow: 0 0 10px rgba(34, 197, 94, 0.15), inset 0 0 10px rgba(34, 197, 94, 0.1); }
         .cyber-card { background: rgba(6, 78, 59, 0.1); border: 1px solid #166534; transition: all 0.2s ease; }
-        .cyber-card:active { border-color: #22c55e; background: rgba(34, 197, 94, 0.2); }
         .cyber-button { background: rgba(34, 197, 94, 0.15); border: 1px solid #22c55e; color: #4ade80; box-shadow: 0 0 10px rgba(34, 197, 94, 0.2); }
         .cyber-button:active { background: #22c55e; color: #000; }
         .drag-active { border-color: #4ade80 !important; background: rgba(34, 197, 94, 0.25) !important; }
@@ -47,7 +46,7 @@
         <!-- Top Section: Upload & Storage -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             
-            <!-- Drop Zone (Takes 2 columns) -->
+            <!-- Drop Zone -->
             <div class="md:col-span-2">
                 <div id="drop-zone" class="cyber-card p-6 md:p-8 rounded-lg text-center cursor-pointer relative overflow-hidden flex flex-col items-center justify-center min-h-[160px]">
                     <input type="file" id="file-input" class="hidden" multiple>
@@ -68,11 +67,11 @@
             <div class="space-y-4 flex flex-col">
                 <div class="cyber-border bg-gray-950 p-3.5 rounded-lg space-y-2">
                     <div class="text-[11px] text-green-600 font-bold">XOTIRA HOLATI</div>
-                    <div class="text-xl md:text-2xl font-bold text-green-400">10,000,000,000 TB</div>
+                    <div class="text-lg md:text-xl font-bold text-green-400 tracking-tight">10,000,000,000 TB</div>
                     <div class="w-full bg-gray-900 h-1.5 border border-green-800 overflow-hidden">
                         <div class="bg-green-500 h-full w-full animate-pulse"></div>
                     </div>
-                    <p class="text-[10px] text-green-700">> Xavfsiz bulut (0 KB band)</p>
+                    <p class="text-[10px] text-green-700">> Xavfsiz bulut (To'liq ochiq)</p>
                 </div>
 
                 <div class="cyber-border bg-gray-950 p-3 rounded-lg flex flex-col flex-1 min-h-[120px]">
@@ -188,6 +187,14 @@
             for (let file of files) await uploadToTelegram(file);
         }
 
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
         function uploadToTelegram(file) {
             return new Promise((resolve) => {
                 log(`Yuklanmoqda: ${file.name}`);
@@ -216,7 +223,7 @@
                                 id: res.result.document.file_id,
                                 name: file.name,
                                 type: file.type,
-                                size: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
+                                size: formatBytes(file.size),
                                 date: new Date().toLocaleDateString()
                             };
                             savedFiles.unshift(fileData);
@@ -303,14 +310,14 @@
                         <i class="fa-solid fa-file-code text-green-400 shrink-0"></i>
                         <div class="truncate">
                             <p class="font-bold text-green-300 truncate">${file.name}</p>
-                            <p class="text-[10px] text-green-600">${file.size}</p>
+                            <p class="text-[10px] text-green-600">${file.size} | ${file.date}</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-1 shrink-0">
-                        <button onclick="previewFile('${file.id}', '${file.name}', '${file.type || ''}')" class="cyber-button p-1.5 rounded text-[10px]"><i class="fa-solid fa-eye"></i></button>
-                        <button onclick="copyShareLink('${file.id}')" class="cyber-button p-1.5 rounded text-[10px]"><i class="fa-solid fa-share-nodes"></i></button>
-                        <button onclick="downloadFile('${file.id}', '${file.name}')" class="cyber-button p-1.5 rounded text-[10px]"><i class="fa-solid fa-download"></i></button>
-                        <button onclick="deleteFile(${index})" class="p-1.5 bg-red-950/40 border border-red-800 text-red-400 rounded text-[10px]"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="previewFile('${file.id}', '${file.name}', '${file.type || ''}')" class="cyber-button p-1.5 rounded text-[10px]" title="Ko'rish"><i class="fa-solid fa-eye"></i></button>
+                        <button onclick="copyShareLink('${file.id}')" class="cyber-button p-1.5 rounded text-[10px]" title="Ulashish"><i class="fa-solid fa-share-nodes"></i></button>
+                        <button onclick="downloadFile('${file.id}', '${file.name}')" class="cyber-button p-1.5 rounded text-[10px]" title="Yuklab olish"><i class="fa-solid fa-download"></i></button>
+                        <button onclick="deleteFile(${index})" class="p-1.5 bg-red-950/40 border border-red-800 text-red-400 rounded text-[10px]" title="O'chirish"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
