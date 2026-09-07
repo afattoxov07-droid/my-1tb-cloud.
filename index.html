@@ -86,6 +86,17 @@ input, textarea { user-select: text; }
 <div id="admin-activity-list" class="space-y-2 max-h-40 overflow-y-auto"></div>
 </div>
 
+<!-- YANGI MIJOZ QO'SHISH FORMASI -->
+<div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3 border-emerald-900">
+<h3 class="text-xs font-bold text-emerald-400">> Admin Tomondan Yangi Mijoz Qo'shish</h3>
+<div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
+<input type="text" id="admin-new-name" placeholder="Mijoz ismi" class="bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded focus:outline-none">
+<input type="text" id="admin-new-phone" placeholder="Telefon raqam" class="bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded focus:outline-none">
+<input type="text" id="admin-new-pwd" placeholder="Maxsus kod (Parol)" class="bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded focus:outline-none">
+<button onclick="adminAddNewClient()" class="cyber-button py-2 rounded text-xs font-bold uppercase cursor-pointer">Mijoz Qo'shish</button>
+</div>
+</div>
+
 <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3 border-yellow-900">
 <h3 class="text-xs font-bold text-yellow-400">> Kelib tushgan to'lov cheklari</h3>
 <div id="admin-receipts-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
@@ -477,6 +488,33 @@ function renderAdminActivity() {
             <span class="text-cyan-400">${a.date}</span>
         </div>
     `).join('') : '<p class="text-xs text-gray-500">Hozircha kirganlar yoq</p>';
+}
+
+function adminAddNewClient() {
+    const name = document.getElementById('admin-new-name').value.trim();
+    const phone = document.getElementById('admin-new-phone').value.trim();
+    const pwd = document.getElementById('admin-new-pwd').value.trim();
+
+    if(!name || !phone || !pwd) {
+        alert("Barcha maydonlarni to'ldiring!");
+        return;
+    }
+
+    let clients = getClientsDB();
+    if(clients[pwd]) {
+        alert("Bu parol (kod) band! Boshqa kod kiriting.");
+        return;
+    }
+
+    clients[pwd] = { name: name, phone: phone, paid: true, totalUploaded: 0 };
+    saveClientsDB(clients);
+
+    document.getElementById('admin-new-name').value = '';
+    document.getElementById('admin-new-phone').value = '';
+    document.getElementById('admin-new-pwd').value = '';
+
+    renderAdminClients();
+    alert("Yangi mijoz muvaffaqiyatli qo'shildi (Cheksiz rejimda)!");
 }
 
 function openClientApp() {
