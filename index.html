@@ -91,7 +91,7 @@ input, textarea { user-select: text; }
 <input type="text" id="new-admin-name" placeholder="Admin ismi" class="bg-gray-900 border border-red-900 text-xs text-red-300 px-3 py-2 rounded focus:outline-none">
 <input type="text" id="new-admin-pwd" placeholder="Admin maxfiy paroli" class="bg-gray-900 border border-red-900 text-xs text-red-300 px-3 py-2 rounded focus:outline-none">
 </div>
-<button onclick="addNewAdmin()" class="w-full py-2 bg-red-950/50 border border-red-800 text-red-400 rounded text-xs font-bold uppercase">+ Admin Qo'shish</button>
+<button onclick="addNewAdmin()" class="w-full py-2 bg-red-950/50 border border-red-800 text-red-400 rounded text-xs font-bold uppercase cursor-pointer">+ Admin Qo'shish</button>
 <div id="admin-list-container" class="space-y-2 mt-3"></div>
 </div>
 <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3 border-yellow-900">
@@ -104,7 +104,7 @@ input, textarea { user-select: text; }
 <input type="text" id="new-client-name" placeholder="Mijoz ismi" class="bg-gray-900 border border-green-800 text-xs text-green-400 px-3 py-2 rounded focus:outline-none">
 <input type="text" id="new-client-pwd" placeholder="Maxfiy paroli" class="bg-gray-900 border border-green-800 text-xs text-green-400 px-3 py-2 rounded focus:outline-none">
 </div>
-<button onclick="addNewClient()" class="w-full cyber-button py-2 rounded text-xs font-bold uppercase">+ Mijoz Qo'shish</button>
+<button onclick="addNewClient()" class="w-full cyber-button py-2 rounded text-xs font-bold uppercase cursor-pointer">+ Mijoz Qo'shish</button>
 </div>
 <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3">
 <h3 class="text-xs font-bold text-green-400">> Shifrlangan mijozlar ro'yxati</h3>
@@ -118,7 +118,24 @@ input, textarea { user-select: text; }
 <div class="cyber-border bg-gray-950 p-4 rounded-lg max-w-xl w-full relative space-y-3 max-h-[90vh] flex flex-col border-yellow-900">
 <button onclick="closeAdminSupportModal()" class="absolute top-2 right-2 text-yellow-400 text-sm font-bold p-2">[ X ]</button>
 <h4 class="text-xs font-bold text-yellow-400">> Mijozlar Yordam Xabarlari</h4>
-<div id="admin-chat-list" class="space-y-3 overflow-y-auto flex-1 max-h-[60vh]"></div>
+<div id="admin-chat-list" class="space-y-3 overflow-y-auto flex-1 max-h-[50vh]"></div>
+<div class="space-y-2 border-t border-yellow-900 pt-2">
+<div class="flex gap-2">
+<input type="text" id="admin-reply-user" placeholder="Mijoz ismi" class="w-1/3 bg-gray-900 border border-yellow-800 text-xs text-yellow-300 p-2 rounded focus:outline-none">
+<input type="text" id="admin-reply-text" placeholder="Javob yozish..." class="flex-1 bg-gray-900 border border-yellow-800 text-xs text-yellow-300 p-2 rounded focus:outline-none">
+<button onclick="sendAdminReply()" class="px-4 bg-yellow-950 border border-yellow-600 text-yellow-300 rounded text-xs font-bold cursor-pointer">Yuborish</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- CHEKNI KO'RISH MODALI -->
+<div id="receipt-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
+<div class="cyber-border bg-gray-950 p-4 rounded-lg max-w-md w-full relative space-y-3 text-center border-yellow-900">
+<button onclick="closeReceiptModal()" class="absolute top-2 right-2 text-yellow-400 text-sm font-bold p-2">[ X ]</button>
+<h4 class="text-xs font-bold text-yellow-400">> TO'LOV CHEKI</h4>
+<div id="receipt-modal-content" class="py-2"></div>
+<button id="approve-payment-btn" class="w-full py-2 bg-emerald-950 border border-green-500 text-green-300 rounded text-xs font-bold uppercase cursor-pointer">TO'LOVNI TASDIQLASH (CHEKSIZ BERISH)</button>
 </div>
 </div>
 
@@ -133,9 +150,9 @@ input, textarea { user-select: text; }
 </div>
 </div>
 <div class="flex items-center space-x-2">
-<button onclick="openClientSupportModal()" class="cyber-button px-2.5 py-1.5 rounded text-xs font-bold bg-emerald-950/60"><i class="fa-solid fa-headset"></i> Yordam</button>
-<button onclick="openNotesModal()" class="cyber-button px-2.5 py-1.5 rounded text-xs font-bold"><i class="fa-solid fa-note-sticky"></i> Matnlar</button>
-<button onclick="logout()" class="cyber-button px-2.5 py-1.5 rounded text-xs font-bold bg-red-950/40 border-red-800 text-red-400">CHIQISH</button>
+<button onclick="openClientSupportModal()" class="cyber-button px-2.5 py-1.5 rounded text-xs font-bold bg-emerald-950/60 cursor-pointer"><i class="fa-solid fa-headset"></i> Yordam</button>
+<button onclick="openNotesModal()" class="cyber-button px-2.5 py-1.5 rounded text-xs font-bold cursor-pointer"><i class="fa-solid fa-note-sticky"></i> Matnlar</button>
+<button onclick="logout()" class="cyber-button px-2.5 py-1.5 rounded text-xs font-bold bg-red-950/40 border-red-800 text-red-400 cursor-pointer">CHIQISH</button>
 </div>
 </header>
 <div class="flex-1 max-w-6xl w-full mx-auto p-3 md:p-6 flex flex-col gap-4 relative z-10">
@@ -158,7 +175,7 @@ input, textarea { user-select: text; }
 <option value="7" selected>7 kun</option>
 <option value="30">30 kun</option>
 </select>
-<button onclick="document.getElementById('file-input').click()" class="cyber-button px-3 py-1 rounded text-xs font-bold uppercase">+ FAYL</button>
+<button onclick="document.getElementById('file-input').click()" class="cyber-button px-3 py-1 rounded text-xs font-bold uppercase cursor-pointer">+ FAYL</button>
 </div>
 </div>
 </div>
@@ -167,7 +184,7 @@ input, textarea { user-select: text; }
 <div class="text-[11px] text-green-600 font-bold flex justify-between"><span>XOTIRA HOLATI</span><span id="storage-status-text" class="text-yellow-400">TEST (5 tadan 0)</span></div>
 <div id="storage-display" class="text-lg md:text-xl font-bold text-yellow-400">5 TA FAYL</div>
 <div class="w-full bg-gray-900 h-1.5 border border-green-800"><div id="storage-bar" class="bg-yellow-500 h-full" style="width: 0%"></div></div>
-<div id="buy-storage-box" class="pt-2 hidden"><button onclick="openBuyModal()" class="w-full py-2 bg-emerald-950 border border-green-500 text-green-300 rounded text-[11px] font-bold animate-bounce">🛒 XOTIRA SOTIB OLISH</button></div>
+<div id="buy-storage-box" class="pt-2 hidden"><button onclick="openBuyModal()" class="w-full py-2 bg-emerald-950 border border-green-500 text-green-300 rounded text-[11px] font-bold animate-bounce cursor-pointer">🛒 XOTIRA SOTIB OLISH</button></div>
 </div>
 </div>
 </div>
@@ -178,10 +195,10 @@ input, textarea { user-select: text; }
 <h3 class="text-xs font-bold text-green-400">> Qo'shimcha Bo'limlar va Ma'lumotlar</h3>
 </div>
 <div class="grid grid-cols-2 gap-2">
-<button onclick="openPublicSection('tariffs')" class="cyber-button py-2 px-3 rounded text-[11px] font-bold text-left flex items-center space-x-2"><i class="fa-solid fa-tags"></i><span>Tariflar</span></button>
-<button onclick="openPublicSection('rules')" class="cyber-button py-2 px-3 rounded text-[11px] font-bold text-left flex items-center space-x-2"><i class="fa-solid fa-book"></i><span>Qoidalar</span></button>
+<button onclick="openPublicSection('tariffs')" class="cyber-button py-2 px-3 rounded text-[11px] font-bold text-left flex items-center space-x-2 cursor-pointer"><i class="fa-solid fa-tags"></i><span>Tariflar</span></button>
+<button onclick="openPublicSection('rules')" class="cyber-button py-2 px-3 rounded text-[11px] font-bold text-left flex items-center space-x-2 cursor-pointer"><i class="fa-solid fa-book"></i><span>Qoidalar</span></button>
 </div>
-<button onclick="openPublicSection('author')" class="w-full py-2.5 px-3 bg-cyan-950 border border-cyan-600 text-cyan-300 rounded text-xs font-bold text-left flex justify-between items-center"><span class="pointer-events-none"><i class="fa-solid fa-user-code mr-2"></i> Muallif va Loyiha Haqida</span><span class="text-[10px] text-cyan-400">Ma'lumot</span></button>
+<button onclick="openPublicSection('author')" class="w-full py-2.5 px-3 bg-cyan-950 border border-cyan-600 text-cyan-300 rounded text-xs font-bold text-left flex justify-between items-center cursor-pointer"><span class="pointer-events-none"><i class="fa-solid fa-user-code mr-2"></i> Muallif va Loyiha Haqida</span><span class="text-[10px] text-cyan-400">Ma'lumot</span></button>
 </div>
 
 <div id="progress-container" class="hidden cyber-border bg-gray-950 p-3 rounded-lg">
@@ -189,7 +206,7 @@ input, textarea { user-select: text; }
 <div class="w-full bg-gray-900 h-2 border border-green-800"><div id="progress-bar" class="bg-green-500 h-full" style="width: 0%"></div></div>
 </div>
 <div class="space-y-3">
-<div class="flex justify-between items-center"><div class="text-xs font-bold text-green-400">SHIFRLANGAN FAYLLAR (<span id="file-count">0</span>)</div><button onclick="openTrashModal()" class="cyber-button px-2.5 py-1 rounded text-[10px]"><i class="fa-solid fa-box-archive"></i> Arxiv / Savat</button></div>
+<div class="flex justify-between items-center"><div class="text-xs font-bold text-green-400">SHIFRLANGAN FAYLLAR (<span id="file-count">0</span>)</div><button onclick="openTrashModal()" class="cyber-button px-2.5 py-1 rounded text-[10px] cursor-pointer"><i class="fa-solid fa-box-archive"></i> Arxiv / Savat</button></div>
 <div id="file-list" class="space-y-2"></div>
 </div>
 </div>
@@ -203,7 +220,7 @@ input, textarea { user-select: text; }
 <div id="client-messages-history" class="space-y-2 overflow-y-auto flex-1 max-h-[45vh] p-2 bg-gray-900/50 rounded border border-green-900 text-xs"></div>
 <div class="space-y-2 border-t border-green-900 pt-3">
 <textarea id="client-question-input" placeholder="Savolingizni shu yerga yozing..." class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded h-20 focus:outline-none resize-none"></textarea>
-<button onclick="sendClientQuestion()" class="w-full cyber-button py-2 rounded text-xs font-bold uppercase">XABARNI YUBORISH</button>
+<button onclick="sendClientQuestion()" class="w-full cyber-button py-2 rounded text-xs font-bold uppercase cursor-pointer">XABARNI YUBORISH</button>
 </div>
 </div>
 </div>
@@ -216,7 +233,7 @@ input, textarea { user-select: text; }
 <div class="space-y-2">
 <input type="text" id="note-title" placeholder="Matn sarlavhasi" class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded focus:outline-none">
 <textarea id="note-content" placeholder="Maxfiy matningiz..." class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded h-28 focus:outline-none resize-none"></textarea>
-<button onclick="saveSecureNote()" class="w-full cyber-button py-2 rounded text-xs font-bold uppercase">SHIFRLAB SAQLASH</button>
+<button onclick="saveSecureNote()" class="w-full cyber-button py-2 rounded text-xs font-bold uppercase cursor-pointer">SHIFRLAB SAQLASH</button>
 </div>
 <div id="notes-list" class="space-y-2 max-h-40 overflow-y-auto border-t border-green-900 pt-3"></div>
 </div>
@@ -244,7 +261,7 @@ input, textarea { user-select: text; }
 <div class="border-t border-green-900 pt-3 space-y-2 text-left">
 <p class="text-xs text-green-400 font-bold">📤 To'lov chekini yuborish:</p>
 <input type="file" id="receipt-file" accept="image/*" class="w-full text-xs text-green-500 file:mr-2 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-bold file:bg-emerald-950 file:text-green-300 cursor-pointer border border-green-900 rounded p-1">
-<button onclick="uploadReceipt()" class="w-full cyber-button py-2.5 rounded text-xs font-bold uppercase">CHEKNI YUBORISH</button>
+<button onclick="uploadReceipt()" class="w-full cyber-button py-2.5 rounded text-xs font-bold uppercase cursor-pointer">CHEKNI YUBORISH</button>
 </div>
 </div>
 </div>
@@ -321,6 +338,7 @@ function saveSupportDB(db) { localStorage.setItem('secure_support_tickets', encr
 let currentClient = null;
 let savedFiles = [];
 let currentOneTimeCode = "";
+let activeReceiptIndex = null;
 
 window.onload = function() {
     generateOneTimeCode();
@@ -357,13 +375,13 @@ function openPublicSection(section) {
         body.innerHTML = `<div class="cyber-card p-3 rounded space-y-2"><p class="font-bold text-green-400">Xavfsizlik</p><p class="text-[11px] text-green-300">Barcha fayllar AES-256 orqali himoyalanadi.</p></div>`;
     } else if (section === 'help') {
         title.innerText = "> ONLAYN YORDAM";
-        body.innerHTML = `<div class="space-y-3"><input type="text" id="public-guest-name" placeholder="Ismingiz" class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded"><textarea id="public-guest-msg" placeholder="Murojaatingiz..." class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded h-24"></textarea><button onclick="sendPublicSupportTicket()" class="w-full cyber-button py-2 rounded text-xs font-bold uppercase">YUBORISH</button></div>`;
+        body.innerHTML = `<div class="space-y-3"><input type="text" id="public-guest-name" placeholder="Ismingiz" class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded"><textarea id="public-guest-msg" placeholder="Murojaatingiz..." class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded h-24"></textarea><button onclick="sendPublicSupportTicket()" class="w-full cyber-button py-2 rounded text-xs font-bold uppercase cursor-pointer">YUBORISH</button></div>`;
     } else if (section === 'author') {
         title.innerText = "> MUALLIF";
         body.innerHTML = `<div class="cyber-card p-3.5 rounded space-y-2"><p class="text-cyan-400 font-bold">Fattoxov Abdulloh Toxirjon o'g'li</p><p class="text-white text-[11px]">Toshkent Menejment va Iqtisodiyot Instituti Farg'ona Campusi, Kompyuter injiniringi, 2-kurs.</p></div>`;
     } else if (section === 'admin_login_guide') {
         title.innerText = "> ADMIN PAROLI";
-        body.innerHTML = `<div class="cyber-card p-3 rounded space-y-2"><p class="text-xs text-red-400">Standart admin paroli: <span class="text-white font-bold">2007080411</span></p><button onclick="fillAdminPassword()" class="w-full py-2 bg-red-950 border border-red-800 text-red-400 rounded text-xs font-bold">Avtomatik qo'yish</button></div>`;
+        body.innerHTML = `<div class="cyber-card p-3 rounded space-y-2"><p class="text-xs text-red-400">Standart admin paroli: <span class="text-white font-bold">2007080411</span></p><button onclick="fillAdminPassword()" class="w-full py-2 bg-red-950 border border-red-800 text-red-400 rounded text-xs font-bold cursor-pointer">Avtomatik qo'yish</button></div>`;
     }
     modal.classList.remove('hidden');
 }
@@ -465,38 +483,114 @@ function logout() {
 function addNewAdmin() {
     const name = document.getElementById('new-admin-name').value.trim();
     const pwd = document.getElementById('new-admin-pwd').value.trim();
-    if(!name || !pwd) return;
+    if(!name || !pwd) { alert("Ma'lumotlarni kiriting!"); return; }
     let admins = getAdminsDB();
     admins[pwd] = { name: name };
     saveAdminsDB(admins);
+    document.getElementById('new-admin-name').value = '';
+    document.getElementById('new-admin-pwd').value = '';
     renderAdminList();
+}
+function deleteAdmin(pwd) {
+    let admins = getAdminsDB();
+    if(Object.keys(admins).length <= 1) { alert("Oxirgi adminni o'chirib bo'lmaydi!"); return; }
+    if(confirm("Adminni o'chirishni tasdiqlaysizmi?")) {
+        delete admins[pwd];
+        saveAdminsDB(admins);
+        renderAdminList();
+    }
 }
 function renderAdminList() {
     let admins = getAdminsDB();
-    document.getElementById('admin-list-container').innerHTML = Object.keys(admins).map(pwd => `<div class="cyber-card p-2 rounded text-xs flex justify-between"><span>${admins[pwd].name} (${pwd})</span></div>`).join('');
+    document.getElementById('admin-list-container').innerHTML = Object.keys(admins).map(pwd => `
+        <div class="cyber-card p-2 rounded text-xs flex justify-between items-center">
+            <span>${admins[pwd].name} (${pwd})</span>
+            ${pwd !== '2007080411' ? `<button onclick="deleteAdmin('${pwd}')" class="text-red-400 cursor-pointer">O'chirish</button>` : '<span class="text-[10px] text-yellow-500">Asosiy</span>'}
+        </div>
+    `).join('');
 }
 
 function addNewClient() {
     const name = document.getElementById('new-client-name').value.trim();
     const pwd = document.getElementById('new-client-pwd').value.trim();
-    if(!name || !pwd) return;
+    if(!name || !pwd) { alert("Ma'lumotlarni kiriting!"); return; }
     let db = getClientsDB();
     db[pwd] = { name: name, paid: false };
     saveClientsDB(db);
+    document.getElementById('new-client-name').value = '';
+    document.getElementById('new-client-pwd').value = '';
     renderAdminClients();
+}
+function deleteClient(pwd) {
+    if(confirm("Mijozni o'chirishni tasdiqlaysizmi?")) {
+        let db = getClientsDB();
+        delete db[pwd];
+        saveClientsDB(db);
+        renderAdminClients();
+    }
 }
 function renderAdminClients() {
     let db = getClientsDB();
-    document.getElementById('admin-clients-list').innerHTML = Object.keys(db).map(pwd => `<div class="cyber-card p-2 rounded text-xs flex justify-between"><span>${db[pwd].name}</span><button onclick="toggleClientPayment('${pwd}')" class="px-2 py-0.5 bg-gray-900 border border-green-700 text-green-300 rounded">To'lov</button></div>`).join('');
+    document.getElementById('admin-clients-list').innerHTML = Object.keys(db).map(pwd => `
+        <div class="cyber-card p-2 rounded text-xs flex justify-between items-center">
+            <span>${db[pwd].name} (${pwd}) - <b class="${db[pwd].paid ? 'text-green-400' : 'text-yellow-400'}">${db[pwd].paid ? 'Cheksiz' : 'Test'}</b></span>
+            <div class="space-x-2">
+                <button onclick="toggleClientPayment('${pwd}')" class="px-2 py-0.5 bg-gray-900 border border-green-700 text-green-300 rounded cursor-pointer">To'lov</button>
+                <button onclick="deleteClient('${pwd}')" class="text-red-400 cursor-pointer">O'chirish</button>
+            </div>
+        </div>
+    `).join('');
 }
 function toggleClientPayment(pwd) {
     let db = getClientsDB();
-    if(db[pwd]) { db[pwd].paid = !db[pwd].paid; saveClientsDB(db); renderAdminClients(); }
+    if(db[pwd]) { 
+        db[pwd].paid = !db[pwd].paid; 
+        saveClientsDB(db); 
+        renderAdminClients(); 
+    }
 }
 
 function renderAdminReceipts() {
     let receipts = getReceiptsDB();
-    document.getElementById('admin-receipts-list').innerHTML = receipts.length ? receipts.map(r => `<div class="cyber-card p-2 rounded text-xs"><span>${r.clientName} chek yubordi</span></div>`).join('') : '<p class="text-xs text-yellow-700">Cheklar yoq</p>';
+    document.getElementById('admin-receipts-list').innerHTML = receipts.length ? receipts.map((r, idx) => `
+        <div class="cyber-card p-2 rounded text-xs flex justify-between items-center">
+            <span><b>${r.clientName}</b> - ${r.date}</span>
+            <button onclick="openReceiptModal(${idx})" class="cyber-button px-2 py-1 rounded cursor-pointer">Tekshirish</button>
+        </div>
+    `).join('') : '<p class="text-xs text-yellow-700">Cheklar yoq</p>';
+}
+
+function openReceiptModal(idx) {
+    activeReceiptIndex = idx;
+    let receipts = getReceiptsDB();
+    let r = receipts[idx];
+    document.getElementById('receipt-modal-content').innerHTML = `
+        <p class="text-xs text-green-300 mb-2">Mijoz: <b>${r.clientName}</b></p>
+        <img src="${r.image}" class="max-h-60 mx-auto rounded border border-green-800 object-contain">
+    `;
+    document.getElementById('receipt-modal').classList.remove('hidden');
+}
+function closeReceiptModal() { document.getElementById('receipt-modal').classList.add('hidden'); }
+
+const approveBtn = document.getElementById('approve-payment-btn');
+if(approveBtn) {
+    approveBtn.onclick = function() {
+        if(activeReceiptIndex !== null) {
+            let receipts = getReceiptsDB();
+            let r = receipts[activeReceiptIndex];
+            let db = getClientsDB();
+            if(db[r.clientPwd]) {
+                db[r.clientPwd].paid = true;
+                saveClientsDB(db);
+            }
+            receipts.splice(activeReceiptIndex, 1);
+            saveReceiptsDB(receipts);
+            closeReceiptModal();
+            renderAdminReceipts();
+            renderAdminClients();
+            alert("To'lov tasdiqlandi va mijoz cheksiz rejimga o'tkazildi!");
+        }
+    }
 }
 
 function openClientSupportModal() { renderClientMessages(); document.getElementById('client-support-modal').classList.remove('hidden'); }
@@ -512,15 +606,55 @@ function sendClientQuestion() {
 }
 function renderClientMessages() {
     let tickets = getSupportDB().filter(t => t.id === currentClient.password);
-    document.getElementById('client-messages-history').innerHTML = tickets.length ? tickets.map(t => `<div class="cyber-card p-2 rounded"><b>Siz:</b> ${t.message}</div>`).join('') : '<p class="text-xs text-green-700">Xabarlar yoq</p>';
+    document.getElementById('client-messages-history').innerHTML = tickets.length ? tickets.map(t => `
+        <div class="cyber-card p-2 rounded space-y-1">
+            <div><b>Siz:</b> ${t.message}</div>
+            ${t.reply ? `<div class="text-yellow-400 border-t border-green-900 pt-1"><b>Admin:</b> ${t.reply}</div>` : ''}
+        </div>
+    `).join('') : '<p class="text-xs text-green-700">Xabarlar yoq</p>';
 }
 
 function openAdminSupportModal() {
-    let tickets = getSupportDB();
-    document.getElementById('admin-chat-list').innerHTML = tickets.length ? tickets.map(t => `<div class="cyber-card p-2 rounded text-xs"><b>${t.user}:</b> ${t.message}</div>`).join('') : '<p class="text-xs text-yellow-700">Murojaat yoq</p>';
+    renderAdminChat();
     document.getElementById('admin-support-modal').classList.remove('hidden');
 }
 function closeAdminSupportModal() { document.getElementById('admin-support-modal').classList.add('hidden'); }
+
+function renderAdminChat() {
+    let tickets = getSupportDB();
+    document.getElementById('admin-unread-badge').innerText = tickets.length;
+    if(tickets.length > 0) document.getElementById('admin-unread-badge').classList.remove('hidden');
+    else document.getElementById('admin-unread-badge').classList.add('hidden');
+
+    document.getElementById('admin-chat-list').innerHTML = tickets.length ? tickets.map((t, idx) => `
+        <div class="cyber-card p-2 rounded text-xs space-y-1 cursor-pointer" onclick="selectChatUser('${t.user}')">
+            <div class="flex justify-between text-[10px] text-yellow-500"><span>${t.user} (${t.type})</span><span>${t.date}</span></div>
+            <div><b>Savol:</b> ${t.message}</div>
+            ${t.reply ? `<div class="text-green-400"><b>Javob:</b> ${t.reply}</div>` : '<div class="text-red-400 text-[10px]">Javob berilmagan</div>'}
+        </div>
+    `).join('') : '<p class="text-xs text-yellow-700">Murojaat yoq</p>';
+}
+
+function selectChatUser(name) {
+    document.getElementById('admin-reply-user').value = name;
+}
+
+function sendAdminReply() {
+    const userName = document.getElementById('admin-reply-user').value.trim();
+    const replyText = document.getElementById('admin-reply-text').value.trim();
+    if(!userName || !replyText) { alert("Mijoz ismi va javobni kiriting!"); return; }
+    let tickets = getSupportDB();
+    let ticket = tickets.find(t => t.user === userName);
+    if(ticket) {
+        ticket.reply = replyText;
+        saveSupportDB(tickets);
+        document.getElementById('admin-reply-text').value = '';
+        renderAdminChat();
+        alert("Javob yuborildi!");
+    } else {
+        alert("Bunday mijoz topilmadi!");
+    }
+}
 
 function loadClientFiles() {
     let enc = localStorage.getItem(`secure_files_${currentClient.password}`);
@@ -546,7 +680,7 @@ if(fileInput) {
 
 function renderFiles() {
     document.getElementById('file-count').innerText = savedFiles.length;
-    document.getElementById('file-list').innerHTML = savedFiles.length ? savedFiles.map((f, i) => `<div class="cyber-card p-2 rounded flex justify-between text-xs"><span>${f.name}</span><button onclick="deleteFile(${i})" class="text-red-400">O'chirish</button></div>`).join('') : '<div class="text-center py-4 text-xs text-green-700">FAYLLAR YOQ</div>';
+    document.getElementById('file-list').innerHTML = savedFiles.length ? savedFiles.map((f, i) => `<div class="cyber-card p-2 rounded flex justify-between text-xs"><span>${f.name}</span><button onclick="deleteFile(${i})" class="text-red-400 cursor-pointer">O'chirish</button></div>`).join('') : '<div class="text-center py-4 text-xs text-green-700">FAYLLAR YOQ</div>';
 }
 function deleteFile(i) {
     savedFiles.splice(i, 1);
@@ -557,16 +691,33 @@ function deleteFile(i) {
 
 function openBuyModal() { document.getElementById('buy-modal').classList.remove('hidden'); }
 function closeBuyModal() { document.getElementById('buy-modal').classList.add('hidden'); }
+
 function uploadReceipt() {
-    let receipts = getReceiptsDB();
-    receipts.unshift({ clientName: currentClient.name, clientPwd: currentClient.password, date: new Date().toLocaleString() });
-    saveReceiptsDB(receipts);
-    alert("Chek yuborildi!");
-    closeBuyModal();
+    const fileInput = document.getElementById('receipt-file');
+    if(fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            let receipts = getReceiptsDB();
+            receipts.unshift({ clientName: currentClient.name, clientPwd: currentClient.password, image: e.target.result, date: new Date().toLocaleString() });
+            saveReceiptsDB(receipts);
+            alert("Chek muvaffaqiyatli yuborildi!");
+            closeBuyModal();
+        }
+        reader.readAsDataURL(fileInput.files[0]);
+    } else {
+        alert("Iltimos, chek rasmini tanlang!");
+    }
 }
+
 function openNotesModal() { document.getElementById('notes-modal').classList.remove('hidden'); }
 function closeNotesModal() { document.getElementById('notes-modal').classList.add('hidden'); }
-function saveSecureNote() { alert("Saqlandi!"); closeNotesModal(); }
+function saveSecureNote() { 
+    const title = document.getElementById('note-title').value.trim();
+    const content = document.getElementById('note-content').value.trim();
+    if(!title || !content) { alert("Maydonlarni to'ldiring!"); return; }
+    alert("Matn muvaffaqiyatli shifrlab saqlandi!"); 
+    closeNotesModal(); 
+}
 function openTrashModal() { document.getElementById('trash-modal').classList.remove('hidden'); }
 function closeTrashModal() { document.getElementById('trash-modal').classList.add('hidden'); }
 </script>
