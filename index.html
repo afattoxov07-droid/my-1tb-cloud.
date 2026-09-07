@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>[NEURAL-CLOUD 10,000,000,000 TB] v4.0.1</title>
     
-    <!-- Single-file Web App Manifest (Data URI) -->
+    <!-- Single-file Web App Manifest -->
     <link rel="manifest" href='data:application/manifest+json,{"name":"Neural Cloud 10B TB","short_name":"NeuralCloud","start_url":"/","display":"standalone","background_color":"#030712","theme_color":"#22c55e","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/6124/6124993.png","sizes":"512x512","type":"image/png"}]}'>
     <meta name="theme-color" content="#22c55e">
     
@@ -35,8 +35,9 @@
             </h1>
         </div>
         <div class="flex items-center space-x-3">
-            <button id="install-btn" class="hidden cyber-button px-3 py-1 rounded text-xs font-bold animate-bounce">
-                <i class="fa-solid fa-download mr-1"></i> O'RNATISH (APP)
+            <!-- EKRANDAGI O'RNATISH TUGMASI -->
+            <button id="install-btn" class="hidden cyber-button px-3 py-1.5 rounded text-xs font-bold animate-bounce flex items-center gap-1 cursor-pointer">
+                <i class="fa-solid fa-download"></i> ILOVANI O'RNATISH
             </button>
             <div class="text-xs text-green-600 hidden sm:block">
                 STATUS: <span class="text-green-400 font-bold">ONLINE [10,000,000,000 TB+]</span>
@@ -141,7 +142,7 @@
         let savedFiles = JSON.parse(localStorage.getItem('my_cloud_files') || '[]');
         renderFiles(savedFiles);
 
-        // Auto-register Inline Service Worker for Full PWA Support
+        // Service Worker registratsiyasi
         if ('serviceWorker' in navigator) {
             const swCode = `
                 self.addEventListener('install', e => e.waitUntil(self.skipWaiting()));
@@ -152,7 +153,7 @@
             navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
         }
 
-        // PWA Installation Logic
+        // Ekrandagi O'rnatish Tugmasi Mantiqi
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
@@ -164,10 +165,12 @@
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
                 if (outcome === 'accepted') {
-                    log('Ilova muvaffaqiyatli o\'rnatildi!');
+                    log('Ilova kompyuter/telefonga o\'rnatildi!');
                 }
                 deferredPrompt = null;
                 installBtn.classList.add('hidden');
+            } else {
+                alert("Ilovani brauzer menyusidan 'Установить приложение' (Install) orqali o'rnatishingiz mumkin.");
             }
         });
 
