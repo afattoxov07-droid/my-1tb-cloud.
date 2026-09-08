@@ -1,276 +1,262 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBER SECURE CLOUD PRO</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
-        body { background-color: #05070d; color: #00ff66; min-height: 100vh; padding: 20px; display: flex; justify-content: center; align-items: center; flex-direction: column; }
-        
-        #toastContainer { position: fixed; top: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; }
-        .toast { background: #0b0f19; border: 1px solid #00ff66; color: #00ff66; padding: 12px 20px; font-size: 13px; font-weight: bold; box-shadow: 0 0 20px rgba(0,255,102,0.4); animation: fadeIn 0.3s ease; }
-        .toast.error { border-color: #ff3333; color: #ff3333; box-shadow: 0 0 20px rgba(255,51,51,0.4); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .wrapper { width: 100%; max-width: 520px; display: flex; flex-direction: column; gap: 20px; }
-
-        /* Login Card */
-        #loginOverlay { width: 100%; display: flex; flex-direction: column; gap: 20px; }
-        .login-card { border: 1px solid #00ff66; padding: 35px 25px; background: rgba(0, 255, 102, 0.02); text-align: center; box-shadow: 0 0 30px rgba(0, 255, 102, 0.08); position: relative; }
-        .login-card::before { content: ''; position: absolute; top: 0; left: 0; width: 10px; height: 10px; border-top: 2px solid #00ff66; border-left: 2px solid #00ff66; }
-        .login-card::after { content: ''; position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; border-bottom: 2px solid #00ff66; border-right: 2px solid #00ff66; }
-
-        .login-icon { font-size: 36px; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(0,255,102,0.5)); }
-        .login-title { color: #00ff66; font-size: 20px; font-weight: bold; margin-bottom: 6px; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0,255,102,0.4); }
-        .login-sub { color: rgba(0, 255, 102, 0.6); font-size: 11px; margin-bottom: 30px; letter-spacing: 1px; text-transform: uppercase; }
-        
-        .login-input { width: 100%; background: #05070d; border: 1px solid #00ff66; color: #00ff66; padding: 14px 18px; font-family: inherit; outline: none; margin-bottom: 15px; text-align: center; font-size: 14px; transition: 0.3s; box-shadow: inset 0 0 10px rgba(0,255,102,0.05); }
-        .login-input:focus { border-color: #fff; box-shadow: 0 0 15px rgba(0,255,102,0.4), inset 0 0 10px rgba(0,255,102,0.1); }
-        .login-input::placeholder { color: rgba(0, 255, 102, 0.3); }
-
-        .login-btn { width: 100%; background: rgba(0, 255, 102, 0.1); border: 1px solid #00ff66; color: #00ff66; padding: 14px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-top: 5px; letter-spacing: 1px; font-size: 13px; }
-        .login-btn:hover { background: #00ff66; color: #05070d; box-shadow: 0 0 25px rgba(0,255,102,0.6); }
-
-        .telegram-contact { margin-top: 25px; font-size: 11px; color: #ffaa00; border-top: 1px dashed rgba(255, 170, 0, 0.3); padding-top: 15px; text-align: center; letter-spacing: 0.5px; }
-        .telegram-contact a { color: #00ff66; text-decoration: none; font-weight: bold; transition: 0.2s; }
-        .telegram-contact a:hover { text-shadow: 0 0 8px #00ff66; }
-
-        /* Dashboard */
-        #mainDashboard { width: 100%; }
-        header { display: flex; justify-content: space-between; align-items: center; border: 1px solid #00ff66; padding: 15px 20px; margin-bottom: 25px; background: rgba(0, 255, 102, 0.03); box-shadow: 0 0 20px rgba(0,255,102,0.05); }
-        .logo-area { display: flex; align-items: center; gap: 12px; }
-        .admin-badge { background: #ff3333; color: #fff; padding: 4px 10px; font-weight: bold; font-size: 13px; box-shadow: 0 0 10px rgba(255,51,51,0.4); }
-        .title { color: #ff3333; font-weight: bold; letter-spacing: 1px; font-size: 14px; text-shadow: 0 0 8px rgba(255,51,51,0.4); }
-        .header-btn { background: transparent; border: 1px solid #ff3333; color: #ff3333; padding: 8px 16px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.2s; font-size: 12px; }
-        .header-btn:hover { background: rgba(255, 51, 51, 0.15); box-shadow: 0 0 10px rgba(255,51,51,0.3); }
-        
-        .section-box { border: 1px solid #ff3333; padding: 22px; margin-bottom: 22px; background: rgba(255, 51, 51, 0.02); box-shadow: 0 0 15px rgba(255,51,51,0.03); }
-        .section-box.green { border-color: #00ff66; background: rgba(0, 255, 102, 0.02); box-shadow: 0 0 15px rgba(0,255,102,0.03); }
-        .section-title { color: #ff3333; font-size: 14px; margin-bottom: 15px; font-weight: bold; letter-spacing: 1px; }
-        .section-box.green .section-title { color: #00ff66; }
-        
-        .form-row { display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; }
-        .section-box input { flex: 1; min-width: 180px; background: #05070d; border: 1px solid #00ff66; color: #00ff66; padding: 12px 15px; font-family: inherit; outline: none; font-size: 13px; }
-        .section-box input::placeholder { color: rgba(0, 255, 102, 0.4); }
-
-        .item-card { border: 1px solid #00ff66; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; background: #05070d; flex-wrap: wrap; gap: 10px; }
-        .card-info { font-size: 13px; }
-        .card-info span { color: #00ff66; }
-        .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-        
-        .btn-sm { background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 6px 12px; font-size: 11px; cursor: pointer; font-family: inherit; transition: 0.2s; font-weight: bold; }
-        .btn-sm.success { border-color: #00ff66; color: #00ff66; }
-        .btn-sm.success:hover { background: #00ff66; color: #05070d; box-shadow: 0 0 10px rgba(0,255,102,0.4); }
-        .btn-sm.danger { border-color: #ff3333; color: #ff3333; }
-        .btn-sm.danger:hover { background: #ff3333; color: #fff; box-shadow: 0 0 10px rgba(255,51,51,0.4); }
-        
-        .empty-text { color: rgba(255, 170, 0, 0.6); font-size: 13px; font-style: italic; }
-        .badge-text { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffaa00; padding: 2px 8px; font-size: 10px; margin-left: 8px; font-weight: bold; }
-
-        /* Pricing & Author Footer */
-        .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .price-card { border: 1px solid #ffaa00; padding: 15px; text-align: center; background: rgba(255, 170, 0, 0.03); }
-        .price-card h4 { color: #ffaa00; font-size: 14px; margin-bottom: 8px; }
-        .price-card .amount { font-size: 16px; font-weight: bold; color: #00ff66; }
-
-        .author-footer { margin-top: 30px; width: 100%; max-width: 520px; border: 1px dashed rgba(0, 255, 102, 0.3); padding: 15px; text-align: center; font-size: 11px; color: rgba(0, 255, 102, 0.7); line-height: 1.6; background: rgba(0,255,102,0.01); }
-        .author-footer b { color: #00ff66; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYBER SECURE CLOUD PRO</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
+body { background-color: #05070d; color: #00ff66; min-height: 100vh; padding: 20px; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+#toastContainer { position: fixed; top: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; }
+.toast { background: #0b0f19; border: 1px solid #00ff66; color: #00ff66; padding: 12px 20px; font-size: 13px; font-weight: bold; box-shadow: 0 0 20px rgba(0,255,102,0.4); animation: fadeIn 0.3s ease; }
+.toast.error { border-color: #ff3333; color: #ff3333; box-shadow: 0 0 20px rgba(255,51,51,0.4); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.wrapper { width: 100%; max-width: 520px; display: flex; flex-direction: column; gap: 20px; }
+/* Login Card */
+#loginOverlay { width: 100%; display: flex; flex-direction: column; gap: 20px; }
+.login-card { border: 1px solid #00ff66; padding: 35px 25px; background: rgba(0, 255, 102, 0.02); text-align: center; box-shadow: 0 0 30px rgba(0, 255, 102, 0.08); position: relative; }
+.login-card::before { content: ''; position: absolute; top: 0; left: 0; width: 10px; height: 10px; border-top: 2px solid #00ff66; border-left: 2px solid #00ff66; }
+.login-card::after { content: ''; position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; border-bottom: 2px solid #00ff66; border-right: 2px solid #00ff66; }
+.login-icon { font-size: 36px; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(0,255,102,0.5)); }
+.login-title { color: #00ff66; font-size: 20px; font-weight: bold; margin-bottom: 6px; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0,255,102,0.4); }
+.login-sub { color: rgba(0, 255, 102, 0.6); font-size: 11px; margin-bottom: 30px; letter-spacing: 1px; text-transform: uppercase; }
+.login-input { width: 100%; background: #05070d; border: 1px solid #00ff66; color: #00ff66; padding: 14px 18px; font-family: inherit; outline: none; margin-bottom: 15px; text-align: center; font-size: 14px; transition: 0.3s; box-shadow: inset 0 0 10px rgba(0,255,102,0.05); }
+.login-input:focus { border-color: #fff; box-shadow: 0 0 15px rgba(0,255,102,0.4), inset 0 0 10px rgba(0,255,102,0.1); }
+.login-input::placeholder { color: rgba(0, 255, 102, 0.3); }
+.login-btn { width: 100%; background: rgba(0, 255, 102, 0.1); border: 1px solid #00ff66; color: #00ff66; padding: 14px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-top: 5px; letter-spacing: 1px; font-size: 13px; }
+.login-btn:hover { background: #00ff66; color: #05070d; box-shadow: 0 0 25px rgba(0,255,102,0.6); }
+.telegram-contact { margin-top: 25px; font-size: 11px; color: #ffaa00; border-top: 1px dashed rgba(255, 170, 0, 0.3); padding-top: 15px; text-align: center; letter-spacing: 0.5px; }
+.telegram-contact a { color: #00ff66; text-decoration: none; font-weight: bold; transition: 0.2s; }
+.telegram-contact a:hover { text-shadow: 0 0 8px #00ff66; }
+/* Dashboard */
+#mainDashboard { width: 100%; }
+header { display: flex; justify-content: space-between; align-items: center; border: 1px solid #00ff66; padding: 15px 20px; margin-bottom: 25px; background: rgba(0, 255, 102, 0.03); box-shadow: 0 0 20px rgba(0,255,102,0.05); }
+.logo-area { display: flex; align-items: center; gap: 12px; }
+.admin-badge { background: #ff3333; color: #fff; padding: 4px 10px; font-weight: bold; font-size: 13px; box-shadow: 0 0 10px rgba(255,51,51,0.4); }
+.title { color: #ff3333; font-weight: bold; letter-spacing: 1px; font-size: 14px; text-shadow: 0 0 8px rgba(255,51,51,0.4); }
+.header-btn { background: transparent; border: 1px solid #ff3333; color: #ff3333; padding: 8px 16px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.2s; font-size: 12px; }
+.header-btn:hover { background: rgba(255, 51, 51, 0.15); box-shadow: 0 0 10px rgba(255,51,51,0.3); }
+.section-box { border: 1px solid #ff3333; padding: 22px; margin-bottom: 22px; background: rgba(255, 51, 51, 0.02); box-shadow: 0 0 15px rgba(255,51,51,0.03); }
+.section-box.green { border-color: #00ff66; background: rgba(0, 255, 102, 0.02); box-shadow: 0 0 15px rgba(0,255,102,0.03); }
+.section-title { color: #ff3333; font-size: 14px; margin-bottom: 15px; font-weight: bold; letter-spacing: 1px; }
+.section-box.green .section-title { color: #00ff66; }
+.form-row { display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; }
+.section-box input { flex: 1; min-width: 180px; background: #05070d; border: 1px solid #00ff66; color: #00ff66; padding: 12px 15px; font-family: inherit; outline: none; font-size: 13px; }
+.section-box input::placeholder { color: rgba(0, 255, 102, 0.4); }
+.item-card { border: 1px solid #00ff66; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; background: #05070d; flex-wrap: wrap; gap: 10px; }
+.card-info { font-size: 13px; }
+.card-info span { color: #00ff66; }
+.card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-sm { background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 6px 12px; font-size: 11px; cursor: pointer; font-family: inherit; transition: 0.2s; font-weight: bold; }
+.btn-sm.success { border-color: #00ff66; color: #00ff66; }
+.btn-sm.success:hover { background: #00ff66; color: #05070d; box-shadow: 0 0 10px rgba(0,255,102,0.4); }
+.btn-sm.danger { border-color: #ff3333; color: #ff3333; }
+.btn-sm.danger:hover { background: #ff3333; color: #fff; box-shadow: 0 0 10px rgba(255,51,51,0.4); }
+.empty-text { color: rgba(255, 170, 0, 0.6); font-size: 13px; font-style: italic; }
+.badge-text { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffaa00; padding: 2px 8px; font-size: 10px; margin-left: 8px; font-weight: bold; }
+/* Pricing & Author Footer */
+.pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+.price-card { border: 1px solid #ffaa00; padding: 15px; text-align: center; background: rgba(255, 170, 0, 0.03); }
+.price-card h4 { color: #ffaa00; font-size: 14px; margin-bottom: 8px; }
+.price-card .amount { font-size: 16px; font-weight: bold; color: #00ff66; }
+.author-footer { margin-top: 30px; width: 100%; max-width: 520px; border: 1px dashed rgba(0, 255, 102, 0.3); padding: 15px; text-align: center; font-size: 11px; color: rgba(0, 255, 102, 0.7); line-height: 1.6; background: rgba(0,255,102,0.01); }
+.author-footer b { color: #00ff66; }
+</style>
 </head>
 <body>
-
-    <div id="toastContainer"></div>
-
-    <div class="wrapper">
-        <!-- Faqat parol kiritish oynasi -->
-        <div id="loginOverlay">
-            <div class="login-card">
-                <div class="login-icon">🔒</div>
-                <div class="login-title">CYBER SECURE CLOUD PRO</div>
-                <div class="login-sub">Admin Boshqaruv Portali</div>
-                <input type="password" id="loginPass" class="login-input" placeholder="Admin parolini kiriting">
-                <button class="login-btn" onclick="handleLogin()">TIZIMGA KIRISH</button>
-                <div class="telegram-contact">Admin Telegram: <a href="https://t.me/abdulloh20070804" target="_blank">@abdulloh20070804</a></div>
-            </div>
-        </div>
-
-        <div id="mainDashboard" style="display: none;">
-            <header>
-                <div class="logo-area">
-                    <div class="admin-badge">A</div>
-                    <span class="title">CYBER ADMIN CONTROL CENTER</span>
-                </div>
-                <div class="header-actions">
-                    <button class="header-btn" onclick="logout()">CHIQISH</button>
-                </div>
-            </header>
-
-            <!-- Admin boshqaruv paneli -->
-            <div class="section-box green">
-                <div class="section-title">> Tariflar narxlari</div>
-                <div class="pricing-grid">
-                    <div class="price-card">
-                        <h4>1 Oylik Obuna</h4>
-                        <div class="amount">59,000 so'm</div>
-                    </div>
-                    <div class="price-card">
-                        <h4>1 Yillik Obuna</h4>
-                        <div class="amount">700,000 so'm</div>
-                    </div>
-                </div>
-
-                <div class="section-title">> Mijoz qo'shish yoki boshqarish</div>
-                <div class="form-row">
-                    <input type="text" id="newClientPhone" placeholder="Mijoz telefon raqami (+998...)">
-                    <input type="text" id="newClientPass" placeholder="Mijoz uchun parol">
-                    <button class="btn-sm success" onclick="addClient()" style="padding: 12px 20px; font-size: 13px;">Mijoz qo'shish</button>
-                </div>
-
-                <div class="section-title" style="margin-top: 20px;">>> Barcha ro'yxatdagi mijozlar</div>
-                <div class="form-row" style="margin-bottom: 10px;">
-                    <input type="text" id="clientSearchInput" placeholder="Telefon raqam bo'yicha qidirish..." oninput="renderDashboard()">
-                </div>
-                <div id="clientsList"></div>
-            </div>
-        </div>
+<div id="toastContainer"></div>
+<div class="wrapper">
+  <!-- Faqat parol kiritish oynasi -->
+  <div id="loginOverlay">
+    <div class="login-card">
+      <div class="login-icon">🔒</div>
+      <div class="login-title">CYBER SECURE CLOUD PRO</div>
+      <div class="login-sub">Admin Boshqaruv Portali</div>
+      <input type="password" id="loginPass" class="login-input" placeholder="Admin parolini kiriting">
+      <button class="login-btn" onclick="handleLogin()">TIZIMGA KIRISH</button>
+      <div class="telegram-contact">Admin Telegram: <a href="https://t.me/abdulloh20070804" target="_blank">@abdulloh20070804</a></div>
     </div>
+  </div>
 
-    <!-- Muallif haqida ma'lumot -->
-    <div class="author-footer">
-        <b>Dastur muallifi:</b> Fattoxov Abdulloh Toxirjon o'g'li<br>
-        <b>Ta'lim muassasasi:</b> Toshkent menejment va iqtisodiyot instituti Farg'ona filiali<br>
-        <b>Mutaxassislik:</b> Kompyuter injiniringi, 2-kurs talabasi<br>
-        <b>Telefon raqamlari:</b> +998-20-000-57-88 | +998-20-025-29-20<br>
-        <b>Telegram:</b> <a href="https://t.me/abdulloh20070804" target="_blank" style="color:#00ff66;">@abdulloh20070804</a>
+  <div id="mainDashboard" style="display: none;">
+    <header>
+      <div class="logo-area">
+        <div class="admin-badge">A</div>
+        <span class="title">CYBER ADMIN CONTROL CENTER</span>
+      </div>
+      <div class="header-actions">
+        <button class="header-btn" onclick="logout()">CHIQISH</button>
+      </div>
+    </header>
+
+    <!-- Admin boshqaruv paneli -->
+    <div class="section-box green">
+      <div class="section-title">> Tariflar narxlari</div>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <h4>1 Oylik Obuna</h4>
+          <div class="amount">59,000 so'm</div>
+        </div>
+        <div class="price-card">
+          <h4>1 Yillik Obuna</h4>
+          <div class="amount">700,000 so'm</div>
+        </div>
+      </div>
+
+      <div class="section-title">> Mijoz qo'shish yoki boshqarish</div>
+      <div class="form-row">
+        <input type="text" id="newClientPhone" placeholder="Mijoz telefon raqami (+998...)">
+        <input type="text" id="newClientPass" placeholder="Mijoz uchun parol">
+        <button class="btn-sm success" onclick="addClient()" style="padding: 12px 20px; font-size: 13px;">Mijoz qo'shish</button>
+      </div>
+
+      <div class="section-title" style="margin-top: 20px;">>> Barcha ro'yxatdagi mijozlar</div>
+      <div class="form-row" style="margin-bottom: 10px;">
+        <input type="text" id="clientSearchInput" placeholder="Telefon raqam bo'yicha qidirish..." oninput="renderDashboard()">
+      </div>
+      <div id="clientsList"></div>
     </div>
+  </div>
+</div>
 
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyDrxNhcj88sRbDT5VNuQhtIQhGaSxIxCQ",
-            authDomain: "cheksiz-hotira.firebaseapp.com",
-            databaseURL: "https://cheksiz-hotira-default-rtdb.firebaseio.com",
-            projectId: "cheksiz-hotira",
-            storageBucket: "cheksiz-hotira.appspot.com",
-            messagingSenderId: "286195163783",
-            appId: "1:286195163783:web:9fbf4b42417i0c1d38e22"
-        };
+<!-- Muallif haqida ma'lumot -->
+<div class="author-footer">
+  <b>Dastur muallifi:</b> Fattoxov Abdulloh Toxirjon o'g'li<br>
+  <b>Ta'lim muassasasi:</b> Toshkent menejment va iqtisodiyot instituti Farg'ona filiali<br>
+  <b>Mutaxassislik:</b> Kompyuter injiniringi, 2-kurs talabasi<br>
+  <b>Telefon raqamlari:</b> +998-20-000-57-88 | +998-20-025-29-20<br>
+  <b>Telegram:</b> <a href="https://t.me/abdulloh20070804" target="_blank" style="color:#00ff66;">@abdulloh20070804</a>
+</div>
 
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const db = firebase.database();
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDrxNhcj88sRbDT5VNuQhtIQhGaSxIxCQ",
+  authDomain: "cheksiz-hotira.firebaseapp.com",
+  databaseURL: "https://cheksiz-hotira-default-rtdb.firebaseio.com",
+  projectId: "cheksiz-hotira",
+  storageBucket: "cheksiz-hotira.appspot.com",
+  messagingSenderId: "286195163783",
+  appId: "1:286195163783:web:9fbf4b42417i0c1d38e22"
+};
 
-        let clients = [];
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
-        function showToast(message, isError = false) {
-            const container = document.getElementById('toastContainer');
-            if(!container) return;
-            const toast = document.createElement('div');
-            toast.className = `toast ${isError ? 'error' : ''}`;
-            toast.innerText = message;
-            container.appendChild(toast);
-            setTimeout(() => { toast.remove(); }, 3500);
-        }
+const db = firebase.database();
+let clients = [];
 
-        db.ref('cyber_system').on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                clients = data.clients || [];
-            } else {
-                clients = [];
-                db.ref('cyber_system').set({ clients });
-            }
-            
-            if (sessionStorage.getItem('cyber_admin_logged') === 'true') {
-                showDashboard();
-            }
-        });
+function showToast(message, isError = false) {
+  const container = document.getElementById('toastContainer');
+  if(!container) return;
+  const toast = document.createElement('div');
+  toast.className = `toast ${isError ? 'error' : ''}`;
+  toast.innerText = message;
+  container.appendChild(toast);
+  setTimeout(() => { toast.remove(); }, 3500);
+}
 
-        function saveData() {
-            db.ref('cyber_system').set({
-                clients: clients
-            });
-        }
+db.ref('cyber_system').on('value', (snapshot) => {
+  const data = snapshot.val();
+  if (data) {
+    clients = data.clients || [];
+  } else {
+    clients = [];
+    db.ref('cyber_system').set({ clients });
+  }
+  if (sessionStorage.getItem('cyber_admin_logged') === 'true') {
+    showDashboard();
+  }
+});
 
-        function handleLogin() {
-            const pass = document.getElementById('loginPass').value.trim();
+function saveData() {
+  db.ref('cyber_system').set({ clients: clients });
+}
 
-            if(pass === "2007080411") {
-                sessionStorage.setItem('cyber_admin_logged', 'true');
-                showDashboard();
-                showToast("Xush kelibsiz, Abdulloh!");
-            } else {
-                showToast("Parol xato!", true);
-            }
-        }
+function handleLogin() {
+  const pass = document.getElementById('loginPass').value.trim();
+  if(pass === "2007080411") {
+    sessionStorage.setItem('cyber_admin_logged', 'true');
+    showDashboard();
+    showToast("Xush kelibsiz, Abdulloh!");
+  } else {
+    showToast("Parol xato!", true);
+  }
+}
 
-        function showDashboard() {
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('mainDashboard').style.display = 'block';
-            renderDashboard();
-        }
+function showDashboard() {
+  document.getElementById('loginOverlay').style.display = 'none';
+  document.getElementById('mainDashboard').style.display = 'block';
+  renderDashboard();
+}
 
-        function logout() {
-            sessionStorage.removeItem('cyber_admin_logged');
-            location.reload();
-        }
+function logout() {
+  sessionStorage.removeItem('cyber_admin_logged');
+  location.reload();
+}
 
-        function addClient() {
-            const phone = document.getElementById('newClientPhone').value.trim();
-            const pass = document.getElementById('newClientPass').value.trim();
+function addClient() {
+  const phone = document.getElementById('newClientPhone').value.trim();
+  const pass = document.getElementById('newClientPass').value.trim();
+  if(!phone || !pass) {
+    showToast("Mijoz telefon raqami va parolini kiriting!", true);
+    return;
+  }
+  clients.push({ phone: phone, pass: pass, subscription: 'Obuna belgilanmagan' });
+  saveData();
+  document.getElementById('newClientPhone').value = '';
+  document.getElementById('newClientPass').value = '';
+  showToast("Yangi mijoz qo'shildi!");
+}
 
-            if(!phone || !pass) {
-                showToast("Mijoz telefon raqami va parolini kiriting!", true);
-                return;
-            }
+function deleteClient(index) {
+  if(confirm("Mijozni o'chirmoqchimisiz?")) {
+    clients.splice(index, 1);
+    saveData();
+    showToast("Mijoz o'chirildi.");
+  }
+}
 
-            clients.push({ phone: phone, pass: pass, subscription: 'Obuna belgilanmagan' });
-            saveData();
-            document.getElementById('newClientPhone').value = '';
-            document.getElementById('newClientPass').value = '';
-            showToast("Yangi mijoz qo'shildi!");
-        }
+function grantSubscription(clientPhone, type) {
+  let client = clients.find(c => c.phone === clientPhone);
+  if(client) {
+    if(type === '1m') client.subscription = "1 Oylik Obuna (59,000 so'm)";
+    else if(type === '1y') client.subscription = "1 Yillik Obuna (700,000 so'm)";
+    saveData();
+    showToast(`${clientPhone} uchun obuna yangilandi!`);
+  }
+}
 
-        function deleteClient(index) {
-            if(confirm("Mijozni o'chirmoqchimisiz?")) {
-                clients.splice(index, 1);
-                saveData();
-                showToast("Mijoz o'chirildi.");
-            }
-        }
+function renderDashboard() {
+  if(sessionStorage.getItem('cyber_admin_logged') !== 'true') return;
+  const searchVal = document.getElementById('clientSearchInput').value.toLowerCase();
+  let clHtml = '';
+  clients.forEach((c, idx) => {
+    if(c.phone.toLowerCase().includes(searchVal)) {
+      clHtml += `<div class="item-card">
+        <div class="card-info">
+          <strong>📞 ${c.phone}</strong>
+          <span class="badge-text">🔒 ${c.subscription}</span><br>
+          <span style="font-size:11px; color:rgba(0,255,102,0.6);">Paroli: ${c.pass}</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn-sm success" onclick="grantSubscription('${c.phone}', '1m')">1 Oylik (59k)</button>
+          <button class="btn-sm success" onclick="grantSubscription('${c.phone}', '1y')">1 Yillik (700k)</button>
+          <button class="btn-sm danger" onclick="deleteClient(${idx})">O'chirish</button>
+        </div>
+      </div>`;
+    }
+  });
+  document.getElementById('clientsList').innerHTML = clHtml || '<div class="empty-text">> Mijozlar topilmadi.</div>';
+}
 
-        function grantSubscription(clientPhone, type) {
-            let client = clients.find(c => c.phone === clientPhone);
-            if(client) {
-                if(type === '1m') client.subscription = '1 Oylik Obuna (59,000 so\'m)';
-                else if(type === '1y') client.subscription = '1 Yillik Obuna (700,000 so\'m)';
-                saveData();
-                showToast(`${clientPhone} uchun obuna yangilandi!`);
-            }
-        }
-
-        function renderDashboard() {
-            if(sessionStorage.getItem('cyber_admin_logged') !== 'true') return;
-
-            const searchVal = document.getElementById('clientSearchInput').value.toLowerCase();
-            let clHtml = '';
-            
-            clients.forEach((c, idx) => {
-                if(c.phone.toLowerCase().includes(searchVal)) {
-                    clHtml += `<div class="item-card"><div class="card-info"><strong>📞 ${c.phone}</strong><span class="badge-text">🔒 ${c.subscription}</span><br><span style="font-size:11px; color:rgba(0,255,102,0.6);">Paroli: ${c.pass}</span></div><div class="card-actions"><button class="btn-sm success" onclick="grantSubscription('${c.phone}', '1m')">1 Oylik (59k)</button><button class="btn-sm success" onclick="grantSubscription('${c.phone}', '1y')">1 Yillik (700k)</button><button class="btn-sm danger" onclick="deleteClient(${idx})">O'chirish</button></div></div>`;
-                }
-            });
-            document.getElementById('clientsList').innerHTML = clHtml || '<div class="empty-text">> Mijozlar topilmadi.</div>';
-        }
-
-        window.onload = function() {
-            if(sessionStorage.getItem('cyber_admin_logged') === 'true') {
-                showDashboard();
-            }
-        }
-    </script>
+window.onload = function() {
+  if(sessionStorage.getItem('cyber_admin_logged') === 'true') {
+    showDashboard();
+  }
+}
+</script>
 </body>
 </html>
