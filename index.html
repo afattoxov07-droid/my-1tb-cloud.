@@ -1086,16 +1086,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropZone = document.getElementById('drop-zone');
 
     if (fileInput) {
-        fileInput.addEventListener('change', function(event) {
-            const files = event.target.files;
-            if (files.length > 0) {
-                for (let i = 0; i < files.length; i++) {
-                    sendFileToTelegram(files[i]);
-                }
-            }
-        });
-    }
-
+       
     if (dropZone && fileInput) {
         // Qutiga bosganda fayl tanlash oynasi ochilishi uchun
         dropZone.addEventListener('click', () => fileInput.click());
@@ -1115,10 +1106,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             dropZone.classList.remove('border-green-400');
             const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                for (let i = 0; i < files.length; i++) {
-                    sendFileToTelegram(files[i]);
-                }
+          
             }
         });
     }
