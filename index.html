@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CYBER ADMIN CONTROL CENTER</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0b0f19">
-    <link rel="apple-touch-icon" href="icon-192.png">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
         body { background-color: #0b0f19; color: #00ff66; padding: 20px; }
@@ -16,56 +13,65 @@
         .title { color: #ff3333; font-weight: bold; letter-spacing: 1px; }
         .header-actions { display: flex; gap: 10px; align-items: center; }
         .header-btn { background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 6px 15px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.2s; }
-        .header-btn.install-btn { border-color: #00ff66; color: #00ff66; display: none; }
         .header-btn.logout { border-color: #ff3333; color: #ff3333; }
         .header-btn:hover { background: rgba(255, 170, 0, 0.1); }
-        .header-btn.install-btn:hover { background: rgba(0, 255, 102, 0.1); }
         .header-btn.logout:hover { background: rgba(255, 51, 51, 0.1); }
+
         .section-box { border: 1px solid #ff3333; padding: 20px; margin-bottom: 25px; background: rgba(255, 51, 51, 0.02); }
         .section-box.yellow { border-color: #ffaa00; background: rgba(255, 170, 0, 0.02); }
         .section-box.green { border-color: #00ff66; background: rgba(0, 255, 102, 0.02); }
         .section-box.purple { border-color: #9933ff; background: rgba(153, 51, 255, 0.02); }
+
         .section-title { color: #ff3333; font-size: 15px; margin-bottom: 15px; font-weight: bold; }
         .section-box.yellow .section-title { color: #ffaa00; }
         .section-box.green .section-title { color: #00ff66; }
         .section-box.purple .section-title { color: #9933ff; }
+
         .form-row { display: flex; gap: 15px; margin-bottom: 15px; }
-        input { flex: 1; background: #0b0f19; border: 1px solid #ff3333; color: #ff3333; padding: 10px 15px; font-family: inherit; outline: none; }
-        .section-box.green input { border-color: #00ff66; color: #00ff66; }
+        input, select { flex: 1; background: #0b0f19; border: 1px solid #ff3333; color: #ff3333; padding: 10px 15px; font-family: inherit; outline: none; }
+        .section-box.green input, .section-box.green select { border-color: #00ff66; color: #00ff66; }
+        .section-box.yellow input, .section-box.yellow select { border-color: #ffaa00; color: #ffaa00; }
         input::placeholder { color: rgba(255, 51, 51, 0.5); }
         .section-box.green input::placeholder { color: rgba(0, 255, 102, 0.5); }
+        .section-box.yellow input::placeholder { color: rgba(255, 170, 0, 0.5); }
+
         .action-btn { width: 100%; background: transparent; border: 1px solid #ff3333; color: #ff3333; padding: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.2s; }
         .section-box.green .action-btn { border-color: #00ff66; color: #00ff66; }
+        .section-box.yellow .action-btn { border-color: #ffaa00; color: #ffaa00; }
         .action-btn:hover { background: rgba(255, 51, 51, 0.1); }
         .section-box.green .action-btn:hover { background: rgba(0, 255, 102, 0.1); }
+        .section-box.yellow .action-btn:hover { background: rgba(255, 170, 0, 0.1); }
+
         .item-card { border: 1px solid #ff3333; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; background: #0b0f19; }
         .section-box.green .item-card { border-color: #00ff66; }
+        .section-box.yellow .item-card { border-color: #ffaa00; }
+        
         .card-info { font-size: 14px; }
         .card-info span { color: #ff3333; }
         .section-box.green .card-info span { color: #00ff66; }
-        .card-actions { display: flex; gap: 8px; }
+        .section-box.yellow .card-info span { color: #ffaa00; }
+
+        .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
         .btn-sm { background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 5px 10px; font-size: 12px; cursor: pointer; font-family: inherit; }
+        .btn-sm.success { border-color: #00ff66; color: #00ff66; }
         .btn-sm.danger { border-color: #ff3333; color: #ff3333; }
         .btn-sm:hover { background: rgba(255, 170, 0, 0.1); }
+        .btn-sm.success:hover { background: rgba(0, 255, 102, 0.1); }
         .btn-sm.danger:hover { background: rgba(255, 51, 51, 0.1); }
+
         .empty-text { color: rgba(255, 170, 0, 0.6); font-size: 14px; }
-        .log-item { border: 1px solid #9933ff; padding: 10px 15px; margin-top: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
-        .log-title { color: #9933ff; font-weight: bold; }
-        .log-sub { color: rgba(0, 255, 102, 0.6); font-size: 11px; margin-top: 3px; }
-        .dot { width: 8px; height: 8px; background: #00ff66; border-radius: 50%; box-shadow: 0 0 8px #00ff66; }
         .badge-text { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffaa00; padding: 2px 6px; font-size: 10px; margin-left: 8px; }
     </style>
 </head>
 <body>
+
     <header>
         <div class="logo-area">
             <div class="admin-badge">A</div>
             <span class="title">CYBER ADMIN CONTROL CENTER</span>
         </div>
         <div class="header-actions">
-            <button id="installBtn" class="header-btn install-btn">📥 O'rnatish</button>
-            <button class="header-btn" onclick="location.href='messages.html'">Mijozlar Xabarlari</button>
-            <button class="header-btn logout" onclick="location.href='logout.html'">CHIQISH</button>
+            <button class="header-btn logout" onclick="logout()">CHIQISH</button>
         </div>
     </header>
 
@@ -73,26 +79,28 @@
     <div class="section-box">
         <div class="section-title">> Adminlar Boshqaruvi</div>
         <div class="form-row">
-            <input type="text" id="adminName" placeholder="Admin ismi">
-            <input type="password" id="adminPass" placeholder="Admin maxfiy paroli">
+            <input type="text" id="newAdminName" placeholder="Yangi admin ismi">
+            <input type="password" id="newAdminPass" placeholder="Admin maxfiy paroli">
         </div>
-        <button class="action-btn" onclick="addAdmin()">+ ADMIN QO'SHISH</button>
-        <div class="item-card" style="margin-top: 15px;">
-            <div class="card-info">
-                <strong>🛡️ Asosiy Admin</strong><br>
-                <span style="color: #ff3333; font-size: 13px;">Parol: 2007080411</span>
-            </div>
-            <div class="card-actions">
-                <button class="btn-sm" onclick="editAdmin('Asosiy Admin')">O'zgartirish</button>
-                <button class="btn-sm danger" onclick="alert('Asosiy adminni o\'chirib bo\'lmaydi!')">O'chirish</button>
-            </div>
-        </div>
+        <button class="action-btn" onclick="addNewAdmin()">+ ADMIN QO'SHISH</button>
+        <div id="adminsList" style="margin-top: 15px;"></div>
     </div>
 
     <!-- 2. Kelib tushgan to'lov cheklari -->
     <div class="section-box yellow">
         <div class="section-title">> Kelib tushgan to'lov cheklari</div>
-        <div class="empty-text">> Hozircha cheklar yoq.</div>
+        <div id="receiptsList">
+            <div class="empty-text">> Hozircha cheklar yoq. (Test uchun pastdan chek yuborib ko'rishingiz mumkin)</div>
+        </div>
+        <!-- Test uchun mijoz chek yuborish paneli (simulyatsiya) -->
+        <div style="margin-top: 15px; border-top: 1px dashed #ffaa00; padding-top: 15px;">
+            <div style="font-size: 13px; margin-bottom: 8px; color: #ffaa00;">[Mijoz Tomoni] To'lov chekini yuborish simulyatsiyasi:</div>
+            <div class="form-row">
+                <input type="text" id="checkClientName" placeholder="Mijozingizning ismi">
+                <input type="text" id="checkInfo" placeholder="Chek raqami yoki izoh (Masalan: Click 50000 so'm)">
+            </div>
+            <button class="action-btn" style="border-color: #ffaa00; color: #ffaa00;" onclick="simulateClientSendCheck()">+ CHEK YUBORISH</button>
+        </div>
     </div>
 
     <!-- 3. Yangi mijoz qo'shish -->
@@ -102,126 +110,203 @@
             <input type="text" id="clientName" placeholder="Mijoz ismi">
             <input type="password" id="clientPass" placeholder="Maxfiy paroli">
         </div>
-        <button class="action-btn" onclick="addClient()">+ MIJOZ QO'SHISH</button>
+        <button class="action-btn" onclick="addNewClient()">+ MIJOZ QO'SHISH</button>
     </div>
 
     <!-- 4. Shifrlangan mijozlar ro'yxati -->
     <div class="section-box green">
-        <div class="section-title">> Shifrlangan mijozlar ro'yxati</div>
-        <div class="item-card">
-            <div class="card-info">
-                <strong>Test_Mijoz</strong> <span class="badge-text">🔒 Text</span><br>
-                <span style="font-size: 13px;">Parol: parol123</span>
-            </div>
-            <div class="card-actions">
-                <button class="btn-sm" onclick="editClient('Test_Mijoz')">To'lovni o'zgartirish</button>
-                <button class="btn-sm" onclick="showPass('parol123')">Parol</button>
-                <button class="btn-sm danger" onclick="deleteClient(this)">O'chirish</button>
-            </div>
-        </div>
-        <div class="item-card">
-            <div class="card-info">
-                <strong>toxirjon</strong> <span class="badge-text">🔒 Text</span><br>
-                <span style="font-size: 13px;">Parol: toxirjon123</span>
-            </div>
-            <div class="card-actions">
-                <button class="btn-sm" onclick="editClient('toxirjon')">To'lovni o'zgartirish</button>
-                <button class="btn-sm" onclick="showPass('toxirjon123')">Parol</button>
-                <button class="btn-sm danger" onclick="deleteClient(this)">O'chirish</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 5. Faol Seanslar & Xavfsizlik Jurnali -->
-    <div class="section-box purple">
-        <div class="section-title">> Faol Seanslar & Xavfsizlik Jurnali</div>
-        <div class="log-item">
-            <div>
-                <div class="log-title">Asosiy Admin (Admin)</div>
-                <div class="log-sub">Noutbuk / Desktop | 07.09.2026 20:28:24</div>
-            </div>
-            <div class="dot"></div>
-        </div>
-        <div class="log-item">
-            <div>
-                <div class="log-title">Asosiy Admin (Admin)</div>
-                <div class="log-sub">Noutbuk / Desktop | 07.09.2026 20:20:10</div>
-            </div>
-            <div class="dot"></div>
-        </div>
-        <div class="log-item">
-            <div>
-                <div class="log-title">toxirjon (Mijoz)</div>
-                <div class="log-sub">Noutbuk / Desktop | 07.09.2026 20:19:54</div>
-            </div>
-            <div class="dot"></div>
-        </div>
-        <div class="log-item">
-            <div>
-                <div class="log-title">Asosiy Admin (Admin)</div>
-                <div class="log-sub">Noutbuk / Desktop | 07.09.2026 20:19:42</div>
-            </div>
-            <div class="dot"></div>
-        </div>
+        <div class="section-title">> Shifrlangan mijozlar ro'yxati va Obunalar</div>
+        <div id="clientsList"></div>
     </div>
 
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').catch(() => {});
+        // Ma'lumotlarni LocalStorage orqali boshqarish
+        let admins = JSON.parse(localStorage.getItem('cyber_admins')) || [
+            { name: 'Asosiy Admin', pass: '2007080411', isMain: true }
+        ];
+
+        let clients = JSON.parse(localStorage.getItem('cyber_clients')) || [
+            { name: 'Test_Mijoz', pass: 'parol123', subscription: '1 Oylik (2026-10-08 gacha)' },
+            { name: 'toxirjon', pass: 'toxirjon123', subscription: 'Cheksiz Xotira' }
+        ];
+
+        let receipts = JSON.parse(localStorage.getItem('cyber_receipts')) || [];
+
+        function saveData() {
+            localStorage.setItem('cyber_admins', JSON.stringify(admins));
+            localStorage.setItem('cyber_clients', JSON.stringify(clients));
+            localStorage.setItem('cyber_receipts', JSON.stringify(receipts));
+            renderAll();
         }
-        let deferredPrompt;
-        const installBtn = document.getElementById('installBtn');
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installBtn.style.display = 'inline-block';
-        });
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    installBtn.style.display = 'none';
-                }
-                deferredPrompt = null;
-            }
-        });
-        function addAdmin() {
-            const name = document.getElementById('adminName').value;
-            const pass = document.getElementById('adminPass').value;
+
+        // Admin qo'shish
+        function addNewAdmin() {
+            const name = document.getElementById('newAdminName').value.trim();
+            const pass = document.getElementById('newAdminPass').value.trim();
             if(!name || !pass) {
                 alert("Iltimos, admin ismi va parolini kiriting!");
                 return;
             }
+            admins.push({ name, pass, isMain: false });
+            document.getElementById('newAdminName').value = '';
+            document.getElementById('newAdminPass').value = '';
+            saveData();
             alert("Yangi admin muvaffaqiyatli qo'shildi!");
-            document.getElementById('adminName').value = '';
-            document.getElementById('adminPass').value = '';
         }
-        function addClient() {
-            const name = document.getElementById('clientName').value;
-            const pass = document.getElementById('clientPass').value;
+
+        // Adminni o'chirish
+        function deleteAdmin(index) {
+            if(admins[index].isMain) {
+                alert("Asosiy adminni o'chirib bo'lmaydi!");
+                return;
+            }
+            if(confirm("Haqiqatan ham bu adminni o'chirmoqchimisiz?")) {
+                admins.splice(index, 1);
+                saveData();
+            }
+        }
+
+        // Mijoz qo'shish (Parol bilan)
+        function addNewClient() {
+            const name = document.getElementById('clientName').value.trim();
+            const pass = document.getElementById('clientPass').value.trim();
             if(!name || !pass) {
                 alert("Iltimos, mijoz ismi va parolini kiriting!");
                 return;
             }
-            alert("Yangi mijoz qo'shildi!");
+            clients.push({ name, pass, subscription: 'Obuna belgilanmagan' });
             document.getElementById('clientName').value = '';
             document.getElementById('clientPass').value = '';
+            saveData();
+            alert("Mijoz yaratildi va tizimga parol bilan kiritishga tayyor!");
         }
-        function editAdmin(name) {
-            alert(name + " ma'lumotlarini o'zgartirish");
-        }
-        function editClient(name) {
-            alert(name + " uchun obuna muddatini o'zgartirish");
-        }
-        function showPass(pass) {
-            alert("Maxfiy parol: " + pass);
-        }
-        function deleteClient(btn) {
-            if(confirm("Haqiqatan ham o'chirmoqchimisiz?")) {
-                btn.closest('.item-card').remove();
+
+        // Mijozni o'chirish
+        function deleteClient(index) {
+            if(confirm("Bu mijozni o'chirmoqchimisiz?")) {
+                clients.splice(index, 1);
+                saveData();
             }
         }
+
+        // Chek simulyatsiyasi (Mijoz tarafidan)
+        function simulateClientSendCheck() {
+            const clientName = document.getElementById('checkClientName').value.trim();
+            const checkInfo = document.getElementById('checkInfo').value.trim();
+            if(!clientName || !checkInfo) {
+                alert("Mijoz ismi va chek ma'lumotini kiriting!");
+                return;
+            }
+            receipts.push({ id: Date.now(), clientName, checkInfo, date: new Date().toLocaleString() });
+            document.getElementById('checkClientName').value = '';
+            document.getElementById('checkInfo').value = '';
+            saveData();
+            alert("Chek adminga yuborildi!");
+        }
+
+        // Chekni ko'rib chiqib obuna berish (1 oylik, 1 yillik, cheksiz)
+        function grantSubscription(receiptIndex, clientName, type) {
+            // Mijozni topamiz va obunasini yangilaymiz
+            let client = clients.find(c => c.name === clientName);
+            
+            let expiryDate = new Date();
+            if(type === '1m') {
+                expiryDate.setMonth(expiryDate.getMonth() + 1);
+                let formatted = expiryDate.toISOString().split('T')[0];
+                if(client) client.subscription = `1 Oylik (${formatted} gacha)`;
+                else clients.push({ name: clientName, pass: '12345', subscription: `1 Oylik (${formatted} gacha)` });
+            } else if(type === '1y') {
+                expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+                let formatted = expiryDate.toISOString().split('T')[0];
+                if(client) client.subscription = `1 Yillik (${formatted} gacha)`;
+                else clients.push({ name: clientName, pass: '12345', subscription: `1 Yillik (${formatted} gacha)` });
+            } else if(type === 'inf') {
+                if(client) client.subscription = 'Cheksiz Xotira';
+                else clients.push({ name: clientName, pass: '12345', subscription: 'Cheksiz Xotira' });
+            }
+
+            // Chekni o'chiramiz (ko'rib chiqildi)
+            receipts.splice(receiptIndex, 1);
+            saveData();
+            alert(`${clientName} uchun obuna muvaffaqiyatli faollashtirildi!`);
+        }
+
+        function deleteReceipt(index) {
+            receipts.splice(index, 1);
+            saveData();
+        }
+
+        // Ma'lumotlarni ekranga chiqarish
+        function renderAll() {
+            // Adminlar ro'yxati
+            let adminsHtml = '';
+            admins.forEach((adm, idx) => {
+                adminsHtml += `
+                    <div class="item-card">
+                        <div class="card-info">
+                            <strong>${adm.isMain ? '🛡️ ' : ''}${adm.name}</strong><br>
+                            <span style="font-size: 13px;">Parol: ${adm.pass}</span>
+                        </div>
+                        <div class="card-actions">
+                            ${!adm.isMain ? `<button class="btn-sm danger" onclick="deleteAdmin(${idx})">O'chirish</button>` : '<span class="badge-text">Asosiy</span>'}
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('adminsList').innerHTML = adminsHtml;
+
+            // Cheklar ro'yxati
+            let receiptsHtml = '';
+            if(receipts.length === 0) {
+                receiptsHtml = '<div class="empty-text">> Hozircha cheklar yoq.</div>';
+            } else {
+                receipts.forEach((rc, idx) => {
+                    receiptsHtml += `
+                        <div class="item-card">
+                            <div class="card-info">
+                                <strong>Mijoz: ${rc.clientName}</strong><br>
+                                <span style="color: #ffaa00; font-size: 13px;">Chek: ${rc.checkInfo} (${rc.date})</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-sm success" onclick="grantSubscription(${idx}, '${rc.clientName}', '1m')">1 Oylik berish</button>
+                                <button class="btn-sm success" onclick="grantSubscription(${idx}, '${rc.clientName}', '1y')">1 Yillik berish</button>
+                                <button class="btn-sm success" onclick="grantSubscription(${idx}, '${rc.clientName}', 'inf')">Cheksiz berish</button>
+                                <button class="btn-sm danger" onclick="deleteReceipt(${idx})">Rad etish</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('receiptsList').innerHTML = receiptsHtml;
+
+            // Mijozlar ro'yxati
+            let clientsHtml = '';
+            if(clients.length === 0) {
+                clientsHtml = '<div class="empty-text">> Hozircha mijozlar yoq.</div>';
+            } else {
+                clients.forEach((cl, idx) => {
+                    clientsHtml += `
+                        <div class="item-card">
+                            <div class="card-info">
+                                <strong>${cl.name}</strong> <span class="badge-text">🔒 ${cl.subscription}</span><br>
+                                <span style="font-size: 13px;">Parol: ${cl.pass}</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-sm danger" onclick="deleteClient(${idx})">O'chirish</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('clientsList').innerHTML = clientsHtml;
+        }
+
+        function logout() {
+            location.href = 'index.html';
+        }
+
+        // Sahifa yuklanganda render qilish
+        renderAll();
     </script>
 </body>
 </html>
