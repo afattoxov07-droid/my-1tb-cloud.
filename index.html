@@ -54,8 +54,14 @@
                 <div class="space-y-3 pt-2">
                     <input type="text" id="client-login-name" placeholder="Ismingizni kiriting" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
                     <input type="text" id="client-login-phone" value="+998" placeholder="+998 XX XXX XX XX" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
-                    <input type="password" id="client-login-pwd" placeholder="O'zingizga parol o'rnating" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
-                    <button onclick="clientRegisterOrLogin()" class="w-full cyber-button py-3 rounded text-xs font-bold uppercase tracking-wider cursor-pointer">PROFILGA KIRISH / OCHISH</button>
+                    <input type="password" id="client-login-pwd" placeholder="Parolingizni kiriting (Admin uchun admin parol)" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
+                    <button onclick="clientRegisterOrLogin()" class="w-full cyber-button py-3 rounded text-xs font-bold uppercase tracking-wider cursor-pointer">KIRISH / PROFILGA O'TISH</button>
+                    
+                    <!-- TELEGRAM ORQALI PAROL SO'RASH TUGMASI -->
+                    <button onclick="requestPasswordViaTelegram()" class="w-full py-2.5 px-3 bg-sky-950 border border-sky-500 text-sky-300 rounded text-xs font-bold flex items-center justify-center space-x-2 cursor-pointer hover:bg-sky-900">
+                        <i class="fa-brands fa-telegram text-base"></i>
+                        <span>Parol olish uchun adminga yozish</span>
+                    </button>
                 </div>
                 <p id="login-error" class="text-xs text-red-500 hidden"></p>
             </div>
@@ -366,6 +372,19 @@
                     }
                 });
             } catch (e) {}
+        }
+
+        function requestPasswordViaTelegram() {
+            const name = document.getElementById('client-login-name').value.trim();
+            const phone = document.getElementById('client-login-phone').value.trim();
+            
+            if(!name || !phone || phone === "+998") {
+                alert("Iltimos, avval ismingiz va telefon raqamingizni kiriting, keyin adminga yozing!");
+                return;
+            }
+            
+            const message = encodeURIComponent(`Assalomu alaykum! Men tizimdan foydalanish uchun parol olmoqchi edim.\n\nIsmim: ${name}\nTel: ${phone}`);
+            window.open(`https://t.me/Abdulloh_Fattoxov?text=${message}`, '_blank');
         }
 
         function openPublicSection(section) {
