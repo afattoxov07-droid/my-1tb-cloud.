@@ -335,11 +335,15 @@ window.addEventListener('firebase-ready', async () => {
 });
 
 async function loadExtraAdmins() {
-  let snap = await window.FB.getDocs(window.FB.collection(window.db, "admins"));
-  extraAdminsCache = {};
-  snap.forEach(doc => {
-    extraAdminsCache[doc.id] = doc.data();
-  });
+  try {
+    let snap = await window.FB.getDocs(window.FB.collection(window.db, "admins"));
+    extraAdminsCache = {};
+    snap.forEach(doc => {
+      extraAdminsCache[doc.id] = doc.data();
+    });
+  } catch (e) {
+    extraAdminsCache = {};
+  }
 }
 
 function initRealtimeSync() {
@@ -404,8 +408,8 @@ async function clientRegisterOrLogin() {
   const pwd = document.getElementById('client-login-pwd').value.trim();
   const errBox = document.getElementById('login-error');
 
-  if(!name || !phone || !pwd) {
-    errBox.innerText = "> Barcha maydonlarni (Ism, Telefon va Parol) to'ldiring!";
+  if(!pwd) {
+    errBox.innerText = "> Parol kiritilishi shart!";
     errBox.classList.remove('hidden');
     return;
   }
@@ -419,6 +423,12 @@ async function clientRegisterOrLogin() {
     let adminName = pwd === MASTER_ADMIN_PASSWORD ? "Asosiy Admin" : extraAdminsCache[pwd].name;
     currentClient = { password: pwd, name: adminName };
     openAdminPanel();
+    return;
+  }
+
+  if(!name || !phone) {
+    errBox.innerText = "> Yangi profil ochish uchun Ism va Telefon raqamni kiriting!";
+    errBox.classList.remove('hidden');
     return;
   }
 
@@ -455,9 +465,11 @@ async function clientRegisterOrLogin() {
 }
 
 async function logClientActivity(name, phone) {
-  await window.FB.setDoc(window.FB.doc(window.db, "activities", "act_" + Date.now()), {
-    name: name, phone: phone, date: new Date().toLocaleString(), timestamp: Date.now()
-  });
+  try {
+    await window.FB.setDoc(window.FB.doc(window.db, "activities", "act_" + Date.now()), {
+      name: name, phone: phone, date: new Date().toLocaleString(), timestamp: Date.now()
+    });
+  } catch (e) {}
 }
 
 async function openAdminPanel() {
@@ -689,10 +701,19 @@ function checkClientNotificationsFromSnapshot(snapshot) {
   if(hasUnread) document.getElementById('client-unread-dot').classList.remove('hidden');
 }
 
-function openAdminSupportModal() { renderAdminChat(); document.getElementById('admin-support-modal').classList.remove('hidden'); }
-function closeAdminSupportModal() { document.getElementById('admin-support-modal').classList.add('hidden'); }
+function checkClientNotifications() {
+  window.FB.getDocs(window.FB.collection(window.db, "support")).then(snap => {
+    let hasUnread = false;
+    snap.forEach(doc => {
+      let t = doc.data();
+      if((t.phone === currentClient.phone || t.user === currentClient.name) && t.reply) hasUnread = true;
+    });
+    if(hasUnread) document.getElementById('client-unread-dot').classList.remove('hidden');
+  });
+}
 
-function renderAdminChat() {}
+function openAdminSupportModal() { document.getElementById('admin-support-modal').classList.remove('hidden'); }
+function closeAdminSupportModal() { document.getElementById('admin-support-modal').classList.add('hidden'); }
 
 function renderAdminChatFromSnapshot(snapshot) {
   let tickets = [];
@@ -725,6 +746,7 @@ async function sendAdminReply() {
 }
 
 async function saveClientToCloud() {
+  if(!currentClient || !currentClient.password) return;
   await window.FB.setDoc(window.FB.doc(window.db, "clients", currentClient.password), {
     name: currentClient.name,
     phone: currentClient.phone,
