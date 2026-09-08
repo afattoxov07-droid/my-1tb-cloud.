@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CYBER ADMIN CONTROL CENTER</title>
+    <!-- Firebase SDK skriptlari -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
         body { background-color: #0b0f19; color: #00ff66; padding: 20px; }
@@ -16,17 +20,12 @@
         .header-btn.logout { border-color: #ff3333; color: #ff3333; }
         .header-btn:hover { background: rgba(255, 170, 0, 0.1); }
         .header-btn.logout:hover { background: rgba(255, 51, 51, 0.1); }
-
         .section-box { border: 1px solid #ff3333; padding: 20px; margin-bottom: 25px; background: rgba(255, 51, 51, 0.02); }
         .section-box.yellow { border-color: #ffaa00; background: rgba(255, 170, 0, 0.02); }
         .section-box.green { border-color: #00ff66; background: rgba(0, 255, 102, 0.02); }
-        .section-box.purple { border-color: #9933ff; background: rgba(153, 51, 255, 0.02); }
-
         .section-title { color: #ff3333; font-size: 15px; margin-bottom: 15px; font-weight: bold; }
         .section-box.yellow .section-title { color: #ffaa00; }
         .section-box.green .section-title { color: #00ff66; }
-        .section-box.purple .section-title { color: #9933ff; }
-
         .form-row { display: flex; gap: 15px; margin-bottom: 15px; }
         input, select { flex: 1; background: #0b0f19; border: 1px solid #ff3333; color: #ff3333; padding: 10px 15px; font-family: inherit; outline: none; }
         .section-box.green input, .section-box.green select { border-color: #00ff66; color: #00ff66; }
@@ -34,58 +33,39 @@
         input::placeholder { color: rgba(255, 51, 51, 0.5); }
         .section-box.green input::placeholder { color: rgba(0, 255, 102, 0.5); }
         .section-box.yellow input::placeholder { color: rgba(255, 170, 0, 0.5); }
-
         .action-btn { width: 100%; background: transparent; border: 1px solid #ff3333; color: #ff3333; padding: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.2s; }
         .section-box.green .action-btn { border-color: #00ff66; color: #00ff66; }
         .section-box.yellow .action-btn { border-color: #ffaa00; color: #ffaa00; }
         .action-btn:hover { background: rgba(255, 51, 51, 0.1); }
         .section-box.green .action-btn:hover { background: rgba(0, 255, 102, 0.1); }
         .section-box.yellow .action-btn:hover { background: rgba(255, 170, 0, 0.1); }
-
         .item-card { border: 1px solid #ff3333; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; background: #0b0f19; }
         .section-box.green .item-card { border-color: #00ff66; }
         .section-box.yellow .item-card { border-color: #ffaa00; }
-        
         .card-info { font-size: 14px; }
         .card-info span { color: #ff3333; }
         .section-box.green .card-info span { color: #00ff66; }
         .section-box.yellow .card-info span { color: #ffaa00; }
-
         .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
         .btn-sm { background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 5px 10px; font-size: 12px; cursor: pointer; font-family: inherit; }
         .btn-sm.success { border-color: #00ff66; color: #00ff66; }
         .btn-sm.danger { border-color: #ff3333; color: #ff3333; }
-        .btn-sm:hover { background: rgba(255, 170, 0, 0.1); }
-        .btn-sm.success:hover { background: rgba(0, 255, 102, 0.1); }
-        .btn-sm.danger:hover { background: rgba(255, 51, 51, 0.1); }
-
         .empty-text { color: rgba(255, 170, 0, 0.6); font-size: 14px; }
         .badge-text { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffaa00; padding: 2px 6px; font-size: 10px; margin-left: 8px; }
-
-        /* Login Ekran Dizayni (Rasmga mos tartib) */
         #loginOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0f19; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
         .login-card { border: 1px solid #00ff66; width: 100%; max-width: 450px; padding: 30px; background: rgba(0, 255, 102, 0.02); text-align: center; }
         .login-icon { font-size: 32px; margin-bottom: 15px; }
         .login-title { color: #00ff66; font-size: 20px; font-weight: bold; margin-bottom: 5px; letter-spacing: 1px; }
         .login-sub { color: rgba(0, 255, 102, 0.6); font-size: 12px; margin-bottom: 25px; }
-        
         .login-input { width: 100%; background: #0b0f19; border: 1px solid #00ff66; color: #00ff66; padding: 12px 15px; font-family: inherit; outline: none; margin-bottom: 15px; text-align: center; }
-        .login-input::placeholder { color: rgba(0, 255, 102, 0.4); }
-        
         .login-btn { width: 100%; background: transparent; border: 1px solid #00ff66; color: #00ff66; padding: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.2s; margin-bottom: 20px; }
         .login-btn:hover { background: rgba(0, 255, 102, 0.1); }
-        
         .open-sections { border: 1px solid #00ff66; width: 100%; max-width: 450px; padding: 20px; margin-top: 20px; background: rgba(0, 255, 102, 0.01); text-align: left; }
         .open-title { color: #00ff66; font-size: 13px; font-weight: bold; margin-bottom: 12px; display: flex; justify-content: space-between; }
         .open-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .open-btn { background: transparent; border: 1px solid #00ff66; color: #00ff66; padding: 10px; font-size: 12px; cursor: pointer; text-align: left; font-family: inherit; }
-        .open-btn:hover { background: rgba(0, 255, 102, 0.1); }
-        .open-btn-full { width: 100%; background: transparent; border: 1px solid #00ff66; color: #00ff66; padding: 10px; font-size: 12px; cursor: pointer; text-align: left; font-family: inherit; margin-bottom: 8px; }
-        .open-btn-full:hover { background: rgba(0, 255, 102, 0.1); }
+        .open-btn, .open-btn-full { background: transparent; border: 1px solid #00ff66; color: #00ff66; padding: 10px; font-size: 12px; cursor: pointer; text-align: left; font-family: inherit; margin-bottom: 8px; width: 100%; }
         .telegram-contact { margin-top: 15px; font-size: 12px; color: #ffaa00; border-top: 1px dashed rgba(255, 170, 0, 0.4); padding-top: 12px; text-align: center; }
         .telegram-contact a { color: #00ff66; text-decoration: underline; font-weight: bold; }
-
-        /* Modal oyna */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center; padding: 20px; }
         .modal-content { background: #0b0f19; border: 1px solid #00ff66; max-width: 500px; width: 100%; padding: 25px; position: relative; }
         .close-modal { position: absolute; top: 10px; right: 15px; color: #ff3333; font-size: 20px; cursor: pointer; font-weight: bold; }
@@ -93,7 +73,6 @@
 </head>
 <body>
 
-    <!-- Kirish Oynasi (Rasmga mos tartib: Ism -> Tel -> Parol -> Tugma) -->
     <div id="loginOverlay">
         <div class="login-card">
             <div class="login-icon">🔒</div>
@@ -111,7 +90,6 @@
             </div>
         </div>
 
-        <!-- Ochiq Bo'limlar (Profilsiz) -->
         <div class="open-sections">
             <div class="open-title"><span>> Ochiq Bo'limlar (Profilsiz)</span> <span style="color: #ffaa00;">Erkin kirish</span></div>
             <div class="open-grid">
@@ -123,7 +101,6 @@
         </div>
     </div>
 
-    <!-- Asosiy Admin Paneli (Faqat kirgandan keyin ochiladi) -->
     <div id="mainDashboard" style="display: none;">
         <header>
             <div class="logo-area">
@@ -135,7 +112,6 @@
             </div>
         </header>
 
-        <!-- 1. Adminlar Boshqaruvi (Faqat Asosiy Admingagina ko'rinadi) -->
         <div class="section-box" id="adminManageSection">
             <div class="section-title">> Adminlar Boshqaruvi</div>
             <div class="form-row">
@@ -146,7 +122,6 @@
             <div id="adminsList" style="margin-top: 15px;"></div>
         </div>
 
-        <!-- 2. Kelib tushgan to'lov cheklari -->
         <div class="section-box yellow">
             <div class="section-title">> Kelib tushgan to'lov cheklari</div>
             <div id="receiptsList">
@@ -154,7 +129,6 @@
             </div>
         </div>
 
-        <!-- 3. Yangi mijoz qo'shish -->
         <div class="section-box green">
             <div class="section-title">> Yangi mijoz qo'shish</div>
             <div class="form-row">
@@ -164,14 +138,12 @@
             <button class="action-btn" onclick="addNewClient()">+ MIJOZ QO'SHISH</button>
         </div>
 
-        <!-- 4. Shifrlangan mijozlar ro'yxati -->
         <div class="section-box green">
             <div class="section-title">> Shifrlangan mijozlar ro'yxati va Obunalar</div>
             <div id="clientsList"></div>
         </div>
     </div>
 
-    <!-- Modal Oyna -->
     <div id="infoModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal()">&times;</span>
@@ -181,27 +153,50 @@
     </div>
 
     <script>
-        let admins = JSON.parse(localStorage.getItem('cyber_admins')) || [
-            { name: 'Asosiy Admin', pass: '2007080411', isMain: true }
-        ];
+        // --- FIREBASE SOZLAMALARI ---
+        const firebaseConfig = {
+            apiKey: "SIZNING_API_KEY",
+            authDomain: "SIZNING_AUTH_DOMAIN",
+            databaseURL: "SIZNING_DATABASE_URL",
+            projectId: "SIZNING_PROJECT_ID",
+            storageBucket: "SIZNING_STORAGE_BUCKET",
+            messagingSenderId: "SIZNING_MESSAGING_SENDER_ID",
+            appId: "SIZNING_APP_ID"
+        };
 
-        let clients = JSON.parse(localStorage.getItem('cyber_clients')) || [
-            { name: 'Test_Mijoz', pass: 'parol123', phone: '+998901234567', subscription: '1 Oylik' },
-            { name: 'toxirjon', pass: 'toxirjon123', phone: '+998919876543', subscription: 'Cheksiz Xotira' }
-        ];
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-        let receipts = JSON.parse(localStorage.getItem('cyber_receipts')) || [];
+        let admins = [];
+        let clients = [];
+        let receipts = [];
 
-        function saveData() {
-            localStorage.setItem('cyber_admins', JSON.stringify(admins));
-            localStorage.setItem('cyber_clients', JSON.stringify(clients));
-            localStorage.setItem('cyber_receipts', JSON.stringify(receipts));
+        // Ma'lumotlarni Firebase'dan real vaqt rejimida o'qib olish
+        db.ref('cyber_system').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                admins = data.admins || [{ name: 'Asosiy Admin', pass: '2007080411', isMain: true }];
+                clients = data.clients || [];
+                receipts = data.receipts || [];
+            } else {
+                // Agar baza bo'sh bo'lsa default qiymatlarni yozish
+                admins = [{ name: 'Asosiy Admin', pass: '2007080411', isMain: true }];
+                clients = [{ name: 'Test_Mijoz', pass: 'parol123', phone: '+998901234567', subscription: '1 Oylik' }];
+                syncToFirebase();
+            }
             renderDashboard();
+        });
+
+        function syncToFirebase() {
+            db.ref('cyber_system').set({
+                admins: admins,
+                clients: clients,
+                receipts: receipts
+            });
         }
 
         function handleLogin() {
             const name = document.getElementById('loginName').value.trim();
-            const phone = document.getElementById('loginPhone').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
 
             if(!name || !pass) {
@@ -223,7 +218,7 @@
                 return;
             }
 
-            alert("Ism yoki parol xato! Parol olish uchun Telegram orqali murojaat qiling.");
+            alert("Ism yoki parol xato!");
         }
 
         function showDashboard() {
@@ -260,7 +255,7 @@
             admins.push({ name, pass, isMain: false });
             document.getElementById('newAdminName').value = '';
             document.getElementById('newAdminPass').value = '';
-            saveData();
+            syncToFirebase();
             alert("Yangi admin qo'shildi!");
         }
 
@@ -271,7 +266,7 @@
             }
             if(confirm("O'chirmoqchimisiz?")) {
                 admins.splice(index, 1);
-                saveData();
+                syncToFirebase();
             }
         }
 
@@ -285,14 +280,14 @@
             clients.push({ name, pass, subscription: 'Obuna belgilanmagan' });
             document.getElementById('clientName').value = '';
             document.getElementById('clientPass').value = '';
-            saveData();
+            syncToFirebase();
             alert("Mijoz qo'shildi!");
         }
 
         function deleteClient(index) {
             if(confirm("Mijozni o'chirmoqchimisiz?")) {
                 clients.splice(index, 1);
-                saveData();
+                syncToFirebase();
             }
         }
 
@@ -302,7 +297,7 @@
                 if(type === '1m') client.subscription = '1 Oylik Obuna';
                 else if(type === '1y') client.subscription = '1 Yillik Obuna';
                 else if(type === 'inf') client.subscription = 'Cheksiz Xotira';
-                saveData();
+                syncToFirebase();
                 alert(`${clientName} uchun obuna yangilandi!`);
             }
         }
