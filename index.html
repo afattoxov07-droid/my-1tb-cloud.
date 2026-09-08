@@ -4,246 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CYBER ADMIN CONTROL CENTER</title>
-    
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0b0f19">
     <link rel="apple-touch-icon" href="icon-192.png">
-
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        body {
-            background-color: #0b0f19;
-            color: #00ff66;
-            padding: 20px;
-        }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #00ff66;
-            padding: 12px 20px;
-            margin-bottom: 25px;
-            background: rgba(0, 255, 102, 0.03);
-        }
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .admin-badge {
-            background: #ff3333;
-            color: #fff;
-            padding: 4px 8px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .title {
-            color: #ff3333;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .header-btn {
-            background: transparent;
-            border: 1px solid #ffaa00;
-            color: #ffaa00;
-            padding: 6px 15px;
-            cursor: pointer;
-            font-weight: bold;
-            text-transform: uppercase;
-            transition: 0.2s;
-        }
-        .header-btn.install-btn {
-            border-color: #00ff66;
-            color: #00ff66;
-            display: none;
-        }
-        .header-btn.logout {
-            border-color: #ff3333;
-            color: #ff3333;
-        }
-        .header-btn:hover {
-            background: rgba(255, 170, 0, 0.1);
-        }
-        .header-btn.install-btn:hover {
-            background: rgba(0, 255, 102, 0.1);
-        }
-        .header-btn.logout:hover {
-            background: rgba(255, 51, 51, 0.1);
-        }
-
-        .section-box {
-            border: 1px solid #ff3333;
-            padding: 20px;
-            margin-bottom: 25px;
-            background: rgba(255, 51, 51, 0.02);
-        }
-        .section-box.yellow {
-            border-color: #ffaa00;
-            background: rgba(255, 170, 0, 0.02);
-        }
-        .section-box.green {
-            border-color: #00ff66;
-            background: rgba(0, 255, 102, 0.02);
-        }
-        .section-box.purple {
-            border-color: #9933ff;
-            background: rgba(153, 51, 255, 0.02);
-        }
-
-        .section-title {
-            color: #ff3333;
-            font-size: 15px;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
+        body { background-color: #0b0f19; color: #00ff66; padding: 20px; }
+        header { display: flex; justify-content: space-between; align-items: center; border: 1px solid #00ff66; padding: 12px 20px; margin-bottom: 25px; background: rgba(0, 255, 102, 0.03); }
+        .logo-area { display: flex; align-items: center; gap: 10px; }
+        .admin-badge { background: #ff3333; color: #fff; padding: 4px 8px; font-weight: bold; font-size: 14px; }
+        .title { color: #ff3333; font-weight: bold; letter-spacing: 1px; }
+        .header-actions { display: flex; gap: 10px; align-items: center; }
+        .header-btn { background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 6px 15px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.2s; }
+        .header-btn.install-btn { border-color: #00ff66; color: #00ff66; display: none; }
+        .header-btn.logout { border-color: #ff3333; color: #ff3333; }
+        .header-btn:hover { background: rgba(255, 170, 0, 0.1); }
+        .header-btn.install-btn:hover { background: rgba(0, 255, 102, 0.1); }
+        .header-btn.logout:hover { background: rgba(255, 51, 51, 0.1); }
+        .section-box { border: 1px solid #ff3333; padding: 20px; margin-bottom: 25px; background: rgba(255, 51, 51, 0.02); }
+        .section-box.yellow { border-color: #ffaa00; background: rgba(255, 170, 0, 0.02); }
+        .section-box.green { border-color: #00ff66; background: rgba(0, 255, 102, 0.02); }
+        .section-box.purple { border-color: #9933ff; background: rgba(153, 51, 255, 0.02); }
+        .section-title { color: #ff3333; font-size: 15px; margin-bottom: 15px; font-weight: bold; }
         .section-box.yellow .section-title { color: #ffaa00; }
         .section-box.green .section-title { color: #00ff66; }
         .section-box.purple .section-title { color: #9933ff; }
-
-        .form-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        input {
-            flex: 1;
-            background: #0b0f19;
-            border: 1px solid #ff3333;
-            color: #ff3333;
-            padding: 10px 15px;
-            font-family: inherit;
-            outline: none;
-        }
-        .section-box.green input {
-            border-color: #00ff66;
-            color: #00ff66;
-        }
-        input::placeholder {
-            color: rgba(255, 51, 51, 0.5);
-        }
-        .section-box.green input::placeholder {
-            color: rgba(0, 255, 102, 0.5);
-        }
-
-        .action-btn {
-            width: 100%;
-            background: transparent;
-            border: 1px solid #ff3333;
-            color: #ff3333;
-            padding: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: 0.2s;
-        }
-        .section-box.green .action-btn {
-            border-color: #00ff66;
-            color: #00ff66;
-        }
-        .action-btn:hover {
-            background: rgba(255, 51, 51, 0.1);
-        }
-        .section-box.green .action-btn:hover {
-            background: rgba(0, 255, 102, 0.1);
-        }
-
-        .item-card {
-            border: 1px solid #ff3333;
-            padding: 12px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
-            background: #0b0f19;
-        }
-        .section-box.green .item-card {
-            border-color: #00ff66;
-        }
-        .card-info {
-            font-size: 14px;
-        }
-        .card-info span {
-            color: #ff3333;
-        }
-        .section-box.green .card-info span {
-            color: #00ff66;
-        }
-        .card-actions {
-            display: flex;
-            gap: 8px;
-        }
-        .btn-sm {
-            background: transparent;
-            border: 1px solid #ffaa00;
-            color: #ffaa00;
-            padding: 5px 10px;
-            font-size: 12px;
-            cursor: pointer;
-            font-family: inherit;
-        }
-        .btn-sm.danger {
-            border-color: #ff3333;
-            color: #ff3333;
-        }
-        .btn-sm:hover {
-            background: rgba(255, 170, 0, 0.1);
-        }
-        .btn-sm.danger:hover {
-            background: rgba(255, 51, 51, 0.1);
-        }
-
-        .empty-text {
-            color: rgba(255, 170, 0, 0.6);
-            font-size: 14px;
-        }
-
-        .log-item {
-            border: 1px solid #9933ff;
-            padding: 10px 15px;
-            margin-top: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-        }
-        .log-title {
-            color: #9933ff;
-            font-weight: bold;
-        }
-        .log-sub {
-            color: rgba(0, 255, 102, 0.6);
-            font-size: 11px;
-            margin-top: 3px;
-        }
-        .dot {
-            width: 8px;
-            height: 8px;
-            background: #00ff66;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #00ff66;
-        }
-        .badge-text {
-            background: rgba(255, 170, 0, 0.15);
-            border: 1px solid #ffaa00;
-            color: #ffaa00;
-            padding: 2px 6px;
-            font-size: 10px;
-            margin-left: 8px;
-        }
+        .form-row { display: flex; gap: 15px; margin-bottom: 15px; }
+        input { flex: 1; background: #0b0f19; border: 1px solid #ff3333; color: #ff3333; padding: 10px 15px; font-family: inherit; outline: none; }
+        .section-box.green input { border-color: #00ff66; color: #00ff66; }
+        input::placeholder { color: rgba(255, 51, 51, 0.5); }
+        .section-box.green input::placeholder { color: rgba(0, 255, 102, 0.5); }
+        .action-btn { width: 100%; background: transparent; border: 1px solid #ff3333; color: #ff3333; padding: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.2s; }
+        .section-box.green .action-btn { border-color: #00ff66; color: #00ff66; }
+        .action-btn:hover { background: rgba(255, 51, 51, 0.1); }
+        .section-box.green .action-btn:hover { background: rgba(0, 255, 102, 0.1); }
+        .item-card { border: 1px solid #ff3333; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; background: #0b0f19; }
+        .section-box.green .item-card { border-color: #00ff66; }
+        .card-info { font-size: 14px; }
+        .card-info span { color: #ff3333; }
+        .section-box.green .card-info span { color: #00ff66; }
+        .card-actions { display: flex; gap: 8px; }
+        .btn-sm { background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 5px 10px; font-size: 12px; cursor: pointer; font-family: inherit; }
+        .btn-sm.danger { border-color: #ff3333; color: #ff3333; }
+        .btn-sm:hover { background: rgba(255, 170, 0, 0.1); }
+        .btn-sm.danger:hover { background: rgba(255, 51, 51, 0.1); }
+        .empty-text { color: rgba(255, 170, 0, 0.6); font-size: 14px; }
+        .log-item { border: 1px solid #9933ff; padding: 10px 15px; margin-top: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+        .log-title { color: #9933ff; font-weight: bold; }
+        .log-sub { color: rgba(0, 255, 102, 0.6); font-size: 11px; margin-top: 3px; }
+        .dot { width: 8px; height: 8px; background: #00ff66; border-radius: 50%; box-shadow: 0 0 8px #00ff66; }
+        .badge-text { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffaa00; padding: 2px 6px; font-size: 10px; margin-left: 8px; }
     </style>
 </head>
 <body>
-
     <header>
         <div class="logo-area">
             <div class="admin-badge">A</div>
@@ -264,7 +77,6 @@
             <input type="password" id="adminPass" placeholder="Admin maxfiy paroli">
         </div>
         <button class="action-btn" onclick="addAdmin()">+ ADMIN QO'SHISH</button>
-        
         <div class="item-card" style="margin-top: 15px;">
             <div class="card-info">
                 <strong>🛡️ Asosiy Admin</strong><br>
@@ -296,7 +108,6 @@
     <!-- 4. Shifrlangan mijozlar ro'yxati -->
     <div class="section-box green">
         <div class="section-title">> Shifrlangan mijozlar ro'yxati</div>
-        
         <div class="item-card">
             <div class="card-info">
                 <strong>Test_Mijoz</strong> <span class="badge-text">🔒 Text</span><br>
@@ -308,7 +119,6 @@
                 <button class="btn-sm danger" onclick="deleteClient(this)">O'chirish</button>
             </div>
         </div>
-
         <div class="item-card">
             <div class="card-info">
                 <strong>toxirjon</strong> <span class="badge-text">🔒 Text</span><br>
@@ -325,7 +135,6 @@
     <!-- 5. Faol Seanslar & Xavfsizlik Jurnali -->
     <div class="section-box purple">
         <div class="section-title">> Faol Seanslar & Xavfsizlik Jurnali</div>
-        
         <div class="log-item">
             <div>
                 <div class="log-title">Asosiy Admin (Admin)</div>
@@ -333,7 +142,6 @@
             </div>
             <div class="dot"></div>
         </div>
-
         <div class="log-item">
             <div>
                 <div class="log-title">Asosiy Admin (Admin)</div>
@@ -341,7 +149,6 @@
             </div>
             <div class="dot"></div>
         </div>
-
         <div class="log-item">
             <div>
                 <div class="log-title">toxirjon (Mijoz)</div>
@@ -349,7 +156,6 @@
             </div>
             <div class="dot"></div>
         </div>
-
         <div class="log-item">
             <div>
                 <div class="log-title">Asosiy Admin (Admin)</div>
@@ -363,16 +169,13 @@
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js').catch(() => {});
         }
-
         let deferredPrompt;
         const installBtn = document.getElementById('installBtn');
-
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
             installBtn.style.display = 'inline-block';
         });
-
         installBtn.addEventListener('click', async () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
@@ -383,7 +186,6 @@
                 deferredPrompt = null;
             }
         });
-
         function addAdmin() {
             const name = document.getElementById('adminName').value;
             const pass = document.getElementById('adminPass').value;
@@ -395,7 +197,6 @@
             document.getElementById('adminName').value = '';
             document.getElementById('adminPass').value = '';
         }
-
         function addClient() {
             const name = document.getElementById('clientName').value;
             const pass = document.getElementById('clientPass').value;
@@ -407,19 +208,15 @@
             document.getElementById('clientName').value = '';
             document.getElementById('clientPass').value = '';
         }
-
         function editAdmin(name) {
             alert(name + " ma'lumotlarini o'zgartirish");
         }
-
         function editClient(name) {
             alert(name + " uchun obuna muddatini o'zgartirish");
         }
-
         function showPass(pass) {
             alert("Maxfiy parol: " + pass);
         }
-
         function deleteClient(btn) {
             if(confirm("Haqiqatan ham o'chirmoqchimisiz?")) {
                 btn.closest('.item-card').remove();
