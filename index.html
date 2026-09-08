@@ -69,13 +69,23 @@
                     <span><i class="fa-solid fa-headset mr-2"></i> Yordam va Qo'llab-quvvatlash</span>
                     <span class="text-[10px] text-yellow-400">Online</span>
                 </button>
+                <!-- MUALLIF HAQIDA (YANGI TUGMA) -->
+                <button onclick="openPublicSection('author')" class="w-full py-2.5 px-3 bg-cyan-950 border border-cyan-600 text-cyan-300 rounded text-xs font-bold text-left flex justify-between items-center">
+                    <span><i class="fa-solid fa-user-code mr-2"></i> Muallif va Loyiha Haqida</span>
+                    <span class="text-[10px] text-cyan-400">Ma'lumot</span>
+                </button>
+                <!-- ADMIN UCHUN TEZIS KIRISH TUGMASI -->
+                <button onclick="openPublicSection('admin_login_guide')" class="w-full py-2 px-3 bg-red-950/40 border border-red-800 text-red-400 rounded text-[11px] font-bold text-left flex justify-between items-center">
+                    <span><i class="fa-solid fa-user-shield mr-2"></i> Admin Panelga Kirish</span>
+                    <span class="text-[9px] text-red-500">Boshqaruv</span>
+                </button>
             </div>
         </div>
 
         <div class="text-[10px] text-green-700 py-2">CYBER SECURE SYSTEM © 2026</div>
     </div>
 
-    <!-- OCHIQ BO'LIMLAR MODALI (Tariflar, Qoidalar, Yordam) -->
+    <!-- OCHIQ BO'LIMLAR MODALI (Tariflar, Qoidalar, Yordam, Muallif, Admin qo'llanma) -->
     <div id="public-modal" class="hidden fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-3">
         <div class="cyber-border bg-gray-950 p-5 rounded-lg max-w-lg w-full relative space-y-4 max-h-[90vh] flex flex-col">
             <button onclick="closePublicModal()" class="absolute top-3 right-3 text-green-400 text-sm font-bold p-2">[ X ]</button>
@@ -402,7 +412,7 @@
         function getReceiptsDB() {
             let encryptedDb = localStorage.getItem('secure_cloud_receipts');
             if (!encryptedDb) return [];
-            return decryptData(encryptedDb) || [];
+            return decryptData(encryptedDb) || {};
         }
 
         function saveReceiptsDB(db) {
@@ -426,7 +436,6 @@
             localStorage.setItem('secure_sessions_log', encryptData(sessions));
         }
 
-        // Support Database (Yordam / Xabarlar)
         function getSupportDB() {
             let enc = localStorage.getItem('secure_support_tickets');
             return enc ? (decryptData(enc) || []) : [];
@@ -503,8 +512,49 @@
                         <button onclick="sendPublicSupportTicket()" class="w-full cyber-button py-2 rounded text-xs font-bold uppercase">YUBORISH</button>
                     </div>
                 `;
+            } else if (section === 'author') {
+                title.innerText = "> MUALLIF VA LOYIHA HAQIDA";
+                body.innerHTML = `
+                    <div class="cyber-card p-3.5 rounded space-y-3 border-cyan-800">
+                        <div class="space-y-1">
+                            <p class="text-cyan-400 font-bold text-xs"><i class="fa-solid fa-user-shield mr-1"></i> Muallif:</p>
+                            <p class="text-white text-[11px]">Fattoxov Abdulloh Toxirjon o'g'li</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-cyan-400 font-bold text-xs"><i class="fa-solid fa-graduation-cap mr-1"></i> O'qish joyi:</p>
+                            <p class="text-white text-[11px]">Toshkent Menejment va Iqtisodiyot Instituti, Farg'ona Campusi, Kompyuter injiniringi yo'nalishi, 2-kurs talabasi.</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-cyan-400 font-bold text-xs"><i class="fa-solid fa-phone mr-1"></i> Aloqa raqamlari:</p>
+                            <p class="text-white text-[11px]">+998 20 000 57 88 / +998 20 025 29 20</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-cyan-400 font-bold text-xs"><i class="fa-solid fa-bullseye mr-1"></i> Nima uchun qilindi va Maqsad:</p>
+                            <p class="text-white text-[11px]">Shaxsiy fayllar, maxfiy matnlar va hujjatlarni begona ko'zlardan himoya qilish, shuningdek xavfsiz bulutli saqlash muhitini yaratish maqsadida ishlab chiqilgan.</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-cyan-400 font-bold text-xs"><i class="fa-solid fa-calendar-days mr-1"></i> Vaqti:</p>
+                            <p class="text-white text-[11px]">2026-yil davomida ishlab chiqilib, takomillashtirib borilmoqda.</p>
+                        </div>
+                    </div>
+                `;
+            } else if (section === 'admin_login_guide') {
+                title.innerText = "> ADMIN PANELGA KIRISH";
+                body.innerHTML = `
+                    <div class="cyber-card p-3 rounded space-y-3 border-red-900">
+                        <p class="text-xs text-red-400 font-bold">Admin parolini yuqoridagi asosiy kirish maydoniga yozib, "PROFILGA KIRISH" tugmasini bosing.</p>
+                        <p class="text-[11px] text-green-400">Standart admin paroli: <span class="text-white font-bold">2007080411</span></p>
+                        <button onclick="fillAdminPassword()" class="w-full py-2 bg-red-950 border border-red-800 text-red-400 rounded text-xs font-bold uppercase">Parolni avtomatik qo'yish</button>
+                    </div>
+                `;
             }
             modal.classList.remove('hidden');
+        }
+
+        function fillAdminPassword() {
+            document.getElementById('client-password').value = "2007080411";
+            closePublicModal();
+            directLogin();
         }
 
         function closePublicModal() {
@@ -573,7 +623,6 @@
             `).join('');
         }
 
-        // Admin support management
         function openAdminSupportModal() {
             renderAdminChat();
             document.getElementById('admin-support-modal').classList.remove('hidden');
@@ -611,7 +660,6 @@
             alert("Javob yuborildi!");
         }
 
-        // To'g'ridan-to'g'ri tekshirib kirish funksiyasi
         function directLogin() {
             const val = document.getElementById('client-password').value.trim();
             const errBox = document.getElementById('login-error');
@@ -1147,7 +1195,7 @@
                         <button onclick="previewFile('${file.id}', '${file.name}', '${file.type || ''}')" class="cyber-button p-1.5 rounded text-[10px]" title="Ko'rish"><i class="fa-solid fa-eye"></i></button>
                         <button onclick="downloadFile('${file.id}', '${file.name}')" class="cyber-button p-1.5 rounded text-[10px]" title="Yuklab olish"><i class="fa-solid fa-download"></i></button>
                         <button onclick="deleteFile(${index})" class="p-1.5 bg-red-950/40 border border-red-800 text-red-400 rounded text-[10px]" title="O'chirish"><i class="fa-solid fa-trash"></i></button>
-                    </div>
+                        </div>
                 </div>
             `).join('');
         }
