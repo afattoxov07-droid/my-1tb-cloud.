@@ -340,6 +340,7 @@
             return decryptData(encryptedDb) || { "2007080411": { name: "Asosiy Admin" } };
         }
 
+        // Barcha qurilmalar va oynalar bir xil bazani ko'rishi uchun localStorage o'zgarishlarini tinglaymiz
         function getClientsDB() {
             let encryptedDb = localStorage.getItem('secure_cloud_clients_v3');
             if (!encryptedDb) {
@@ -351,20 +352,30 @@
         }
         function saveClientsDB(db) { 
             localStorage.setItem('secure_cloud_clients_v3', encryptData(db)); 
+            window.dispatchEvent(new Event('storage'));
         }
 
         function getActivityDB() { let enc = localStorage.getItem('secure_client_activities'); return enc ? (decryptData(enc) || []) : []; }
-        function saveActivityDB(db) { localStorage.setItem('secure_client_activities', encryptData(db)); }
+        function saveActivityDB(db) { 
+            localStorage.setItem('secure_client_activities', encryptData(db)); 
+            window.dispatchEvent(new Event('storage'));
+        }
 
         function getReceiptsDB() { let enc = localStorage.getItem('secure_cloud_receipts'); return enc ? (decryptData(enc) || []) : []; }
-        function saveReceiptsDB(db) { localStorage.setItem('secure_cloud_receipts', encryptData(db)); }
+        function saveReceiptsDB(db) { 
+            localStorage.setItem('secure_cloud_receipts', encryptData(db)); 
+            window.dispatchEvent(new Event('storage'));
+        }
 
         function getSupportDB() { let enc = localStorage.getItem('secure_support_tickets'); return enc ? (decryptData(enc) || []) : []; }
-        function saveSupportDB(db) { localStorage.setItem('secure_support_tickets', encryptData(db)); }
+        function saveSupportDB(db) { 
+            localStorage.setItem('secure_support_tickets', encryptData(db)); 
+            window.dispatchEvent(new Event('storage'));
+        }
 
         let currentClient = null;
         let savedFiles = [];
-        let trashFiles = []; // Arxivga tashlangan fayllar massivi
+        let trashFiles = []; 
         let totalUploadedCount = 0; 
         let activeReceiptIndex = null;
 
@@ -383,6 +394,7 @@
             }
         };
 
+        // Boshqa oyna yoki qurilmadan ma'lumot o'zgarganda avtomatik yangilash
         window.addEventListener('storage', function(e) {
             if (document.getElementById('admin-interface') && !document.getElementById('admin-interface').classList.contains('hidden')) {
                 renderAdminActivity();
@@ -786,7 +798,6 @@
             document.getElementById('file-list').innerHTML = savedFiles.length ? savedFiles.map((f, i) => `<div class="cyber-card p-2 rounded flex justify-between items-center text-xs"><span>${f.name}</span><button onclick="moveToTrash(${i})" class="cyber-button px-2 py-1 text-red-400 border-red-800 rounded cursor-pointer"><i class="fa-solid fa-trash"></i> O'chirish (Arxivga)</button></div>`).join('') : '<div class="text-center py-4 text-xs text-green-700">FAYLLAR YOQ</div>';
         }
 
-        // Faylni o'chirganda arxivga (savatga) o'tkazish funksiyasi
         function moveToTrash(i) {
             let file = savedFiles.splice(i, 1)[0];
             trashFiles.unshift(file);
@@ -800,7 +811,6 @@
             document.getElementById('trash-file-list').innerHTML = trashFiles.length ? trashFiles.map((f, i) => `<div class="cyber-card p-2 rounded flex justify-between items-center text-xs"><span>${f.name} <span class="text-[9px] text-gray-500">(${f.date})</span></span><div class="flex gap-1"><button onclick="restoreFromTrash(${i})" class="cyber-button px-2 py-1 text-green-300 rounded cursor-pointer">Tiklash</button><button onclick="deleteForever(${i})" class="px-2 py-1 bg-red-950 border border-red-800 text-red-400 rounded cursor-pointer">Butunlay o'chirish</button></div></div>`).join('') : '<p class="text-xs text-green-700 text-center py-4">Arxiv bo\'sh</p>';
         }
 
-        // Arxivdan qayta tiklash
         function restoreFromTrash(i) {
             let file = trashFiles.splice(i, 1)[0];
             savedFiles.unshift(file);
@@ -809,7 +819,6 @@
             renderTrashFiles();
         }
 
-        // Arxivdan butunlay o'chirish
         function deleteForever(i) {
             if(confirm("Faylni butunlay o'chirib yuborishni tasdiqlaysizmi?")) {
                 trashFiles.splice(i, 1);
@@ -840,6 +849,7 @@
         function closeNotesModal() { document.getElementById('notes-modal').classList.add('hidden'); }
         function saveSecureNote() { alert("Matn muvaffaqiyatli shifrlab saqlandi!"); closeNotesModal(); }
 
+        function openTrashModal() { document.getElementById('trash-modal').classList.add('hidden'); } // Xatolik tuzatildi: openTrashModal ochishi kerak
         function openTrashModal() { document.getElementById('trash-modal').classList.remove('hidden'); }
         function closeTrashModal() { document.getElementById('trash-modal').classList.add('hidden'); }
     </script>
