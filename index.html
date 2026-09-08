@@ -301,7 +301,7 @@
         }
 
         function renderDashboard() {
-            const logged = JSON.parse(sessionStorage.getItem('cyber_logged_user'));
+            const logged = sessionStorage.getItem('cyber_logged_user');
             if(!logged || logged.role !== 'admin') return;
 
             const searchVal = document.getElementById('clientSearchInput').value.toLowerCase();
