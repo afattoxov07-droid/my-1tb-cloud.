@@ -228,7 +228,7 @@
         </div>
     </div>
 
-    <!-- PAROLNI O'ZGARTIRISH MODALI -->
+    <!-- PAROLni O'ZGARTIRISH MODALI -->
     <div id="password-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
         <div class="cyber-border bg-gray-950 p-5 rounded-lg max-w-sm w-full relative space-y-4 text-center">
             <button onclick="closePasswordChangeModal()" class="absolute top-2 right-2 text-green-400 text-sm font-bold p-2 cursor-pointer">[ X ]</button>
@@ -382,7 +382,6 @@
             }
         };
 
-        // Real vaqt rejimida admin panelni yangilab turish uchun hodisa
         window.addEventListener('storage', function(e) {
             if (document.getElementById('admin-interface') && !document.getElementById('admin-interface').classList.contains('hidden')) {
                 renderAdminActivity();
@@ -556,6 +555,7 @@
                     <div class="flex items-center gap-1.5 flex-wrap justify-end">
                         <button onclick="adminGiveDuration('${pwd}', 30)" class="px-2 py-1 bg-emerald-950 border border-green-600 text-green-300 rounded text-[10px] font-bold cursor-pointer">+1 Oy</button>
                         <button onclick="adminGiveDuration('${pwd}', 365)" class="px-2 py-1 bg-cyan-950 border border-cyan-600 text-cyan-300 rounded text-[10px] font-bold cursor-pointer">+1 Yil</button>
+                        <button onclick="adminToggleSub('${pwd}')" class="px-2 py-1 ${isVip ? 'bg-red-950 border-red-700 text-red-300' : 'bg-green-950 border-green-500 text-green-300'} rounded text-[10px] font-bold cursor-pointer">${isVip ? 'Tarifni O\'chirish' : 'Tarifni Yoqish (+1 Oy)'}</button>
                         <button onclick="adminRenewPassword('${pwd}')" class="px-2 py-1 bg-yellow-950 border border-yellow-600 text-yellow-300 rounded text-[10px] font-bold cursor-pointer">Parol</button>
                         <button onclick="deleteClient('${pwd}')" class="px-2 py-1 bg-red-950/40 border border-red-800 text-red-400 rounded text-[10px] cursor-pointer">O'chirish</button>
                     </div>
@@ -569,15 +569,29 @@
                 let now = new Date().getTime();
                 let currentExp = db[pwd].expiresAt && db[pwd].expiresAt > now ? db[pwd].expiresAt : now;
                 db[pwd].expiresAt = currentExp + (days * 24 * 60 * 60 * 1000);
-                let newPwd = Math.floor(100000 + Math.random() * 900000).toString();
-                db[newPwd] = db[pwd];
-                delete db[pwd];
                 saveClientsDB(db);
-                let tickets = getSupportDB();
-                tickets.unshift({ user: db[newPwd].name, phone: db[newPwd].phone, type: 'Tizim (Obuna)', message: `Admin tomonidan ${days === 30 ? '1 oylik' : '1 yillik'} cheksiz obuna berildi. Yangi parolingiz: ${newPwd}`, reply: 'Obuna aktivlashtirildi.', date: new Date().toLocaleString() });
-                saveSupportDB(tickets);
                 renderAdminClients();
-                alert(`Mijozga ${days === 30 ? '1 oylik' : '1 yillik'} obuna berildi! Yangi parol: ${newPwd}`);
+                alert(`Mijoz obunasi ${days} kunga uzaytirildi!`);
+            }
+        }
+
+        // Tarifni yoqish yoki o'chirish tugmasi funksiyasi
+        function adminToggleSub(pwd) {
+            let db = getClientsDB();
+            if(db[pwd]) {
+                let now = new Date().getTime();
+                let isVip = db[pwd].expiresAt && db[pwd].expiresAt > now;
+                if(isVip) {
+                    // Tarifni o'chirish (muddatni o'tmishga qo'yish orqali bloklash)
+                    db[pwd].expiresAt = now - 1000;
+                    alert("Mijozning obunasi o'chirildi va bloklandi!");
+                } else {
+                    // Tarifni yoqish (30 kunga faollashtirish)
+                    db[pwd].expiresAt = now + (30 * 24 * 60 * 60 * 1000);
+                    alert("Mijozga 1 oylik obuna yoqildi!");
+                }
+                saveClientsDB(db);
+                renderAdminClients();
             }
         }
 
@@ -589,9 +603,6 @@
                 db[newPwd] = clientInfo;
                 delete db[oldPwd];
                 saveClientsDB(db);
-                let tickets = getSupportDB();
-                tickets.unshift({ user: clientInfo.name, phone: clientInfo.phone, type: 'Tizim (Parol)', message: `Admin tomonidan yangi shaxsiy parol berildi: ${newPwd}`, reply: 'Yangi parol.', date: new Date().toLocaleString() });
-                saveSupportDB(tickets);
                 renderAdminClients();
                 alert(`Yangi parol berildi: ${newPwd}`);
             }
@@ -630,18 +641,11 @@
                     let now = new Date().getTime();
                     let currentExp = db[r.clientPwd].expiresAt && db[r.clientPwd].expiresAt > now ? db[r.clientPwd].expiresAt : now;
                     db[r.clientPwd].expiresAt = currentExp + (days * 24 * 60 * 60 * 1000);
-                    let clientInfo = db[r.clientPwd];
-                    let newPwd = Math.floor(100000 + Math.random() * 900000).toString();
-                    db[newPwd] = clientInfo;
-                    delete db[r.clientPwd];
                     saveClientsDB(db);
-                    let tickets = getSupportDB();
-                    tickets.unshift({ user: clientInfo.name, phone: clientInfo.phone, type: 'Tizim (To\'lov)', message: `To'lovingiz tasdiqlandi! ${days === 30 ? '1 oylik' : '1 yillik'} cheksiz obuna yoqildi. Yangi parolingiz: ${newPwd}`, reply: 'Muvaffaqiyatli.', date: new Date().toLocaleString() });
-                    saveSupportDB(tickets);
                     closeReceiptModal();
                     renderAdminReceipts();
                     renderAdminClients();
-                    alert(`To'lov tasdiqlandi! Mijozga ${days === 30 ? '1 oylik' : '1 yillik'} obuna berildi. Parol: ${newPwd}`);
+                    alert(`To'lov tasdiqlandi! Mijozga ${days === 30 ? '1 oylik' : '1 yillik'} obuna berildi.`);
                 }
                 receipts.splice(activeReceiptIndex, 1);
                 saveReceiptsDB(receipts);
@@ -793,7 +797,7 @@
                     let receipts = getReceiptsDB();
                     receipts.unshift({ clientName: currentClient.name, clientPhone: currentClient.phone, clientPwd: currentClient.password, image: e.target.result, date: new Date().toLocaleString() });
                     saveReceiptsDB(receipts);
-                    alert("Chek muvaffaqiyatli yuborildi! Admin tasdiqlagach, 1 oylik yoki 1 yillik obuna beriladi va yangi parol xabarga keladi.");
+                    alert("Chek muvaffaqiyatli yuborildi!");
                     closeBuyModal();
                 }
                 reader.readAsDataURL(fileInput.files[0]);
