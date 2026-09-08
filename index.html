@@ -85,13 +85,13 @@
     <div id="toastContainer"></div>
 
     <div class="wrapper">
+        <!-- Faqat parol kiritish oynasi -->
         <div id="loginOverlay">
             <div class="login-card">
                 <div class="login-icon">🔒</div>
                 <div class="login-title">CYBER SECURE CLOUD PRO</div>
-                <div class="login-sub">Mijoz va Admin Kirish Portali</div>
-                <input type="text" id="loginPhone" class="login-input" placeholder="Telefon raqamingiz (+998...)">
-                <input type="password" id="loginPass" class="login-input" placeholder="Parolingizni kiriting">
+                <div class="login-sub">Admin Boshqaruv Portali</div>
+                <input type="password" id="loginPass" class="login-input" placeholder="Admin parolini kiriting">
                 <button class="login-btn" onclick="handleLogin()">TIZIMGA KIRISH</button>
                 <div class="telegram-contact">Admin Telegram: <a href="https://t.me/abdulloh20070804" target="_blank">@abdulloh20070804</a></div>
             </div>
@@ -100,8 +100,8 @@
         <div id="mainDashboard" style="display: none;">
             <header>
                 <div class="logo-area">
-                    <div class="admin-badge" id="roleBadge">A</div>
-                    <span class="title" id="welcomeTitle">CYBER ADMIN CONTROL CENTER</span>
+                    <div class="admin-badge">A</div>
+                    <span class="title">CYBER ADMIN CONTROL CENTER</span>
                 </div>
                 <div class="header-actions">
                     <button class="header-btn" onclick="logout()">CHIQISH</button>
@@ -109,7 +109,7 @@
             </header>
 
             <!-- Admin boshqaruv paneli -->
-            <div class="section-box green" id="adminControlPanel" style="display: none;">
+            <div class="section-box green">
                 <div class="section-title">> Tariflar narxlari</div>
                 <div class="pricing-grid">
                     <div class="price-card">
@@ -122,29 +122,18 @@
                     </div>
                 </div>
 
-                <div class="section-title">> Barcha ro'yxatdan o'tgan mijozlar</div>
+                <div class="section-title">> Mijoz qo'shish yoki boshqarish</div>
+                <div class="form-row">
+                    <input type="text" id="newClientPhone" placeholder="Mijoz telefon raqami (+998...)">
+                    <input type="text" id="newClientPass" placeholder="Mijoz uchun parol">
+                    <button class="btn-sm success" onclick="addClient()" style="padding: 12px 20px; font-size: 13px;">Mijoz qo'shish</button>
+                </div>
+
+                <div class="section-title" style="margin-top: 20px;">>> Barcha ro'yxatdagi mijozlar</div>
                 <div class="form-row" style="margin-bottom: 10px;">
                     <input type="text" id="clientSearchInput" placeholder="Telefon raqam bo'yicha qidirish..." oninput="renderDashboard()">
                 </div>
                 <div id="clientsList"></div>
-            </div>
-
-            <!-- Mijoz shaxsiy kabineti -->
-            <div class="section-box green" id="clientCabinetPanel" style="display: none;">
-                <div class="section-title">> Shaxsiy Kabinet va Tariflar</div>
-                <div class="pricing-grid">
-                    <div class="price-card">
-                        <h4>1 Oylik Obuna</h4>
-                        <div class="amount">59,000 so'm</div>
-                    </div>
-                    <div class="price-card">
-                        <h4>1 Yillik Obuna</h4>
-                        <div class="amount">700,000 so'm</div>
-                    </div>
-                </div>
-                <div id="clientInfoContent" style="font-size: 14px; line-height: 1.8; margin-top: 15px;">
-                    <!-- Mijoz ma'lumotlari -->
-                </div>
             </div>
         </div>
     </div>
@@ -195,8 +184,7 @@
                 db.ref('cyber_system').set({ clients });
             }
             
-            const logged = JSON.parse(sessionStorage.getItem('cyber_logged_user'));
-            if (logged) {
+            if (sessionStorage.getItem('cyber_admin_logged') === 'true') {
                 showDashboard();
             }
         });
@@ -208,78 +196,42 @@
         }
 
         function handleLogin() {
-            const phone = document.getElementById('loginPhone').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
 
-            if(!phone || !pass) {
-                showToast("Iltimos, telefon raqam va parolni kiriting!", true);
-                return;
-            }
-
-            // 1. SIZNING ADMIN PAROLINGIZ
-            if (pass === "2007080411") {
-                const userData = { phone: phone, role: 'admin' };
-                sessionStorage.setItem('cyber_logged_user', JSON.stringify(userData));
+            if(pass === "2007080411") {
+                sessionStorage.setItem('cyber_admin_logged', 'true');
                 showDashboard();
-                showToast("Xush kelibsiz, Abdulloh (Admin)!");
-                return;
-            }
-
-            // 2. MIJOZLAR (O'z raqami va o'zi kiritgan paroli bilan)
-            let client = clients.find(c => c.phone === phone);
-            
-            if (client) {
-                if (client.pass === pass) {
-                    const userData = { phone: client.phone, role: 'client', subscription: client.subscription };
-                    sessionStorage.setItem('cyber_logged_user', JSON.stringify(userData));
-                    showDashboard();
-                    showToast("Tizimga muvaffaqiyatli kirdingiz!");
-                } else {
-                    showToast("Parol xato!", true);
-                }
+                showToast("Xush kelibsiz, Abdulloh!");
             } else {
-                clients.push({ phone: phone, pass: pass, subscription: 'Obuna belgilanmagan' });
-                saveData();
-                
-                const userData = { phone: phone, role: 'client', subscription: 'Obuna belgilanmagan' };
-                sessionStorage.setItem('cyber_logged_user', JSON.stringify(userData));
-                showDashboard();
-                showToast("Muvaffaqiyatli ro'yxatdan o'tdingiz!");
+                showToast("Parol xato!", true);
             }
         }
 
         function showDashboard() {
-            const logged = JSON.parse(sessionStorage.getItem('cyber_logged_user'));
-            if(!logged) return;
-
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('mainDashboard').style.display = 'block';
-
-            if(logged.role === 'admin') {
-                document.getElementById('roleBadge').innerText = 'A';
-                document.getElementById('welcomeTitle').innerText = 'CYBER ADMIN CONTROL CENTER';
-                document.getElementById('adminControlPanel').style.display = 'block';
-                document.getElementById('clientCabinetPanel').style.display = 'none';
-                renderDashboard();
-            } else {
-                document.getElementById('roleBadge').innerText = 'M';
-                document.getElementById('welcomeTitle').innerText = 'MIJOZ PORTALI: ' + logged.phone;
-                document.getElementById('adminControlPanel').style.display = 'none';
-                document.getElementById('clientCabinetPanel').style.display = 'block';
-                
-                let currentClient = clients.find(c => c.phone === logged.phone);
-                let subStatus = currentClient ? currentClient.subscription : logged.subscription;
-                document.getElementById('clientInfoContent').innerHTML = `
-                    <p><b>Telefon raqamingiz:</b> ${logged.phone}</p>
-                    <p><b>Sizning obuna holatingiz:</b> <span style="color: #ffaa00;">${subStatus}</span></p>
-                    <p style="margin-top: 15px; color: rgba(0,255,102,0.8); font-size: 12px;">> Obunani faollashtirish uchun admin bilan bog'laning: <a href="https://t.me/abdulloh20070804" target="_blank" style="color:#00ff66;">@abdulloh20070804</a></p>
-                `;
-            }
+            renderDashboard();
         }
 
         function logout() {
-            sessionStorage.removeItem('cyber_logged_user');
+            sessionStorage.removeItem('cyber_admin_logged');
             location.reload();
+        }
+
+        function addClient() {
+            const phone = document.getElementById('newClientPhone').value.trim();
+            const pass = document.getElementById('newClientPass').value.trim();
+
+            if(!phone || !pass) {
+                showToast("Mijoz telefon raqami va parolini kiriting!", true);
+                return;
+            }
+
+            clients.push({ phone: phone, pass: pass, subscription: 'Obuna belgilanmagan' });
+            saveData();
+            document.getElementById('newClientPhone').value = '';
+            document.getElementById('newClientPass').value = '';
+            showToast("Yangi mijoz qo'shildi!");
         }
 
         function deleteClient(index) {
@@ -301,8 +253,7 @@
         }
 
         function renderDashboard() {
-            const logged = sessionStorage.getItem('cyber_logged_user');
-            if(!logged || logged.role !== 'admin') return;
+            if(sessionStorage.getItem('cyber_admin_logged') !== 'true') return;
 
             const searchVal = document.getElementById('clientSearchInput').value.toLowerCase();
             let clHtml = '';
@@ -316,8 +267,7 @@
         }
 
         window.onload = function() {
-            const logged = sessionStorage.getItem('cyber_logged_user');
-            if(logged) {
+            if(sessionStorage.getItem('cyber_admin_logged') === 'true') {
                 showDashboard();
             }
         }
