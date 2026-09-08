@@ -39,7 +39,6 @@
   window.db = db;
   window.FB = { collection, doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, onSnapshot, query, orderBy };
   
-  // Firebase ulangach dasturiy yuklanishni boshlash
   window.dispatchEvent(new Event('firebase-ready'));
 </script>
 </head>
@@ -53,15 +52,11 @@
       <div class="w-12 h-12 mx-auto rounded border border-green-500 bg-emerald-950 flex items-center justify-center text-green-400 font-bold text-xl animate-pulse">🔒</div>
       <div>
         <h2 class="text-base md:text-lg font-bold text-green-400">CYBER SECURE CLOUD PRO</h2>
-        <p id="login-subtitle" class="text-[10px] text-green-600 mt-1">Ism va Telefon Raqam Orqali Kirish (Cloud)</p>
+        <p class="text-[10px] text-green-600 mt-1">Admin Tomondan Berilgan Shaxsiy Kod Orqali Kirish</p>
       </div>
       <div class="space-y-3 pt-2">
-        <div id="registration-fields" class="space-y-3">
-          <input type="text" id="client-login-name" placeholder="[ Ismingizni kiriting ]" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
-          <input type="text" id="client-login-phone" placeholder="[ Telefon raqam: +998... ]" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
-        </div>
-        <input type="password" id="client-login-pwd" placeholder="[ Shaxsiy Kodingiz / Parolingiz ]" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
-        <button onclick="clientRegisterOrLogin()" class="w-full cyber-button py-3 rounded text-xs font-bold uppercase tracking-wider cursor-pointer">PROFILGA KIRISH / OCHISH</button>
+        <input type="password" id="client-login-pwd" placeholder="[ Admin Bergan Parolni Kiriting ]" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
+        <button onclick="clientLogin()" class="w-full cyber-button py-3 rounded text-xs font-bold uppercase tracking-wider cursor-pointer">KABINETGA KIRISH</button>
       </div>
       <p id="login-error" class="text-xs text-red-500 hidden"></p>
     </div>
@@ -110,12 +105,12 @@
       <div id="admin-activity-list" class="space-y-2 max-h-40 overflow-y-auto"></div>
     </div>
     <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3 border-emerald-900">
-      <h3 class="text-xs font-bold text-emerald-400">> Admin Tomondan Yangi Mijoz Qo'shish</h3>
+      <h3 class="text-xs font-bold text-emerald-400">> Admin Tomondan Yangi Mijoz Qo'shish va Parol Berish</h3>
       <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
         <input type="text" id="admin-new-name" placeholder="Mijoz ismi" class="bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded focus:outline-none">
         <input type="text" id="admin-new-phone" placeholder="Telefon raqam" class="bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded focus:outline-none">
-        <input type="text" id="admin-new-pwd" placeholder="Maxsus kod (Parol)" class="bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded focus:outline-none">
-        <button onclick="adminAddNewClient()" class="cyber-button py-2 rounded text-xs font-bold uppercase cursor-pointer">Mijoz Qo'shish</button>
+        <input type="text" id="admin-new-pwd" placeholder="Beriladigan parol" class="bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded focus:outline-none">
+        <button onclick="adminAddNewClient()" class="cyber-button py-2 rounded text-xs font-bold uppercase cursor-pointer">Mijoz Yaratish</button>
       </div>
     </div>
     <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3 border-yellow-900">
@@ -123,7 +118,7 @@
       <div id="admin-receipts-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
     </div>
     <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3">
-      <h3 class="text-xs font-bold text-green-400">> Shifrlangan mijozlar ro'yxati va Obunalarni Boshqarish</h3>
+      <h3 class="text-xs font-bold text-green-400">> Shifrlangan mijozlar ro'yxati va Parollar</h3>
       <div id="admin-clients-list" class="space-y-2"></div>
     </div>
   </div>
@@ -169,7 +164,6 @@
       </div>
     </div>
     <div class="flex items-center space-x-2">
-      <button onclick="openPasswordChangeModal()" class="cyber-button px-2.5 py-1.5 rounded text-xs font-bold bg-cyan-950/60 cursor-pointer"><i class="fa-solid fa-key"></i> Parol</button>
       <button onclick="openClientSupportModal()" class="cyber-button px-2.5 py-1.5 rounded text-xs font-bold bg-emerald-950/60 cursor-pointer relative"><i class="fa-solid fa-headset"></i> Yordam <span id="client-unread-dot" class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full hidden"></span></button>
       <button onclick="openNotesModal()" class="cyber-button px-2.5 py-1.5 rounded text-xs font-bold cursor-pointer"><i class="fa-solid fa-note-sticky"></i> Matnlar</button>
       <button onclick="logout()" class="cyber-button px-2.5 py-1.5 rounded text-xs font-bold bg-red-950/40 border-red-800 text-red-400 cursor-pointer">CHIQISH</button>
@@ -231,18 +225,6 @@
     <p class="text-xs text-green-300">Obuna muddati tugagani uchun xizmat vaqtincha to'xtatildi. Admin tomonidan 1 oylik yoki 1 yillik tarif yoqilgach tizim avtomatik ochiladi.</p>
     <div class="pt-2"><button onclick="openBuyModal()" class="w-full py-2 bg-emerald-950 border border-green-500 text-green-300 rounded text-xs font-bold uppercase cursor-pointer">CHEK YUBORISH VA OBUNANI UZOQTIRISH</button></div>
     <button onclick="logout()" class="text-xs text-red-400 underline pt-2 cursor-pointer">Chiqish</button>
-  </div>
-</div>
-
-<!-- PAROLNI O'ZGARTIRISH -->
-<div id="password-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
-  <div class="cyber-border bg-gray-950 p-5 rounded-lg max-w-sm w-full relative space-y-4 text-center">
-    <button onclick="closePasswordChangeModal()" class="absolute top-2 right-2 text-green-400 text-sm font-bold p-2 cursor-pointer">[ X ]</button>
-    <h3 class="text-xs font-bold text-green-400">> SHAXSIY PAROLni O'ZGARTIRISH</h3>
-    <div class="space-y-3">
-      <input type="password" id="new-custom-pwd" placeholder="Yangi parolni kiriting" class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded focus:outline-none">
-      <button onclick="updateClientPassword()" class="w-full cyber-button py-2 rounded text-xs font-bold uppercase cursor-pointer">SAQLASH VA YANGILASH</button>
-    </div>
   </div>
 </div>
 
@@ -311,15 +293,6 @@ let audioCtx = null;
 function initAudioContext() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
 
 const MASTER_SECRET = "CloudSystem_Secure_2026_Encryption_Key";
-function encryptData(data) { return CryptoJS.AES.encrypt(JSON.stringify(data), MASTER_SECRET).toString(); }
-function decryptData(ciphertext) {
-  try {
-    const bytes = CryptoJS.AES.decrypt(ciphertext, MASTER_SECRET);
-    const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
-    return decryptedData ? JSON.parse(decryptedData) : null;
-  } catch (e) { return null; }
-}
-
 const ADMIN_PASSWORD = "2007080411";
 let currentClient = null;
 let savedFiles = [];
@@ -328,7 +301,6 @@ let totalUploadedCount = 0;
 let activeReceiptIndex = null;
 let allReceiptsCache = [];
 
-// Firebase ulanishi tayyor bo'lganda sessionni tekshirish
 window.addEventListener('firebase-ready', async () => {
   const savedSession = localStorage.getItem('secure_active_session');
   if (savedSession) {
@@ -349,7 +321,6 @@ window.addEventListener('firebase-ready', async () => {
 });
 
 function initRealtimeSync() {
-  // Real-time listenerlar
   window.FB.onSnapshot(window.FB.collection(window.db, "activities"), (snapshot) => {
     if(document.getElementById('admin-interface') && !document.getElementById('admin-interface').classList.contains('hidden')) {
       renderAdminActivityFromSnapshot(snapshot);
@@ -404,7 +375,8 @@ async function sendPublicSupportTicket() {
   closePublicModal();
 }
 
-async function clientRegisterOrLogin() {
+// Mijoz faqat admin bergan parol bilan kiradi
+async function clientLogin() {
   const pwd = document.getElementById('client-login-pwd').value.trim();
   const errBox = document.getElementById('login-error');
   if(!pwd) { errBox.innerText = "> Parolni kiriting!"; errBox.classList.remove('hidden'); return; }
@@ -427,20 +399,8 @@ async function clientRegisterOrLogin() {
     logClientActivity(currentClient.name, currentClient.phone);
     checkSubscriptionAndOpenApp();
   } else {
-    const name = document.getElementById('client-login-name').value.trim();
-    const phone = document.getElementById('client-login-phone').value.trim();
-    if(!name || !phone) {
-      errBox.innerText = "> Yangi profil uchun Ism va Telefon raqamni kiriting!";
-      errBox.classList.remove('hidden');
-      return;
-    }
-    const clientData = { name: name, phone: phone, expiresAt: null, totalUploaded: 0, files: [], trash: [], notes: [] };
-    await window.FB.setDoc(docRef, clientData);
-    errBox.classList.add('hidden');
-    localStorage.setItem('secure_active_session', pwd);
-    currentClient = { password: pwd, ...clientData };
-    logClientActivity(name, phone);
-    checkSubscriptionAndOpenApp();
+    errBox.innerText = "> Noto'g'ri parol! Admin tomonidan berilgan parolni kiriting.";
+    errBox.classList.remove('hidden');
   }
 }
 
@@ -476,24 +436,25 @@ function renderAdminActivityFromSnapshot(snapshot) {
   document.getElementById('admin-activity-list').innerHTML = acts.length ? acts.map(a => `<div class="cyber-card p-2 rounded text-xs flex justify-between items-center"><span><b>${a.name}</b> (${a.phone})</span><span class="text-cyan-400">${a.date}</span></div>`).join('') : '<p class="text-xs text-gray-500">Hozircha kirganlar yoq</p>';
 }
 
+// Admin mijozga o'zi parol o'rnatib qo'shadi
 async function adminAddNewClient() {
   const name = document.getElementById('admin-new-name').value.trim();
   const phone = document.getElementById('admin-new-phone').value.trim();
   const pwd = document.getElementById('admin-new-pwd').value.trim();
-  if(!name || !phone || !pwd) { alert("Barcha maydonlarni to'ldiring!"); return; }
+  if(!name || !phone || !pwd) { alert("Barcha maydonlarni to'ldiring (Ism, Telefon va Parol)!"); return; }
   
   let docRef = window.FB.doc(window.db, "clients", pwd);
   let snap = await window.FB.getDoc(docRef);
-  if(snap.exists()) { alert("Bu parol band! Boshqa kod kiriting."); return; }
+  if(snap.exists()) { alert("Bu parol allaqachonband! Boshqa parol kiriting."); return; }
 
   await window.FB.setDoc(docRef, {
-    name: name, phone: phone, expiresAt: Date.now() + 30*24*60*60*1000, totalUploaded: 0, files: [], trash: [], notes: []
+    name: name, phone: phone, expiresAt: null, totalUploaded: 0, files: [], trash: [], notes: []
   });
   document.getElementById('admin-new-name').value = '';
   document.getElementById('admin-new-phone').value = '';
   document.getElementById('admin-new-pwd').value = '';
   renderAdminClients();
-  alert("Yangi mijoz qo'shildi!");
+  alert(`Yangi mijoz yaratildi! Paroli: ${pwd} (Mijozga jo'natishingiz mumkin).`);
 }
 
 async function checkSubscriptionAndOpenApp() {
@@ -552,7 +513,7 @@ async function renderAdminClients() {
     let c = docSnap.data();
     let isVip = c.expiresAt && c.expiresAt > now;
     let expireText = isVip ? new Date(c.expiresAt).toLocaleDateString() : "Muddati tugagan / Test";
-    html += `<div class="cyber-card p-3 rounded text-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"><div class="space-y-0.5"><p><b>${c.name}</b><span class="text-gray-400">(${c.phone})</span></p><p class="text-[11px] text-gray-400">Kod: <span class="text-yellow-400 font-mono">${pwd}</span> | Status: <b class="${isVip ? 'text-green-400' : 'text-yellow-400'}">${expireText}</b></p></div><div class="flex items-center gap-1.5 flex-wrap justify-end"><button onclick="adminGiveDuration('${pwd}', 30)" class="px-2 py-1 bg-emerald-950 border border-green-600 text-green-300 rounded text-[10px] font-bold cursor-pointer">+1 Oy</button><button onclick="adminGiveDuration('${pwd}', 365)" class="px-2 py-1 bg-cyan-950 border border-cyan-600 text-cyan-300 rounded text-[10px] font-bold cursor-pointer">+1 Yil</button><button onclick="adminToggleSub('${pwd}')" class="px-2 py-1 ${isVip ? 'bg-red-950 border-red-700 text-red-300' : 'bg-green-950 border-green-500 text-green-300'} rounded text-[10px] font-bold cursor-pointer">${isVip ? 'Tarifni O\'chirish' : 'Tarifni Yoqish (+1 Oy)'}</button><button onclick="adminRenewPassword('${pwd}')" class="px-2 py-1 bg-yellow-950 border border-yellow-600 text-yellow-300 rounded text-[10px] font-bold cursor-pointer">Parol</button><button onclick="deleteClient('${pwd}')" class="px-2 py-1 bg-red-950/40 border border-red-800 text-red-400 rounded text-[10px] cursor-pointer">O'chirish</button></div></div>`;
+    html += `<div class="cyber-card p-3 rounded text-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"><div class="space-y-0.5"><p><b>${c.name}</b> <span class="text-gray-400">(${c.phone})</span></p><p class="text-[11px] text-gray-400">Paroli: <span class="text-yellow-400 font-mono font-bold">${pwd}</span> | Status: <b class="${isVip ? 'text-green-400' : 'text-yellow-400'}">${expireText}</b></p></div><div class="flex items-center gap-1.5 flex-wrap justify-end"><button onclick="adminGiveDuration('${pwd}', 30)" class="px-2 py-1 bg-emerald-950 border border-green-600 text-green-300 rounded text-[10px] font-bold cursor-pointer">+1 Oy</button><button onclick="adminGiveDuration('${pwd}', 365)" class="px-2 py-1 bg-cyan-950 border border-cyan-600 text-cyan-300 rounded text-[10px] font-bold cursor-pointer">+1 Yil</button><button onclick="adminToggleSub('${pwd}')" class="px-2 py-1 ${isVip ? 'bg-red-950 border-red-700 text-red-300' : 'bg-green-950 border-green-500 text-green-300'} rounded text-[10px] font-bold cursor-pointer">${isVip ? 'Tarifni O\'chirish' : 'Tarifni Yoqish (+1 Oy)'}</button><button onclick="adminRenewPassword('${pwd}')" class="px-2 py-1 bg-yellow-950 border border-yellow-600 text-yellow-300 rounded text-[10px] font-bold cursor-pointer">Parolni O'zgartirish</button><button onclick="deleteClient('${pwd}')" class="px-2 py-1 bg-red-950/40 border border-red-800 text-red-400 rounded text-[10px] cursor-pointer">O'chirish</button></div></div>`;
   });
   document.getElementById('admin-clients-list').innerHTML = html || '<p class="text-xs text-gray-500">Mijozlar yoq</p>';
 }
@@ -586,15 +547,16 @@ async function adminToggleSub(pwd) {
 }
 
 async function adminRenewPassword(oldPwd) {
-  let ref = window.FB.doc(window.db, "clients", oldPwd);
-  let snap = await window.FB.getDoc(ref);
+  let newPwd = prompt("Yangi parolni kiriting:");
+  if(!newPwd) return;
+  let oldRef = window.FB.doc(window.db, "clients", oldPwd);
+  let snap = await window.FB.getDoc(oldRef);
   if(snap.exists()) {
     let data = snap.data();
-    let newPwd = Math.floor(100000 + Math.random() * 900000).toString();
     await window.FB.setDoc(window.FB.doc(window.db, "clients", newPwd), data);
-    await window.FB.deleteDoc(ref);
+    await window.FB.deleteDoc(oldRef);
     renderAdminClients();
-    alert(`Yangi parol berildi: ${newPwd}`);
+    alert(`Parol o'zgartirildi! Yangi parol: ${newPwd}`);
   }
 }
 
@@ -638,30 +600,6 @@ async function approvePaymentWithDuration(days) {
   }
 }
 
-function openPasswordChangeModal() { document.getElementById('password-modal').classList.remove('hidden'); }
-function closePasswordChangeModal() { document.getElementById('password-modal').classList.add('hidden'); }
-
-async function updateClientPassword() {
-  const newPwd = document.getElementById('new-custom-pwd').value.trim();
-  if(!newPwd) { alert("Yangi parolni kiriting!"); return; }
-  let newRef = window.FB.doc(window.db, "clients", newPwd);
-  let snap = await window.FB.getDoc(newRef);
-  if(snap.exists()) { alert("Bu parol band! Boshqa parol kiriting."); return; }
-
-  let oldRef = window.FB.doc(window.db, "clients", currentClient.password);
-  let oldSnap = await window.FB.getDoc(oldRef);
-  if(oldSnap.exists()) {
-    await window.FB.setDoc(newRef, oldSnap.data());
-    await window.FB.deleteDoc(oldRef);
-  }
-
-  currentClient.password = newPwd;
-  localStorage.setItem('secure_active_session', newPwd);
-  closePasswordChangeModal();
-  document.getElementById('new-custom-pwd').value = '';
-  alert("Parolingiz muvaffaqiyatli o'zgartirildi!");
-}
-
 function openClientSupportModal() { renderClientMessages(); document.getElementById('client-support-modal').classList.remove('hidden'); document.getElementById('client-unread-dot').classList.add('hidden'); }
 function closeClientSupportModal() { document.getElementById('client-support-modal').classList.add('hidden'); }
 
@@ -699,9 +637,7 @@ function checkClientNotificationsFromSnapshot(snapshot) {
 function openAdminSupportModal() { renderAdminChat(); document.getElementById('admin-support-modal').classList.remove('hidden'); }
 function closeAdminSupportModal() { document.getElementById('admin-support-modal').classList.add('hidden'); }
 
-function renderAdminChat() {
-  // Real-time render handled via snapshot
-}
+function renderAdminChat() {}
 
 function renderAdminChatFromSnapshot(snapshot) {
   let tickets = [];
