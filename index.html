@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CYBER ADMIN CONTROL CENTER</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b0f19">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
     <style>
         * {
             box-sizing: border-box;
@@ -42,6 +47,11 @@
             font-weight: bold;
             letter-spacing: 1px;
         }
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
         .header-btn {
             background: transparent;
             border: 1px solid #ffaa00;
@@ -50,8 +60,12 @@
             cursor: pointer;
             font-weight: bold;
             text-transform: uppercase;
-            margin-left: 10px;
             transition: 0.2s;
+        }
+        .header-btn.install-btn {
+            border-color: #00ff66;
+            color: #00ff66;
+            display: none;
         }
         .header-btn.logout {
             border-color: #ff3333;
@@ -59,6 +73,9 @@
         }
         .header-btn:hover {
             background: rgba(255, 170, 0, 0.1);
+        }
+        .header-btn.install-btn:hover {
+            background: rgba(0, 255, 102, 0.1);
         }
         .header-btn.logout:hover {
             background: rgba(255, 51, 51, 0.1);
@@ -232,7 +249,8 @@
             <div class="admin-badge">A</div>
             <span class="title">CYBER ADMIN CONTROL CENTER</span>
         </div>
-        <div>
+        <div class="header-actions">
+            <button id="installBtn" class="header-btn install-btn">📥 O'rnatish</button>
             <button class="header-btn" onclick="location.href='messages.html'">Mijozlar Xabarlari</button>
             <button class="header-btn logout" onclick="location.href='logout.html'">CHIQISH</button>
         </div>
@@ -342,6 +360,30 @@
     </div>
 
     <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(() => {});
+        }
+
+        let deferredPrompt;
+        const installBtn = document.getElementById('installBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'inline-block';
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installBtn.style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        });
+
         function addAdmin() {
             const name = document.getElementById('adminName').value;
             const pass = document.getElementById('adminPass').value;
