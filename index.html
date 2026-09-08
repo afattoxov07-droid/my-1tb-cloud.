@@ -62,14 +62,16 @@
         .empty-text { color: rgba(255, 170, 0, 0.6); font-size: 14px; }
         .badge-text { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffaa00; padding: 2px 6px; font-size: 10px; margin-left: 8px; }
 
-        /* Login Ekran Dizayni */
+        /* Login Ekran Dizayni (Rasmga mos tartib) */
         #loginOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0f19; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
         .login-card { border: 1px solid #00ff66; width: 100%; max-width: 450px; padding: 30px; background: rgba(0, 255, 102, 0.02); text-align: center; }
         .login-icon { font-size: 32px; margin-bottom: 15px; }
         .login-title { color: #00ff66; font-size: 20px; font-weight: bold; margin-bottom: 5px; letter-spacing: 1px; }
         .login-sub { color: rgba(0, 255, 102, 0.6); font-size: 12px; margin-bottom: 25px; }
+        
         .login-input { width: 100%; background: #0b0f19; border: 1px solid #00ff66; color: #00ff66; padding: 12px 15px; font-family: inherit; outline: none; margin-bottom: 15px; text-align: center; }
         .login-input::placeholder { color: rgba(0, 255, 102, 0.4); }
+        
         .login-btn { width: 100%; background: transparent; border: 1px solid #00ff66; color: #00ff66; padding: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.2s; margin-bottom: 20px; }
         .login-btn:hover { background: rgba(0, 255, 102, 0.1); }
         
@@ -91,7 +93,7 @@
 </head>
 <body>
 
-    <!-- Kirish Oynasi (Parol Himoyasi bilan) -->
+    <!-- Kirish Oynasi (Rasmga mos tartib: Ism -> Tel -> Parol -> Tugma) -->
     <div id="loginOverlay">
         <div class="login-card">
             <div class="login-icon">🔒</div>
@@ -99,8 +101,10 @@
             <div class="login-sub">Mijoz va Admin Kirish Portali</div>
             
             <input type="text" id="loginName" class="login-input" placeholder="Ismingizni kiriting">
-            <input type="password" id="loginPass" class="login-input" placeholder="Parolingizni kiriting">
-            <button class="login-btn" onclick="handleLogin()">PROFILGA KIRISH</button>
+            <input type="text" id="loginPhone" class="login-input" value="+998" placeholder="+998">
+            <input type="password" id="loginPass" class="login-input" placeholder="********">
+            
+            <button class="login-btn" onclick="handleLogin()">PROFILGA KIRISH / OCHISH</button>
             
             <div class="telegram-contact">
                 Parol olish uchun Telegram: <a href="https://t.me/SizningUsername" target="_blank">@SizningUsername</a> ga yozing.
@@ -177,14 +181,13 @@
     </div>
 
     <script>
-        // Ma'lumotlar bazasi
         let admins = JSON.parse(localStorage.getItem('cyber_admins')) || [
             { name: 'Asosiy Admin', pass: '2007080411', isMain: true }
         ];
 
         let clients = JSON.parse(localStorage.getItem('cyber_clients')) || [
-            { name: 'Test_Mijoz', pass: 'parol123', subscription: '1 Oylik' },
-            { name: 'toxirjon', pass: 'toxirjon123', subscription: 'Cheksiz Xotira' }
+            { name: 'Test_Mijoz', pass: 'parol123', phone: '+998901234567', subscription: '1 Oylik' },
+            { name: 'toxirjon', pass: 'toxirjon123', phone: '+998919876543', subscription: 'Cheksiz Xotira' }
         ];
 
         let receipts = JSON.parse(localStorage.getItem('cyber_receipts')) || [];
@@ -196,9 +199,9 @@
             renderDashboard();
         }
 
-        // Tizimga kirish logikasi
         function handleLogin() {
             const name = document.getElementById('loginName').value.trim();
+            const phone = document.getElementById('loginPhone').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
 
             if(!name || !pass) {
@@ -206,7 +209,6 @@
                 return;
             }
 
-            // Adminlarni tekshirish
             let admin = admins.find(a => a.name === name && a.pass === pass);
             if(admin) {
                 localStorage.setItem('cyber_logged_user', JSON.stringify({ name: admin.name, role: 'admin', isMain: admin.isMain }));
@@ -214,7 +216,6 @@
                 return;
             }
 
-            // Mijozlarni tekshirish
             let client = clients.find(c => c.name === name && c.pass === pass);
             if(client) {
                 localStorage.setItem('cyber_logged_user', JSON.stringify({ name: client.name, role: 'client', subscription: client.subscription }));
@@ -240,7 +241,6 @@
                 document.getElementById('roleBadge').innerText = 'M';
                 document.getElementById('welcomeTitle').innerText = 'MIJOZ PORTALI: ' + logged.name + ' (' + logged.subscription + ')';
                 document.getElementById('adminManageSection').style.display = 'none';
-                // Mijozga boshqa admin boshqaruv panellari kerak emas, yashiramiz
             }
             renderDashboard();
         }
@@ -250,7 +250,6 @@
             location.reload();
         }
 
-        // Admin qo'shish
         function addNewAdmin() {
             const name = document.getElementById('newAdminName').value.trim();
             const pass = document.getElementById('newAdminPass').value.trim();
@@ -276,7 +275,6 @@
             }
         }
 
-        // Mijoz qo'shish
         function addNewClient() {
             const name = document.getElementById('clientName').value.trim();
             const pass = document.getElementById('clientPass').value.trim();
@@ -298,7 +296,6 @@
             }
         }
 
-        // Obuna berish
         function grantSubscription(clientName, type) {
             let client = clients.find(c => c.name === clientName);
             if(client) {
@@ -315,7 +312,6 @@
             if(!logged) return;
 
             if(logged.role === 'admin') {
-                // Adminlar ro'yxati
                 let admHtml = '';
                 admins.forEach((a, idx) => {
                     admHtml += `
@@ -327,7 +323,6 @@
                 });
                 document.getElementById('adminsList').innerHTML = admHtml;
 
-                // Mijozlar ro'yxati
                 let clHtml = '';
                 clients.forEach((c, idx) => {
                     clHtml += `
@@ -346,7 +341,6 @@
             }
         }
 
-        // Modal funksiyalari
         function openModal(title, text) {
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalBody').innerText = text;
@@ -357,7 +351,6 @@
             document.getElementById('infoModal').style.display = 'none';
         }
 
-        // Sahifa ochilganda avvalgi seansni tekshirish
         window.onload = function() {
             const logged = localStorage.getItem('cyber_logged_user');
             if(logged) {
