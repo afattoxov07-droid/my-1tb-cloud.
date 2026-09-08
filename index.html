@@ -57,7 +57,7 @@
       <div class="space-y-3 pt-2">
         <input type="text" id="client-login-name" placeholder="Ismingizni kiriting" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
         <input type="text" id="client-login-phone" value="+998" placeholder="+998 XX XXX XX XX" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
-        <input type="password" id="client-login-pwd" placeholder="Shaxsiy parolingizni o'rnating" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
+        <input type="password" id="client-login-pwd" placeholder="O'zingizga parol o'rnating" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-4 py-3 rounded text-center focus:outline-none focus:border-green-400">
         <button onclick="clientRegisterOrLogin()" class="w-full cyber-button py-3 rounded text-xs font-bold uppercase tracking-wider cursor-pointer">PROFILGA KIRISH / OCHISH</button>
       </div>
       <p id="login-error" class="text-xs text-red-500 hidden"></p>
@@ -426,8 +426,8 @@ async function clientRegisterOrLogin() {
     return;
   }
 
-  if(!name || !phone) {
-    errBox.innerText = "> Yangi profil ochish uchun Ism va Telefon raqamni kiriting!";
+  if(!name) {
+    errBox.innerText = "> Iltimos, ismingizni kiriting!";
     errBox.classList.remove('hidden');
     return;
   }
@@ -444,7 +444,7 @@ async function clientRegisterOrLogin() {
   } else {
     let newClientData = {
       name: name,
-      phone: phone,
+      phone: phone || "+998",
       expiresAt: null,
       totalUploaded: 0,
       files: [],
@@ -454,7 +454,7 @@ async function clientRegisterOrLogin() {
     await window.FB.setDoc(docRef, newClientData);
     
     await window.FB.setDoc(window.FB.doc(window.db, "activities", "act_" + Date.now()), {
-      name: name + " (Yangi mijoz qo'shildi)", phone: phone, date: new Date().toLocaleString(), timestamp: Date.now()
+      name: name + " (Yangi profil ochildi)", phone: phone || "+998", date: new Date().toLocaleString(), timestamp: Date.now()
     });
 
     errBox.classList.add('hidden');
