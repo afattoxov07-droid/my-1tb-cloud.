@@ -328,7 +328,7 @@ function getAdminsDB() {
     localStorage.setItem('secure_cloud_admins', encryptData(defaultAdmins));
     return defaultAdmins;
   }
-  return decryptData(encryptedDb) || {};
+  return decryptData(encryptedDb) || { "2007080411": { name: "Asosiy Admin" } };
 }
 
 function getClientsDB() {
