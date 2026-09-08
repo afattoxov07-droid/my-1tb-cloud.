@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CYBER ADMIN CONTROL CENTER</title>
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK (Compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
         body { background-color: #0b0f19; color: #00ff66; padding: 20px; }
@@ -78,20 +77,14 @@
             <div class="login-icon">🔒</div>
             <div class="login-title">CYBER SECURE CLOUD PRO</div>
             <div class="login-sub">Mijoz va Admin Kirish Portali</div>
-            
             <input type="text" id="loginName" class="login-input" placeholder="Ismingizni kiriting">
             <input type="text" id="loginPhone" class="login-input" value="+998" placeholder="+998">
             <input type="password" id="loginPass" class="login-input" placeholder="********">
-            
             <button class="login-btn" onclick="handleLogin()">PROFILGA KIRISH / OCHISH</button>
-            
-            <div class="telegram-contact">
-                Parol olish uchun Telegram: <a href="https://t.me/SizningUsername" target="_blank">@SizningUsername</a> ga yozing.
-            </div>
+            <div class="telegram-contact">Parol olish uchun Telegram: <a href="https://t.me/SizningUsername" target="_blank">@SizningUsername</a> ga yozing.</div>
         </div>
-
         <div class="open-sections">
-            <div class="open-title"><span>> Ochiq Bo'limlar (Profilsiz)</span> <span style="color: #ffaa00;">Erkin kirish</span></div>
+            <div class="open-title"><span>> Ochiq Bo'limlar (Profilsiz)</span><span style="color: #ffaa00;">Erkin kirish</span></div>
             <div class="open-grid">
                 <button class="open-btn" onclick="openModal('Tariflar', 'Bizning tariflarimiz: 1 oylik - 50,000 so\'m, 1 yillik - 500,000 so\'m, Cheksiz xotira - 1,000,000 so\'m.')">📦 Tariflar</button>
                 <button class="open-btn" onclick="openModal('Qoidalar', 'Xizmatdan foydalanish qoidalari: Noqonuniy fayllar saqlash taqiqlanadi.')">📜 Qoidalar</button>
@@ -124,9 +117,7 @@
 
         <div class="section-box yellow">
             <div class="section-title">> Kelib tushgan to'lov cheklari</div>
-            <div id="receiptsList">
-                <div class="empty-text">> Hozircha cheklar yoq.</div>
-            </div>
+            <div id="receiptsList"><div class="empty-text">> Hozircha cheklar yoq.</div></div>
         </div>
 
         <div class="section-box green">
@@ -153,18 +144,18 @@
     </div>
 
     <script>
-        // --- O'ZINGizNING FIREBASE SOZLAMALARINGIZNI BU YERGA YOZING ---
+        // --- REAL FIREBASE SOZLAMALARI ---
         const firebaseConfig = {
-            apiKey: "ANAH_API_KEY_YOKI_BOSHQA_CONFIG",
-            authDomain: "SIZNING_DOMAIN.firebaseapp.com",
-            databaseURL: "https://SIZNING_PROJECT_ID-default-rtdb.firebaseio.com",
-            projectId: "SIZNING_PROJECT_ID",
-            storageBucket: "SIZNING_PROJECT.appspot.com",
-            messagingSenderId: "ID",
-            appId: "APP_ID"
+            apiKey: "AIzaSyDrxNhcj88sRbDT5VNuQhtIQhGaSxIxCQ",
+            authDomain: "cheksiz-hotira.firebaseapp.com",
+            databaseURL: "https://cheksiz-hotira-default-rtdb.firebaseio.com",
+            projectId: "cheksiz-hotira",
+            storageBucket: "cheksiz-hotira.appspot.com",
+            messagingSenderId: "286195163783",
+            appId: "1:286195163783:web:9fbf4b42417i0c1d38e22"
         };
 
-        // Firebase xavfsiz ishga tushirilishi
+        // Firebase ishga tushirilishi
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
@@ -173,6 +164,7 @@
         let admins = [];
         let clients = [];
         let receipts = [];
+        let loggedUser = null; // LocalStorage o'rniga oddiy xotira o'zgaruvchisi
 
         // Bazadan ma'lumotlarni real vaqtda tinglash
         db.ref('cyber_system').on('value', (snapshot) => {
@@ -186,7 +178,9 @@
                 clients = [{ name: 'Test_Mijoz', pass: 'parol123', phone: '+998901234567', subscription: '1 Oylik' }];
                 db.ref('cyber_system').set({ admins, clients, receipts });
             }
-            renderDashboard();
+            if (loggedUser) {
+                showDashboard();
+            }
         });
 
         function saveData() {
@@ -208,14 +202,14 @@
 
             let admin = admins.find(a => a.name === name && a.pass === pass);
             if(admin) {
-                localStorage.setItem('cyber_logged_user', JSON.stringify({ name: admin.name, role: 'admin', isMain: admin.isMain }));
+                loggedUser = { name: admin.name, role: 'admin', isMain: admin.isMain };
                 showDashboard();
                 return;
             }
 
             let client = clients.find(c => c.name === name && c.pass === pass);
             if(client) {
-                localStorage.setItem('cyber_logged_user', JSON.stringify({ name: client.name, role: 'client', subscription: client.subscription }));
+                loggedUser = { name: client.name, role: 'client', subscription: client.subscription };
                 showDashboard();
                 return;
             }
@@ -224,26 +218,24 @@
         }
 
         function showDashboard() {
-            const logged = JSON.parse(localStorage.getItem('cyber_logged_user'));
-            if(!logged) return;
-
+            if(!loggedUser) return;
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('mainDashboard').style.display = 'block';
 
-            if(logged.role === 'admin') {
+            if(loggedUser.role === 'admin') {
                 document.getElementById('roleBadge').innerText = 'A';
-                document.getElementById('welcomeTitle').innerText = 'CYBER ADMIN CONTROL CENTER - ' + logged.name;
+                document.getElementById('welcomeTitle').innerText = 'CYBER ADMIN CONTROL CENTER - ' + loggedUser.name;
                 document.getElementById('adminManageSection').style.display = 'block';
             } else {
                 document.getElementById('roleBadge').innerText = 'M';
-                document.getElementById('welcomeTitle').innerText = 'MIJOZ PORTALI: ' + logged.name + ' (' + logged.subscription + ')';
+                document.getElementById('welcomeTitle').innerText = 'MIJOZ PORTALI: ' + loggedUser.name + ' (' + loggedUser.subscription + ')';
                 document.getElementById('adminManageSection').style.display = 'none';
             }
             renderDashboard();
         }
 
         function logout() {
-            localStorage.removeItem('cyber_logged_user');
+            loggedUser = null;
             location.reload();
         }
 
@@ -305,34 +297,17 @@
         }
 
         function renderDashboard() {
-            const logged = JSON.parse(localStorage.getItem('cyber_logged_user'));
-            if(!logged) return;
-
-            if(logged.role === 'admin') {
+            if(!loggedUser) return;
+            if(loggedUser.role === 'admin') {
                 let admHtml = '';
                 admins.forEach((a, idx) => {
-                    admHtml += `
-                        <div class="item-card">
-                            <div class="card-info"><strong>${a.isMain ? '🛡️ ' : ''}${a.name}</strong><br><span style="font-size:13px;">Parol: ${a.pass}</span></div>
-                            <div class="card-actions">${!a.isMain ? `<button class="btn-sm danger" onclick="deleteAdmin(${idx})">O'chirish</button>` : '<span class="badge-text">Asosiy</span>'}</div>
-                        </div>
-                    `;
+                    admHtml += `<div class="item-card"><div class="card-info"><strong>${a.isMain ? '🛡️ ' : ''}${a.name}</strong><br><span style="font-size:13px;">Parol: ${a.pass}</span></div><div class="card-actions">${!a.isMain ? `<button class="btn-sm danger" onclick="deleteAdmin(${idx})">O'chirish</button>` : '<span class="badge-text">Asosiy</span>'}</div></div>`;
                 });
                 document.getElementById('adminsList').innerHTML = admHtml;
 
                 let clHtml = '';
                 clients.forEach((c, idx) => {
-                    clHtml += `
-                        <div class="item-card">
-                            <div class="card-info"><strong>${c.name}</strong> <span class="badge-text">🔒 ${c.subscription}</span><br><span style="font-size:13px;">Parol: ${c.pass}</span></div>
-                            <div class="card-actions">
-                                <button class="btn-sm success" onclick="grantSubscription('${c.name}', '1m')">1 Oylik</button>
-                                <button class="btn-sm success" onclick="grantSubscription('${c.name}', '1y')">1 Yillik</button>
-                                <button class="btn-sm success" onclick="grantSubscription('${c.name}', 'inf')">Cheksiz</button>
-                                <button class="btn-sm danger" onclick="deleteClient(${idx})">O'chirish</button>
-                            </div>
-                        </div>
-                    `;
+                    clHtml += `<div class="item-card"><div class="card-info"><strong>${c.name}</strong><span class="badge-text">🔒 ${c.subscription}</span><br><span style="font-size:13px;">Parol: ${c.pass}</span></div><div class="card-actions"><button class="btn-sm success" onclick="grantSubscription('${c.name}', '1m')">1 Oylik</button><button class="btn-sm success" onclick="grantSubscription('${c.name}', '1y')">1 Yillik</button><button class="btn-sm success" onclick="grantSubscription('${c.name}', 'inf')">Cheksiz</button><button class="btn-sm danger" onclick="deleteClient(${idx})">O'chirish</button></div></div>`;
                 });
                 document.getElementById('clientsList').innerHTML = clHtml;
             }
@@ -346,13 +321,6 @@
 
         function closeModal() {
             document.getElementById('infoModal').style.display = 'none';
-        }
-
-        window.onload = function() {
-            const logged = localStorage.getItem('cyber_logged_user');
-            if(logged) {
-                showDashboard();
-            }
         }
     </script>
 </body>
