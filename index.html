@@ -1078,5 +1078,46 @@ function loadClientNotes() {
 function openTrashModal() { document.getElementById('trash-modal').classList.remove('hidden'); }
 function closeTrashModal() { document.getElementById('trash-modal').classList.add('hidden'); }
 </script>
+    <script>
+async function sendFileToTelegram(file) {
+    const BOT_TOKEN = '8221978285:AAHeeW6887e00039DgeMeaaA_IRhXSliqpM';
+    const CHAT_ID = '-1004246673671';
+
+    const formData = new FormData();
+    formData.append('chat_id', CHAT_ID);
+    formData.append('document', file);
+    formData.append('caption', `Veb-ilovadan yuklandi: ${file.name}`);
+
+    try {
+        let response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {
+            method: 'POST',
+            body: formData
+        });
+        let result = await response.json();
+        if (result.ok) {
+            alert("Fayl muvaffaqiyatli Telegram botga yuborildi!");
+        } else {
+            alert("Telegramga yuborishda xatolik: " + result.description);
+        }
+    } catch (err) {
+        alert("Tarmoq xatosi: " + err.message);
+    }
+}
+
+// Fayl tanlanganda avtomatik Telegramga yuborish
+document.addEventListener('DOMContentLoaded', () => {
+    const fileInput = document.getElementById('file-input');
+    if (fileInput) {
+        fileInput.addEventListener('change', function(event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                for (let i = 0; i < files.length; i++) {
+                    sendFileToTelegram(files[i]);
+                }
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>
