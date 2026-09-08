@@ -12,7 +12,7 @@
         .admin-badge { background: #ff3333; color: #fff; padding: 4px 8px; font-weight: bold; font-size: 14px; }
         .title { color: #ff3333; font-weight: bold; letter-spacing: 1px; }
         .header-actions { display: flex; gap: 10px; align-items: center; }
-        .header-btn { background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 6px 15px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.2s; }
+        .header-btn { background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 6px 15px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.2s; text-decoration: none; display: inline-block; font-size: 13px; }
         .header-btn.logout { border-color: #ff3333; color: #ff3333; }
         .header-btn:hover { background: rgba(255, 170, 0, 0.1); }
         .header-btn.logout:hover { background: rgba(255, 51, 51, 0.1); }
@@ -61,72 +61,129 @@
 
         .empty-text { color: rgba(255, 170, 0, 0.6); font-size: 14px; }
         .badge-text { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffaa00; padding: 2px 6px; font-size: 10px; margin-left: 8px; }
+
+        /* Login Ekran Dizayni */
+        #loginOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0f19; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+        .login-card { border: 1px solid #00ff66; width: 100%; max-width: 450px; padding: 30px; background: rgba(0, 255, 102, 0.02); text-align: center; }
+        .login-icon { font-size: 32px; margin-bottom: 15px; }
+        .login-title { color: #00ff66; font-size: 20px; font-weight: bold; margin-bottom: 5px; letter-spacing: 1px; }
+        .login-sub { color: rgba(0, 255, 102, 0.6); font-size: 12px; margin-bottom: 25px; }
+        .login-input { width: 100%; background: #0b0f19; border: 1px solid #00ff66; color: #00ff66; padding: 12px 15px; font-family: inherit; outline: none; margin-bottom: 15px; text-align: center; }
+        .login-input::placeholder { color: rgba(0, 255, 102, 0.4); }
+        .login-btn { width: 100%; background: transparent; border: 1px solid #00ff66; color: #00ff66; padding: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.2s; margin-bottom: 20px; }
+        .login-btn:hover { background: rgba(0, 255, 102, 0.1); }
+        
+        .open-sections { border: 1px solid #00ff66; width: 100%; max-width: 450px; padding: 20px; margin-top: 20px; background: rgba(0, 255, 102, 0.01); text-align: left; }
+        .open-title { color: #00ff66; font-size: 13px; font-weight: bold; margin-bottom: 12px; display: flex; justify-content: space-between; }
+        .open-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .open-btn { background: transparent; border: 1px solid #00ff66; color: #00ff66; padding: 10px; font-size: 12px; cursor: pointer; text-align: left; font-family: inherit; }
+        .open-btn:hover { background: rgba(0, 255, 102, 0.1); }
+        .open-btn-full { width: 100%; background: transparent; border: 1px solid #00ff66; color: #00ff66; padding: 10px; font-size: 12px; cursor: pointer; text-align: left; font-family: inherit; margin-bottom: 8px; }
+        .open-btn-full:hover { background: rgba(0, 255, 102, 0.1); }
+        .telegram-contact { margin-top: 15px; font-size: 12px; color: #ffaa00; border-top: 1px dashed rgba(255, 170, 0, 0.4); padding-top: 12px; text-align: center; }
+        .telegram-contact a { color: #00ff66; text-decoration: underline; font-weight: bold; }
+
+        /* Modal oyna */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: #0b0f19; border: 1px solid #00ff66; max-width: 500px; width: 100%; padding: 25px; position: relative; }
+        .close-modal { position: absolute; top: 10px; right: 15px; color: #ff3333; font-size: 20px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo-area">
-            <div class="admin-badge">A</div>
-            <span class="title">CYBER ADMIN CONTROL CENTER</span>
-        </div>
-        <div class="header-actions">
-            <button class="header-btn logout" onclick="logout()">CHIQISH</button>
-        </div>
-    </header>
-
-    <!-- 1. Adminlar Boshqaruvi -->
-    <div class="section-box">
-        <div class="section-title">> Adminlar Boshqaruvi</div>
-        <div class="form-row">
-            <input type="text" id="newAdminName" placeholder="Yangi admin ismi">
-            <input type="password" id="newAdminPass" placeholder="Admin maxfiy paroli">
-        </div>
-        <button class="action-btn" onclick="addNewAdmin()">+ ADMIN QO'SHISH</button>
-        <div id="adminsList" style="margin-top: 15px;"></div>
-    </div>
-
-    <!-- 2. Kelib tushgan to'lov cheklari -->
-    <div class="section-box yellow">
-        <div class="section-title">> Kelib tushgan to'lov cheklari</div>
-        <div id="receiptsList">
-            <div class="empty-text">> Hozircha cheklar yoq. (Test uchun pastdan chek yuborib ko'rishingiz mumkin)</div>
-        </div>
-        <!-- Test uchun mijoz chek yuborish paneli (simulyatsiya) -->
-        <div style="margin-top: 15px; border-top: 1px dashed #ffaa00; padding-top: 15px;">
-            <div style="font-size: 13px; margin-bottom: 8px; color: #ffaa00;">[Mijoz Tomoni] To'lov chekini yuborish simulyatsiyasi:</div>
-            <div class="form-row">
-                <input type="text" id="checkClientName" placeholder="Mijozingizning ismi">
-                <input type="text" id="checkInfo" placeholder="Chek raqami yoki izoh (Masalan: Click 50000 so'm)">
+    <!-- Kirish Oynasi (Parol Himoyasi bilan) -->
+    <div id="loginOverlay">
+        <div class="login-card">
+            <div class="login-icon">🔒</div>
+            <div class="login-title">CYBER SECURE CLOUD PRO</div>
+            <div class="login-sub">Mijoz va Admin Kirish Portali</div>
+            
+            <input type="text" id="loginName" class="login-input" placeholder="Ismingizni kiriting">
+            <input type="password" id="loginPass" class="login-input" placeholder="Parolingizni kiriting">
+            <button class="login-btn" onclick="handleLogin()">PROFILGA KIRISH</button>
+            
+            <div class="telegram-contact">
+                Parol olish uchun Telegram: <a href="https://t.me/SizningUsername" target="_blank">@SizningUsername</a> ga yozing.
             </div>
-            <button class="action-btn" style="border-color: #ffaa00; color: #ffaa00;" onclick="simulateClientSendCheck()">+ CHEK YUBORISH</button>
+        </div>
+
+        <!-- Ochiq Bo'limlar (Profilsiz) -->
+        <div class="open-sections">
+            <div class="open-title"><span>> Ochiq Bo'limlar (Profilsiz)</span> <span style="color: #ffaa00;">Erkin kirish</span></div>
+            <div class="open-grid">
+                <button class="open-btn" onclick="openModal('Tariflar', 'Bizning tariflarimiz: 1 oylik - 50,000 so\'m, 1 yillik - 500,000 so\'m, Cheksiz xotira - 1,000,000 so\'m.')">📦 Tariflar</button>
+                <button class="open-btn" onclick="openModal('Qoidalar', 'Xizmatdan foydalanish qoidalari: Noqonuniy fayllar saqlash taqiqlanadi.')">📜 Qoidalar</button>
+            </div>
+            <button class="open-btn-full" onclick="openModal('Yordam', 'Yordam olish uchun administratorga Telegram orqali murojaat qiling.')">🎧 Yordam va Qo'llab-quvvatlash <span style="float: right; color: #ffaa00;">Online</span></button>
+            <button class="open-btn-full" onclick="openModal('Muallif', 'Cyber Secure Cloud Pro tizimi. Barcha huquqlar himoyalangan. 2026')">ℹ️ Muallif va Loyiha Haqida</button>
         </div>
     </div>
 
-    <!-- 3. Yangi mijoz qo'shish -->
-    <div class="section-box green">
-        <div class="section-title">> Yangi mijoz qo'shish</div>
-        <div class="form-row">
-            <input type="text" id="clientName" placeholder="Mijoz ismi">
-            <input type="password" id="clientPass" placeholder="Maxfiy paroli">
+    <!-- Asosiy Admin Paneli (Faqat kirgandan keyin ochiladi) -->
+    <div id="mainDashboard" style="display: none;">
+        <header>
+            <div class="logo-area">
+                <div class="admin-badge" id="roleBadge">A</div>
+                <span class="title" id="welcomeTitle">CYBER ADMIN CONTROL CENTER</span>
+            </div>
+            <div class="header-actions">
+                <button class="header-btn logout" onclick="logout()">CHIQISH</button>
+            </div>
+        </header>
+
+        <!-- 1. Adminlar Boshqaruvi (Faqat Asosiy Admingagina ko'rinadi) -->
+        <div class="section-box" id="adminManageSection">
+            <div class="section-title">> Adminlar Boshqaruvi</div>
+            <div class="form-row">
+                <input type="text" id="newAdminName" placeholder="Yangi admin ismi">
+                <input type="password" id="newAdminPass" placeholder="Admin maxfiy paroli">
+            </div>
+            <button class="action-btn" onclick="addNewAdmin()">+ ADMIN QO'SHISH</button>
+            <div id="adminsList" style="margin-top: 15px;"></div>
         </div>
-        <button class="action-btn" onclick="addNewClient()">+ MIJOZ QO'SHISH</button>
+
+        <!-- 2. Kelib tushgan to'lov cheklari -->
+        <div class="section-box yellow">
+            <div class="section-title">> Kelib tushgan to'lov cheklari</div>
+            <div id="receiptsList">
+                <div class="empty-text">> Hozircha cheklar yoq.</div>
+            </div>
+        </div>
+
+        <!-- 3. Yangi mijoz qo'shish -->
+        <div class="section-box green">
+            <div class="section-title">> Yangi mijoz qo'shish</div>
+            <div class="form-row">
+                <input type="text" id="clientName" placeholder="Mijoz ismi">
+                <input type="password" id="clientPass" placeholder="Maxfiy paroli">
+            </div>
+            <button class="action-btn" onclick="addNewClient()">+ MIJOZ QO'SHISH</button>
+        </div>
+
+        <!-- 4. Shifrlangan mijozlar ro'yxati -->
+        <div class="section-box green">
+            <div class="section-title">> Shifrlangan mijozlar ro'yxati va Obunalar</div>
+            <div id="clientsList"></div>
+        </div>
     </div>
 
-    <!-- 4. Shifrlangan mijozlar ro'yxati -->
-    <div class="section-box green">
-        <div class="section-title">> Shifrlangan mijozlar ro'yxati va Obunalar</div>
-        <div id="clientsList"></div>
+    <!-- Modal Oyna -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div id="modalTitle" style="color: #00ff66; font-weight: bold; margin-bottom: 10px; font-size: 16px;"></div>
+            <div id="modalBody" style="color: rgba(0,255,102,0.8); font-size: 14px; line-height: 1.5;"></div>
+        </div>
     </div>
 
     <script>
-        // Ma'lumotlarni LocalStorage orqali boshqarish
+        // Ma'lumotlar bazasi
         let admins = JSON.parse(localStorage.getItem('cyber_admins')) || [
             { name: 'Asosiy Admin', pass: '2007080411', isMain: true }
         ];
 
         let clients = JSON.parse(localStorage.getItem('cyber_clients')) || [
-            { name: 'Test_Mijoz', pass: 'parol123', subscription: '1 Oylik (2026-10-08 gacha)' },
+            { name: 'Test_Mijoz', pass: 'parol123', subscription: '1 Oylik' },
             { name: 'toxirjon', pass: 'toxirjon123', subscription: 'Cheksiz Xotira' }
         ];
 
@@ -136,7 +193,61 @@
             localStorage.setItem('cyber_admins', JSON.stringify(admins));
             localStorage.setItem('cyber_clients', JSON.stringify(clients));
             localStorage.setItem('cyber_receipts', JSON.stringify(receipts));
-            renderAll();
+            renderDashboard();
+        }
+
+        // Tizimga kirish logikasi
+        function handleLogin() {
+            const name = document.getElementById('loginName').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+
+            if(!name || !pass) {
+                alert("Iltimos, ism va parolni kiriting!");
+                return;
+            }
+
+            // Adminlarni tekshirish
+            let admin = admins.find(a => a.name === name && a.pass === pass);
+            if(admin) {
+                localStorage.setItem('cyber_logged_user', JSON.stringify({ name: admin.name, role: 'admin', isMain: admin.isMain }));
+                showDashboard();
+                return;
+            }
+
+            // Mijozlarni tekshirish
+            let client = clients.find(c => c.name === name && c.pass === pass);
+            if(client) {
+                localStorage.setItem('cyber_logged_user', JSON.stringify({ name: client.name, role: 'client', subscription: client.subscription }));
+                showDashboard();
+                return;
+            }
+
+            alert("Ism yoki parol xato! Parol olish uchun Telegram orqali murojaat qiling.");
+        }
+
+        function showDashboard() {
+            const logged = JSON.parse(localStorage.getItem('cyber_logged_user'));
+            if(!logged) return;
+
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('mainDashboard').style.display = 'block';
+
+            if(logged.role === 'admin') {
+                document.getElementById('roleBadge').innerText = 'A';
+                document.getElementById('welcomeTitle').innerText = 'CYBER ADMIN CONTROL CENTER - ' + logged.name;
+                document.getElementById('adminManageSection').style.display = 'block';
+            } else {
+                document.getElementById('roleBadge').innerText = 'M';
+                document.getElementById('welcomeTitle').innerText = 'MIJOZ PORTALI: ' + logged.name + ' (' + logged.subscription + ')';
+                document.getElementById('adminManageSection').style.display = 'none';
+                // Mijozga boshqa admin boshqaruv panellari kerak emas, yashiramiz
+            }
+            renderDashboard();
+        }
+
+        function logout() {
+            localStorage.removeItem('cyber_logged_user');
+            location.reload();
         }
 
         // Admin qo'shish
@@ -144,169 +255,115 @@
             const name = document.getElementById('newAdminName').value.trim();
             const pass = document.getElementById('newAdminPass').value.trim();
             if(!name || !pass) {
-                alert("Iltimos, admin ismi va parolini kiriting!");
+                alert("Ism va parolni kiriting!");
                 return;
             }
             admins.push({ name, pass, isMain: false });
             document.getElementById('newAdminName').value = '';
             document.getElementById('newAdminPass').value = '';
             saveData();
-            alert("Yangi admin muvaffaqiyatli qo'shildi!");
+            alert("Yangi admin qo'shildi!");
         }
 
-        // Adminni o'chirish
         function deleteAdmin(index) {
             if(admins[index].isMain) {
                 alert("Asosiy adminni o'chirib bo'lmaydi!");
                 return;
             }
-            if(confirm("Haqiqatan ham bu adminni o'chirmoqchimisiz?")) {
+            if(confirm("O'chirmoqchimisiz?")) {
                 admins.splice(index, 1);
                 saveData();
             }
         }
 
-        // Mijoz qo'shish (Parol bilan)
+        // Mijoz qo'shish
         function addNewClient() {
             const name = document.getElementById('clientName').value.trim();
             const pass = document.getElementById('clientPass').value.trim();
             if(!name || !pass) {
-                alert("Iltimos, mijoz ismi va parolini kiriting!");
+                alert("Ism va parolni kiriting!");
                 return;
             }
             clients.push({ name, pass, subscription: 'Obuna belgilanmagan' });
             document.getElementById('clientName').value = '';
             document.getElementById('clientPass').value = '';
             saveData();
-            alert("Mijoz yaratildi va tizimga parol bilan kiritishga tayyor!");
+            alert("Mijoz qo'shildi!");
         }
 
-        // Mijozni o'chirish
         function deleteClient(index) {
-            if(confirm("Bu mijozni o'chirmoqchimisiz?")) {
+            if(confirm("Mijozni o'chirmoqchimisiz?")) {
                 clients.splice(index, 1);
                 saveData();
             }
         }
 
-        // Chek simulyatsiyasi (Mijoz tarafidan)
-        function simulateClientSendCheck() {
-            const clientName = document.getElementById('checkClientName').value.trim();
-            const checkInfo = document.getElementById('checkInfo').value.trim();
-            if(!clientName || !checkInfo) {
-                alert("Mijoz ismi va chek ma'lumotini kiriting!");
-                return;
-            }
-            receipts.push({ id: Date.now(), clientName, checkInfo, date: new Date().toLocaleString() });
-            document.getElementById('checkClientName').value = '';
-            document.getElementById('checkInfo').value = '';
-            saveData();
-            alert("Chek adminga yuborildi!");
-        }
-
-        // Chekni ko'rib chiqib obuna berish (1 oylik, 1 yillik, cheksiz)
-        function grantSubscription(receiptIndex, clientName, type) {
-            // Mijozni topamiz va obunasini yangilaymiz
+        // Obuna berish
+        function grantSubscription(clientName, type) {
             let client = clients.find(c => c.name === clientName);
-            
-            let expiryDate = new Date();
-            if(type === '1m') {
-                expiryDate.setMonth(expiryDate.getMonth() + 1);
-                let formatted = expiryDate.toISOString().split('T')[0];
-                if(client) client.subscription = `1 Oylik (${formatted} gacha)`;
-                else clients.push({ name: clientName, pass: '12345', subscription: `1 Oylik (${formatted} gacha)` });
-            } else if(type === '1y') {
-                expiryDate.setFullYear(expiryDate.getFullYear() + 1);
-                let formatted = expiryDate.toISOString().split('T')[0];
-                if(client) client.subscription = `1 Yillik (${formatted} gacha)`;
-                else clients.push({ name: clientName, pass: '12345', subscription: `1 Yillik (${formatted} gacha)` });
-            } else if(type === 'inf') {
-                if(client) client.subscription = 'Cheksiz Xotira';
-                else clients.push({ name: clientName, pass: '12345', subscription: 'Cheksiz Xotira' });
+            if(client) {
+                if(type === '1m') client.subscription = '1 Oylik Obuna';
+                else if(type === '1y') client.subscription = '1 Yillik Obuna';
+                else if(type === 'inf') client.subscription = 'Cheksiz Xotira';
+                saveData();
+                alert(`${clientName} uchun obuna yangilandi!`);
             }
-
-            // Chekni o'chiramiz (ko'rib chiqildi)
-            receipts.splice(receiptIndex, 1);
-            saveData();
-            alert(`${clientName} uchun obuna muvaffaqiyatli faollashtirildi!`);
         }
 
-        function deleteReceipt(index) {
-            receipts.splice(index, 1);
-            saveData();
-        }
+        function renderDashboard() {
+            const logged = JSON.parse(localStorage.getItem('cyber_logged_user'));
+            if(!logged) return;
 
-        // Ma'lumotlarni ekranga chiqarish
-        function renderAll() {
-            // Adminlar ro'yxati
-            let adminsHtml = '';
-            admins.forEach((adm, idx) => {
-                adminsHtml += `
-                    <div class="item-card">
-                        <div class="card-info">
-                            <strong>${adm.isMain ? '🛡️ ' : ''}${adm.name}</strong><br>
-                            <span style="font-size: 13px;">Parol: ${adm.pass}</span>
-                        </div>
-                        <div class="card-actions">
-                            ${!adm.isMain ? `<button class="btn-sm danger" onclick="deleteAdmin(${idx})">O'chirish</button>` : '<span class="badge-text">Asosiy</span>'}
-                        </div>
-                    </div>
-                `;
-            });
-            document.getElementById('adminsList').innerHTML = adminsHtml;
-
-            // Cheklar ro'yxati
-            let receiptsHtml = '';
-            if(receipts.length === 0) {
-                receiptsHtml = '<div class="empty-text">> Hozircha cheklar yoq.</div>';
-            } else {
-                receipts.forEach((rc, idx) => {
-                    receiptsHtml += `
+            if(logged.role === 'admin') {
+                // Adminlar ro'yxati
+                let admHtml = '';
+                admins.forEach((a, idx) => {
+                    admHtml += `
                         <div class="item-card">
-                            <div class="card-info">
-                                <strong>Mijoz: ${rc.clientName}</strong><br>
-                                <span style="color: #ffaa00; font-size: 13px;">Chek: ${rc.checkInfo} (${rc.date})</span>
-                            </div>
-                            <div class="card-actions">
-                                <button class="btn-sm success" onclick="grantSubscription(${idx}, '${rc.clientName}', '1m')">1 Oylik berish</button>
-                                <button class="btn-sm success" onclick="grantSubscription(${idx}, '${rc.clientName}', '1y')">1 Yillik berish</button>
-                                <button class="btn-sm success" onclick="grantSubscription(${idx}, '${rc.clientName}', 'inf')">Cheksiz berish</button>
-                                <button class="btn-sm danger" onclick="deleteReceipt(${idx})">Rad etish</button>
-                            </div>
+                            <div class="card-info"><strong>${a.isMain ? '🛡️ ' : ''}${a.name}</strong><br><span style="font-size:13px;">Parol: ${a.pass}</span></div>
+                            <div class="card-actions">${!a.isMain ? `<button class="btn-sm danger" onclick="deleteAdmin(${idx})">O'chirish</button>` : '<span class="badge-text">Asosiy</span>'}</div>
                         </div>
                     `;
                 });
-            }
-            document.getElementById('receiptsList').innerHTML = receiptsHtml;
+                document.getElementById('adminsList').innerHTML = admHtml;
 
-            // Mijozlar ro'yxati
-            let clientsHtml = '';
-            if(clients.length === 0) {
-                clientsHtml = '<div class="empty-text">> Hozircha mijozlar yoq.</div>';
-            } else {
-                clients.forEach((cl, idx) => {
-                    clientsHtml += `
+                // Mijozlar ro'yxati
+                let clHtml = '';
+                clients.forEach((c, idx) => {
+                    clHtml += `
                         <div class="item-card">
-                            <div class="card-info">
-                                <strong>${cl.name}</strong> <span class="badge-text">🔒 ${cl.subscription}</span><br>
-                                <span style="font-size: 13px;">Parol: ${cl.pass}</span>
-                            </div>
+                            <div class="card-info"><strong>${c.name}</strong> <span class="badge-text">🔒 ${c.subscription}</span><br><span style="font-size:13px;">Parol: ${c.pass}</span></div>
                             <div class="card-actions">
+                                <button class="btn-sm success" onclick="grantSubscription('${c.name}', '1m')">1 Oylik</button>
+                                <button class="btn-sm success" onclick="grantSubscription('${c.name}', '1y')">1 Yillik</button>
+                                <button class="btn-sm success" onclick="grantSubscription('${c.name}', 'inf')">Cheksiz</button>
                                 <button class="btn-sm danger" onclick="deleteClient(${idx})">O'chirish</button>
                             </div>
                         </div>
                     `;
                 });
+                document.getElementById('clientsList').innerHTML = clHtml;
             }
-            document.getElementById('clientsList').innerHTML = clientsHtml;
         }
 
-        function logout() {
-            location.href = 'index.html';
+        // Modal funksiyalari
+        function openModal(title, text) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalBody').innerText = text;
+            document.getElementById('infoModal').style.display = 'flex';
         }
 
-        // Sahifa yuklanganda render qilish
-        renderAll();
+        function closeModal() {
+            document.getElementById('infoModal').style.display = 'none';
+        }
+
+        // Sahifa ochilganda avvalgi seansni tekshirish
+        window.onload = function() {
+            const logged = localStorage.getItem('cyber_logged_user');
+            if(logged) {
+                showDashboard();
+            }
+        }
     </script>
 </body>
 </html>
