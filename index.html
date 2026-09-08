@@ -1,257 +1,1059 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>[SECURE ENCRYPTED CYBER CLOUD PRO - TELEGRAM BOT]</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- PWA (Ilova sifatida o'rnatish) uchun manifest va sozlamalar -->
-    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Cyber%20Cloud%20Pro%22%2C%22short_name%22%3A%22CloudPro%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23030712%22%2C%22theme_color%22%3A%22%2322c55e%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Ffluency%2F96%2Fsecurity-checked.png%22%2C%22sizes%22%3A%2296x96%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Cyber Cloud">
-    <style>
-        body { font-family: 'Fira Code', monospace; }
-        .glass { background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(34, 197, 94, 0.2); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>[SECURE ENCRYPTED CYBER CLOUD PRO - FIREBASE REALTIME]</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
+
+<!-- PWA (Ilova sifatida o'rnatish) uchun manifest va sozlamalar -->
+<link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Cyber%20Cloud%20Pro%22%2C%22short_name%22%3A%22CloudPro%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23030712%22%2C%22theme_color%22%3A%22%2322c55e%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Ffluency%2F96%2Fsecurity-checked.png%22%2C%22sizes%22%3A%2296x96%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cyber Cloud">
+
+
+<style>
+body { font-family: 'Fira Code', monospace; background-color: #030712; color: #22c55e; -webkit-text-size-adjust: 100%; user-select: none; margin: 0; padding: 0; height: 100vh; overflow: hidden; }
+input, textarea { user-select: text; }
+.scanline { background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.3)); background-size: 100% 4px; }
+.cyber-border { border: 1px solid #15803d; box-shadow: 0 0 10px rgba(34, 197, 94, 0.15), inset 0 0 10px rgba(34, 197, 94, 0.1); }
+.cyber-card { background: rgba(6, 78, 59, 0.1); border: 1px solid #166534; transition: all 0.2s ease; }
+.cyber-button { background: rgba(34, 197, 94, 0.15); border: 1px solid #22c55e; color: #4ade80; box-shadow: 0 0 10px rgba(34, 197, 94, 0.2); cursor: pointer; }
+.cyber-button:active { background: #22c55e; color: #000; }
+</style>
+
+<!-- Firebase SDK va Realtime Database Ulanishi -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getDatabase, ref, set, get, update, remove, onValue, push, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+const firebaseConfig = {
+apiKey: "AIzaSyDrvfNcJ0MRRID7VWv8gltIGha8bkAcQ",
+authDomain: "cheksiz-hotira.firebaseapp.com",
+databaseURL: "https://cheksiz-hotira-default-rtdb.firebaseio.com",
+projectId: "cheksiz-hotira",
+storageBucket: "cheksiz-hotira.appspot.com",
+messagingSenderId: "286196163768",
+appId: "1:286196163768:web:990f7a842f17d87f289d22",
+measurementId: "G-61G6NRYXER"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+window.RDB = { db, ref, set, get, update, remove, onValue, push, child };
+window.dispatchEvent(new Event('realtime-ready'));
+</script>
 </head>
-<body class="bg-slate-950 text-green-400 min-h-screen flex flex-col items-center justify-between p-4">
+<body class="h-screen w-screen flex flex-col relative overflow-hidden text-xs md:text-sm" onclick="initAudioContext()">
+<div class="pointer-events-none fixed inset-0 z-50 scanline opacity-30"></div>
 
-    <!-- HEADER -->
-    <header class="w-full max-w-md glass p-4 rounded-xl shadow-lg shadow-green-900/20 text-center mb-4">
-        <h1 class="text-xl font-bold tracking-wider text-green-400 flex items-center justify-center gap-2">
-            <i class="fa-solid fa-shield-halved"></i> CYBER CLOUD PRO
-        </h1>
-        <p class="text-xs text-slate-400 mt-1">Telegram Bulut Shlyuzi • Nol Xotira</p>
-    </header>
+<!-- KIRISH / RO'YXATDAN O'TISH EKRANI -->
+<div id="login-screen" class="fixed inset-0 z-50 bg-[#030712] flex flex-col justify-between p-3 overflow-y-auto">
+<div class="w-full max-w-md mx-auto my-auto space-y-3 text-center py-2">
+<div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3">
+<div class="w-10 h-10 mx-auto rounded border border-green-500 bg-emerald-950 flex items-center justify-center text-green-400 font-bold text-lg animate-pulse">🔒</div>
+<div>
+<h2 class="text-xs md:text-sm font-bold text-green-400">CYBER SECURE CLOUD PRO</h2>
+<p class="text-[9px] text-green-600">Mijoz va Admin Kirish Portali</p>
+</div>
+<div class="space-y-2 pt-1">
+<input type="text" id="client-login-name" placeholder="Ismingizni kiriting" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-3 py-2 rounded text-center focus:outline-none focus:border-green-400">
+<input type="text" id="client-login-phone" value="+998" placeholder="+998 XX XXX XX XX" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-3 py-2 rounded text-center focus:outline-none focus:border-green-400">
+<input type="password" id="client-login-pwd" placeholder="O'zingizga parol o'rnating" class="w-full bg-gray-900 border border-green-800 text-xs text-green-400 px-3 py-2 rounded text-center focus:outline-none focus:border-green-400">
+<button onclick="playClickSound(); clientRegisterOrLogin()" class="w-full cyber-button py-2.5 rounded text-[11px] font-bold uppercase tracking-wider cursor-pointer">PROFILGA KIRISH / OCHISH</button>
 
-    <!-- MAIN CONTAINER -->
-    <main class="w-full max-w-md glass p-5 rounded-2xl shadow-2xl flex flex-col gap-4">
-        
-        <!-- SECRET KEY INPUT -->
-        <div class="flex flex-col gap-2">
-            <label class="text-xs text-slate-400"><i class="fa-solid fa-key"></i> Maxfiy Shifrlash Kaliti (Secret Key)</label>
-            <input type="password" id="secretKey" placeholder="Kalit so'zni kiriting..." class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-green-300 focus:outline-none focus:border-green-500">
-        </div>
+<!-- TELEFONDAN ILOVA Qilib O'RNATISH TUGMASI -->
+<div id="install-container" class="hidden mt-1">
+    <button id="install-btn" onclick="playClickSound()" class="w-full cyber-button py-2.5 rounded text-[11px] font-bold uppercase tracking-wider flex items-center justify-center space-x-2 bg-emerald-950/80 border-green-400 text-green-300 cursor-pointer">
+        <i class="fa-solid fa-download"></i>
+        <span>TELEFONDAN ILOVA Qilib O'RNATISH</span>
+    </button>
+</div>
 
-        <hr class="border-slate-800 my-1">
+</div>
+<p id="login-error" class="text-[10px] text-red-500 hidden"></p>
+</div>
 
-        <!-- FILE UPLOAD ZONE -->
-        <div id="dropZone" class="border-2 border-dashed border-slate-700 hover:border-green-500 rounded-xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2 bg-slate-900/50">
-            <i class="fa-solid fa-cloud-arrow-up text-3xl text-green-500 mb-1"></i>
-            <span class="text-xs text-slate-300">Faylni shu yerga tashlang yoki tanlang</span>
-            <span class="text-[10px] text-slate-500">(To'g'ridan-to'g'ri shifrlanib Telegramga ketadi)</span>
-            <input type="file" id="fileInput" class="hidden">
-        </div>
+<!-- OCHIQ BO'LIMLAR -->
+<div class="cyber-border bg-gray-950 p-3 rounded-lg space-y-2 text-left">
+<div class="flex justify-between items-center border-b border-green-900 pb-1">
+<h3 class="text-[11px] font-bold text-green-400">> Ochiq Bo'limlar</h3>
+<span class="text-[9px] text-yellow-500">Erkin kirish</span>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<button onclick="playClickSound(); openPublicSection('tariffs')" class="cyber-button py-2 px-2 rounded text-[10px] font-bold text-left flex items-center space-x-1.5 cursor-pointer"><i class="fa-solid fa-tags"></i><span>Tariflar</span></button>
+<button onclick="playClickSound(); openPublicSection('rules')" class="cyber-button py-2 px-2 rounded text-[10px] font-bold text-left flex items-center space-x-1.5 cursor-pointer"><i class="fa-solid fa-book"></i><span>Qoidalar</span></button>
+</div>
+<button onclick="playClickSound(); openPublicSection('help')" class="w-full py-2 px-2.5 bg-emerald-950 border border-green-500 text-green-300 rounded text-[10px] font-bold text-left flex justify-between items-center cursor-pointer"><span class="pointer-events-none"><i class="fa-solid fa-headset mr-1.5"></i>Yordam va Qo'llab-quvvatlash</span><span class="text-[9px] text-yellow-400">Online</span></button>
+<button onclick="playClickSound(); openPublicSection('author')" class="w-full py-2 px-2.5 bg-cyan-950 border border-cyan-600 text-cyan-300 rounded text-[10px] font-bold text-left flex justify-between items-center cursor-pointer"><span class="pointer-events-none"><i class="fa-solid fa-user-code mr-1.5"></i> Muallif va Loyiha Haqida</span><span class="text-[9px] text-cyan-400">Ma'lumot</span></button>
+</div>
+</div>
+<div class="text-[9px] text-green-700 py-1 text-center shrink-0">CYBER SECURE SYSTEM © 2026</div>
+</div>
 
-        <!-- PROGRESS BAR -->
-        <div id="progressContainer" class="hidden flex flex-col gap-1.5">
-            <div class="flex justify-between text-xs text-slate-400">
-                <span id="statusText">Shifrlanmoqda...</span>
-                <span id="progressPercent">0%</span>
-            </div>
-            <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
-                <div id="progressBar" class="bg-green-500 h-full w-0 transition-all duration-150"></div>
-            </div>
-        </div>
+<!-- OCHIQ BO'LIMLAR MODALI -->
+<div id="public-modal" class="hidden fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-3">
+<div class="cyber-border bg-gray-950 p-4 rounded-lg max-w-lg w-full relative space-y-3 max-h-[85vh] flex flex-col">
+<button onclick="playClickSound(); closePublicModal()" class="absolute top-2 right-2 text-green-400 text-xs font-bold p-2 cursor-pointer">[ X ]</button>
+<h3 id="public-modal-title" class="text-xs font-bold text-green-400 uppercase">> BO'LIM</h3>
+<div id="public-modal-body" class="flex-1 overflow-y-auto space-y-2 text-xs text-green-300 pr-1"></div>
+</div>
+</div>
 
-        <!-- ACTION BUTTON -->
-        <button id="uploadBtn" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-green-600/20 text-sm flex items-center justify-center gap-2">
-            <i class="fa-solid fa-lock"></i> Shifrlash va Telegramga yuborish
-        </button>
+<!-- ADMIN PANEL -->
+<div id="admin-interface" class="hidden h-full flex flex-col overflow-hidden">
+<header class="p-2.5 md:p-3 border-b border-green-800 bg-gray-950/90 flex justify-between items-center relative z-10 shrink-0 gap-2">
+<div class="flex items-center space-x-2 overflow-hidden">
+<div class="w-6 h-6 rounded border border-red-500 bg-red-950 flex items-center justify-center text-red-400 font-bold text-[10px] shrink-0">A</div>
+<h1 class="text-[11px] md:text-xs font-bold text-red-400 truncate">CYBER ADMIN CENTER</h1>
+</div>
+<div class="flex items-center space-x-1.5 shrink-0">
+<button onclick="playClickSound(); openAddClientModal()" class="cyber-button px-2 py-1 rounded text-[10px] font-bold bg-emerald-950/40 border-green-800 text-green-400 cursor-pointer">+ Mijoz</button>
+<button onclick="playClickSound(); openAddAdminModal()" class="cyber-button px-2 py-1 rounded text-[10px] font-bold bg-cyan-950/40 border-cyan-800 text-cyan-400 cursor-pointer">+ Admin</button>
+<button onclick="playClickSound(); openAdminSupportModal()" class="cyber-button px-2 py-1 rounded text-[10px] font-bold bg-yellow-950/40 border-yellow-800 text-yellow-400 cursor-pointer">💬 <span id="admin-unread-badge" class="bg-red-500 text-white rounded-full px-1 text-[8px] hidden">0</span></button>
+<button onclick="playClickSound(); logout()" class="cyber-button px-2 py-1 rounded text-[10px] font-bold bg-red-950/40 border-red-800 text-red-400 cursor-pointer">Chiqish</button>
+</div>
+</header>
+<div class="flex-1 max-w-4xl w-full mx-auto p-3 space-y-3 overflow-y-auto">
+<div class="cyber-border bg-gray-950 p-3 rounded-lg space-y-2 border-cyan-900">
+<h3 class="text-[11px] font-bold text-cyan-400">> Profilga Kirganlar Tarixi</h3>
+<div id="admin-activity-list" class="space-y-1.5 max-h-32 overflow-y-auto pr-1"></div>
+</div>
+<div class="cyber-border bg-gray-950 p-3 rounded-lg space-y-2 border-yellow-900">
+<h3 class="text-[11px] font-bold text-yellow-400">> To'lov Cheklari</h3>
+<div id="admin-receipts-list" class="space-y-1.5 max-h-40 overflow-y-auto pr-1"></div>
+</div>
+<div class="cyber-border bg-gray-950 p-3 rounded-lg space-y-2">
+<h3 class="text-[11px] font-bold text-green-400">> Barcha Mijozlar</h3>
+<div id="admin-clients-list" class="space-y-1.5 max-h-48 overflow-y-auto pr-1"></div>
+</div>
+<div class="cyber-border bg-gray-950 p-3 rounded-lg space-y-2 border-purple-900">
+<h3 class="text-[11px] font-bold text-purple-400">> Qo'shimcha Adminlar</h3>
+<div id="admin-list-box" class="space-y-1.5"></div>
+</div>
+</div>
+</div>
 
-        <hr class="border-slate-800 my-1">
+<!-- MIJOZ QO'SHISH MODALI -->
+<div id="add-client-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
+<div class="cyber-border bg-gray-950 p-4 rounded-lg max-w-md w-full relative space-y-3 border-green-900">
+<button onclick="playClickSound(); closeAddClientModal()" class="absolute top-2 right-2 text-green-400 text-xs font-bold p-2 cursor-pointer">[ X ]</button>
+<h4 class="text-[11px] font-bold text-green-400">> YANGI MIJOZNI QO'SHISH</h4>
+<div class="space-y-2.5 pt-1">
+<input type="text" id="admin-client-name" placeholder="Mijoz ismi" class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded focus:outline-none">
+<input type="text" id="admin-client-phone" value="+998" placeholder="+998 XX XXX XX XX" class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded focus:outline-none">
+<input type="text" id="admin-client-pwd" placeholder="Mijoz uchun parol (ID)" class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded focus:outline-none">
+<button onclick="playClickSound(); saveAdminNewClient()" class="w-full py-2 bg-emerald-950 border border-green-500 text-green-300 rounded text-[11px] font-bold uppercase cursor-pointer">SAQLASH</button>
+</div>
+</div>
+</div>
 
-        <!-- USER FILES LIST -->
-        <div class="flex flex-col gap-2">
-            <div class="flex justify-between items-center">
-                <span class="text-xs font-bold text-slate-300"><i class="fa-solid fa-folder-open"></i> Mening fayllarim</span>
-                <button id="refreshFilesBtn" class="text-[10px] text-green-400 hover:underline"><i class="fa-solid fa-rotate"></i> Yangilash</button>
-            </div>
-            <div id="filesList" class="flex flex-col gap-2 max-h-48 overflow-y-auto pr-1">
-                <span class="text-[10px] text-slate-500 text-center py-3">Kalitni kiriting va ro'yxatni yangilang</span>
-            </div>
-        </div>
+<!-- ADMIN QO'SHISH MODALI -->
+<div id="add-admin-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
+<div class="cyber-border bg-gray-950 p-4 rounded-lg max-w-md w-full relative space-y-3 border-cyan-900">
+<button onclick="playClickSound(); closeAddAdminModal()" class="absolute top-2 right-2 text-cyan-400 text-xs font-bold p-2 cursor-pointer">[ X ]</button>
+<h4 class="text-[11px] font-bold text-cyan-400">> YAGONA ADMIN QO'SHISH</h4>
+<div class="space-y-2.5 pt-1">
+<input type="text" id="new-admin-name" placeholder="Admin ismi" class="w-full bg-gray-900 border border-cyan-800 text-xs text-cyan-300 p-2 rounded focus:outline-none">
+<input type="password" id="new-admin-pwd" placeholder="Yangi admin uchun maxfiy parol" class="w-full bg-gray-900 border border-cyan-800 text-xs text-cyan-300 p-2 rounded focus:outline-none">
+<button onclick="playClickSound(); saveNewAdmin()" class="w-full py-2 bg-cyan-950 border border-cyan-500 text-cyan-300 rounded text-[11px] font-bold uppercase cursor-pointer">SAQLASH</button>
+</div>
+</div>
+</div>
 
-    </main>
+<!-- ADMIN CHAT MODALI -->
+<div id="admin-support-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
+<div class="cyber-border bg-gray-950 p-4 rounded-lg max-w-xl w-full relative space-y-3 max-h-[85vh] flex flex-col border-yellow-900">
+<button onclick="playClickSound(); closeAdminSupportModal()" class="absolute top-2 right-2 text-yellow-400 text-xs font-bold p-2 cursor-pointer">[ X ]</button>
+<h4 class="text-[11px] font-bold text-yellow-400">> Mijozlar Yordam Xabarlari</h4>
+<div id="admin-chat-list" class="space-y-2 overflow-y-auto flex-1 max-h-[40vh] pr-1"></div>
+<div class="space-y-2 border-t border-yellow-900 pt-2 shrink-0">
+<div class="flex gap-1.5">
+<input type="text" id="admin-reply-user" placeholder="Mijoz ismi" class="w-1/3 bg-gray-900 border border-yellow-800 text-xs text-yellow-300 p-2 rounded focus:outline-none">
+<input type="text" id="admin-reply-text" placeholder="Javob yozish..." class="flex-1 bg-gray-900 border border-yellow-800 text-xs text-yellow-300 p-2 rounded focus:outline-none">
+<button onclick="playClickSound(); sendAdminReply()" class="px-3 bg-yellow-950 border border-yellow-600 text-yellow-300 rounded text-xs font-bold cursor-pointer">Yuborish</button>
+</div>
+</div>
+</div>
+</div>
 
-    <!-- FOOTER -->
-    <footer class="mt-4 text-[10px] text-slate-600 text-center">
-        Cyber Cloud Pro &bull; Zero-Storage Architecture
-    </footer>
+<!-- CHEKNI KO'RISH MODALI -->
+<div id="receipt-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
+<div class="cyber-border bg-gray-950 p-4 rounded-lg max-w-md w-full relative space-y-3 text-center border-yellow-900">
+<button onclick="playClickSound(); closeReceiptModal()" class="absolute top-2 right-2 text-yellow-400 text-xs font-bold p-2 cursor-pointer">[ X ]</button>
+<h4 class="text-[11px] font-bold text-yellow-400">> TO'LOV CHEKI</h4>
+<div id="receipt-modal-content" class="py-1"></div>
+<div class="grid grid-cols-2 gap-2 pt-1">
+<button onclick="playClickSound(); approvePaymentWithDuration(30)" class="py-2 bg-emerald-950 border border-green-500 text-green-300 rounded text-[10px] font-bold uppercase cursor-pointer">1 OYLIK BERISH</button>
+<button onclick="playClickSound(); approvePaymentWithDuration(365)" class="py-2 bg-cyan-950 border border-cyan-500 text-cyan-300 rounded text-[10px] font-bold uppercase cursor-pointer">1 YILLIK BERISH</button>
+</div>
+</div>
+</div>
 
-    <script>
-        const BOT_TOKEN = "8997903805:AAHeQFkI3rcdRv7azBH5WhjMqBwDU8DTE3s";
-        const CHAT_ID = "8866709686";
+<!-- MIJOZ KABINETI -->
+<div id="app-interface" class="hidden h-full flex flex-col overflow-hidden">
+<header class="p-2.5 md:p-3 border-b border-green-800 bg-gray-950/90 flex justify-between items-center relative z-10 shrink-0 gap-2">
+<div class="flex items-center space-x-2 overflow-hidden">
+<div class="w-6 h-6 rounded border border-green-500 bg-emerald-950 flex items-center justify-center text-green-400 font-bold text-[10px] shrink-0">🔒</div>
+<div class="overflow-hidden">
+<h1 id="client-title" class="text-[11px] md:text-xs font-bold tracking-wider text-green-400 truncate">KABINET</h1>
+<p id="client-status-badge" class="text-[8px] text-yellow-500 font-bold truncate">SHIFRLANGAN REJIM</p>
+</div>
+</div>
+<div class="flex items-center space-x-1.5 shrink-0">
+<button onclick="playClickSound(); openClientSupportModal()" class="cyber-button px-2 py-1 rounded text-[10px] font-bold bg-emerald-950/60 cursor-pointer relative"><i class="fa-solid fa-headset"></i> Yordam <span id="client-unread-dot" class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full hidden"></span></button>
+<button onclick="playClickSound(); openNotesModal()" class="cyber-button px-2 py-1 rounded text-[10px] font-bold cursor-pointer"><i class="fa-solid fa-note-sticky"></i> Matnlar</button>
+<button onclick="playClickSound(); logout()" class="cyber-button px-2 py-1 rounded text-[10px] font-bold bg-red-950/40 border-red-800 text-red-400 cursor-pointer">Chiqish</button>
+</div>
+</header>
+<div class="flex-1 max-w-6xl w-full mx-auto p-3 flex flex-col gap-3 overflow-y-auto relative z-10">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 shrink-0">
+<div class="md:col-span-2 space-y-3">
+<div id="drop-zone" class="cyber-card p-4 rounded-lg text-center cursor-pointer relative overflow-hidden flex flex-col items-center justify-center min-h-[120px]">
+<input type="file" id="file-input" class="hidden" multiple>
+<div class="space-y-1.5 pointer-events-none">
+<i class="fa-solid fa-shield-halved text-2xl text-green-400"></i>
+<div>
+<h3 class="text-xs md:text-sm font-bold text-green-300">FAYLLARNI YUKLASH VA SHIFRLASH</h3>
+<p class="text-[10px] text-green-600">[ Cloud Sync va muddatli saqlash ]</p>
+</div>
+</div>
+<div class="flex justify-center items-center gap-2 pt-2 z-10">
+<span class="text-[10px] text-green-500">Muddati:</span>
+<select id="file-expire-days" class="bg-gray-900 border border-green-800 text-[10px] text-green-300 px-2 py-1 rounded focus:outline-none">
+<option value="1">1 kun</option>
+<option value="3">3 kun</option>
+<option value="7" selected>7 kun</option>
+<option value="30">30 kun</option>
+</select>
+<button onclick="playClickSound(); document.getElementById('file-input').click()" class="cyber-button px-2.5 py-1 rounded text-[10px] font-bold uppercase cursor-pointer">+ FAYL</button>
+</div>
+</div>
+</div>
+<div class="space-y-3 flex flex-col">
+<div class="cyber-border bg-gray-950 p-3 rounded-lg space-y-1.5">
+<div class="text-[10px] text-green-600 font-bold flex justify-between"><span>XOTIRA HOLATI</span><span id="storage-status-text" class="text-yellow-400">TEST (5 tadan 0)</span></div>
+<div id="storage-display" class="text-base md:text-lg font-bold text-yellow-400">5 TA FAYL</div>
+<div class="w-full bg-gray-900 h-1.5 border border-green-800"><div id="storage-bar" class="bg-yellow-500 h-full" style="width: 0%"></div></div>
+<div id="buy-storage-box" class="pt-1 hidden"><button onclick="playClickSound(); openBuyModal()" class="w-full py-1.5 bg-emerald-950 border border-green-500 text-green-300 rounded text-[10px] font-bold animate-bounce cursor-pointer">🛒 XOTIRA SOTIB OLISH</button></div>
+</div>
+</div>
+</div>
+<div class="space-y-2 flex-1 flex flex-col min-h-0">
+<div class="flex justify-between items-center shrink-0">
+<div class="text-[11px] font-bold text-green-400">SHIFRLANGAN FAYLLAR (<span id="file-count">0</span>)</div>
+<button onclick="playClickSound(); openTrashModal()" class="cyber-button px-2 py-1 rounded text-[10px] cursor-pointer"><i class="fa-solid fa-box-archive"></i> Arxiv / Savat (<span id="trash-count">0</span>)</button>
+</div>
+<div id="file-list" class="space-y-1.5 overflow-y-auto flex-1 pr-1"></div>
+</div>
+</div>
+</div>
 
-        const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('fileInput');
-        const uploadBtn = document.getElementById('uploadBtn');
-        const progressContainer = document.getElementById('progressContainer');
-        const progressBar = document.getElementById('progressBar');
-        const progressPercent = document.getElementById('progressPercent');
-        const statusText = document.getElementById('statusText');
-        const filesList = document.getElementById('filesList');
-        const refreshFilesBtn = document.getElementById('refreshFilesBtn');
+<!-- BLOKLANGAN EKRAN -->
+<div id="blocked-interface" class="hidden fixed inset-0 z-50 bg-[#030712] flex flex-col items-center justify-center p-3 text-center">
+<div class="cyber-border bg-gray-950 p-5 rounded-lg max-w-md w-full space-y-3 border-red-900">
+<div class="w-10 h-10 mx-auto rounded border border-red-500 bg-red-950 flex items-center justify-center text-red-400 font-bold text-lg">⏳</div>
+<h2 class="text-xs md:text-sm font-bold text-red-400">OBUNA MUDDATI TUGADI YOKI TO'LANMAGAN</h2>
+<p class="text-[11px] text-green-300">Obuna muddati tugagani uchun xizmat vaqtincha to'xtatildi. Admin tomonidan tarif yoqilgach tizim avtomatik ochiladi.</p>
+<div class="pt-1"><button onclick="playClickSound(); openBuyModal()" class="w-full py-2 bg-emerald-950 border border-green-500 text-green-300 rounded text-[11px] font-bold uppercase cursor-pointer">CHEK YUBORISH VA OBUNANI UZOQTIRISH</button></div>
+<button onclick="playClickSound(); logout()" class="text-[10px] text-red-400 underline pt-1 cursor-pointer">Chiqish</button>
+</div>
+</div>
 
-        dropZone.addEventListener('click', () => fileInput.click());
+<!-- MIJOZ YORDAM MODALI -->
+<div id="client-support-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
+<div class="cyber-border bg-gray-950 p-4 rounded-lg max-w-md w-full relative space-y-3 flex flex-col max-h-[85vh]">
+<button onclick="playClickSound(); closeClientSupportModal()" class="absolute top-2 right-2 text-green-400 text-xs font-bold p-2 cursor-pointer">[ X ]</button>
+<h3 class="text-[11px] font-bold text-green-400">> Texnik Yordam</h3>
+<div id="client-messages-history" class="space-y-2 overflow-y-auto flex-1 max-h-[40vh] p-2 bg-gray-900/50 rounded border border-green-900 text-xs pr-1"></div>
+<div class="space-y-2 border-t border-green-900 pt-2 shrink-0">
+<textarea id="client-question-input" placeholder="Savolingizni shu yerga yozing..." class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded h-16 focus:outline-none resize-none"></textarea>
+<button onclick="playClickSound(); sendClientQuestion()" class="w-full cyber-button py-2 rounded text-[11px] font-bold uppercase cursor-pointer">XABARNI YUBORISH</button>
+</div>
+</div>
+</div>
 
-        uploadBtn.addEventListener('click', async () => {
-            const secretKey = document.getElementById('secretKey').value.trim();
-            const file = fileInput.files[0];
+<!-- MATNLAR MODALI -->
+<div id="notes-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
+<div class="cyber-border bg-gray-950 p-4 rounded-lg max-w-lg w-full relative space-y-3 max-h-[85vh] flex flex-col">
+<button onclick="playClickSound(); closeNotesModal()" class="absolute top-2 right-2 text-green-400 text-xs font-bold p-2 cursor-pointer">[ X ]</button>
+<h3 class="text-[11px] font-bold text-green-400">> AES Shifrlangan Maxfiy Matnlar</h3>
+<div class="space-y-2 shrink-0">
+<input type="text" id="note-title" placeholder="Matn sarlavhasi" class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded focus:outline-none">
+<textarea id="note-content" placeholder="Maxfiy matningiz..." class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded h-20 focus:outline-none resize-none"></textarea>
+<button onclick="playClickSound(); saveSecureNote()" class="w-full cyber-button py-2 rounded text-[11px] font-bold uppercase cursor-pointer">SHIFRLAB SAQLASH</button>
+</div>
+<div id="notes-list" class="space-y-2 overflow-y-auto flex-1 border-t border-green-900 pt-2 pr-1"></div>
+</div>
+</div>
 
-            if (!secretKey) {
-                alert('Iltimos, Maxfiy kalitni kiriting!');
-                return;
+<!-- SAVAT / ARXIV -->
+<div id="trash-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
+<div class="cyber-border bg-gray-950 p-4 rounded-lg max-w-xl w-full relative space-y-3 max-h-[85vh] flex flex-col">
+<button onclick="playClickSound(); closeTrashModal()" class="absolute top-2 right-2 text-green-400 text-xs font-bold p-2 cursor-pointer">[ X ]</button>
+<h4 class="text-[11px] font-bold text-green-400">> ARXIV / O'CHIRILGAN FAYLLAR SAVATI</h4>
+<div id="trash-file-list" class="space-y-1.5 overflow-y-auto flex-1 pr-1"></div>
+</div>
+</div>
+
+<!-- XARID MODALI -->
+<div id="buy-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
+<div class="cyber-border bg-gray-950 p-4 rounded-lg max-w-md w-full relative space-y-3 text-center max-h-[90vh] overflow-y-auto">
+<button onclick="playClickSound(); closeBuyModal()" class="absolute top-2 right-2 text-green-400 text-xs font-bold p-2 cursor-pointer">[ X ]</button>
+<div class="w-8 h-8 mx-auto rounded border border-green-500 bg-emerald-950 flex items-center justify-center text-green-400 font-bold text-sm">🛒</div>
+<h3 class="text-xs font-bold text-green-400">CHEKSIZ XOTIRA SOTIB OLISH</h3>
+<div class="p-2.5 cyber-card rounded text-[10px] text-left space-y-1">
+<p class="text-green-300 font-bold">💳 Karta (UZS): <span class="text-white">4023 0605 1984 4434</span></p>
+<p class="text-green-300 font-bold">👤 Egasi: <span class="text-white">ABDULLOH FATTOXOV</span></p>
+<p class="text-green-300 font-bold mt-1.5">💳 Karta (UZS): <span class="text-white">4073 4200 8225 8769</span></p>
+<p class="text-green-300 font-bold">👤 Egasi: <span class="text-white">DORIPOVA KAMOLA</span></p>
+<p class="text-green-300 font-bold mt-1.5">💳 Visa (UZS): <span class="text-white">4466 1369 1010 0990</span></p>
+<p class="text-green-300 font-bold">👤 Egasi: <span class="text-white">ABDULLOKH FATTOKHOV</span></p>
+<p class="text-green-300 font-bold mt-1.5">💳 Visa (USD): <span class="text-white">4231 2000 9209 3193</span></p>
+<p class="text-green-300 font-bold">👤 Egasi: <span class="text-white">ABDULLOH FATTOXOV</span></p>
+</div>
+<div class="border-t border-green-900 pt-2 space-y-2 text-left">
+<p class="text-[10px] text-green-400 font-bold">📤 To'lov chekini yuborish:</p>
+<input type="file" id="receipt-file" accept="image/*" class="w-full text-[10px] text-green-500 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-[10px] file:font-bold file:bg-emerald-950 file:text-green-300 cursor-pointer border border-green-900 rounded p-1">
+<button onclick="playClickSound(); uploadReceipt()" class="w-full cyber-button py-2 rounded text-[11px] font-bold uppercase cursor-pointer">CHEKNI YUBORISH</button>
+</div>
+</div>
+</div>
+
+<script>
+// TUGMA BOSILgANDA OVOZ CHIQARISH (WEB AUDIO API)
+let audioCtx = null;
+function initAudioContext() { 
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+}
+
+function playClickSound() {
+    try {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.04);
+    } catch (e) {}
+}
+
+const MASTER_ADMIN_PASSWORD = "2007080411";
+let currentClient = null;
+let savedFiles = [];
+let trashFiles = [];
+let totalUploadedCount = 0;
+let activeReceiptIndex = null;
+let allReceiptsCache = [];
+let extraAdminsCache = {};
+let isRealtimeInitialized = false;
+
+// PWA O'rnatish logikasi (Install Prompt)
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const installContainer = document.getElementById('install-container');
+    if (installContainer) {
+        installContainer.classList.remove('hidden');
+    }
+});
+
+const installBtn = document.getElementById('install-btn');
+if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('Foydalanuvchi ilovani o\'rnatdi');
             }
+            deferredPrompt = null;
+            document.getElementById('install-container').classList.add('hidden');
+        } else {
+            alert("Ilova allaqachon o'rnatilgan yoki brauzeringiz bu funksiyani qo'llab-quvvatlamaydi. Brauzer menyusidan 'Bosh ekranga qo'shish' tugmasini bosing.");
+        }
+    });
+}
 
-            if (!file) {
-                alert('Iltimos, yuborish uchun fayl tanlang!');
-                return;
-            }
 
-            progressContainer.classList.remove('hidden');
-            uploadBtn.disabled = true;
-            uploadBtn.classList.add('opacity-50');
-
+window.addEventListener('realtime-ready', async () => {
+    isRealtimeInitialized = true;
+    await loadExtraAdmins();
+    initRealtimeSync();
+    const savedSession = localStorage.getItem('secure_active_session');
+    if (savedSession) {
+        if (savedSession === MASTER_ADMIN_PASSWORD || extraAdminsCache[savedSession]) {
+            let adminName = savedSession === MASTER_ADMIN_PASSWORD ? "Asosiy Admin" : extraAdminsCache[savedSession].name;
+            currentClient = { password: savedSession, name: adminName };
+            openAdminPanel();
+        } else {
             try {
-                statusText.innerText = "Fayl o'qilmoqda va shifrlanmoqda...";
-                progressPercent.innerText = "20%";
-                progressBar.style.width = "20%";
-
-                const arrayBuffer = await file.arrayBuffer();
-                const wordArray = CryptoJS.lib.WordArray.create(arrayBuffer);
-
-                progressPercent.innerText = "50%";
-                progressBar.style.width = "50%";
-                statusText.innerText = "AES-256 shifri bajarilmoqda...";
-
-                const encrypted = CryptoJS.AES.encrypt(wordArray, secretKey).toString();
-
-                progressPercent.innerText = "80%";
-                progressBar.style.width = "80%";
-                statusText.innerText = "Telegram botga uzatilmoqda...";
-
-                const encryptedBlob = new Blob([encrypted], { type: 'text/plain' });
-                const formData = new FormData();
-                formData.append('chat_id', CHAT_ID);
-                formData.append('document', encryptedBlob, file.name + '.enc');
-                formData.append('caption', `🔐 Shifrlangan fayl: \`${file.name}\`\n🛡️ Algoritm: AES-256`);
-                formData.append('parse_mode', 'Markdown');
-
-                const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const result = await response.json();
-
-                if (result.ok) {
-                    progressPercent.innerText = "100%";
-                    progressBar.style.width = "100%";
-                    statusText.innerText = "Muvaffaqiyatli yuborildi!";
-                    alert('Fayl muvaffaqiyatli shifrlanib, Telegram botingizga yuborildi!');
-                    fileInput.value = '';
-                    loadUserFiles();
+                let snap = await window.RDB.get(window.RDB.child(window.RDB.ref(window.RDB.db), "clients/" + savedSession));
+                if (snap.exists()) {
+                    currentClient = { password: savedSession, ...snap.val() };
+                    checkSubscriptionAndOpenApp();
                 } else {
-                    throw new Error(result.description || 'Telegramga yuborishda xatolik yuz berdi.');
+                    localStorage.removeItem('secure_active_session');
                 }
+            } catch (e) {
+                localStorage.removeItem('secure_active_session');
+            }
+        }
+    }
+});
 
-            } catch (error) {
-                alert('Xatolik: ' + error.message);
-                statusText.innerText = "Xatolik yuz berdi!";
-            } finally {
-                uploadBtn.disabled = false;
-                uploadBtn.classList.remove('opacity-50');
+async function loadExtraAdmins() {
+    try {
+        let snap = await window.RDB.get(window.RDB.ref(window.RDB.db, "admins"));
+        extraAdminsCache = {};
+        if(snap.exists()) {
+            extraAdminsCache = snap.val();
+        }
+    } catch (e) {
+        extraAdminsCache = {};
+    }
+}
+
+function initRealtimeSync() {
+    try {
+        window.RDB.onValue(window.RDB.ref(window.RDB.db, "activities"), (snapshot) => {
+            if(document.getElementById('admin-interface') && !document.getElementById('admin-interface').classList.contains('hidden')) {
+                renderAdminActivityFromSnapshot(snapshot);
             }
         });
-
-        async function loadUserFiles() {
-            const secretKey = document.getElementById('secretKey').value.trim();
-            if (!secretKey) {
-                filesList.innerHTML = `<span class="text-[10px] text-red-400 text-center py-2">Avval maxfiy kalitni kiriting!</span>`;
-                return;
+        window.RDB.onValue(window.RDB.ref(window.RDB.db, "receipts"), (snapshot) => {
+            allReceiptsCache = [];
+            if(snapshot.exists()) {
+                snapshot.forEach(childSnap => {
+                    allReceiptsCache.push({ id: childSnap.key, ...childSnap.val() });
+                });
             }
-
-            filesList.innerHTML = `<span class="text-[10px] text-slate-400 text-center py-2">Yuklanmoqda...</span>`;
-
-            try {
-                const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`);
-                const data = await res.json();
-
-                if (!data.ok) throw new Error("Botdan xabarlarni o'qib bo'lmadi.");
-
-                filesList.innerHTML = '';
-                let foundFiles = false;
-
-                for (let update of data.result.reverse()) {
-                    if (update.message && update.message.document) {
-                        const doc = update.message.document;
-                        if (doc.file_name && doc.file_name.endsWith('.enc')) {
-                            foundFiles = true;
-                            
-                            const fileRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${doc.file_id}`);
-                            const fileData = await fileRes.json();
-
-                            if (fileData.ok) {
-                                const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileData.result.file_path}`;
-                                const originalName = doc.file_name.replace('.enc', '');
-
-                                const item = document.createElement('div');
-                                item.className = "flex items-center justify-between bg-slate-900 border border-slate-800 p-2 rounded-lg text-xs";
-                                item.innerHTML = `
-                                    <span class="truncate max-w-[150px] text-green-300" title="${originalName}">${originalName}</span>
-                                    <button class="bg-green-600/20 hover:bg-green-600 text-green-400 hover:text-slate-950 px-2.5 py-1 rounded transition text-[10px] font-bold" onclick="decryptAndDownload('${fileUrl}', '${originalName}')">
-                                        <i class="fa-solid fa-download"></i> Ochish
-                                    </button>
-                                `;
-                                filesList.appendChild(item);
-                            }
-                        }
+            if(document.getElementById('admin-interface') && !document.getElementById('admin-interface').classList.contains('hidden')) {
+                renderAdminReceipts();
+            }
+        });
+        window.RDB.onValue(window.RDB.ref(window.RDB.db, "support"), (snapshot) => {
+            if(document.getElementById('admin-interface') && !document.getElementById('admin-interface').classList.contains('hidden')) {
+                renderAdminChatFromSnapshot(snapshot);
+            }
+            if(currentClient && currentClient.password !== MASTER_ADMIN_PASSWORD && !extraAdminsCache[currentClient.password]) {
+                checkClientNotificationsFromSnapshot(snapshot);
+            }
+        });
+        if(currentClient && currentClient.password && currentClient.password !== MASTER_ADMIN_PASSWORD && !extraAdminsCache[currentClient.password]) {
+            window.RDB.onValue(window.RDB.ref(window.RDB.db, "clients/" + currentClient.password), (snapshot) => {
+                if(snapshot.exists()) {
+                    let updatedData = snapshot.val();
+                    let wasExpired = currentClient.expiresAt && currentClient.expiresAt < Date.now();
+                    let isNowExpired = updatedData.expiresAt && updatedData.expiresAt < Date.now();
+                    currentClient = { password: currentClient.password, ...updatedData };
+                    if(wasExpired && !isNowExpired) {
+                        document.getElementById('blocked-interface').classList.add('hidden');
+                        document.getElementById('app-interface').classList.remove('hidden');
+                        openClientAppDashboard();
                     }
                 }
-
-                if (!foundFiles) {
-                    filesList.innerHTML = `<span class="text-[10px] text-slate-500 text-center py-2">Hozircha fayllar topilmadi.</span>`;
-                }
-
-            } catch (err) {
-                filesList.innerHTML = `<span class="text-[10px] text-red-400 text-center py-2">Xatolik yuz berdi.</span>`;
-            }
+            });
         }
+    } catch (e) {}
+}
 
-        refreshFilesBtn.addEventListener('click', loadUserFiles);
+function openPublicSection(section) {
+    const modal = document.getElementById('public-modal');
+    const title = document.getElementById('public-modal-title');
+    const body = document.getElementById('public-modal-body');
+    if (section === 'tariffs') {
+        title.innerText = "> TARIFLAR REJASI";
+        body.innerHTML = `<div class="cyber-card p-2.5 rounded space-y-1.5"><p class="font-bold text-yellow-400">1. Test Rejimi</p><p class="text-[10px] text-green-300">Bepul. Jami 5 ta fayl yuklash limiti.</p></div><div class="cyber-card p-2.5 rounded space-y-1.5"><p class="font-bold text-green-400">2. 1 Oylik Cheksiz Tarif</p><p class="text-[10px] text-white font-bold">59,000 so'm / oy</p></div><div class="cyber-card p-2.5 rounded space-y-1.5 border-emerald-500"><p class="font-bold text-cyan-400">3. 1 Yillik Cheksiz Tarif (Tavsiya etiladi)</p><p class="text-[10px] text-white font-bold">700,000 so'm / yil</p></div>`;
+    } else if (section === 'rules') {
+        title.innerText = "> TIZIM QOIDALARI";
+        body.innerHTML = `<div class="cyber-card p-2.5 rounded space-y-1.5"><p class="font-bold text-green-400">Xavfsizlik va Ma'lumotlar</p><p class="text-[10px] text-green-300">To'lov vaqti tugasa fayllaringiz o'chib ketmaydi, shunchaki xizmat vaqtincha to'xtatiladi. To'lov qilingach qayta faollashadi.</p></div>`;
+    } else if (section === 'help') {
+        title.innerText = "> ONLAYN YORDAM";
+        body.innerHTML = `<div class="space-y-2.5"><input type="text" id="public-guest-name" placeholder="Ismingiz" class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded"><textarea id="public-guest-msg" placeholder="Murojaatingiz..." class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded h-20 resize-none"></textarea><button onclick="playClickSound(); sendPublicSupportTicket()" class="w-full cyber-button py-2 rounded text-xs font-bold uppercase cursor-pointer">YUBORISH</button></div>`;
+    } else if (section === 'author') {
+        title.innerText = "> MUALLIF VA LOYIHA HAQIDA";
+        body.innerHTML = `<div class="cyber-card p-3 rounded space-y-2.5"><div><p class="text-cyan-400 font-bold text-xs">Fattoxov Abdulloh Toxirjon o'g'li</p><p class="text-white text-[10px] mt-1">Toshkent Menejment va Iqtisodiyot Instituti Farg'ona Campusi, Kompyuter injiniringi yo'nalishi, 2-kurs talabasi.</p><p class="text-green-300 text-[10px] mt-1.5">📞 Tel: <a href="tel:+998200005788" class="text-yellow-400 underline">+998 20 000 57 88</a> / <a href="tel:+998200252920" class="text-yellow-400 underline">+998 20 025 29 20</a></p></div><div class="border-t border-green-900/60 pt-2 space-y-1"><p class="text-green-400 font-bold text-[10px]">> Loyiha Haqida:</p><p class="text-green-300 text-[10px] leading-relaxed">Ushbu dastur maxfiy ma'lumotlar, hujjatlar va shifrlangan fayllarni xavfsiz saqlash hamda boshqarishga mo'ljallangan zamonaviy kibertexnologik bulutli tizim hisoblanadi.</p></div></div>`;
+    }
+    modal.classList.remove('hidden');
+}
 
-        async function decryptAndDownload(url, fileName) {
-            const secretKey = document.getElementById('secretKey').value.trim();
-            if (!secretKey) {
-                alert('Maxfiy kalit kiritilmagan!');
-                return;
-            }
+function closePublicModal() { document.getElementById('public-modal').classList.add('hidden'); }
 
+async function sendPublicSupportTicket() {
+    const name = document.getElementById('public-guest-name').value.trim();
+    const msg = document.getElementById('public-guest-msg').value.trim();
+    if(!name || !msg) { alert("Maydonlarni to'ldiring!"); return; }
+    try {
+        const newRef = window.RDB.push(window.RDB.ref(window.RDB.db, "support"));
+        await window.RDB.set(newRef, {user: name, phone: 'guest', type: 'Mehmon', message: msg, reply: '', date: new Date().toLocaleString(), timestamp: Date.now()});
+        alert("Yuborildi!");
+        closePublicModal();
+    } catch(err) {
+        alert("Xatolik: " + err.message);
+    }
+}
+
+async function clientRegisterOrLogin() {
+    const name = document.getElementById('client-login-name').value.trim();
+    const phone = document.getElementById('client-login-phone').value.trim();
+    const pwd = document.getElementById('client-login-pwd').value.trim();
+    const errBox = document.getElementById('login-error');
+    if(!isRealtimeInitialized) {
+        errBox.innerText = "> Internet yoki Firebase ulanishi kutilmoqda...";
+        errBox.classList.remove('hidden');
+        return;
+    }
+    if(!pwd) {
+        errBox.innerText = "> Parol kiritilishi shart!";
+        errBox.classList.remove('hidden');
+        return;
+    }
+    try {
+        await loadExtraAdmins();
+        if(pwd === MASTER_ADMIN_PASSWORD || extraAdminsCache[pwd]) {
+            errBox.classList.add('hidden');
+            localStorage.setItem('secure_active_session', pwd);
+            let adminName = pwd === MASTER_ADMIN_PASSWORD ? "Asosiy Admin" : extraAdminsCache[pwd].name;
+            currentClient = { password: pwd, name: adminName };
+            openAdminPanel();
+            return;
+        }
+        if(!name) {
+            errBox.innerText = "> Iltimos, ismingizni kiriting!";
+            errBox.classList.remove('hidden');
+            return;
+        }
+        let clientRef = window.RDB.ref(window.RDB.db, "clients/" + pwd);
+        let snap = await window.RDB.get(clientRef);
+        if(snap.exists()) {
+            errBox.classList.add('hidden');
+            localStorage.setItem('secure_active_session', pwd);
+            currentClient = { password: pwd, ...snap.val() };
+            logClientActivity(currentClient.name, currentClient.phone);
+            checkSubscriptionAndOpenApp();
+        } else {
+            let newClientData = {
+                name: name,
+                phone: phone || "+998",
+                expiresAt: null,
+                totalUploaded: 0,
+                files: "",
+                trash: "",
+                notes: ""
+            };
+            await window.RDB.set(clientRef, newClientData);
             try {
-                const res = await fetch(url);
-                const encryptedText = await res.text();
+                const actRef = window.RDB.push(window.RDB.ref(window.RDB.db, "activities"));
+                await window.RDB.set(actRef, {name: name + " (Yangi profil)", phone: phone || "+998", date: new Date().toLocaleString(), timestamp: Date.now()});
+            } catch (e) {}
+            errBox.classList.add('hidden');
+            localStorage.setItem('secure_active_session', pwd);
+            currentClient = { password: pwd, ...newClientData };
+            checkSubscriptionAndOpenApp();
+        }
+    } catch (err) {
+        errBox.innerText = "> Xatolik: " + err.message;
+        errBox.classList.remove('hidden');
+    }
+}
 
-                const bytes = CryptoJS.AES.decrypt(encryptedText, secretKey);
-                const decryptedString = bytes.toString(CryptoJS.enc.Utf8);
+async function logClientActivity(name, phone) {
+    try {
+        const actRef = window.RDB.push(window.RDB.ref(window.RDB.db, "activities"));
+        await window.RDB.set(actRef, {name: name, phone: phone, date: new Date().toLocaleString(), timestamp: Date.now()});
+    } catch (e) {}
+}
 
-                if (!decryptedString) {
-                    throw new Error("Kalit noto'g'ri!");
+function openAdminPanel() {
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('admin-interface').classList.remove('hidden');
+    renderAdminActivity();
+    renderAdminClients();
+    renderAdminReceipts();
+    renderAdminChat();
+    renderAdminList();
+}
+
+function openAddClientModal() { document.getElementById('add-client-modal').classList.remove('hidden'); }
+function closeAddClientModal() { document.getElementById('add-client-modal').classList.add('hidden'); }
+
+async function saveAdminNewClient() {
+    const name = document.getElementById('admin-client-name').value.trim();
+    const phone = document.getElementById('admin-client-phone').value.trim();
+    const pwd = document.getElementById('admin-client-pwd').value.trim();
+    if(!name || !pwd) { alert("Ism va parolni kiriting!"); return; }
+    try {
+        let clientRef = window.RDB.ref(window.RDB.db, "clients/" + pwd);
+        let snap = await window.RDB.get(clientRef);
+        if(snap.exists()) { alert("Bu parol bilan mijoz mavjud!"); return; }
+        let newClientData = {
+            name: name,
+            phone: phone || "+998",
+            expiresAt: Date.now() + (30 * 24 * 60 * 60 * 1000),
+            totalUploaded: 0,
+            files: "",
+            trash: "",
+            notes: ""
+        };
+        await window.RDB.set(clientRef, newClientData);
+        document.getElementById('admin-client-name').value = '';
+        document.getElementById('admin-client-phone').value = '';
+        document.getElementById('admin-client-pwd').value = '';
+        closeAddClientModal();
+        renderAdminClients();
+        alert("Mijoz qo'shildi!");
+    } catch(e) {
+        alert("Xatolik: " + e.message);
+    }
+}
+
+function openAddAdminModal() { document.getElementById('add-admin-modal').classList.remove('hidden'); }
+function closeAddAdminModal() { document.getElementById('add-admin-modal').classList.add('hidden'); }
+
+async function saveNewAdmin() {
+    const name = document.getElementById('new-admin-name').value.trim();
+    const pwd = document.getElementById('new-admin-pwd').value.trim();
+    if(!name || !pwd) { alert("Ism va parolni kiriting!"); return; }
+    try {
+        await window.RDB.set(window.RDB.ref(window.RDB.db, "admins/" + pwd), {name: name, createdAt: new Date().toLocaleString()});
+        document.getElementById('new-admin-name').value = '';
+        document.getElementById('new-admin-pwd').value = '';
+        closeAddAdminModal();
+        await loadExtraAdmins();
+        renderAdminList();
+        alert("Admin qo'shildi!");
+    } catch(e) {
+        alert("Xatolik: " + e.message);
+    }
+}
+
+async function renderAdminList() {
+    try {
+        let snap = await window.RDB.get(window.RDB.ref(window.RDB.db, "admins"));
+        let html = `<div class="cyber-card p-2 rounded text-xs flex justify-between items-center"><span><b>Asosiy Admin</b></span><span class="text-yellow-400">Doimiy</span></div>`;
+        if(snap.exists()) {
+            snap.forEach(childSnap => {
+                let ad = childSnap.val();
+                let pwd = childSnap.key;
+                html += `<div class="cyber-card p-2 rounded text-xs flex justify-between items-center"><span><b>${ad.name}</b> (<span class="text-yellow-400 font-mono">${pwd}</span>)</span><button onclick="playClickSound(); deleteAdmin('${pwd}')" class="px-2 py-0.5 bg-red-950 border border-red-800 text-red-400 rounded cursor-pointer">O'chirish</button></div>`;
+            });
+        }
+        document.getElementById('admin-list-box').innerHTML = html;
+    } catch(e) {}
+}
+
+async function deleteAdmin(pwd) {
+    if(confirm("Adminni o'chirishni tasdiqlaysizmi?")) {
+        await window.RDB.remove(window.RDB.ref(window.RDB.db, "admins/" + pwd));
+        await loadExtraAdmins();
+        renderAdminList();
+    }
+}
+
+async function renderAdminActivity() {
+    try {
+        let snap = await window.RDB.get(window.RDB.ref(window.RDB.db, "activities"));
+        renderAdminActivityFromSnapshot(snap);
+    } catch(e) {}
+}
+
+function renderAdminActivityFromSnapshot(snapshot) {
+    let acts = [];
+    if(snapshot.exists()) {
+        snapshot.forEach(child => acts.push(child.val()));
+    }
+    acts.sort((a,b) => b.timestamp - a.timestamp);
+    document.getElementById('admin-activity-list').innerHTML = acts.length ? acts.map(a => `<div class="cyber-card p-2 rounded text-xs flex justify-between items-center"><span><b>${a.name}</b> (${a.phone})</span><span class="text-cyan-400">${a.date}</span></div>`).join('') : '<p class="text-xs text-gray-500">Faollik yoq</p>';
+}
+
+async function checkSubscriptionAndOpenApp() {
+    try {
+        let snap = await window.RDB.get(window.RDB.ref(window.RDB.db, "clients/" + currentClient.password));
+        if(snap.exists()) {
+            currentClient = { password: currentClient.password, ...snap.val() };
+        }
+    } catch(e) {}
+    let now = Date.now();
+    let isExpired = currentClient.expiresAt && currentClient.expiresAt < now;
+    document.getElementById('login-screen').classList.add('hidden');
+    if (isExpired) {
+        document.getElementById('blocked-interface').classList.remove('hidden');
+    } else {
+        document.getElementById('app-interface').classList.remove('hidden');
+        openClientAppDashboard();
+    }
+}
+
+function openClientAppDashboard() {
+    document.getElementById('client-title').innerText = currentClient.name + " (" + currentClient.phone + ")";
+    totalUploadedCount = currentClient.totalUploaded || 0;
+    try {
+        savedFiles = currentClient.files ? JSON.parse(currentClient.files) : [];
+    } catch(e) { savedFiles = []; }
+    try {
+        trashFiles = currentClient.trash ? JSON.parse(currentClient.trash) : [];
+    } catch(e) { trashFiles = []; }
+    let now = Date.now();
+    const badge = document.getElementById('client-status-badge');
+    if (currentClient.expiresAt && currentClient.expiresAt > now) {
+        let expireDateStr = new Date(currentClient.expiresAt).toLocaleDateString();
+        badge.innerText = `⭐ CHEKSIZ OBUNA (${expireDateStr})`;
+        badge.className = "text-[8px] text-green-400 font-bold truncate";
+        document.getElementById('storage-status-text').innerText = "∞ CHEKSIZ";
+        document.getElementById('storage-display').innerText = "10,000 TB";
+        document.getElementById('storage-bar').style.width = "100%";
+    } else {
+        badge.innerText = "SHIFRLANGAN TEST";
+        badge.className = "text-[8px] text-yellow-500 font-bold truncate";
+        updateTestStorageUI();
+    }
+    renderFiles();
+    renderTrashFiles();
+    loadClientNotes();
+    checkClientNotifications();
+}
+
+function logout() {
+    localStorage.removeItem('secure_active_session');
+    location.reload();
+}
+
+async function renderAdminClients() {
+    try {
+        let snap = await window.RDB.get(window.RDB.ref(window.RDB.db, "clients"));
+        let now = Date.now();
+        let html = "";
+        if(snap.exists()) {
+            snap.forEach(childSnap => {
+                let pwd = childSnap.key;
+                let c = childSnap.val();
+                let isVip = c.expiresAt && c.expiresAt > now;
+                let expireText = isVip ? new Date(c.expiresAt).toLocaleDateString() : "Test / Tugagan";
+                html += `<div class="cyber-card p-2.5 rounded text-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2"><div class="space-y-0.5"><p><b>${c.name}</b><span class="text-gray-400">(${c.phone})</span></p><p class="text-[10px] text-gray-400">Parol: <span class="text-yellow-400 font-mono font-bold">${pwd}</span> | <b class="${isVip ? 'text-green-400' : 'text-yellow-400'}">${expireText}</b></p></div><div class="flex items-center gap-1 flex-wrap justify-end"><button onclick="playClickSound(); adminGiveDuration('${pwd}', 30)" class="px-2 py-1 bg-emerald-950 border border-green-600 text-green-300 rounded text-[9px] font-bold cursor-pointer">+1 Oy</button><button onclick="playClickSound(); adminGiveDuration('${pwd}', 365)" class="px-2 py-1 bg-cyan-950 border border-cyan-600 text-cyan-300 rounded text-[9px] font-bold cursor-pointer">+1 Yil</button><button onclick="playClickSound(); adminToggleSub('${pwd}')" class="px-2 py-1 ${isVip ? 'bg-red-950 border-red-700 text-red-300' : 'bg-green-950 border-green-500 text-green-300'} rounded text-[9px] font-bold cursor-pointer">${isVip ? 'O\'chirish' : 'Yoqish'}</button><button onclick="playClickSound(); deleteClient('${pwd}')" class="px-2 py-1 bg-red-950/40 border border-red-800 text-red-400 rounded text-[9px] cursor-pointer">X</button></div></div>`;
+            });
+        }
+        document.getElementById('admin-clients-list').innerHTML = html || '<p class="text-xs text-gray-500">Mijozlar yoq</p>';
+    } catch(e) {}
+}
+
+async function adminGiveDuration(pwd, days) {
+    let ref = window.RDB.ref(window.RDB.db, "clients/" + pwd);
+    let snap = await window.RDB.get(ref);
+    if(snap.exists()) {
+        let c = snap.val();
+        let now = Date.now();
+        let currentExp = c.expiresAt && c.expiresAt > now ? c.expiresAt : now;
+        let newExp = currentExp + (days * 24 * 60 * 60 * 1000);
+        await window.RDB.update(ref, { expiresAt: newExp });
+        renderAdminClients();
+        alert(`${days} kunga uzaytirildi!`);
+    }
+}
+
+async function adminToggleSub(pwd) {
+    let ref = window.RDB.ref(window.RDB.db, "clients/" + pwd);
+    let snap = await window.RDB.get(ref);
+    if(snap.exists()) {
+        let c = snap.val();
+        let now = Date.now();
+        let isVip = c.expiresAt && c.expiresAt > now;
+        let newExp = isVip ? now - 1000 : now + (30 * 24 * 60 * 60 * 1000);
+        await window.RDB.update(ref, { expiresAt: newExp });
+        renderAdminClients();
+        alert(isVip ? "Obuna o'chirildi!" : "Obuna yoqildi!");
+    }
+}
+
+async function deleteClient(pwd) {
+    if(confirm("Mijozni o'chirishni tasdiqlaysizmi?")) {
+        await window.RDB.remove(window.RDB.ref(window.RDB.db, "clients/" + pwd));
+        renderAdminClients();
+    }
+}
+
+function renderAdminReceipts() {
+    document.getElementById('admin-receipts-list').innerHTML = allReceiptsCache.length ? allReceiptsCache.map((r, idx) => `<div class="cyber-card p-2 rounded text-xs flex justify-between items-center"><span><b>${r.clientName}</b> (${r.clientPhone})</span><button onclick="playClickSound(); openReceiptModal('${r.id}')" class="cyber-button px-2.5 py-1 rounded cursor-pointer">Tekshirish</button></div>`).join('') : '<p class="text-xs text-yellow-700">Cheklar yoq</p>';
+}
+
+function openReceiptModal(id) {
+    activeReceiptIndex = id;
+    let r = allReceiptsCache.find(item => item.id === id);
+    if(!r) return;
+    document.getElementById('receipt-modal-content').innerHTML = `<p class="text-xs text-green-300 mb-2">Mijoz: <b>${r.clientName}</b></p><img src="${r.image}" class="max-h-48 mx-auto rounded border border-green-800 object-contain">`;
+    document.getElementById('receipt-modal').classList.remove('hidden');
+}
+
+function closeReceiptModal() { document.getElementById('receipt-modal').classList.add('hidden'); }
+
+async function approvePaymentWithDuration(days) {
+    if(activeReceiptIndex) {
+        let r = allReceiptsCache.find(item => item.id === activeReceiptIndex);
+        if(r) {
+            let clientRef = window.RDB.ref(window.RDB.db, "clients/" + r.clientPwd);
+            let snap = await window.RDB.get(clientRef);
+            if(snap.exists()) {
+                let c = snap.val();
+                let now = Date.now();
+                let currentExp = c.expiresAt && c.expiresAt > now ? c.expiresAt : now;
+                await window.RDB.update(clientRef, { expiresAt: currentExp + (days * 24 * 60 * 60 * 1000) });
+            }
+            await window.RDB.remove(window.RDB.ref(window.RDB.db, "receipts/" + r.id));
+            closeReceiptModal();
+            renderAdminClients();
+            alert(`Tasdiqlandi! ${days === 30 ? '1 oylik' : '1 yillik'} obuna berildi.`);
+        }
+    }
+}
+
+function openClientSupportModal() {
+    renderClientMessages();
+    document.getElementById('client-support-modal').classList.remove('hidden');
+    document.getElementById('client-unread-dot').classList.add('hidden');
+}
+
+function closeClientSupportModal() { document.getElementById('client-support-modal').classList.add('hidden'); }
+
+async function sendClientQuestion() {
+    const text = document.getElementById('client-question-input').value.trim();
+    if(!text) return;
+    try {
+        const newRef = window.RDB.push(window.RDB.ref(window.RDB.db, "support"));
+        await window.RDB.set(newRef, {user: currentClient.name, phone: currentClient.phone, type: 'Mijoz', message: text, reply: '', date: new Date().toLocaleString(), timestamp: Date.now()});
+        document.getElementById('client-question-input').value = '';
+        renderClientMessages();
+    } catch(e) {
+        alert("Xatolik: " + e.message);
+    }
+}
+
+async function renderClientMessages() {
+    try {
+        let snap = await window.RDB.get(window.RDB.ref(window.RDB.db, "support"));
+        let html = "";
+        if(snap.exists()) {
+            snap.forEach(child => {
+                let t = child.val();
+                if(t.phone === currentClient.phone || t.user === currentClient.name) {
+                    html += `<div class="cyber-card p-2 rounded space-y-1"><div class="text-[9px] text-yellow-500">${t.date}</div><div><b>Xabar:</b> ${t.message}</div>${t.reply ? `<div class="text-green-400 border-t border-green-900 pt-1"><b>Javob:</b> ${t.reply}</div>` : ''}</div>`;
                 }
+            });
+        }
+        document.getElementById('client-messages-history').innerHTML = html || '<p class="text-xs text-green-700">Xabarlar yoq</p>';
+    } catch(e) {}
+}
 
-                const blob = new Blob([bytes.toString(CryptoJS.enc.Latin1)], { type: 'application/octet-stream' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = fileName;
-                link.click();
-            } catch (err) {
-                alert('Xatolik: Kalit xato yoki faylni shifrdan yechib bo\'lmadi!');
+function checkClientNotificationsFromSnapshot(snapshot) {
+    let hasUnread = false;
+    if(snapshot.exists()) {
+        snapshot.forEach(child => {
+            let t = child.val();
+            if((t.phone === currentClient.phone || t.user === currentClient.name) && t.reply) hasUnread = true;
+        });
+    }
+    if(hasUnread) document.getElementById('client-unread-dot').classList.remove('hidden');
+}
+
+function checkClientNotifications() {
+    try {
+        window.RDB.get(window.RDB.ref(window.RDB.db, "support")).then(snap => {
+            checkClientNotificationsFromSnapshot(snap);
+        });
+    } catch(e) {}
+}
+
+function openAdminSupportModal() { document.getElementById('admin-support-modal').classList.remove('hidden'); }
+function closeAdminSupportModal() { document.getElementById('admin-support-modal').classList.add('hidden'); }
+
+async function renderAdminChat() {
+    try {
+        let snap = await window.RDB.get(window.RDB.ref(window.RDB.db, "support"));
+        renderAdminChatFromSnapshot(snap);
+    } catch(e) {}
+}
+
+function renderAdminChatFromSnapshot(snapshot) {
+    let tickets = [];
+    if(snapshot.exists()) {
+        snapshot.forEach(child => tickets.push({ id: child.key, ...child.val() }));
+    }
+    document.getElementById('admin-unread-badge').innerText = tickets.length;
+    if(tickets.length > 0) document.getElementById('admin-unread-badge').classList.remove('hidden');
+    else document.getElementById('admin-unread-badge').classList.add('hidden');
+    document.getElementById('admin-chat-list').innerHTML = tickets.length ? tickets.map(t => `<div class="cyber-card p-2 rounded text-xs space-y-1 cursor-pointer" onclick="playClickSound(); selectChatUser('${t.user}')"><div class="flex justify-between text-[9px] text-yellow-500"><span>${t.user} (${t.type})</span><span>${t.date}</span></div><div><b>Xabar:</b> ${t.message}</div>${t.reply ? `<div class="text-green-400"><b>Javob:</b> ${t.reply}</div>` : '<div class="text-red-400 text-[9px]">Javob berilmagan</div>'}</div>`).join('') : '<p class="text-xs text-yellow-700">Murojaat yoq</p>';
+}
+
+function selectChatUser(name) { document.getElementById('admin-reply-user').value = name; }
+
+async function sendAdminReply() {
+    const userName = document.getElementById('admin-reply-user').value.trim();
+    const replyText = document.getElementById('admin-reply-text').value.trim();
+    if(!userName || !replyText) { alert("Mijoz ismi va javobni kiriting!"); return; }
+    try {
+        let snap = await window.RDB.get(window.RDB.ref(window.RDB.db, "support"));
+        let foundKey = null;
+        if(snap.exists()) {
+            snap.forEach(child => { if(child.val().user === userName) foundKey = child.key; });
+        }
+        if(foundKey) {
+            await window.RDB.update(window.RDB.ref(window.RDB.db, "support/" + foundKey), { reply: replyText });
+            document.getElementById('admin-reply-text').value = '';
+            alert("Javob yuborildi!");
+        } else {
+            alert("Bunday mijoz topilmadi!");
+        }
+    } catch(e) {
+        alert("Xatolik: " + e.message);
+    }
+}
+
+async function saveClientToCloud() {
+    if(!currentClient || !currentClient.password) return;
+    try {
+        let clientRef = window.RDB.ref(window.RDB.db, "clients/" + currentClient.password);
+        await window.RDB.update(clientRef, {
+            totalUploaded: totalUploadedCount,
+            files: JSON.stringify(savedFiles),
+            trash: JSON.stringify(trashFiles),
+            notes: currentClient.notes ? JSON.stringify(currentClient.notes) : ""
+        });
+    } catch(e) {}
+}
+
+const fileInput = document.getElementById('file-input');
+if(fileInput) {
+    fileInput.addEventListener('change', async (e) => {
+        let now = Date.now();
+        let isVip = currentClient.expiresAt && currentClient.expiresAt > now;
+        for(let file of e.target.files) {
+            if(!isVip && totalUploadedCount >= 5) { alert("Test rejimidagi 5 ta fayl limiti tugadi! Obuna sotib oling."); break; }
+            savedFiles.unshift({ name: file.name, size: '100 KB', date: new Date().toLocaleDateString() });
+            totalUploadedCount++;
+        }
+        await saveClientToCloud();
+        renderFiles();
+        if(!isVip) updateTestStorageUI();
+    });
+}
+
+function updateTestStorageUI() {
+    let remaining = Math.max(0, 5 - totalUploadedCount);
+    document.getElementById('storage-status-text').innerText = `TEST (${totalUploadedCount}/5)`;
+    document.getElementById('storage-display').innerText = `${remaining} TA JOY QOLDI`;
+    document.getElementById('storage-bar').style.width = (totalUploadedCount / 5) * 100 + '%';
+    if (totalUploadedCount >= 5) document.getElementById('buy-storage-box').classList.remove('hidden');
+}
+
+function renderFiles() {
+    document.getElementById('file-count').innerText = savedFiles.length;
+    document.getElementById('file-list').innerHTML = savedFiles.length ? savedFiles.map((f, i) => `<div class="cyber-card p-2 rounded flex justify-between items-center text-xs shrink-0"><span>${f.name}</span><button onclick="playClickSound(); moveToTrash(${i})" class="cyber-button px-2 py-1 text-red-400 border-red-800 rounded cursor-pointer">O'chirish</button></div>`).join('') : '<div class="text-center py-6 text-xs text-green-700">FAYLLAR YOQ</div>';
+}
+
+async function moveToTrash(i) {
+    let file = savedFiles.splice(i, 1)[0];
+    trashFiles.unshift(file);
+    await saveClientToCloud();
+    renderFiles();
+    renderTrashFiles();
+}
+
+function renderTrashFiles() {
+    document.getElementById('trash-count').innerText = trashFiles.length;
+    document.getElementById('trash-file-list').innerHTML = trashFiles.length ? trashFiles.map((f, i) => `<div class="cyber-card p-2 rounded flex justify-between items-center text-xs shrink-0"><span>${f.name}</span><div class="flex gap-1"><button onclick="playClickSound(); restoreFromTrash(${i})" class="cyber-button px-2 py-1 text-green-300 rounded cursor-pointer">Tiklash</button><button onclick="playClickSound(); deleteForever(${i})" class="px-2 py-1 bg-red-950 border border-red-800 text-red-400 rounded cursor-pointer">X</button></div></div>`).join('') : '<p class="text-xs text-green-700 text-center py-6">Arxiv bo\'sh</p>';
+}
+
+async function restoreFromTrash(i) {
+    let file = trashFiles.splice(i, 1)[0];
+    savedFiles.unshift(file);
+    await saveClientToCloud();
+    renderFiles();
+    renderTrashFiles();
+}
+
+async function deleteForever(i) {
+    if(confirm("Faylni butunlay o'chirishni tasdiqlaysizmi?")) {
+        trashFiles.splice(i, 1);
+        await saveClientToCloud();
+        renderTrashFiles();
+    }
+}
+
+function openBuyModal() { document.getElementById('buy-modal').classList.remove('hidden'); }
+function closeBuyModal() { document.getElementById('buy-modal').classList.add('hidden'); }
+
+function uploadReceipt() {
+    const fileInput = document.getElementById('receipt-file');
+    if(fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            try {
+                const newRef = window.RDB.push(window.RDB.ref(window.RDB.db, "receipts"));
+                await window.RDB.set(newRef, {clientName: currentClient.name, clientPhone: currentClient.phone, clientPwd: currentClient.password, image: e.target.result, date: new Date().toLocaleString(), timestamp: Date.now()});
+                alert("Chek muvaffaqiyatli yuborildi!");
+                closeBuyModal();
+            } catch(err) {
+                alert("Xatolik: " + err.message);
             }
         }
-    </script>
+        reader.readAsDataURL(fileInput.files[0]);
+    } else { alert("Iltimos, chek rasmini tanlang!"); }
+}
+
+function openNotesModal() { document.getElementById('notes-modal').classList.remove('hidden'); }
+function closeNotesModal() { document.getElementById('notes-modal').classList.add('hidden'); }
+
+async function saveSecureNote() {
+    const title = document.getElementById('note-title').value.trim();
+    const content = document.getElementById('note-content').value.trim();
+    if(!title || !content) { alert("Sarlavha va matnni kiriting!"); return; }
+    if(!currentClient.notes) currentClient.notes = [];
+    else if(typeof currentClient.notes === 'string') {
+        try { currentClient.notes = JSON.parse(currentClient.notes); } catch(e) { currentClient.notes = []; }
+    }
+    currentClient.notes.unshift({ title, content, date: new Date().toLocaleDateString() });
+    await saveClientToCloud();
+    document.getElementById('note-title').value = '';
+    document.getElementById('note-content').value = '';
+    loadClientNotes();
+    alert("Matn saqlandi!");
+}
+<script>
+function loadClientNotes() {
+    let notes = [];
+    if(currentClient.notes) {
+        if(typeof currentClient.notes === 'string') {
+            try { notes = JSON.parse(currentClient.notes); } catch(e) { notes = []; }
+        } else {
+            notes = currentClient.notes;
+        }
+    }
+    document.getElementById('notes-list').innerHTML = notes.length ? notes.map(n => `<div class="cyber-card p-2 rounded text-xs space-y-1"><p class="font-bold text-green-400">${n.title}</p><p class="text-gray-300">${n.content}</p></div>`).join('') : '<p class="text-xs text-green-700 text-center py-4">Maxfiy matnlar yoq</p>';
+}
+
+function openTrashModal() { document.getElementById('trash-modal').classList.remove('hidden'); }
+function closeTrashModal() { document.getElementById('trash-modal').classList.add('hidden'); }
+</script>
+  
+}
+    }
+
+
+</script>
 </body>
 </html>
