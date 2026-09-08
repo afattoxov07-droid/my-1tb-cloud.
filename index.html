@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CYBER ADMIN CONTROL CENTER</title>
-    <!-- Firebase SDK skriptlari -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
@@ -153,25 +153,28 @@
     </div>
 
     <script>
-        // --- FIREBASE SOZLAMALARI ---
+        // --- O'ZINGizNING FIREBASE SOZLAMALARINGIZNI BU YERGA YOZING ---
         const firebaseConfig = {
-            apiKey: "SIZNING_API_KEY",
-            authDomain: "SIZNING_AUTH_DOMAIN",
-            databaseURL: "SIZNING_DATABASE_URL",
+            apiKey: "ANAH_API_KEY_YOKI_BOSHQA_CONFIG",
+            authDomain: "SIZNING_DOMAIN.firebaseapp.com",
+            databaseURL: "https://SIZNING_PROJECT_ID-default-rtdb.firebaseio.com",
             projectId: "SIZNING_PROJECT_ID",
-            storageBucket: "SIZNING_STORAGE_BUCKET",
-            messagingSenderId: "SIZNING_MESSAGING_SENDER_ID",
-            appId: "SIZNING_APP_ID"
+            storageBucket: "SIZNING_PROJECT.appspot.com",
+            messagingSenderId: "ID",
+            appId: "APP_ID"
         };
 
-        firebase.initializeApp(firebaseConfig);
+        // Firebase xavfsiz ishga tushirilishi
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const db = firebase.database();
 
         let admins = [];
         let clients = [];
         let receipts = [];
 
-        // Ma'lumotlarni Firebase'dan real vaqt rejimida o'qib olish
+        // Bazadan ma'lumotlarni real vaqtda tinglash
         db.ref('cyber_system').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
@@ -179,15 +182,14 @@
                 clients = data.clients || [];
                 receipts = data.receipts || [];
             } else {
-                // Agar baza bo'sh bo'lsa default qiymatlarni yozish
                 admins = [{ name: 'Asosiy Admin', pass: '2007080411', isMain: true }];
                 clients = [{ name: 'Test_Mijoz', pass: 'parol123', phone: '+998901234567', subscription: '1 Oylik' }];
-                syncToFirebase();
+                db.ref('cyber_system').set({ admins, clients, receipts });
             }
             renderDashboard();
         });
 
-        function syncToFirebase() {
+        function saveData() {
             db.ref('cyber_system').set({
                 admins: admins,
                 clients: clients,
@@ -255,7 +257,7 @@
             admins.push({ name, pass, isMain: false });
             document.getElementById('newAdminName').value = '';
             document.getElementById('newAdminPass').value = '';
-            syncToFirebase();
+            saveData();
             alert("Yangi admin qo'shildi!");
         }
 
@@ -266,7 +268,7 @@
             }
             if(confirm("O'chirmoqchimisiz?")) {
                 admins.splice(index, 1);
-                syncToFirebase();
+                saveData();
             }
         }
 
@@ -280,14 +282,14 @@
             clients.push({ name, pass, subscription: 'Obuna belgilanmagan' });
             document.getElementById('clientName').value = '';
             document.getElementById('clientPass').value = '';
-            syncToFirebase();
+            saveData();
             alert("Mijoz qo'shildi!");
         }
 
         function deleteClient(index) {
             if(confirm("Mijozni o'chirmoqchimisiz?")) {
                 clients.splice(index, 1);
-                syncToFirebase();
+                saveData();
             }
         }
 
@@ -297,7 +299,7 @@
                 if(type === '1m') client.subscription = '1 Oylik Obuna';
                 else if(type === '1y') client.subscription = '1 Yillik Obuna';
                 else if(type === 'inf') client.subscription = 'Cheksiz Xotira';
-                syncToFirebase();
+                saveData();
                 alert(`${clientName} uchun obuna yangilandi!`);
             }
         }
