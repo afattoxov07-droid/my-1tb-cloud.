@@ -3,164 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBER SECURE CLOUD PRO - Professional</title>
-    <!-- Firebase SDK (Compat) -->
+    <title>CYBER SECURE CLOUD PRO</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
-        body { background-color: #0b0f19; color: #00ff66; padding: 20px; }
+        body { background-color: #05070d; color: #00ff66; min-height: 100vh; padding: 20px; display: flex; justify-content: center; align-items: center; }
         
         #toastContainer { position: fixed; top: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; }
-        .toast { background: #0b0f19; border: 1px solid #00ff66; color: #00ff66; padding: 12px 20px; font-size: 13px; font-weight: bold; box-shadow: 0 0 15px rgba(0,255,102,0.2); animation: fadeIn 0.3s ease; }
-        .toast.error { border-color: #ff3333; color: #ff3333; box-shadow: 0 0 15px rgba(255,51,51,0.2); }
+        .toast { background: #0b0f19; border: 1px solid #00ff66; color: #00ff66; padding: 12px 20px; font-size: 13px; font-weight: bold; box-shadow: 0 0 20px rgba(0,255,102,0.4); animation: fadeIn 0.3s ease; }
+        .toast.error { border-color: #ff3333; color: #ff3333; box-shadow: 0 0 20px rgba(255,51,51,0.4); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        header { display: flex; justify-content: space-between; align-items: center; border: 1px solid #00ff66; padding: 12px 20px; margin-bottom: 25px; background: rgba(0, 255, 102, 0.03); }
-        .logo-area { display: flex; align-items: center; gap: 10px; }
-        .admin-badge { background: #ff3333; color: #fff; padding: 4px 8px; font-weight: bold; font-size: 14px; }
-        .title { color: #ff3333; font-weight: bold; letter-spacing: 1px; }
-        .header-actions { display: flex; gap: 10px; align-items: center; }
-        .header-btn { background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 6px 15px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.2s; text-decoration: none; display: inline-block; font-size: 13px; }
-        .header-btn.logout { border-color: #ff3333; color: #ff3333; }
-        .header-btn:hover { background: rgba(255, 170, 0, 0.1); }
-        .header-btn.logout:hover { background: rgba(255, 51, 51, 0.1); }
+        /* Asosiy Wrapper */
+        .wrapper { width: 100%; max-width: 520px; display: flex; flex-direction: column; gap: 20px; }
+
+        /* Login Card */
+        #loginOverlay { width: 100%; display: flex; flex-direction: column; gap: 20px; }
+        .login-card { border: 1px solid #00ff66; padding: 35px 25px; background: rgba(0, 255, 102, 0.02); text-align: center; box-shadow: 0 0 30px rgba(0, 255, 102, 0.08); position: relative; }
+        .login-card::before { content: ''; position: absolute; top: 0; left: 0; width: 10px; height: 10px; border-top: 2px solid #00ff66; border-left: 2px solid #00ff66; }
+        .login-card::after { content: ''; position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; border-bottom: 2px solid #00ff66; border-right: 2px solid #00ff66; }
+
+        .login-icon { font-size: 36px; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(0,255,102,0.5)); }
+        .login-title { color: #00ff66; font-size: 20px; font-weight: bold; margin-bottom: 6px; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0,255,102,0.4); }
+        .login-sub { color: rgba(0, 255, 102, 0.6); font-size: 11px; margin-bottom: 30px; letter-spacing: 1px; text-transform: uppercase; }
         
-        .section-box { border: 1px solid #ff3333; padding: 20px; margin-bottom: 25px; background: rgba(255, 51, 51, 0.02); }
+        .login-input { width: 100%; background: #05070d; border: 1px solid #00ff66; color: #00ff66; padding: 14px 18px; font-family: inherit; outline: none; margin-bottom: 15px; text-align: center; font-size: 14px; transition: 0.3s; box-shadow: inset 0 0 10px rgba(0,255,102,0.05); }
+        .login-input:focus { border-color: #fff; box-shadow: 0 0 15px rgba(0,255,102,0.4), inset 0 0 10px rgba(0,255,102,0.1); }
+        .login-input::placeholder { color: rgba(0, 255, 102, 0.3); }
+
+        .login-btn { width: 100%; background: rgba(0, 255, 102, 0.1); border: 1px solid #00ff66; color: #00ff66; padding: 14px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-top: 5px; letter-spacing: 1px; font-size: 13px; }
+        .login-btn:hover { background: #00ff66; color: #05070d; box-shadow: 0 0 25px rgba(0,255,102,0.6); }
+
+        .telegram-contact { margin-top: 25px; font-size: 11px; color: #ffaa00; border-top: 1px dashed rgba(255, 170, 0, 0.3); padding-top: 15px; text-align: center; letter-spacing: 0.5px; }
+        .telegram-contact a { color: #00ff66; text-decoration: none; font-weight: bold; transition: 0.2s; }
+        .telegram-contact a:hover { text-shadow: 0 0 8px #00ff66; }
+
+        /* Ochiq Bo'limlar */
+        .open-sections { border: 1px solid #00ff66; padding: 25px; background: rgba(0, 255, 102, 0.01); box-shadow: 0 0 25px rgba(0, 255, 102, 0.05); }
+        .open-title { color: #00ff66; font-size: 12px; font-weight: bold; margin-bottom: 15px; display: flex; justify-content: space-between; text-transform: uppercase; letter-spacing: 1px; }
+        .open-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+        .open-btn, .open-btn-full { background: rgba(0, 255, 102, 0.03); border: 1px solid rgba(0, 255, 102, 0.5); color: #00ff66; padding: 12px 15px; font-size: 12px; cursor: pointer; text-align: left; font-family: inherit; width: 100%; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+        .open-btn:hover, .open-btn-full:hover { background: rgba(0, 255, 102, 0.15); border-color: #00ff66; box-shadow: 0 0 15px rgba(0,255,102,0.2); transform: translateY(-1px); }
+
+        /* Dashboard qismi (Kirilgandan keyin) */
+        #mainDashboard { width: 100%; }
+        header { display: flex; justify-content: space-between; align-items: center; border: 1px solid #00ff66; padding: 15px 20px; margin-bottom: 25px; background: rgba(0, 255, 102, 0.03); box-shadow: 0 0 20px rgba(0,255,102,0.05); }
+        .logo-area { display: flex; align-items: center; gap: 12px; }
+        .admin-badge { background: #ff3333; color: #fff; padding: 4px 10px; font-weight: bold; font-size: 13px; box-shadow: 0 0 10px rgba(255,51,51,0.4); }
+        .title { color: #ff3333; font-weight: bold; letter-spacing: 1px; font-size: 14px; text-shadow: 0 0 8px rgba(255,51,51,0.4); }
+        .header-btn { background: transparent; border: 1px solid #ff3333; color: #ff3333; padding: 8px 16px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.2s; font-size: 12px; }
+        .header-btn:hover { background: rgba(255, 51, 51, 0.15); box-shadow: 0 0 10px rgba(255,51,51,0.3); }
+        
+        .section-box { border: 1px solid #ff3333; padding: 22px; margin-bottom: 22px; background: rgba(255, 51, 51, 0.02); box-shadow: 0 0 15px rgba(255,51,51,0.03); }
         .section-box.yellow { border-color: #ffaa00; background: rgba(255, 170, 0, 0.02); }
-        .section-box.green { border-color: #00ff66; background: rgba(0, 255, 102, 0.02); }
-        .section-title { color: #ff3333; font-size: 15px; margin-bottom: 15px; font-weight: bold; }
+        .section-box.green { border-color: #00ff66; background: rgba(0, 255, 102, 0.02); box-shadow: 0 0 15px rgba(0,255,102,0.03); }
+        .section-title { color: #ff3333; font-size: 14px; margin-bottom: 15px; font-weight: bold; letter-spacing: 1px; }
         .section-box.yellow .section-title { color: #ffaa00; }
         .section-box.green .section-title { color: #00ff66; }
         
-        .form-row { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
-        input, select { flex: 1; min-width: 200px; background: #0b0f19; border: 1px solid #ff3333; color: #ff3333; padding: 10px 15px; font-family: inherit; outline: none; }
-        .section-box.green input, .section-box.green select { border-color: #00ff66; color: #00ff66; }
-        .section-box.yellow input, .section-box.yellow select { border-color: #ffaa00; color: #ffaa00; }
-        input::placeholder { color: rgba(255, 51, 51, 0.5); }
-        .section-box.green input::placeholder { color: rgba(0, 255, 102, 0.5); }
-        .section-box.yellow input::placeholder { color: rgba(255, 170, 0, 0.5); }
-        
-        .action-btn { width: 100%; background: transparent; border: 1px solid #ff3333; color: #ff3333; padding: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.2s; }
-        .section-box.green .action-btn { border-color: #00ff66; color: #00ff66; }
+        .form-row { display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; }
+        .section-box input { flex: 1; min-width: 180px; background: #05070d; border: 1px solid #00ff66; color: #00ff66; padding: 12px 15px; font-family: inherit; outline: none; font-size: 13px; }
+        .section-box.yellow input { border-color: #ffaa00; color: #ffaa00; }
+        .section-box input::placeholder { color: rgba(0, 255, 102, 0.4); }
+        .section-box.yellow input::placeholder { color: rgba(255, 170, 0, 0.4); }
+
+        .action-btn { width: 100%; background: transparent; border: 1px solid #00ff66; color: #00ff66; padding: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; font-size: 13px; letter-spacing: 1px; }
+        .section-box.green .action-btn:hover { background: #00ff66; color: #05070d; box-shadow: 0 0 20px rgba(0,255,102,0.4); }
         .section-box.yellow .action-btn { border-color: #ffaa00; color: #ffaa00; }
-        .action-btn:hover { background: rgba(255, 51, 51, 0.1); }
-        .section-box.green .action-btn:hover { background: rgba(0, 255, 102, 0.1); }
-        .section-box.yellow .action-btn:hover { background: rgba(255, 170, 0, 0.1); }
-        
-        .item-card { border: 1px solid #ff3333; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; background: #0b0f19; flex-wrap: wrap; gap: 10px; }
-        .section-box.green .item-card { border-color: #00ff66; }
+        .section-box.yellow .action-btn:hover { background: #ffaa00; color: #05070d; box-shadow: 0 0 20px rgba(255,170,0,0.4); }
+
+        .item-card { border: 1px solid #00ff66; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; background: #05070d; flex-wrap: wrap; gap: 10px; }
         .section-box.yellow .item-card { border-color: #ffaa00; }
-        .card-info { font-size: 14px; }
-        .card-info span { color: #ff3333; }
-        .section-box.green .card-info span { color: #00ff66; }
+        .card-info { font-size: 13px; }
+        .card-info span { color: #00ff66; }
         .section-box.yellow .card-info span { color: #ffaa00; }
         .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
         
-        .btn-sm { background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 5px 10px; font-size: 12px; cursor: pointer; font-family: inherit; transition: 0.2s; }
+        .btn-sm { background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 6px 12px; font-size: 11px; cursor: pointer; font-family: inherit; transition: 0.2s; font-weight: bold; }
         .btn-sm.success { border-color: #00ff66; color: #00ff66; }
-        .btn-sm.success:hover { background: rgba(0,255,102,0.1); }
+        .btn-sm.success:hover { background: #00ff66; color: #05070d; box-shadow: 0 0 10px rgba(0,255,102,0.4); }
         .btn-sm.danger { border-color: #ff3333; color: #ff3333; }
-        .btn-sm.danger:hover { background: rgba(255,51,51,0.1); }
+        .btn-sm.danger:hover { background: #ff3333; color: #fff; box-shadow: 0 0 10px rgba(255,51,51,0.4); }
         
-        .empty-text { color: rgba(255, 170, 0, 0.6); font-size: 14px; }
-        .badge-text { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffaa00; padding: 2px 6px; font-size: 10px; margin-left: 8px; }
+        .empty-text { color: rgba(255, 170, 0, 0.6); font-size: 13px; font-style: italic; }
+        .badge-text { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffaa00; padding: 2px 8px; font-size: 10px; margin-left: 8px; font-weight: bold; }
         
-        #loginOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0f19; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
-        .login-card { border: 1px solid #00ff66; width: 100%; max-width: 450px; padding: 30px; background: rgba(0, 255, 102, 0.02); text-align: center; }
-        .login-icon { font-size: 32px; margin-bottom: 15px; }
-        .login-title { color: #00ff66; font-size: 20px; font-weight: bold; margin-bottom: 5px; letter-spacing: 1px; }
-        .login-sub { color: rgba(0, 255, 102, 0.6); font-size: 12px; margin-bottom: 25px; }
-        .login-input { width: 100%; background: #0b0f19; border: 1px solid #00ff66; color: #00ff66; padding: 12px 15px; font-family: inherit; outline: none; margin-bottom: 15px; text-align: center; }
-        .login-btn { width: 100%; background: transparent; border: 1px solid #00ff66; color: #00ff66; padding: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.2s; margin-bottom: 20px; }
-        .login-btn:hover { background: rgba(0, 255, 102, 0.1); }
-        
-        .open-sections { border: 1px solid #00ff66; width: 100%; max-width: 450px; padding: 20px; margin-top: 20px; background: rgba(0, 255, 102, 0.01); text-align: left; }
-        .open-title { color: #00ff66; font-size: 13px; font-weight: bold; margin-bottom: 12px; display: flex; justify-content: space-between; }
-        .open-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .open-btn, .open-btn-full { background: transparent; border: 1px solid #00ff66; color: #00ff66; padding: 10px; font-size: 12px; cursor: pointer; text-align: left; font-family: inherit; margin-bottom: 8px; width: 100%; transition: 0.2s; }
-        .open-btn:hover, .open-btn-full:hover { background: rgba(0,255,102,0.1); }
-        
-        .telegram-contact { margin-top: 15px; font-size: 12px; color: #ffaa00; border-top: 1px dashed rgba(255, 170, 0, 0.4); padding-top: 12px; text-align: center; }
-        .telegram-contact a { color: #00ff66; text-decoration: underline; font-weight: bold; }
-        
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: #0b0f19; border: 1px solid #00ff66; max-width: 500px; width: 100%; padding: 25px; position: relative; }
-        .close-modal { position: absolute; top: 10px; right: 15px; color: #ff3333; font-size: 20px; cursor: pointer; font-weight: bold; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5,7,13,0.85); backdrop-filter: blur(5px); z-index: 10000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: #0b0f19; border: 1px solid #00ff66; max-width: 480px; width: 100%; padding: 30px; position: relative; box-shadow: 0 0 30px rgba(0,255,102,0.2); }
+        .close-modal { position: absolute; top: 12px; right: 15px; color: #ff3333; font-size: 22px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .close-modal:hover { color: #fff; text-shadow: 0 0 10px #ff3333; }
     </style>
 </head>
 <body>
 
     <div id="toastContainer"></div>
 
-    <div id="loginOverlay">
-        <div class="login-card">
-            <div class="login-icon">🔒</div>
-            <div class="login-title">CYBER SECURE CLOUD PRO</div>
-            <div class="login-sub">Mijoz va Admin Kirish Portali</div>
-            <input type="text" id="loginName" class="login-input" placeholder="Ismingizni kiriting">
-            <input type="text" id="loginPhone" class="login-input" value="+998" placeholder="+998">
-            <input type="password" id="loginPass" class="login-input" placeholder="********">
-            <button class="login-btn" onclick="handleLogin()">PROFILGA KIRISH / OCHISH</button>
-            <div class="telegram-contact">Parol olish uchun Telegram: <a href="https://t.me/SizningUsername" target="_blank">@SizningUsername</a> ga yozing.</div>
-        </div>
-        <div class="open-sections">
-            <div class="open-title"><span>> Ochiq Bo'limlar (Profilsiz)</span><span style="color: #ffaa00;">Erkin kirish</span></div>
-            <div class="open-grid">
-                <button class="open-btn" onclick="openModal('Tariflar', 'Bizning tariflarimiz: 1 oylik - 50,000 so\'m, 1 yillik - 500,000 so\'m, Cheksiz xotira - 1,000,000 so\'m.')">📦 Tariflar</button>
-                <button class="open-btn" onclick="openModal('Qoidalar', 'Xizmatdan foydalanish qoidalari: Noqonuniy fayllar saqlash taqiqlanadi.')">📜 Qoidalar</button>
+    <div class="wrapper">
+        <div id="loginOverlay">
+            <div class="login-card">
+                <div class="login-icon">🔒</div>
+                <div class="login-title">CYBER SECURE CLOUD PRO</div>
+                <div class="login-sub">Mijoz va Admin Kirish Portali</div>
+                <input type="text" id="loginName" class="login-input" placeholder="Ismingizni kiriting">
+                <input type="text" id="loginPhone" class="login-input" value="+998" placeholder="+998">
+                <input type="password" id="loginPass" class="login-input" placeholder="********">
+                <button class="login-btn" onclick="handleLogin()">PROFILGA KIRISH / OCHISH</button>
+                <div class="telegram-contact">Parol olish uchun Telegram: <a href="https://t.me/abdulloh20070804" target="_blank">@abdulloh20070804</a> ga yozing.</div>
             </div>
-            <button class="open-btn-full" onclick="openModal('Yordam', 'Yordam olish uchun administratorga Telegram orqali murojaat qiling.')">🎧 Yordam va Qo'llab-quvvatlash <span style="float: right; color: #ffaa00;">Online</span></button>
-            <button class="open-btn-full" onclick="openModal('Muallif', 'Cyber Secure Cloud Pro tizimi. Barcha huquqlar himoyalangan. 2026')">ℹ️ Muallif va Loyiha Haqida</button>
-        </div>
-    </div>
-
-    <div id="mainDashboard" style="display: none;">
-        <header>
-            <div class="logo-area">
-                <div class="admin-badge" id="roleBadge">A</div>
-                <span class="title" id="welcomeTitle">CYBER ADMIN CONTROL CENTER</span>
+            
+            <div class="open-sections">
+                <div class="open-title"><span>> Ochiq Bo'limlar (Profilsiz)</span><span style="color: #ffaa00;">Erkin kirish</span></div>
+                <div class="open-grid">
+                    <button class="open-btn" onclick="openModal('Tariflar', 'Bizning tariflarimiz: 1 oylik - 50,000 so\'m, 1 yillik - 500,000 so\'m, Cheksiz xotira - 1,000,000 so\'m.')">📦 Tariflar</button>
+                    <button class="open-btn" onclick="openModal('Qoidalar', 'Xizmatdan foydalanish qoidalari: Noqonuniy fayllar saqlash taqiqlanadi.')">📜 Qoidalar</button>
+                </div>
+                <button class="open-btn-full" onclick="openModal('Yordam', 'Yordam olish uchun administratorga Telegram (@abdulloh20070804) orqali murojaat qiling.')">🎧 Yordam va Qo'llab-quvvatlash <span style="margin-left: auto; color: #ffaa00;">Online</span></button>
+                <button style="margin-top: 8px;" class="open-btn-full" onclick="openModal('Muallif', 'Cyber Secure Cloud Pro tizimi. Barcha huquqlar himoyalangan. 2026')">ℹ️ Muallif va Loyiha Haqida</button>
             </div>
-            <div class="header-actions">
-                <button class="header-btn logout" onclick="logout()">CHIQISH</button>
-            </div>
-        </header>
-
-        <div class="section-box" id="adminManageSection">
-            <div class="section-title">> Adminlar Boshqaruvi</div>
-            <div class="form-row">
-                <input type="text" id="newAdminName" placeholder="Yangi admin ismi">
-                <input type="password" id="newAdminPass" placeholder="Admin maxfiy paroli">
-            </div>
-            <button class="action-btn" onclick="addNewAdmin()">+ ADMIN QO'SHISH</button>
-            <div id="adminsList" style="margin-top: 15px;"></div>
         </div>
 
-        <div class="section-box yellow">
-            <div class="section-title">> Kelib tushgan to'lov cheklari</div>
-            <div id="receiptsList"><div class="empty-text">> Hozircha cheklar yoq.</div></div>
-        </div>
+        <div id="mainDashboard" style="display: none;">
+            <header>
+                <div class="logo-area">
+                    <div class="admin-badge" id="roleBadge">A</div>
+                    <span class="title" id="welcomeTitle">CYBER ADMIN CONTROL CENTER</span>
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn" onclick="logout()">CHIQISH</button>
+                </div>
+            </header>
 
-        <div class="section-box green">
-            <div class="section-title">> Yangi mijoz qo'shish</div>
-            <div class="form-row">
-                <input type="text" id="clientName" placeholder="Mijoz ismi">
-                <input type="password" id="clientPass" placeholder="Maxfiy paroli">
+            <div class="section-box green" id="adminManageSection">
+                <div class="section-title">> Adminlar Boshqaruvi</div>
+                <div class="form-row">
+                    <input type="text" id="newAdminName" placeholder="Yangi admin ismi">
+                    <input type="password" id="newAdminPass" placeholder="Admin maxfiy paroli">
+                </div>
+                <button class="action-btn" onclick="addNewAdmin()">+ ADMIN QO'SHISH</button>
+                <div id="adminsList" style="margin-top: 15px;"></div>
             </div>
-            <button class="action-btn" onclick="addNewClient()">+ MIJOZ QO'SHISH</button>
-        </div>
 
-        <div class="section-box green">
-            <div class="section-title">> Shifrlangan mijozlar ro'yxati va Obunalar</div>
-            <div id="clientsList"></div>
+            <div class="section-box yellow">
+                <div class="section-title">> Kelib tushgan to'lov cheklari</div>
+                <div id="receiptsList"><div class="empty-text">> Hozircha cheklar yoq.</div></div>
+            </div>
+
+            <div class="section-box green">
+                <div class="section-title">> Yangi mijoz qo'shish</div>
+                <div class="form-row">
+                    <input type="text" id="clientName" placeholder="Mijoz ismi">
+                    <input type="password" id="clientPass" placeholder="Maxfiy paroli">
+                </div>
+                <button class="action-btn" onclick="addNewClient()">+ MIJOZ QO'SHISH</button>
+            </div>
+
+            <div class="section-box green">
+                <div class="section-title">> Shifrlangan mijozlar ro'yxati va Obunalar</div>
+                <div id="clientsList"></div>
+            </div>
         </div>
     </div>
 
     <div id="infoModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal()">&times;</span>
-            <div id="modalTitle" style="color: #00ff66; font-weight: bold; margin-bottom: 10px; font-size: 16px;"></div>
-            <div id="modalBody" style="color: rgba(0,255,102,0.8); font-size: 14px; line-height: 1.5;"></div>
+            <div id="modalTitle" style="color: #00ff66; font-weight: bold; margin-bottom: 12px; font-size: 16px; letter-spacing: 1px;"></div>
+            <div id="modalBody" style="color: rgba(0,255,102,0.85); font-size: 13px; line-height: 1.6;"></div>
         </div>
     </div>
 
@@ -183,11 +192,6 @@
         let admins = [];
         let clients = [];
         let receipts = [];
-
-        // Xatolikni oldini olish uchun xavfsiz funksiya qo'shildi
-        function renderAdminChat() {
-            // Chat yoki qo'shimcha ma'lumotlar paneli uchun bo'sh joy
-        }
 
         function showToast(message, isError = false) {
             const container = document.getElementById('toastContainer');
@@ -269,7 +273,6 @@
                 document.getElementById('welcomeTitle').innerText = 'CYBER ADMIN CONTROL CENTER - ' + logged.name;
                 document.getElementById('adminManageSection').style.display = 'block';
                 renderDashboard();
-                renderAdminChat(); // Xatolik bermasligi uchun chaqirildi
             } else {
                 document.getElementById('roleBadge').innerText = 'M';
                 document.getElementById('welcomeTitle').innerText = 'MIJOZ PORTALI: ' + logged.name + ' (' + logged.subscription + ')';
@@ -347,13 +350,13 @@
 
             let admHtml = '';
             admins.forEach((a, idx) => {
-                admHtml += `<div class="item-card"><div class="card-info"><strong>${a.isMain ? '🛡️ ' : ''}${a.name}</strong><br><span style="font-size:13px;">Parol: ${a.pass}</span></div><div class="card-actions">${!a.isMain ? `<button class="btn-sm danger" onclick="deleteAdmin(${idx})">O'chirish</button>` : '<span class="badge-text">Asosiy</span>'}</div></div>`;
+                admHtml += `<div class="item-card"><div class="card-info"><strong>${a.isMain ? '🛡️ ' : ''}${a.name}</strong><br><span style="font-size:12px;">Parol: ${a.pass}</span></div><div class="card-actions">${!a.isMain ? `<button class="btn-sm danger" onclick="deleteAdmin(${idx})">O'chirish</button>` : '<span class="badge-text">Asosiy</span>'}</div></div>`;
             });
             document.getElementById('adminsList').innerHTML = admHtml || '<div class="empty-text">> Adminlar yoq.</div>';
 
             let clHtml = '';
             clients.forEach((c, idx) => {
-                clHtml += `<div class="item-card"><div class="card-info"><strong>${c.name}</strong><span class="badge-text">🔒 ${c.subscription}</span><br><span style="font-size:13px;">Parol: ${c.pass}</span></div><div class="card-actions"><button class="btn-sm success" onclick="grantSubscription('${c.name}', '1m')">1 Oylik</button><button class="btn-sm success" onclick="grantSubscription('${c.name}', '1y')">1 Yillik</button><button class="btn-sm success" onclick="grantSubscription('${c.name}', 'inf')">Cheksiz</button><button class="btn-sm danger" onclick="deleteClient(${idx})">O'chirish</button></div></div>`;
+                clHtml += `<div class="item-card"><div class="card-info"><strong>${c.name}</strong><span class="badge-text">🔒 ${c.subscription}</span><br><span style="font-size:12px;">Parol: ${c.pass}</span></div><div class="card-actions"><button class="btn-sm success" onclick="grantSubscription('${c.name}', '1m')">1 Oylik</button><button class="btn-sm success" onclick="grantSubscription('${c.name}', '1y')">1 Yillik</button><button class="btn-sm success" onclick="grantSubscription('${c.name}', 'inf')">Cheksiz</button><button class="btn-sm danger" onclick="deleteClient(${idx})">O'chirish</button></div></div>`;
             });
             document.getElementById('clientsList').innerHTML = clHtml || '<div class="empty-text">> Hozircha mijozlar yoq.</div>';
         }
