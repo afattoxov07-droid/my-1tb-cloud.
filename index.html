@@ -52,13 +52,10 @@ header { display: flex; justify-content: space-between; align-items: center; bor
 .btn-sm { background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 6px 12px; font-size: 11px; cursor: pointer; font-family: inherit; transition: 0.2s; font-weight: bold; }
 .btn-sm.success { border-color: #00ff66; color: #00ff66; }
 .btn-sm.success:hover { background: #00ff66; color: #05070d; box-shadow: 0 0 10px rgba(0,255,102,0.4); }
-.btn-sm.paid { border-color: #00ffff; color: #00ffff; }
-.btn-sm.paid:hover { background: #00ffff; color: #05070d; box-shadow: 0 0 10px rgba(0,255,255,0.4); }
 .btn-sm.danger { border-color: #ff3333; color: #ff3333; }
 .btn-sm.danger:hover { background: #ff3333; color: #fff; box-shadow: 0 0 10px rgba(255,51,51,0.4); }
 .empty-text { color: rgba(255, 170, 0, 0.6); font-size: 13px; font-style: italic; }
 .badge-text { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffaa00; padding: 2px 8px; font-size: 10px; margin-left: 8px; font-weight: bold; }
-.badge-text.paid { background: rgba(0, 255, 255, 0.15); border: 1px solid #00ffff; color: #00ffff; }
 /* Pricing & Author Footer */
 .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
 .price-card { border: 1px solid #ffaa00; padding: 15px; text-align: center; background: rgba(255, 170, 0, 0.03); }
@@ -207,7 +204,7 @@ function addClient() {
     showToast("Mijoz telefon raqami va parolini kiriting!", true);
     return;
   }
-  clients.push({ phone: phone, pass: pass, subscription: 'Obuna belgilanmagan', paid: false });
+  clients.push({ phone: phone, pass: pass, subscription: 'Obuna belgilanmagan' });
   saveData();
   document.getElementById('newClientPhone').value = '';
   document.getElementById('newClientPass').value = '';
@@ -232,33 +229,21 @@ function grantSubscription(clientPhone, type) {
   }
 }
 
-function togglePaidStatus(clientPhone) {
-  let client = clients.find(c => c.phone === clientPhone);
-  if(client) {
-    client.paid = !client.paid;
-    saveData();
-    showToast(`${clientPhone} to'lov holati o'zgartirildi!`);
-  }
-}
-
 function renderDashboard() {
   if(sessionStorage.getItem('cyber_admin_logged') !== 'true') return;
   const searchVal = document.getElementById('clientSearchInput').value.toLowerCase();
   let clHtml = '';
   clients.forEach((c, idx) => {
     if(c.phone.toLowerCase().includes(searchVal)) {
-      const isPaid = c.paid === true;
       clHtml += `<div class="item-card">
         <div class="card-info">
           <strong>📞 ${c.phone}</strong>
-          <span class="badge-text">🔒 ${c.subscription}</span>
-          <span class="badge-text ${isPaid ? 'paid' : ''}">${isPaid ? '✅ To\'langan' : '⏳ To\'lanmagan'}</span><br>
+          <span class="badge-text">🔒 ${c.subscription}</span><br>
           <span style="font-size:11px; color:rgba(0,255,102,0.6);">Paroli: ${c.pass}</span>
         </div>
         <div class="card-actions">
           <button class="btn-sm success" onclick="grantSubscription('${c.phone}', '1m')">1 Oylik (59k)</button>
           <button class="btn-sm success" onclick="grantSubscription('${c.phone}', '1y')">1 Yillik (700k)</button>
-          <button class="btn-sm paid" onclick="togglePaidStatus('${c.phone}')">${isPaid ? 'To\'lanmagan qilish' : 'To\'landi deb belgilash'}</button>
           <button class="btn-sm danger" onclick="deleteClient(${idx})">O'chirish</button>
         </div>
       </div>`;
