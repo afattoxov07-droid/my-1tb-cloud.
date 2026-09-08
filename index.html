@@ -15,93 +15,112 @@ body { background-color: #05070d; color: #00ff66; min-height: 100vh; padding: 20
 @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 .wrapper { width: 100%; max-width: 520px; display: flex; flex-direction: column; gap: 20px; }
 
-/* Login Card */
-#loginOverlay { width: 100%; display: flex; flex-direction: column; gap: 20px; }
-.login-card { border: 1px solid #00ff66; padding: 35px 25px; background: rgba(0, 255, 102, 0.02); text-align: center; box-shadow: 0 0 30px rgba(0, 255, 102, 0.08); position: relative; }
-.login-card::before { content: ''; position: absolute; top: 0; left: 0; width: 10px; height: 10px; border-top: 2px solid #00ff66; border-left: 2px solid #00ff66; }
-.login-card::after { content: ''; position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; border-bottom: 2px solid #00ff66; border-right: 2px solid #00ff66; }
-.login-icon { font-size: 36px; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(0,255,102,0.5)); }
-.login-title { color: #00ff66; font-size: 20px; font-weight: bold; margin-bottom: 6px; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0,255,102,0.4); }
-.login-sub { color: rgba(0, 255, 102, 0.6); font-size: 11px; margin-bottom: 30px; letter-spacing: 1px; text-transform: uppercase; }
-.login-input { width: 100%; background: #05070d; border: 1px solid #00ff66; color: #00ff66; padding: 14px 18px; font-family: inherit; outline: none; margin-bottom: 15px; text-align: center; font-size: 14px; transition: 0.3s; box-shadow: inset 0 0 10px rgba(0,255,102,0.05); }
-.login-input:focus { border-color: #fff; box-shadow: 0 0 15px rgba(0,255,102,0.4), inset 0 0 10px rgba(0,255,102,0.1); }
+/* Login Cards */
+.login-card { border: 1px solid #00ff66; padding: 30px 20px; background: rgba(0, 255, 102, 0.02); text-align: center; box-shadow: 0 0 30px rgba(0, 255, 102, 0.08); position: relative; margin-bottom: 15px; }
+.login-card.client-card { border-color: #00ffff; background: rgba(0, 255, 255, 0.02); box-shadow: 0 0 30px rgba(0, 255, 255, 0.08); }
+.login-icon { font-size: 32px; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(0,255,102,0.5)); }
+.login-title { color: #00ff66; font-size: 18px; font-weight: bold; margin-bottom: 5px; letter-spacing: 2px; }
+.client-card .login-title { color: #00ffff; }
+.login-sub { color: rgba(0, 255, 102, 0.6); font-size: 11px; margin-bottom: 20px; letter-spacing: 1px; text-transform: uppercase; }
+.client-card .login-sub { color: rgba(0, 255, 255, 0.6); }
+
+.login-input { width: 100%; background: #05070d; border: 1px solid #00ff66; color: #00ff66; padding: 12px 15px; font-family: inherit; outline: none; margin-bottom: 12px; text-align: center; font-size: 13px; }
+.client-card .login-input { border-color: #00ffff; color: #00ffff; }
+.login-input:focus { border-color: #fff; }
 .login-input::placeholder { color: rgba(0, 255, 102, 0.3); }
-.login-btn { width: 100%; background: rgba(0, 255, 102, 0.1); border: 1px solid #00ff66; color: #00ff66; padding: 14px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-top: 5px; letter-spacing: 1px; font-size: 13px; }
-.login-btn:hover { background: #00ff66; color: #05070d; box-shadow: 0 0 25px rgba(0,255,102,0.6); }
-.telegram-contact { margin-top: 25px; font-size: 11px; color: #ffaa00; border-top: 1px dashed rgba(255, 170, 0, 0.3); padding-top: 15px; text-align: center; letter-spacing: 0.5px; }
-.telegram-contact a { color: #00ff66; text-decoration: none; font-weight: bold; transition: 0.2s; }
-.telegram-contact a:hover { text-shadow: 0 0 8px #00ff66; }
+.client-card .login-input::placeholder { color: rgba(0, 255, 255, 0.3); }
 
-/* Dashboard */
-#mainDashboard { width: 100%; }
-header { display: flex; justify-content: space-between; align-items: center; border: 1px solid #00ff66; padding: 15px 20px; margin-bottom: 25px; background: rgba(0, 255, 102, 0.03); box-shadow: 0 0 20px rgba(0,255,102,0.05); }
-.logo-area { display: flex; align-items: center; gap: 12px; }
-.admin-badge { background: #ff3333; color: #fff; padding: 4px 10px; font-weight: bold; font-size: 13px; box-shadow: 0 0 10px rgba(255,51,51,0.4); }
-.title { color: #ff3333; font-weight: bold; letter-spacing: 1px; font-size: 14px; text-shadow: 0 0 8px rgba(255,51,51,0.4); }
-.header-btn { background: transparent; border: 1px solid #ff3333; color: #ff3333; padding: 8px 16px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.2s; font-size: 12px; }
-.header-btn:hover { background: rgba(255, 51, 51, 0.15); box-shadow: 0 0 10px rgba(255,51,51,0.3); }
+.login-btn { width: 100%; background: rgba(0, 255, 102, 0.1); border: 1px solid #00ff66; color: #00ff66; padding: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; font-size: 12px; }
+.login-btn:hover { background: #00ff66; color: #05070d; }
+.client-card .login-btn { background: rgba(0, 255, 255, 0.1); border-color: #00ffff; color: #00ffff; }
+.client-card .login-btn:hover { background: #00ffff; color: #05070d; }
 
-.section-box { border: 1px solid #ff3333; padding: 22px; margin-bottom: 22px; background: rgba(255, 51, 51, 0.02); box-shadow: 0 0 15px rgba(255,51,51,0.03); }
-.section-box.green { border-color: #00ff66; background: rgba(0, 255, 102, 0.02); box-shadow: 0 0 15px rgba(0,255,102,0.03); }
-.section-title { color: #ff3333; font-size: 14px; margin-bottom: 15px; font-weight: bold; letter-spacing: 1px; }
+.telegram-contact { margin-top: 15px; font-size: 11px; color: #ffaa00; border-top: 1px dashed rgba(255, 170, 0, 0.3); padding-top: 12px; text-align: center; }
+.telegram-contact a { color: #00ff66; text-decoration: none; font-weight: bold; }
+
+/* Dashboard & Client View */
+#mainDashboard, #clientPortal { width: 100%; }
+header { display: flex; justify-content: space-between; align-items: center; border: 1px solid #00ff66; padding: 15px 20px; margin-bottom: 20px; background: rgba(0, 255, 102, 0.03); }
+.logo-area { display: flex; align-items: center; gap: 10px; }
+.admin-badge { background: #ff3333; color: #fff; padding: 4px 8px; font-weight: bold; font-size: 12px; }
+.client-badge { background: #00ffff; color: #05070d; padding: 4px 8px; font-weight: bold; font-size: 12px; }
+.title { color: #ff3333; font-weight: bold; font-size: 13px; letter-spacing: 1px; }
+.header-btn { background: transparent; border: 1px solid #ff3333; color: #ff3333; padding: 6px 12px; cursor: pointer; font-weight: bold; font-size: 11px; text-transform: uppercase; }
+.header-btn:hover { background: rgba(255, 51, 51, 0.15); }
+
+.section-box { border: 1px solid #ff3333; padding: 20px; margin-bottom: 20px; background: rgba(255, 51, 51, 0.02); }
+.section-box.green { border-color: #00ff66; background: rgba(0, 255, 102, 0.02); }
+.section-box.cyan { border-color: #00ffff; background: rgba(0, 255, 255, 0.02); color: #00ffff; }
+.section-title { color: #ff3333; font-size: 13px; margin-bottom: 12px; font-weight: bold; }
 .section-box.green .section-title { color: #00ff66; }
+.section-box.cyan .section-title { color: #00ffff; }
 
-.form-row { display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; }
-.section-box input { flex: 1; min-width: 180px; background: #05070d; border: 1px solid #00ff66; color: #00ff66; padding: 12px 15px; font-family: inherit; outline: none; font-size: 13px; }
+.form-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.section-box input { flex: 1; min-width: 160px; background: #05070d; border: 1px solid #00ff66; color: #00ff66; padding: 10px 14px; font-family: inherit; outline: none; font-size: 12px; }
+.section-box.cyan input { border-color: #00ffff; color: #00ffff; }
 .section-box input::placeholder { color: rgba(0, 255, 102, 0.4); }
 
-.item-card { border: 1px solid #00ff66; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 12px; background: #05070d; flex-wrap: wrap; gap: 12px; box-shadow: inset 0 0 10px rgba(0,255,102,0.02); }
-.card-info { font-size: 13px; line-height: 1.6; }
-.card-info strong { color: #00ff66; font-size: 14px; }
-.card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.item-card { border: 1px solid #00ff66; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; background: #05070d; flex-wrap: wrap; gap: 10px; }
+.card-info { font-size: 12px; line-height: 1.5; }
+.card-info strong { color: #00ff66; }
+.card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
 
-.btn-sm { background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 6px 12px; font-size: 11px; cursor: pointer; font-family: inherit; transition: 0.2s; font-weight: bold; }
+.btn-sm { background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 6px 10px; font-size: 10px; cursor: pointer; font-family: inherit; font-weight: bold; }
 .btn-sm.success { border-color: #00ff66; color: #00ff66; }
-.btn-sm.success:hover { background: #00ff66; color: #05070d; box-shadow: 0 0 10px rgba(0,255,102,0.4); }
+.btn-sm.success:hover { background: #00ff66; color: #05070d; }
 .btn-sm.paid-action { border-color: #00ffff; color: #00ffff; }
-.btn-sm.paid-action:hover { background: #00ffff; color: #05070d; box-shadow: 0 0 10px rgba(0,255,255,0.4); }
+.btn-sm.paid-action:hover { background: #00ffff; color: #05070d; }
 .btn-sm.danger { border-color: #ff3333; color: #ff3333; }
-.btn-sm.danger:hover { background: #ff3333; color: #fff; box-shadow: 0 0 10px rgba(255,51,51,0.4); }
+.btn-sm.danger:hover { background: #ff3333; color: #fff; }
 
-.empty-text { color: rgba(255, 170, 0, 0.6); font-size: 13px; font-style: italic; }
-.badge-text { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffaa00; padding: 2px 8px; font-size: 10px; margin-left: 6px; font-weight: bold; display: inline-block; margin-top: 4px; }
+.empty-text { color: rgba(255, 170, 0, 0.6); font-size: 12px; font-style: italic; }
+.badge-text { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffaa00; padding: 2px 6px; font-size: 9px; margin-left: 5px; font-weight: bold; display: inline-block; margin-top: 3px; }
 .badge-text.paid { background: rgba(0, 255, 255, 0.15); border: 1px solid #00ffff; color: #00ffff; }
 
-/* Pricing & Author Footer */
-.pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-.price-card { border: 1px solid #ffaa00; padding: 15px; text-align: center; background: rgba(255, 170, 0, 0.03); }
-.price-card h4 { color: #ffaa00; font-size: 14px; margin-bottom: 8px; }
-.price-card .amount { font-size: 16px; font-weight: bold; color: #00ff66; }
+.pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+.price-card { border: 1px solid #ffaa00; padding: 12px; text-align: center; background: rgba(255, 170, 0, 0.03); }
+.price-card h4 { color: #ffaa00; font-size: 12px; margin-bottom: 6px; }
+.price-card .amount { font-size: 14px; font-weight: bold; color: #00ff66; }
 
-.author-footer { margin-top: 10px; width: 100%; max-width: 520px; border: 1px dashed rgba(0, 255, 102, 0.3); padding: 15px; text-align: center; font-size: 11px; color: rgba(0, 255, 102, 0.7); line-height: 1.6; background: rgba(0,255,102,0.01); }
+.author-footer { margin-top: 10px; width: 100%; max-width: 520px; border: 1px dashed rgba(0, 255, 102, 0.3); padding: 12px; text-align: center; font-size: 10px; color: rgba(0, 255, 102, 0.7); line-height: 1.5; background: rgba(0,255,102,0.01); }
 .author-footer b { color: #00ff66; }
 </style>
 </head>
 <body>
 <div id="toastContainer"></div>
 <div class="wrapper">
-  <!-- Login Oynasi -->
+  
+  <!-- Kirish Qismi (Admin va Mijoz uchun) -->
   <div id="loginOverlay">
+    <!-- Admin Login -->
     <div class="login-card">
       <div class="login-icon">🔒</div>
-      <div class="login-title">CYBER SECURE CLOUD PRO</div>
-      <div class="login-sub">Admin Boshqaruv Portali</div>
-      <input type="password" id="loginPass" class="login-input" placeholder="Admin parolini kiriting">
-      <button class="login-btn" onclick="handleLogin()">TIZIMGA KIRISH</button>
+      <div class="login-title">ADMIN PORTALI</div>
+      <div class="login-sub">Boshqaruv Markazi</div>
+      <input type="password" id="adminPassInput" class="login-input" placeholder="Admin parolini kiriting">
+      <button class="login-btn" onclick="handleAdminLogin()">ADMIN KIRISH</button>
       <div class="telegram-contact">Admin Telegram: <a href="https://t.me/abdulloh20070804" target="_blank">@abdulloh20070804</a></div>
+    </div>
+
+    <!-- Mijoz Login -->
+    <div class="login-card client-card">
+      <div class="login-icon">👤</div>
+      <div class="login-title">MIJOZ PORTALI</div>
+      <div class="login-sub">Kabinetni Tekshirish</div>
+      <input type="text" id="clientPhoneInput" class="login-input" placeholder="Telefon raqam (+998...)">
+      <input type="password" id="clientPassInput" class="login-input" placeholder="Maxfiy parol">
+      <button class="login-btn" onclick="handleClientLogin()">MIJOZ KIRISH</button>
     </div>
   </div>
 
-  <!-- Asosiy Boshqaruv Paneli -->
+  <!-- Admin Boshqaruv Paneli -->
   <div id="mainDashboard" style="display: none;">
     <header>
       <div class="logo-area">
         <div class="admin-badge">A</div>
-        <span class="title">CYBER ADMIN CONTROL CENTER</span>
+        <span class="title">ADMIN CONTROL CENTER</span>
       </div>
-      <div class="header-actions">
-        <button class="header-btn" onclick="logout()">CHIQISH</button>
-      </div>
+      <button class="header-btn" onclick="logout()">CHIQISH</button>
     </header>
 
     <div class="section-box green">
@@ -117,20 +136,39 @@ header { display: flex; justify-content: space-between; align-items: center; bor
         </div>
       </div>
 
-      <div class="section-title">> Mijoz qo'shish yoki boshqarish</div>
+      <div class="section-title">> Mijoz qo'shish</div>
       <div class="form-row">
-        <input type="text" id="newClientPhone" placeholder="Mijoz telefon raqami (+998...)">
-        <input type="text" id="newClientPass" placeholder="Mijoz uchun parol">
-        <button class="btn-sm success" onclick="addClient()" style="padding: 12px 20px; font-size: 13px;">Mijoz qo'shish</button>
+        <input type="text" id="newClientPhone" placeholder="Tel: +998901234567">
+        <input type="text" id="newClientPass" placeholder="Parol">
+        <button class="btn-sm success" onclick="addClient()" style="padding: 10px 15px;">Qo'shish</button>
       </div>
 
-      <div class="section-title" style="margin-top: 20px;">>> Barcha ro'yxatdagi mijozlar</div>
-      <div class="form-row" style="margin-bottom: 10px;">
-        <input type="text" id="clientSearchInput" placeholder="Telefon raqam bo'yicha qidirish..." oninput="renderDashboard()">
+      <div class="section-title" style="margin-top: 15px;">>> Barcha mijozlar ro'yxati</div>
+      <div class="form-row" style="margin-bottom: 8px;">
+        <input type="text" id="clientSearchInput" placeholder="Qidirish..." oninput="renderDashboard()">
       </div>
       <div id="clientsList"></div>
     </div>
   </div>
+
+  <!-- Mijoz Shaxsiy Kabineti -->
+  <div id="clientPortal" style="display: none;">
+    <header style="border-color: #00ffff; background: rgba(0,255,255,0.03);">
+      <div class="logo-area">
+        <div class="client-badge">M</div>
+        <span class="title" style="color: #00ffff;">MIJOZ KABINETI</span>
+      </div>
+      <button class="header-btn" style="border-color: #00ffff; color: #00ffff;" onclick="logout()">CHIQISH</button>
+    </header>
+
+    <div class="section-box cyan">
+      <div class="section-title">> Sizning Hisob Ma'lumotlaringiz</div>
+      <div id="clientInfoBox" style="font-size: 13px; line-height: 1.8;">
+        <!-- Dinamik to'ldiriladi -->
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <!-- Muallif haqida ma'lumot -->
@@ -178,34 +216,76 @@ db.ref('cyber_system').on('value', (snapshot) => {
     clients = [];
     db.ref('cyber_system').set({ clients });
   }
-  if (sessionStorage.getItem('cyber_admin_logged') === 'true') {
-    showDashboard();
-  }
+  checkSession();
 });
 
 function saveData() {
   db.ref('cyber_system').set({ clients: clients });
 }
 
-function handleLogin() {
-  const pass = document.getElementById('loginPass').value.trim();
+// Admin Kirish
+function handleAdminLogin() {
+  const pass = document.getElementById('adminPassInput').value.trim();
   if(pass === "2007080411") {
-    sessionStorage.setItem('cyber_admin_logged', 'true');
+    sessionStorage.setItem('role', 'admin');
     showDashboard();
     showToast("Xush kelibsiz, Abdulloh!");
   } else {
-    showToast("Parol xato!", true);
+    showToast("Admin paroli xato!", true);
+  }
+}
+
+// Mijoz Kirish
+function handleClientLogin() {
+  const phone = document.getElementById('clientPhoneInput').value.trim();
+  const pass = document.getElementById('clientPassInput').value.trim();
+  
+  let found = clients.find(c => c.phone === phone && c.pass === pass);
+  if(found) {
+    sessionStorage.setItem('role', 'client');
+    sessionStorage.setItem('clientPhone', phone);
+    showClientPortal(found);
+    showToast("Kabinetga muvaffaqiyatli kirdingiz!");
+  } else {
+    showToast("Telefon raqam yoki parol xato!", true);
+  }
+}
+
+function checkSession() {
+  const role = sessionStorage.getItem('role');
+  if(role === 'admin') {
+    showDashboard();
+  } else if(role === 'client') {
+    const phone = sessionStorage.getItem('clientPhone');
+    let found = clients.find(c => c.phone === phone);
+    if(found) showClientPortal(found);
+    else logout();
   }
 }
 
 function showDashboard() {
   document.getElementById('loginOverlay').style.display = 'none';
+  document.getElementById('clientPortal').style.display = 'none';
   document.getElementById('mainDashboard').style.display = 'block';
   renderDashboard();
 }
 
+function showClientPortal(client) {
+  document.getElementById('loginOverlay').style.display = 'none';
+  document.getElementById('mainDashboard').style.display = 'none';
+  document.getElementById('clientPortal').style.display = 'block';
+  
+  const isPaid = client.paid === true;
+  document.getElementById('clientInfoBox').innerHTML = `
+    📞 <b>Telefon raqam:</b> ${client.phone}<br>
+    🔒 <b>Obuna holati:</b> ${client.subscription}<br>
+    💳 <b>To'lov holati:</b> <span style="color: ${isPaid ? '#00ff66' : '#ff3333'}">${isPaid ? '✅ To\'langan (Faol)' : '⏳ To\'lanmagan'}</span><br><br>
+    <div style="font-size:11px; color:rgba(0,255,255,0.7);">* Obunani faollashtirish yoki uzaytirish uchun admin bilan bog'laning.</div>
+  `;
+}
+
 function logout() {
-  sessionStorage.removeItem('cyber_admin_logged');
+  sessionStorage.clear();
   location.reload();
 }
 
@@ -213,7 +293,7 @@ function addClient() {
   const phone = document.getElementById('newClientPhone').value.trim();
   const pass = document.getElementById('newClientPass').value.trim();
   if(!phone || !pass) {
-    showToast("Mijoz telefon raqami va parolini kiriting!", true);
+    showToast("Telefon raqam va parolni kiriting!", true);
     return;
   }
   clients.push({ phone: phone, pass: pass, subscription: 'Obuna belgilanmagan', paid: false });
@@ -251,7 +331,7 @@ function togglePaidStatus(clientPhone) {
 }
 
 function renderDashboard() {
-  if(sessionStorage.getItem('cyber_admin_logged') !== 'true') return;
+  if(sessionStorage.getItem('role') !== 'admin') return;
   const searchVal = document.getElementById('clientSearchInput').value.toLowerCase();
   let clHtml = '';
   clients.forEach((c, idx) => {
@@ -265,8 +345,8 @@ function renderDashboard() {
           <span style="font-size:11px; color:rgba(0,255,102,0.6);">Paroli: ${c.pass}</span>
         </div>
         <div class="card-actions">
-          <button class="btn-sm success" onclick="grantSubscription('${c.phone}', '1m')">1 Oylik (59k)</button>
-          <button class="btn-sm success" onclick="grantSubscription('${c.phone}', '1y')">1 Yillik (700k)</button>
+          <button class="btn-sm success" onclick="grantSubscription('${c.phone}', '1m')">1 Oylik</button>
+          <button class="btn-sm success" onclick="grantSubscription('${c.phone}', '1y')">1 Yillik</button>
           <button class="btn-sm paid-action" onclick="togglePaidStatus('${c.phone}')">${isPaid ? 'To\'lanmagan' : 'To\'landi'}</button>
           <button class="btn-sm danger" onclick="deleteClient(${idx})">O'chirish</button>
         </div>
@@ -277,9 +357,7 @@ function renderDashboard() {
 }
 
 window.onload = function() {
-  if(sessionStorage.getItem('cyber_admin_logged') === 'true') {
-    showDashboard();
-  }
+  checkSession();
 }
 </script>
 </body>
