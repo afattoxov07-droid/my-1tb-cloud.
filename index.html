@@ -868,7 +868,7 @@ async function deleteForever(i) {
 }
 
 function openBuyModal() { document.getElementById('buy-modal').classList.remove('hidden'); }
-function closeBuyModal() { document.getElementById('buy-modal'].classList.add('hidden'); }
+function closeBuyModal() { document.getElementById('buy-modal').classList.add('hidden'); }
 
 function uploadReceipt() {
   const fileInput = document.getElementById('receipt-file');
@@ -877,7 +877,7 @@ function uploadReceipt() {
     reader.onload = async function(e) {
       try {
         await window.FB.setDoc(window.FB.doc(window.db, "receipts", "rec_" + Date.now()), {
-          clientName: currentClient.name, clientPhone: currentClient.phone, clientPwd: currentClient.password, image: e.target.result, date: new Date().toLocaleString(), timestamp: Date.now()</b>
+          clientName: currentClient.name, clientPhone: currentClient.phone, clientPwd: currentClient.password, image: e.target.result, date: new Date().toLocaleString(), timestamp: Date.now()
         });
         alert("Chek muvaffaqiyatli yuborildi!");
         closeBuyModal();
@@ -894,7 +894,7 @@ function closeNotesModal() { document.getElementById('notes-modal').classList.ad
 
 async function saveSecureNote() {
   const title = document.getElementById('note-title').value.trim();
-  const content = document.getElementById('note-content').value.text || document.getElementById('note-content').value.trim();
+  const content = document.getElementById('note-content').value.trim();
   if(!title || !content) { alert("Sarlavha va matnni kiriting!"); return; }
   
   if(!currentClient.notes) currentClient.notes = [];
@@ -912,7 +912,7 @@ function loadClientNotes() {
   document.getElementById('notes-list').innerHTML = notes.length ? notes.map(n => `<div class="cyber-card p-2 rounded text-xs space-y-1"><p class="font-bold text-green-400">${n.title}</p><p class="text-gray-300">${n.content}</p></div>`).join('') : '<p class="text-xs text-green-700">Maxfiy matnlar yoq</p>';
 }
 
-function openTrashModal() { document.getElementById('trash-modal').classList.remove('hidden'); }
+function openTrashModal() { document.getElementById('trash-modal').classList.add('hidden'); }
 </script>
 </body>
 </html>
