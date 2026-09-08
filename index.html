@@ -14,6 +14,7 @@ body { background-color: #05070d; color: #00ff66; min-height: 100vh; padding: 20
 .toast.error { border-color: #ff3333; color: #ff3333; box-shadow: 0 0 20px rgba(255,51,51,0.4); }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 .wrapper { width: 100%; max-width: 520px; display: flex; flex-direction: column; gap: 20px; }
+
 /* Login Card */
 #loginOverlay { width: 100%; display: flex; flex-direction: column; gap: 20px; }
 .login-card { border: 1px solid #00ff66; padding: 35px 25px; background: rgba(0, 255, 102, 0.02); text-align: center; box-shadow: 0 0 30px rgba(0, 255, 102, 0.08); position: relative; }
@@ -30,6 +31,7 @@ body { background-color: #05070d; color: #00ff66; min-height: 100vh; padding: 20
 .telegram-contact { margin-top: 25px; font-size: 11px; color: #ffaa00; border-top: 1px dashed rgba(255, 170, 0, 0.3); padding-top: 15px; text-align: center; letter-spacing: 0.5px; }
 .telegram-contact a { color: #00ff66; text-decoration: none; font-weight: bold; transition: 0.2s; }
 .telegram-contact a:hover { text-shadow: 0 0 8px #00ff66; }
+
 /* Dashboard */
 #mainDashboard { width: 100%; }
 header { display: flex; justify-content: space-between; align-items: center; border: 1px solid #00ff66; padding: 15px 20px; margin-bottom: 25px; background: rgba(0, 255, 102, 0.03); box-shadow: 0 0 20px rgba(0,255,102,0.05); }
@@ -38,37 +40,47 @@ header { display: flex; justify-content: space-between; align-items: center; bor
 .title { color: #ff3333; font-weight: bold; letter-spacing: 1px; font-size: 14px; text-shadow: 0 0 8px rgba(255,51,51,0.4); }
 .header-btn { background: transparent; border: 1px solid #ff3333; color: #ff3333; padding: 8px 16px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.2s; font-size: 12px; }
 .header-btn:hover { background: rgba(255, 51, 51, 0.15); box-shadow: 0 0 10px rgba(255,51,51,0.3); }
+
 .section-box { border: 1px solid #ff3333; padding: 22px; margin-bottom: 22px; background: rgba(255, 51, 51, 0.02); box-shadow: 0 0 15px rgba(255,51,51,0.03); }
 .section-box.green { border-color: #00ff66; background: rgba(0, 255, 102, 0.02); box-shadow: 0 0 15px rgba(0,255,102,0.03); }
 .section-title { color: #ff3333; font-size: 14px; margin-bottom: 15px; font-weight: bold; letter-spacing: 1px; }
 .section-box.green .section-title { color: #00ff66; }
+
 .form-row { display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; }
 .section-box input { flex: 1; min-width: 180px; background: #05070d; border: 1px solid #00ff66; color: #00ff66; padding: 12px 15px; font-family: inherit; outline: none; font-size: 13px; }
 .section-box input::placeholder { color: rgba(0, 255, 102, 0.4); }
-.item-card { border: 1px solid #00ff66; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; background: #05070d; flex-wrap: wrap; gap: 10px; }
-.card-info { font-size: 13px; }
-.card-info span { color: #00ff66; }
+
+.item-card { border: 1px solid #00ff66; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 12px; background: #05070d; flex-wrap: wrap; gap: 12px; box-shadow: inset 0 0 10px rgba(0,255,102,0.02); }
+.card-info { font-size: 13px; line-height: 1.6; }
+.card-info strong { color: #00ff66; font-size: 14px; }
 .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
 .btn-sm { background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 6px 12px; font-size: 11px; cursor: pointer; font-family: inherit; transition: 0.2s; font-weight: bold; }
 .btn-sm.success { border-color: #00ff66; color: #00ff66; }
 .btn-sm.success:hover { background: #00ff66; color: #05070d; box-shadow: 0 0 10px rgba(0,255,102,0.4); }
+.btn-sm.paid-action { border-color: #00ffff; color: #00ffff; }
+.btn-sm.paid-action:hover { background: #00ffff; color: #05070d; box-shadow: 0 0 10px rgba(0,255,255,0.4); }
 .btn-sm.danger { border-color: #ff3333; color: #ff3333; }
 .btn-sm.danger:hover { background: #ff3333; color: #fff; box-shadow: 0 0 10px rgba(255,51,51,0.4); }
+
 .empty-text { color: rgba(255, 170, 0, 0.6); font-size: 13px; font-style: italic; }
-.badge-text { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffaa00; padding: 2px 8px; font-size: 10px; margin-left: 8px; font-weight: bold; }
+.badge-text { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffaa00; padding: 2px 8px; font-size: 10px; margin-left: 6px; font-weight: bold; display: inline-block; margin-top: 4px; }
+.badge-text.paid { background: rgba(0, 255, 255, 0.15); border: 1px solid #00ffff; color: #00ffff; }
+
 /* Pricing & Author Footer */
 .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
 .price-card { border: 1px solid #ffaa00; padding: 15px; text-align: center; background: rgba(255, 170, 0, 0.03); }
 .price-card h4 { color: #ffaa00; font-size: 14px; margin-bottom: 8px; }
 .price-card .amount { font-size: 16px; font-weight: bold; color: #00ff66; }
-.author-footer { margin-top: 30px; width: 100%; max-width: 520px; border: 1px dashed rgba(0, 255, 102, 0.3); padding: 15px; text-align: center; font-size: 11px; color: rgba(0, 255, 102, 0.7); line-height: 1.6; background: rgba(0,255,102,0.01); }
+
+.author-footer { margin-top: 10px; width: 100%; max-width: 520px; border: 1px dashed rgba(0, 255, 102, 0.3); padding: 15px; text-align: center; font-size: 11px; color: rgba(0, 255, 102, 0.7); line-height: 1.6; background: rgba(0,255,102,0.01); }
 .author-footer b { color: #00ff66; }
 </style>
 </head>
 <body>
 <div id="toastContainer"></div>
 <div class="wrapper">
-  <!-- Faqat parol kiritish oynasi -->
+  <!-- Login Oynasi -->
   <div id="loginOverlay">
     <div class="login-card">
       <div class="login-icon">🔒</div>
@@ -80,6 +92,7 @@ header { display: flex; justify-content: space-between; align-items: center; bor
     </div>
   </div>
 
+  <!-- Asosiy Boshqaruv Paneli -->
   <div id="mainDashboard" style="display: none;">
     <header>
       <div class="logo-area">
@@ -91,7 +104,6 @@ header { display: flex; justify-content: space-between; align-items: center; bor
       </div>
     </header>
 
-    <!-- Admin boshqaruv paneli -->
     <div class="section-box green">
       <div class="section-title">> Tariflar narxlari</div>
       <div class="pricing-grid">
@@ -204,7 +216,7 @@ function addClient() {
     showToast("Mijoz telefon raqami va parolini kiriting!", true);
     return;
   }
-  clients.push({ phone: phone, pass: pass, subscription: 'Obuna belgilanmagan' });
+  clients.push({ phone: phone, pass: pass, subscription: 'Obuna belgilanmagan', paid: false });
   saveData();
   document.getElementById('newClientPhone').value = '';
   document.getElementById('newClientPass').value = '';
@@ -222,10 +234,19 @@ function deleteClient(index) {
 function grantSubscription(clientPhone, type) {
   let client = clients.find(c => c.phone === clientPhone);
   if(client) {
-    if(type === '1m') client.subscription = "1 Oylik Obuna (59,000 so'm)";
-    else if(type === '1y') client.subscription = "1 Yillik Obuna (700,000 so'm)";
+    if(type === '1m') client.subscription = "1 Oylik";
+    else if(type === '1y') client.subscription = "1 Yillik";
     saveData();
     showToast(`${clientPhone} uchun obuna yangilandi!`);
+  }
+}
+
+function togglePaidStatus(clientPhone) {
+  let client = clients.find(c => c.phone === clientPhone);
+  if(client) {
+    client.paid = !client.paid;
+    saveData();
+    showToast(`${clientPhone} to'lov holati o'zgartirildi!`);
   }
 }
 
@@ -235,15 +256,18 @@ function renderDashboard() {
   let clHtml = '';
   clients.forEach((c, idx) => {
     if(c.phone.toLowerCase().includes(searchVal)) {
+      const isPaid = c.paid === true;
       clHtml += `<div class="item-card">
         <div class="card-info">
           <strong>📞 ${c.phone}</strong>
-          <span class="badge-text">🔒 ${c.subscription}</span><br>
+          <span class="badge-text">🔒 ${c.subscription}</span>
+          <span class="badge-text ${isPaid ? 'paid' : ''}">${isPaid ? '✅ To\'langan' : '⏳ To\'lanmagan'}</span><br>
           <span style="font-size:11px; color:rgba(0,255,102,0.6);">Paroli: ${c.pass}</span>
         </div>
         <div class="card-actions">
           <button class="btn-sm success" onclick="grantSubscription('${c.phone}', '1m')">1 Oylik (59k)</button>
           <button class="btn-sm success" onclick="grantSubscription('${c.phone}', '1y')">1 Yillik (700k)</button>
+          <button class="btn-sm paid-action" onclick="togglePaidStatus('${c.phone}')">${isPaid ? 'To\'lanmagan' : 'To\'landi'}</button>
           <button class="btn-sm danger" onclick="deleteClient(${idx})">O'chirish</button>
         </div>
       </div>`;
