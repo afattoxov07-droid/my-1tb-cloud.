@@ -1,430 +1,374 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBER ADMIN CONTROL CENTER</title>
-    
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0b0f19">
-    <link rel="apple-touch-icon" href="icon-192.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYBER SECURE CLOUD PRO</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
+body { background-color: #05070d; color: #00ff66; min-height: 100vh; padding: 20px; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+#toastContainer { position: fixed; top: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; }
+.toast { background: #0b0f19; border: 1px solid #00ff66; color: #00ff66; padding: 12px 20px; font-size: 13px; font-weight: bold; box-shadow: 0 0 20px rgba(0,255,102,0.4); animation: fadeIn 0.3s ease; }
+.toast.error { border-color: #ff3333; color: #ff3333; box-shadow: 0 0 20px rgba(255,51,51,0.4); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.wrapper { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        body {
-            background-color: #0b0f19;
-            color: #00ff66;
-            padding: 20px;
-        }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #00ff66;
-            padding: 12px 20px;
-            margin-bottom: 25px;
-            background: rgba(0, 255, 102, 0.03);
-        }
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .admin-badge {
-            background: #ff3333;
-            color: #fff;
-            padding: 4px 8px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .title {
-            color: #ff3333;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .header-btn {
-            background: transparent;
-            border: 1px solid #ffaa00;
-            color: #ffaa00;
-            padding: 6px 15px;
-            cursor: pointer;
-            font-weight: bold;
-            text-transform: uppercase;
-            transition: 0.2s;
-        }
-        .header-btn.install-btn {
-            border-color: #00ff66;
-            color: #00ff66;
-            display: none;
-        }
-        .header-btn.logout {
-            border-color: #ff3333;
-            color: #ff3333;
-        }
-        .header-btn:hover {
-            background: rgba(255, 170, 0, 0.1);
-        }
-        .header-btn.install-btn:hover {
-            background: rgba(0, 255, 102, 0.1);
-        }
-        .header-btn.logout:hover {
-            background: rgba(255, 51, 51, 0.1);
-        }
+/* Login Container Layout */
+#loginOverlay { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; }
+@media(max-width: 580px) { #loginOverlay { grid-template-columns: 1fr; } }
 
-        .section-box {
-            border: 1px solid #ff3333;
-            padding: 20px;
-            margin-bottom: 25px;
-            background: rgba(255, 51, 51, 0.02);
-        }
-        .section-box.yellow {
-            border-color: #ffaa00;
-            background: rgba(255, 170, 0, 0.02);
-        }
-        .section-box.green {
-            border-color: #00ff66;
-            background: rgba(0, 255, 102, 0.02);
-        }
-        .section-box.purple {
-            border-color: #9933ff;
-            background: rgba(153, 51, 255, 0.02);
-        }
+.login-card { border: 1px solid #00ff66; padding: 25px 20px; background: rgba(0, 255, 102, 0.02); text-align: center; box-shadow: 0 0 25px rgba(0, 255, 102, 0.06); display: flex; flex-direction: column; justify-content: space-between; }
+.login-card.client-card { border-color: #00ffff; background: rgba(0, 255, 255, 0.02); box-shadow: 0 0 25px rgba(0, 255, 255, 0.06); }
+.login-icon { font-size: 28px; margin-bottom: 8px; filter: drop-shadow(0 0 8px rgba(0,255,102,0.5)); }
+.client-card .login-icon { filter: drop-shadow(0 0 8px rgba(0,255,255,0.5)); }
+.login-title { color: #00ff66; font-size: 16px; font-weight: bold; margin-bottom: 4px; letter-spacing: 1px; }
+.client-card .login-title { color: #00ffff; }
+.login-sub { color: rgba(0, 255, 102, 0.6); font-size: 10px; margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase; }
+.client-card .login-sub { color: rgba(0, 255, 255, 0.6); }
 
-        .section-title {
-            color: #ff3333;
-            font-size: 15px;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-        .section-box.yellow .section-title { color: #ffaa00; }
-        .section-box.green .section-title { color: #00ff66; }
-        .section-box.purple .section-title { color: #9933ff; }
+.login-input { width: 100%; background: #05070d; border: 1px solid #00ff66; color: #00ff66; padding: 10px 12px; font-family: inherit; outline: none; margin-bottom: 10px; text-align: center; font-size: 12px; }
+.client-card .login-input { border-color: #00ffff; color: #00ffff; }
+.login-input:focus { border-color: #fff; }
+.login-input::placeholder { color: rgba(0, 255, 102, 0.3); }
+.client-card .login-input::placeholder { color: rgba(0, 255, 255, 0.3); }
 
-        .form-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        input {
-            flex: 1;
-            background: #0b0f19;
-            border: 1px solid #ff3333;
-            color: #ff3333;
-            padding: 10px 15px;
-            font-family: inherit;
-            outline: none;
-        }
-        .section-box.green input {
-            border-color: #00ff66;
-            color: #00ff66;
-        }
-        input::placeholder {
-            color: rgba(255, 51, 51, 0.5);
-        }
-        .section-box.green input::placeholder {
-            color: rgba(0, 255, 102, 0.5);
-        }
+.login-btn { width: 100%; background: rgba(0, 255, 102, 0.1); border: 1px solid #00ff66; color: #00ff66; padding: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; font-size: 11px; }
+.login-btn:hover { background: #00ff66; color: #05070d; }
+.client-card .login-btn { background: rgba(0, 255, 255, 0.1); border-color: #00ffff; color: #00ffff; }
+.client-card .login-btn:hover { background: #00ffff; color: #05070d; }
 
-        .action-btn {
-            width: 100%;
-            background: transparent;
-            border: 1px solid #ff3333;
-            color: #ff3333;
-            padding: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: 0.2s;
-        }
-        .section-box.green .action-btn {
-            border-color: #00ff66;
-            color: #00ff66;
-        }
-        .action-btn:hover {
-            background: rgba(255, 51, 51, 0.1);
-        }
-        .section-box.green .action-btn:hover {
-            background: rgba(0, 255, 102, 0.1);
-        }
+.telegram-contact { margin-top: 12px; font-size: 10px; color: #ffaa00; border-top: 1px dashed rgba(255, 170, 0, 0.3); padding-top: 10px; text-align: center; }
+.telegram-contact a { color: #00ff66; text-decoration: none; font-weight: bold; }
 
-        .item-card {
-            border: 1px solid #ff3333;
-            padding: 12px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
-            background: #0b0f19;
-        }
-        .section-box.green .item-card {
-            border-color: #00ff66;
-        }
-        .card-info {
-            font-size: 14px;
-        }
-        .card-info span {
-            color: #ff3333;
-        }
-        .section-box.green .card-info span {
-            color: #00ff66;
-        }
-        .card-actions {
-            display: flex;
-            gap: 8px;
-        }
-        .btn-sm {
-            background: transparent;
-            border: 1px solid #ffaa00;
-            color: #ffaa00;
-            padding: 5px 10px;
-            font-size: 12px;
-            cursor: pointer;
-            font-family: inherit;
-        }
-        .btn-sm.danger {
-            border-color: #ff3333;
-            color: #ff3333;
-        }
-        .btn-sm:hover {
-            background: rgba(255, 170, 0, 0.1);
-        }
-        .btn-sm.danger:hover {
-            background: rgba(255, 51, 51, 0.1);
-        }
+/* Dashboard & Client Portal */
+#mainDashboard, #clientPortal { width: 100%; }
+header { display: flex; justify-content: space-between; align-items: center; border: 1px solid #00ff66; padding: 15px 20px; margin-bottom: 20px; background: rgba(0, 255, 102, 0.03); }
+.logo-area { display: flex; align-items: center; gap: 10px; }
+.admin-badge { background: #ff3333; color: #fff; padding: 4px 8px; font-weight: bold; font-size: 12px; }
+.client-badge { background: #00ffff; color: #05070d; padding: 4px 8px; font-weight: bold; font-size: 12px; }
+.title { color: #ff3333; font-weight: bold; font-size: 13px; letter-spacing: 1px; }
+.header-btn { background: transparent; border: 1px solid #ff3333; color: #ff3333; padding: 6px 12px; cursor: pointer; font-weight: bold; font-size: 11px; text-transform: uppercase; }
+.header-btn:hover { background: rgba(255, 51, 51, 0.15); }
 
-        .empty-text {
-            color: rgba(255, 170, 0, 0.6);
-            font-size: 14px;
-        }
+.section-box { border: 1px solid #ff3333; padding: 20px; margin-bottom: 20px; background: rgba(255, 51, 51, 0.02); }
+.section-box.green { border-color: #00ff66; background: rgba(0, 255, 102, 0.02); }
+.section-box.cyan { border-color: #00ffff; background: rgba(0, 255, 255, 0.02); color: #00ffff; }
+.section-title { color: #ff3333; font-size: 13px; margin-bottom: 12px; font-weight: bold; }
+.section-box.green .section-title { color: #00ff66; }
+.section-box.cyan .section-title { color: #00ffff; }
 
-        .log-item {
-            border: 1px solid #9933ff;
-            padding: 10px 15px;
-            margin-top: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-        }
-        .log-title {
-            color: #9933ff;
-            font-weight: bold;
-        }
-        .log-sub {
-            color: rgba(0, 255, 102, 0.6);
-            font-size: 11px;
-            margin-top: 3px;
-        }
-        .dot {
-            width: 8px;
-            height: 8px;
-            background: #00ff66;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #00ff66;
-        }
-        .badge-text {
-            background: rgba(255, 170, 0, 0.15);
-            border: 1px solid #ffaa00;
-            color: #ffaa00;
-            padding: 2px 6px;
-            font-size: 10px;
-            margin-left: 8px;
-        }
-    </style>
+.form-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.section-box input { flex: 1; min-width: 160px; background: #05070d; border: 1px solid #00ff66; color: #00ff66; padding: 10px 14px; font-family: inherit; outline: none; font-size: 12px; }
+.section-box.cyan input { border-color: #00ffff; color: #00ffff; }
+.section-box input::placeholder { color: rgba(0, 255, 102, 0.4); }
+
+.item-card { border: 1px solid #00ff66; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; background: #05070d; flex-wrap: wrap; gap: 10px; }
+.card-info { font-size: 12px; line-height: 1.5; }
+.card-info strong { color: #00ff66; }
+.card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.btn-sm { background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 6px 10px; font-size: 10px; cursor: pointer; font-family: inherit; font-weight: bold; }
+.btn-sm.success { border-color: #00ff66; color: #00ff66; }
+.btn-sm.success:hover { background: #00ff66; color: #05070d; }
+.btn-sm.paid-action { border-color: #00ffff; color: #00ffff; }
+.btn-sm.paid-action:hover { background: #00ffff; color: #05070d; }
+.btn-sm.danger { border-color: #ff3333; color: #ff3333; }
+.btn-sm.danger:hover { background: #ff3333; color: #fff; }
+
+.empty-text { color: rgba(255, 170, 0, 0.6); font-size: 12px; font-style: italic; }
+.badge-text { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffaa00; padding: 2px 6px; font-size: 9px; margin-left: 5px; font-weight: bold; display: inline-block; margin-top: 3px; }
+.badge-text.paid { background: rgba(0, 255, 255, 0.15); border: 1px solid #00ffff; color: #00ffff; }
+
+.pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+.price-card { border: 1px solid #ffaa00; padding: 12px; text-align: center; background: rgba(255, 170, 0, 0.03); }
+.price-card h4 { color: #ffaa00; font-size: 12px; margin-bottom: 6px; }
+.price-card .amount { font-size: 14px; font-weight: bold; color: #00ff66; }
+
+.author-footer { margin-top: 15px; width: 100%; max-width: 600px; border: 1px dashed rgba(0, 255, 102, 0.3); padding: 12px; text-align: center; font-size: 10px; color: rgba(0, 255, 102, 0.7); line-height: 1.5; background: rgba(0,255,102,0.01); }
+.author-footer b { color: #00ff66; }
+</style>
 </head>
 <body>
+<div id="toastContainer"></div>
+<div class="wrapper">
+  
+  <!-- Kirish Qismi (Admin va Mijoz yonma-yon tartibli) -->
+  <div id="loginOverlay">
+    <!-- Admin Login -->
+    <div class="login-card">
+      <div>
+        <div class="login-icon">🔒</div>
+        <div class="login-title">ADMIN PORTALI</div>
+        <div class="login-sub">Boshqaruv Markazi</div>
+        <input type="password" id="adminPassInput" class="login-input" placeholder="Admin parolini kiriting">
+      </div>
+      <div>
+        <button class="login-btn" onclick="handleAdminLogin()">ADMIN KIRISH</button>
+        <div class="telegram-contact">Admin Telegram: <a href="https://t.me/abdulloh20070804" target="_blank">@abdulloh20070804</a></div>
+      </div>
+    </div>
 
+    <!-- Mijoz Login -->
+    <div class="login-card client-card">
+      <div>
+        <div class="login-icon">👤</div>
+        <div class="login-title">MIJOZ PORTALI</div>
+        <div class="login-sub">Kabinetni Tekshirish</div>
+        <input type="text" id="clientPhoneInput" class="login-input" placeholder="Tel: +998901234567">
+        <input type="password" id="clientPassInput" class="login-input" placeholder="Maxfiy parol">
+      </div>
+      <div>
+        <button class="login-btn" onclick="handleClientLogin()">MIJOZ KIRISH</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Boshqaruv Paneli -->
+  <div id="mainDashboard" style="display: none;">
     <header>
-        <div class="logo-area">
-            <div class="admin-badge">A</div>
-            <span class="title">CYBER ADMIN CONTROL CENTER</span>
-        </div>
-        <div class="header-actions">
-            <button id="installBtn" class="header-btn install-btn">📥 O'rnatish</button>
-            <button class="header-btn" onclick="location.href='messages.html'">Mijozlar Xabarlari</button>
-            <button class="header-btn logout" onclick="location.href='logout.html'">CHIQISH</button>
-        </div>
+      <div class="logo-area">
+        <div class="admin-badge">A</div>
+        <span class="title">ADMIN CONTROL CENTER</span>
+      </div>
+      <button class="header-btn" onclick="logout()">CHIQISH</button>
     </header>
 
-    <!-- 1. Adminlar Boshqaruvi -->
-    <div class="section-box">
-        <div class="section-title">> Adminlar Boshqaruvi</div>
-        <div class="form-row">
-            <input type="text" id="adminName" placeholder="Admin ismi">
-            <input type="password" id="adminPass" placeholder="Admin maxfiy paroli">
-        </div>
-        <button class="action-btn" onclick="addAdmin()">+ ADMIN QO'SHISH</button>
-        
-        <div class="item-card" style="margin-top: 15px;">
-            <div class="card-info">
-                <strong>🛡️ Asosiy Admin</strong><br>
-                <span style="color: #ff3333; font-size: 13px;">Parol: 2007080411</span>
-            </div>
-            <div class="card-actions">
-                <button class="btn-sm" onclick="editAdmin('Asosiy Admin')">O'zgartirish</button>
-                <button class="btn-sm danger" onclick="alert('Asosiy adminni o\'chirib bo\'lmaydi!')">O'chirish</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2. Kelib tushgan to'lov cheklari -->
-    <div class="section-box yellow">
-        <div class="section-title">> Kelib tushgan to'lov cheklari</div>
-        <div class="empty-text">> Hozircha cheklar yoq.</div>
-    </div>
-
-    <!-- 3. Yangi mijoz qo'shish -->
     <div class="section-box green">
-        <div class="section-title">> Yangi mijoz qo'shish</div>
-        <div class="form-row">
-            <input type="text" id="clientName" placeholder="Mijoz ismi">
-            <input type="password" id="clientPass" placeholder="Maxfiy paroli">
+      <div class="section-title">> Tariflar narxlari</div>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <h4>1 Oylik Obuna</h4>
+          <div class="amount">59,000 so'm</div>
         </div>
-        <button class="action-btn" onclick="addClient()">+ MIJOZ QO'SHISH</button>
+        <div class="price-card">
+          <h4>1 Yillik Obuna</h4>
+          <div class="amount">700,000 so'm</div>
+        </div>
+      </div>
+
+      <div class="section-title">> Mijoz qo'shish</div>
+      <div class="form-row">
+        <input type="text" id="newClientPhone" placeholder="Tel: +998901234567">
+        <input type="text" id="newClientPass" placeholder="Parol">
+        <button class="btn-sm success" onclick="addClient()" style="padding: 10px 15px;">Qo'shish</button>
+      </div>
+
+      <div class="section-title" style="margin-top: 15px;">>> Barcha mijozlar ro'yxati</div>
+      <div class="form-row" style="margin-bottom: 8px;">
+        <input type="text" id="clientSearchInput" placeholder="Qidirish..." oninput="renderDashboard()">
+      </div>
+      <div id="clientsList"></div>
     </div>
+  </div>
 
-    <!-- 4. Shifrlangan mijozlar ro'yxati -->
-    <div class="section-box green">
-        <div class="section-title">> Shifrlangan mijozlar ro'yxati</div>
-        
-        <div class="item-card">
-            <div class="card-info">
-                <strong>Test_Mijoz</strong> <span class="badge-text">🔒 Text</span><br>
-                <span style="font-size: 13px;">Parol: parol123</span>
-            </div>
-            <div class="card-actions">
-                <button class="btn-sm" onclick="editClient('Test_Mijoz')">To'lovni o'zgartirish</button>
-                <button class="btn-sm" onclick="showPass('parol123')">Parol</button>
-                <button class="btn-sm danger" onclick="deleteClient(this)">O'chirish</button>
-            </div>
-        </div>
+  <!-- Mijoz Shaxsiy Kabineti -->
+  <div id="clientPortal" style="display: none;">
+    <header style="border-color: #00ffff; background: rgba(0,255,255,0.03);">
+      <div class="logo-area">
+        <div class="client-badge">M</div>
+        <span class="title" style="color: #00ffff;">MIJOZ KABINETI</span>
+      </div>
+      <button class="header-btn" style="border-color: #00ffff; color: #00ffff;" onclick="logout()">CHIQISH</button>
+    </header>
 
-        <div class="item-card">
-            <div class="card-info">
-                <strong>toxirjon</strong> <span class="badge-text">🔒 Text</span><br>
-                <span style="font-size: 13px;">Parol: toxirjon123</span>
-            </div>
-            <div class="card-actions">
-                <button class="btn-sm" onclick="editClient('toxirjon')">To'lovni o'zgartirish</button>
-                <button class="btn-sm" onclick="showPass('toxirjon123')">Parol</button>
-                <button class="btn-sm danger" onclick="deleteClient(this)">O'chirish</button>
-            </div>
-        </div>
+    <div class="section-box cyan">
+      <div class="section-title">> Sizning Hisob Ma'lumotlaringiz</div>
+      <div id="clientInfoBox" style="font-size: 13px; line-height: 1.8;">
+        <!-- Dinamik to'ldiriladi -->
+      </div>
     </div>
+  </div>
 
-    <!-- 5. Faol Seanslar & Xavfsizlik Jurnali -->
-    <div class="section-box purple">
-        <div class="section-title">> Faol Seanslar & Xavfsizlik Jurnali</div>
-        
-        <div class="log-item">
-            <div>
-                <div class="log-title">Asosiy Admin (Admin)</div>
-                <div class="log-sub">Noutbuk / Desktop | 07.09.2026 20:28:24</div>
-            </div>
-            <div class="dot"></div>
+</div>
+
+<!-- Muallif haqida ma'lumot -->
+<div class="author-footer">
+  <b>Dastur muallifi:</b> Fattoxov Abdulloh Toxirjon o'g'li<br>
+  <b>Ta'lim muassasasi:</b> Toshkent menejment va iqtisodiyot instituti Farg'ona filiali<br>
+  <b>Mutaxassislik:</b> Kompyuter injiniringi, 2-kurs talabasi<br>
+  <b>Telefon raqamlari:</b> +998-20-000-57-88 | +998-20-025-29-20<br>
+  <b>Telegram:</b> <a href="https://t.me/abdulloh20070804" target="_blank" style="color:#00ff66;">@abdulloh20070804</a>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDrxNhcj88sRbDT5VNuQhtIQhGaSxIxCQ",
+  authDomain: "cheksiz-hotira.firebaseapp.com",
+  databaseURL: "https://cheksiz-hotira-default-rtdb.firebaseio.com",
+  projectId: "cheksiz-hotira",
+  storageBucket: "cheksiz-hotira.appspot.com",
+  messagingSenderId: "286195163783",
+  appId: "1:286195163783:web:9fbf4b42417i0c1d38e22"
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+const db = firebase.database();
+let clients = [];
+
+function showToast(message, isError = false) {
+  const container = document.getElementById('toastContainer');
+  if(!container) return;
+  const toast = document.createElement('div');
+  toast.className = `toast ${isError ? 'error' : ''}`;
+  toast.innerText = message;
+  container.appendChild(toast);
+  setTimeout(() => { toast.remove(); }, 3500);
+}
+
+db.ref('cyber_system').on('value', (snapshot) => {
+  const data = snapshot.val();
+  if (data) {
+    clients = data.clients || [];
+  } else {
+    clients = [];
+    db.ref('cyber_system').set({ clients });
+  }
+  checkSession();
+});
+
+function saveData() {
+  db.ref('cyber_system').set({ clients: clients });
+}
+
+function handleAdminLogin() {
+  const pass = document.getElementById('adminPassInput').value.trim();
+  if(pass === "2007080411") {
+    sessionStorage.setItem('role', 'admin');
+    showDashboard();
+    showToast("Xush kelibsiz, Abdulloh!");
+  } else {
+    showToast("Admin paroli xato!", true);
+  }
+}
+
+function handleClientLogin() {
+  const phone = document.getElementById('clientPhoneInput').value.trim();
+  const pass = document.getElementById('clientPassInput').value.trim();
+  
+  let found = clients.find(c => c.phone === phone && c.pass === pass);
+  if(found) {
+    sessionStorage.setItem('role', 'client');
+    sessionStorage.setItem('clientPhone', phone);
+    showClientPortal(found);
+    showToast("Kabinetga muvaffaqiyatli kirdingiz!");
+  } else {
+    showToast("Telefon raqam yoki parol xato!", true);
+  }
+}
+
+function checkSession() {
+  const role = sessionStorage.getItem('role');
+  if(role === 'admin') {
+    showDashboard();
+  } else if(role === 'client') {
+    const phone = sessionStorage.getItem('clientPhone');
+    let found = clients.find(c => c.phone === phone);
+    if(found) showClientPortal(found);
+    else logout();
+  }
+}
+
+function showDashboard() {
+  document.getElementById('loginOverlay').style.display = 'none';
+  document.getElementById('clientPortal').style.display = 'none';
+  document.getElementById('mainDashboard').style.display = 'block';
+  renderDashboard();
+}
+
+function showClientPortal(client) {
+  document.getElementById('loginOverlay').style.display = 'none';
+  document.getElementById('mainDashboard').style.display = 'none';
+  document.getElementById('clientPortal').style.display = 'block';
+  
+  const isPaid = client.paid === true;
+  document.getElementById('clientInfoBox').innerHTML = `
+    📞 <b>Telefon raqam:</b> ${client.phone}<br>
+    🔒 <b>Obuna holati:</b> ${client.subscription}<br>
+    💳 <b>To'lov holati:</b> <span style="color: ${isPaid ? '#00ff66' : '#ff3333'}">${isPaid ? '✅ To\'langan (Faol)' : '⏳ To\'lanmagan'}</span><br><br>
+    <div style="font-size:11px; color:rgba(0,255,255,0.7);">* Obunani faollashtirish yoki uzaytirish uchun admin bilan bog'laning.</div>
+  `;
+}
+
+function logout() {
+  sessionStorage.clear();
+  location.reload();
+}
+
+function addClient() {
+  const phone = document.getElementById('newClientPhone').value.trim();
+  const pass = document.getElementById('newClientPass').value.trim();
+  if(!phone || !pass) {
+    showToast("Telefon raqam va parolni kiriting!", true);
+    return;
+  }
+  clients.push({ phone: phone, pass: pass, subscription: 'Obuna belgilanmagan', paid: false });
+  saveData();
+  document.getElementById('newClientPhone').value = '';
+  document.getElementById('newClientPass').value = '';
+  showToast("Yangi mijoz qo'shildi!");
+}
+
+function deleteClient(index) {
+  if(confirm("Mijozni o'chirmoqchimisiz?")) {
+    clients.splice(index, 1);
+    saveData();
+    showToast("Mijoz o'chirildi.");
+  }
+}
+
+function grantSubscription(clientPhone, type) {
+  let client = clients.find(c => c.phone === clientPhone);
+  if(client) {
+    if(type === '1m') client.subscription = "1 Oylik";
+    else if(type === '1y') client.subscription = "1 Yillik";
+    saveData();
+    showToast(`${clientPhone} uchun obuna yangilandi!`);
+  }
+}
+
+function togglePaidStatus(clientPhone) {
+  let client = clients.find(c => c.phone === clientPhone);
+  if(client) {
+    client.paid = !client.paid;
+    saveData();
+    showToast(`${clientPhone} to'lov holati o'zgartirildi!`);
+  }
+}
+
+function renderDashboard() {
+  if(sessionStorage.getItem('role') !== 'admin') return;
+  const searchVal = document.getElementById('clientSearchInput').value.toLowerCase();
+  let clHtml = '';
+  clients.forEach((c, idx) => {
+    if(c.phone.toLowerCase().includes(searchVal)) {
+      const isPaid = c.paid === true;
+      clHtml += `<div class="item-card">
+        <div class="card-info">
+          <strong>📞 ${c.phone}</strong>
+          <span class="badge-text">🔒 ${c.subscription}</span>
+          <span class="badge-text ${isPaid ? 'paid' : ''}">${isPaid ? '✅ To\'langan' : '⏳ To\'lanmagan'}</span><br>
+          <span style="font-size:11px; color:rgba(0,255,102,0.6);">Paroli: ${c.pass}</span>
         </div>
-
-        <div class="log-item">
-            <div>
-                <div class="log-title">Asosiy Admin (Admin)</div>
-                <div class="log-sub">Noutbuk / Desktop | 07.09.2026 20:20:10</div>
-            </div>
-            <div class="dot"></div>
+        <div class="card-actions">
+          <button class="btn-sm success" onclick="grantSubscription('${c.phone}', '1m')">1 Oylik</button>
+          <button class="btn-sm success" onclick="grantSubscription('${c.phone}', '1y')">1 Yillik</button>
+          <button class="btn-sm paid-action" onclick="togglePaidStatus('${c.phone}')">${isPaid ? 'To\'lanmagan' : 'To\'landi'}</button>
+          <button class="btn-sm danger" onclick="deleteClient(${idx})">O'chirish</button>
         </div>
+      </div>`;
+    }
+  });
+  document.getElementById('clientsList').innerHTML = clHtml || '<div class="empty-text">> Mijozlar topilmadi.</div>';
+}
 
-        <div class="log-item">
-            <div>
-                <div class="log-title">toxirjon (Mijoz)</div>
-                <div class="log-sub">Noutbuk / Desktop | 07.09.2026 20:19:54</div>
-            </div>
-            <div class="dot"></div>
-        </div>
-
-        <div class="log-item">
-            <div>
-                <div class="log-title">Asosiy Admin (Admin)</div>
-                <div class="log-sub">Noutbuk / Desktop | 07.09.2026 20:19:42</div>
-            </div>
-            <div class="dot"></div>
-        </div>
-    </div>
-
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').catch(() => {});
-        }
-
-        let deferredPrompt;
-        const installBtn = document.getElementById('installBtn');
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installBtn.style.display = 'inline-block';
-        });
-
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    installBtn.style.display = 'none';
-                }
-                deferredPrompt = null;
-            }
-        });
-
-        function addAdmin() {
-            const name = document.getElementById('adminName').value;
-            const pass = document.getElementById('adminPass').value;
-            if(!name || !pass) {
-                alert("Iltimos, admin ismi va parolini kiriting!");
-                return;
-            }
-            alert("Yangi admin muvaffaqiyatli qo'shildi!");
-            document.getElementById('adminName').value = '';
-            document.getElementById('adminPass').value = '';
-        }
-
-        function addClient() {
-            const name = document.getElementById('clientName').value;
-            const pass = document.getElementById('clientPass').value;
-            if(!name || !pass) {
-                alert("Iltimos, mijoz ismi va parolini kiriting!");
-                return;
-            }
-            alert("Yangi mijoz qo'shildi!");
-            document.getElementById('clientName').value = '';
-            document.getElementById('clientPass').value = '';
-        }
-
-        function editAdmin(name) {
-            alert(name + " ma'lumotlarini o'zgartirish");
-        }
-
-        function editClient(name) {
-            alert(name + " uchun obuna muddatini o'zgartirish");
-        }
-
-        function showPass(pass) {
-            alert("Maxfiy parol: " + pass);
-        }
-
-        function deleteClient(btn) {
-            if(confirm("Haqiqatan ham o'chirmoqchimisiz?")) {
-                btn.closest('.item-card').remove();
-            }
-        }
-    </script>
+window.onload = function() {
+  checkSession();
+}
+</script>
 </body>
 </html>
