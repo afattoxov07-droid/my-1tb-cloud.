@@ -36,8 +36,8 @@
         .login-btn:hover { background: #00ff66; color: #05070d; box-shadow: 0 0 25px rgba(0,255,102,0.6); }
 
         .telegram-contact { margin-top: 25px; font-size: 11px; color: #ffaa00; border-top: 1px dashed rgba(255, 170, 0, 0.3); padding-top: 15px; text-align: center; letter-spacing: 0.5px; }
-        .telegram-contact a { color: #00ff66; text-decoration: none; font-weight: bold; transition: 0.2s; }
-        .telegram-contact a:hover { text-shadow: 0 0 8px #00ff66; }
+        .telegram-contact span { color: #00ff66; text-decoration: underline; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .telegram-contact span:hover { text-shadow: 0 0 8px #00ff66; }
 
         /* Ochiq Bo'limlar */
         .open-sections { border: 1px solid #00ff66; padding: 25px; background: rgba(0, 255, 102, 0.01); box-shadow: 0 0 25px rgba(0, 255, 102, 0.05); }
@@ -109,7 +109,8 @@
                 <input type="text" id="loginPhone" class="login-input" value="+998" placeholder="+998">
                 <input type="password" id="loginPass" class="login-input" placeholder="********">
                 <button class="login-btn" onclick="handleLogin()">PROFILGA KIRISH / OCHISH</button>
-                <div class="telegram-contact">Parol olish uchun Telegram: <a href="https://t.me/abdulloh20070804" target="_blank">@abdulloh20070804</a> ga yozing.</div>
+                <!-- Bu yerda oddiygina JS orqali ochiladigan qilindi -->
+                <div class="telegram-contact">Parol olish uchun Telegram: <span onclick="window.open('https://t.me/abdulloh20070804', '_blank')">@abdulloh20070804</span> ga yozing.</div>
             </div>
             
             <div class="open-sections">
