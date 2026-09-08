@@ -9,13 +9,13 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-body { font-family: 'Fira Code', monospace; background-color: #030712; color: #22c55e; -webkit-text-size-adjust: 100%; user-select: none; }
-input, textarea { user-select: text; }
-.scanline { background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.3)); background-size: 100% 4px; }
-.cyber-border { border: 1px solid #15803d; box-shadow: 0 0 10px rgba(34, 197, 94, 0.15), inset 0 0 10px rgba(34, 197, 94, 0.1); }
-.cyber-card { background: rgba(6, 78, 59, 0.1); border: 1px solid #166534; transition: all 0.2s ease; }
-.cyber-button { background: rgba(34, 197, 94, 0.15); border: 1px solid #22c55e; color: #4ade80; box-shadow: 0 0 10px rgba(34, 197, 94, 0.2); cursor: pointer; }
-.cyber-button:active { background: #22c55e; color: #000; }
+  body { font-family: 'Fira Code', monospace; background-color: #030712; color: #22c55e; -webkit-text-size-adjust: 100%; user-select: none; }
+  input, textarea { user-select: text; }
+  .scanline { background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.3)); background-size: 100% 4px; }
+  .cyber-border { border: 1px solid #15803d; box-shadow: 0 0 10px rgba(34, 197, 94, 0.15), inset 0 0 10px rgba(34, 197, 94, 0.1); }
+  .cyber-card { background: rgba(6, 78, 59, 0.1); border: 1px solid #166534; transition: all 0.2s ease; }
+  .cyber-button { background: rgba(34, 197, 94, 0.15); border: 1px solid #22c55e; color: #4ade80; box-shadow: 0 0 10px rgba(34, 197, 94, 0.2); cursor: pointer; }
+  .cyber-button:active { background: #22c55e; color: #000; }
 </style>
 </head>
 <body class="min-h-screen flex flex-col relative overflow-x-hidden text-sm md:text-base" onclick="initAudioContext()">
@@ -30,7 +30,6 @@ input, textarea { user-select: text; }
         <h2 class="text-base md:text-lg font-bold text-green-400">CYBER SECURE CLOUD PRO</h2>
         <p id="login-subtitle" class="text-[10px] text-green-600 mt-1">Ism va Telefon Raqam Orqali Kirish</p>
       </div>
-
       <!-- KIRISH FORMASI -->
       <div class="space-y-3 pt-2">
         <div id="registration-fields" class="space-y-3">
@@ -42,7 +41,6 @@ input, textarea { user-select: text; }
       </div>
       <p id="login-error" class="text-xs text-red-500 hidden"></p>
     </div>
-
     <!-- OCHIQ BO'LIMLAR -->
     <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3 text-left">
       <div class="flex justify-between items-center border-b border-green-900 pb-2">
@@ -178,17 +176,22 @@ input, textarea { user-select: text; }
       </div>
       <div class="space-y-4 flex flex-col">
         <div class="cyber-border bg-gray-950 p-3.5 rounded-lg space-y-2">
-          <div class="text-[11px] text-green-600 font-bold flex justify-between"><span>XOTIRA HOLATI</span><span id="storage-status-text" class="text-yellow-400">TEST (5 tadan 0)</span></div>
+          <div class="text-[11px] text-green-600 font-bold flex justify-between">
+            <span>XOTIRA HOLATI</span>
+            <span id="storage-status-text" class="text-yellow-400">TEST (5 tadan 0)</span>
+          </div>
           <div id="storage-display" class="text-lg md:text-xl font-bold text-yellow-400">5 TA FAYL</div>
           <div class="w-full bg-gray-900 h-1.5 border border-green-800"><div id="storage-bar" class="bg-yellow-500 h-full" style="width: 0%"></div></div>
           <div id="buy-storage-box" class="pt-2 hidden"><button onclick="openBuyModal()" class="w-full py-2 bg-emerald-950 border border-green-500 text-green-300 rounded text-[11px] font-bold animate-bounce cursor-pointer">🛒 XOTIRA SOTIB OLISH</button></div>
         </div>
       </div>
     </div>
-    
+
     <!-- OCHIQ BO'LIMLAR (KABINET ICHIDA) -->
     <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3 text-left">
-      <div class="flex justify-between items-center border-b border-green-900 pb-2"><h3 class="text-xs font-bold text-green-400">> Qo'shimcha Bo'limlar va Ma'lumotlar</h3></div>
+      <div class="flex justify-between items-center border-b border-green-900 pb-2">
+        <h3 class="text-xs font-bold text-green-400">> Qo'shimcha Bo'limlar va Ma'lumotlar</h3>
+      </div>
       <div class="grid grid-cols-2 gap-2">
         <button onclick="openPublicSection('tariffs')" class="cyber-button py-2 px-3 rounded text-[11px] font-bold text-left flex items-center space-x-2 cursor-pointer"><i class="fa-solid fa-tags"></i><span>Tariflar</span></button>
         <button onclick="openPublicSection('rules')" class="cyber-button py-2 px-3 rounded text-[11px] font-bold text-left flex items-center space-x-2 cursor-pointer"><i class="fa-solid fa-book"></i><span>Qoidalar</span></button>
@@ -212,9 +215,7 @@ input, textarea { user-select: text; }
     <div class="w-12 h-12 mx-auto rounded border border-red-500 bg-red-950 flex items-center justify-center text-red-400 font-bold text-xl">⏳</div>
     <h2 class="text-base font-bold text-red-400">OBUNA MUDDATI TUGADI YOKI TO'LANMAGAN</h2>
     <p class="text-xs text-green-300">Sizning ma'lumotlaringiz xavfsiz saqlanmoqda, ammo obuna muddati tugagani uchun vaqtincha bloklandi. Admin tomonidan 1 oylik yoki 1 yillik cheksiz tarif yoqilgach, tizim avtomatik ochiladi.</p>
-    <div class="pt-2">
-      <button onclick="openBuyModal()" class="w-full py-2 bg-emerald-950 border border-green-500 text-green-300 rounded text-xs font-bold uppercase cursor-pointer">CHEK YUBORISH VA OBUNANI UZOQTIRISH</button>
-    </div>
+    <div class="pt-2"><button onclick="openBuyModal()" class="w-full py-2 bg-emerald-950 border border-green-500 text-green-300 rounded text-xs font-bold uppercase cursor-pointer">CHEK YUBORISH VA OBUNANI UZOQTIRISH</button></div>
     <button onclick="logout()" class="text-xs text-red-400 underline pt-2 cursor-pointer">Chiqish</button>
   </div>
 </div>
@@ -340,7 +341,6 @@ function getClientsDB() {
   }
   return decryptData(encryptedDb) || {};
 }
-
 function saveClientsDB(db) { localStorage.setItem('secure_cloud_clients_v3', encryptData(db)); }
 function getActivityDB() { let enc = localStorage.getItem('secure_client_activities'); return enc ? (decryptData(enc) || []) : []; }
 function saveActivityDB(db) { localStorage.setItem('secure_client_activities', encryptData(db)); }
@@ -351,6 +351,7 @@ function saveSupportDB(db) { localStorage.setItem('secure_support_tickets', encr
 
 let currentClient = null;
 let savedFiles = [];
+let trashFiles = []; // Arxiv uchun massiv
 let totalUploadedCount = 0; 
 let activeReceiptIndex = null;
 
@@ -388,6 +389,7 @@ function openPublicSection(section) {
   }
   modal.classList.remove('hidden');
 }
+
 function closePublicModal() { document.getElementById('public-modal').classList.add('hidden'); }
 
 function sendPublicSupportTicket() {
@@ -413,7 +415,6 @@ function clientRegisterOrLogin() {
     openAdminPanel();
     return;
   }
-
   let clients = getClientsDB();
   if(clients[pwd]) {
     errBox.classList.add('hidden');
@@ -482,10 +483,8 @@ function checkSubscriptionAndOpenApp() {
   if(clients[currentClient.password]) {
     currentClient = { password: currentClient.password, ...clients[currentClient.password] };
   }
-  
   let now = new Date().getTime();
   let isExpired = currentClient.expiresAt && currentClient.expiresAt < now;
-
   document.getElementById('login-screen').classList.add('hidden');
   if (isExpired) {
     document.getElementById('blocked-interface').classList.remove('hidden');
@@ -498,10 +497,8 @@ function checkSubscriptionAndOpenApp() {
 function openClientAppDashboard() {
   document.getElementById('client-title').innerText = currentClient.name + " (" + currentClient.phone + ")";
   totalUploadedCount = currentClient.totalUploaded || 0;
-  
   let now = new Date().getTime();
   const badge = document.getElementById('client-status-badge');
-  
   if (currentClient.expiresAt && currentClient.expiresAt > now) {
     let expireDateStr = new Date(currentClient.expiresAt).toLocaleDateString();
     badge.innerText = `⭐ CHEKSIZ OBUNA (${expireDateStr} gacha)`;
@@ -540,12 +537,10 @@ function adminGiveDuration(pwd, days) {
     let now = new Date().getTime();
     let currentExp = db[pwd].expiresAt && db[pwd].expiresAt > now ? db[pwd].expiresAt : now;
     db[pwd].expiresAt = currentExp + (days * 24 * 60 * 60 * 1000);
-    
     let newPwd = Math.floor(100000 + Math.random() * 900000).toString();
     db[newPwd] = db[pwd];
     delete db[pwd];
     saveClientsDB(db);
-
     let tickets = getSupportDB();
     tickets.unshift({ user: db[newPwd].name, phone: db[newPwd].phone, type: 'Tizim (Obuna)', message: `Admin tomonidan ${days === 30 ? '1 oylik' : '1 yillik'} cheksiz obuna berildi. Yangi parolingiz: ${newPwd}`, reply: 'Obuna aktivlashtirildi.', date: new Date().toLocaleString() });
     saveSupportDB(tickets);
@@ -591,6 +586,7 @@ function openReceiptModal(idx) {
   document.getElementById('receipt-modal-content').innerHTML = `<p class="text-xs text-green-300 mb-2">Mijoz: <b>${r.clientName}</b></p><img src="${r.image}" class="max-h-60 mx-auto rounded border border-green-800 object-contain">`;
   document.getElementById('receipt-modal').classList.remove('hidden');
 }
+
 function closeReceiptModal() { document.getElementById('receipt-modal').classList.add('hidden'); }
 
 function approvePaymentWithDuration(days) {
@@ -602,17 +598,14 @@ function approvePaymentWithDuration(days) {
       let now = new Date().getTime();
       let currentExp = db[r.clientPwd].expiresAt && db[r.clientPwd].expiresAt > now ? db[r.clientPwd].expiresAt : now;
       db[r.clientPwd].expiresAt = currentExp + (days * 24 * 60 * 60 * 1000);
-      
       let clientInfo = db[r.clientPwd];
       let newPwd = Math.floor(100000 + Math.random() * 900000).toString();
       db[newPwd] = clientInfo;
       delete db[r.clientPwd];
       saveClientsDB(db);
-
       let tickets = getSupportDB();
       tickets.unshift({ user: clientInfo.name, phone: clientInfo.phone, type: 'Tizim (To\'lov)', message: `To'lovingiz tasdiqlandi! ${days === 30 ? '1 oylik' : '1 yillik'} cheksiz obuna yoqildi. Yangi parolingiz: ${newPwd}`, reply: 'Muvaffaqiyatli.', date: new Date().toLocaleString() });
       saveSupportDB(tickets);
-      
       closeReceiptModal();
       renderAdminReceipts();
       renderAdminClients();
@@ -629,10 +622,8 @@ function closePasswordChangeModal() { document.getElementById('password-modal').
 function updateClientPassword() {
   const newPwd = document.getElementById('new-custom-pwd').value.trim();
   if(!newPwd) { alert("Yangi parolni kiriting!"); return; }
-  
   let clients = getClientsDB();
   if(clients[newPwd]) { alert("Bu parol band! Boshqa parol kiriting."); return; }
-  
   clients[newPwd] = clients[currentClient.password];
   delete clients[currentClient.password];
   saveClientsDB(clients);
@@ -643,15 +634,25 @@ function updateClientPassword() {
     localStorage.removeItem(`secure_files_${currentClient.password}`);
   }
 
+  let oldTrash = localStorage.getItem(`secure_trash_${currentClient.password}`);
+  if(oldTrash) {
+    localStorage.setItem(`secure_trash_${newPwd}`, oldTrash);
+    localStorage.removeItem(`secure_trash_${currentClient.password}`);
+  }
+
   currentClient.password = newPwd;
   localStorage.setItem('secure_active_session', newPwd);
-  
   closePasswordChangeModal();
   document.getElementById('new-custom-pwd').value = '';
   alert("Parolingiz muvaffaqiyatli o'zgartirildi!");
 }
 
-function openClientSupportModal() { renderClientMessages(); document.getElementById('client-support-modal').classList.remove('hidden'); document.getElementById('client-unread-dot').classList.add('hidden'); }
+function openClientSupportModal() {
+  renderClientMessages();
+  document.getElementById('client-support-modal').classList.remove('hidden');
+  document.getElementById('client-unread-dot').classList.add('hidden');
+}
+
 function closeClientSupportModal() { document.getElementById('client-support-modal').classList.add('hidden'); }
 
 function sendClientQuestion() {
@@ -674,7 +675,11 @@ function checkClientNotifications() {
   if(tickets.length > 0) { document.getElementById('client-unread-dot').classList.remove('hidden'); }
 }
 
-function openAdminSupportModal() { renderAdminChat(); document.getElementById('admin-support-modal').classList.remove('hidden'); }
+function openAdminSupportModal() {
+  renderAdminChat();
+  document.getElementById('admin-support-modal').classList.remove('hidden');
+}
+
 function closeAdminSupportModal() { document.getElementById('admin-support-modal').classList.add('hidden'); }
 
 function renderAdminChat() {
@@ -686,6 +691,7 @@ function renderAdminChat() {
 }
 
 function selectChatUser(name) { document.getElementById('admin-reply-user').value = name; }
+
 function sendAdminReply() {
   const userName = document.getElementById('admin-reply-user').value.trim();
   const replyText = document.getElementById('admin-reply-text').value.trim();
@@ -704,15 +710,22 @@ function sendAdminReply() {
 function loadClientFiles() {
   let enc = localStorage.getItem(`secure_files_${currentClient.password}`);
   savedFiles = enc ? (decryptData(enc) || []) : [];
+
+  let encTrash = localStorage.getItem(`secure_trash_${currentClient.password}`);
+  trashFiles = encTrash ? (decryptData(encTrash) || []) : [];
+
   let clients = getClientsDB();
   if(clients[currentClient.password]) {
     totalUploadedCount = clients[currentClient.password].totalUploaded || 0;
   }
   renderFiles();
+  renderTrashFiles();
 }
 
 function saveClientFiles() {
   localStorage.setItem(`secure_files_${currentClient.password}`, encryptData(savedFiles));
+  localStorage.setItem(`secure_trash_${currentClient.password}`, encryptData(trashFiles));
+  
   let clients = getClientsDB();
   if(clients[currentClient.password]) {
     clients[currentClient.password].totalUploaded = totalUploadedCount;
@@ -746,16 +759,45 @@ function updateTestStorageUI() {
 
 function renderFiles() {
   document.getElementById('file-count').innerText = savedFiles.length;
-  document.getElementById('file-list').innerHTML = savedFiles.length ? savedFiles.map((f, i) => `<div class="cyber-card p-2 rounded flex justify-between text-xs"><span>${f.name}</span><button onclick="deleteFile(${i})" class="text-red-400 cursor-pointer">O'chirish</button></div>`).join('') : '<div class="text-center py-4 text-xs text-green-700">FAYLLAR YOQ</div>';
+  document.getElementById('file-list').innerHTML = savedFiles.length ? savedFiles.map((f, i) => `<div class="cyber-card p-2 rounded flex justify-between text-xs items-center"><span>${f.name}</span><button onclick="deleteFile(${i})" class="text-red-400 cursor-pointer">O'chirish</button></div>`).join('') : '<div class="text-center py-4 text-xs text-green-700">FAYLLAR YOQ</div>';
 }
 
 function deleteFile(i) {
-  savedFiles.splice(i, 1);
+  let deleted = savedFiles.splice(i, 1)[0];
+  trashFiles.unshift(deleted);
   saveClientFiles();
   renderFiles();
+  renderTrashFiles();
+  
   let now = new Date().getTime();
   let isVip = currentClient.expiresAt && currentClient.expiresAt > now;
   if(!isVip) updateTestStorageUI();
+}
+
+function restoreFile(i) {
+  let restored = trashFiles.splice(i, 1)[0];
+  savedFiles.unshift(restored);
+  saveClientFiles();
+  renderFiles();
+  renderTrashFiles();
+}
+
+function openTrashModal() { 
+  renderTrashFiles();
+  document.getElementById('trash-modal').classList.remove('hidden'); 
+}
+
+function closeTrashModal() { document.getElementById('trash-modal').classList.add('hidden'); }
+
+function renderTrashFiles() {
+  const trashContainer = document.getElementById('trash-file-list');
+  if (!trashContainer) return;
+  trashContainer.innerHTML = trashFiles.length ? trashFiles.map((f, i) => `
+    <div class="cyber-card p-2 rounded flex justify-between items-center text-xs">
+      <span>${f.name}</span>
+      <button onclick="restoreFile(${i})" class="cyber-button px-2 py-1 rounded cursor-pointer text-green-400">Tiklash</button>
+    </div>
+  `).join('') : '<div class="text-center py-4 text-xs text-green-700">ARXIV BO\'SH</div>';
 }
 
 function openBuyModal() { document.getElementById('buy-modal').classList.remove('hidden'); }
@@ -778,13 +820,7 @@ function uploadReceipt() {
 
 function openNotesModal() { document.getElementById('notes-modal').classList.remove('hidden'); }
 function closeNotesModal() { document.getElementById('notes-modal').classList.add('hidden'); }
-function saveSecureNote() { 
-  alert("Matn muvaffaqiyatli shifrlab saqlandi!"); 
-  closeNotesModal(); 
-}
-
-function openTrashModal() { document.getElementById('trash-modal').classList.remove('hidden'); }
-function closeTrashModal() { document.getElementById('trash-modal').classList.add('hidden'); }
+function saveSecureNote() { alert("Matn muvaffaqiyatli shifrlab saqlandi!"); closeNotesModal(); }
 </script>
 </body>
 </html>
