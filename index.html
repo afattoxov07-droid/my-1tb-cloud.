@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin va Mijozlar Paneli - Firebase & Telegram</title>
-    <!-- Firebase SDK skriptlari -->
+    <title>Admin va Mijozlar Paneli - Firebase</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <style>
@@ -28,8 +27,7 @@
             
             <div id="admin-panel" class="panel" style="display:none;">
                 <h4>Admin Boshqaruvi</h4>
-                <p>Barcha ma'lumotlar Firebase Realtime Database dan yuklandi.</p>
-                <div id="admin-stats"></div>
+                <p>Ma'lumotlar to'g'ridan-to'g'ri Firebase bazasidan boshqariladi.</p>
             </div>
 
             <div id="client-panel" class="panel" style="display:none;">
@@ -41,7 +39,6 @@
     </div>
 
     <script>
-        // --- FIREBASE SOZLAMALARI ---
         const firebaseConfig = {
             apiKey: "SIZNING_API_KEYINGIZ",
             authDomain: "SIZNING_PROYEKT.firebaseapp.com",
@@ -52,15 +49,12 @@
             appId: "SIZNING_APP_ID"
         };
 
-        // Firebase ni ishga tushirish
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // --- TELEGRAM BOT SOZLAMALARI ---
         const BOT_TOKEN = "SIZNING_BOT_TOKENINGIZ";
         const CHAT_ID = "SIZNING_CHAT_IDINGIZ";
 
-        // Seansni log qilish funksiyasi
         function logSession(name, role) {
             database.ref('sessions').once('value', (snapshot) => {
                 let sessions = snapshot.val() || [];
@@ -75,7 +69,6 @@
             });
         }
 
-        // Tizimga kirish funksiyasi
         function login() {
             const val = document.getElementById('username').value.trim();
             if (!val) {
@@ -83,13 +76,8 @@
                 return;
             }
 
-            // Adminlar bazasini tekshirish
             database.ref('admins').once('value', (adminSnap) => {
-                let admins = adminSnap.val();
-                if (!admins) {
-                    admins = { "2007080411": { name: "Asosiy Admin" } };
-                    database.ref('admins').set(admins);
-                }
+                const admins = adminSnap.val() || {};
 
                 if (admins[val]) {
                     showDashboard(admins[val].name, 'admin');
@@ -97,13 +85,8 @@
                     return;
                 }
 
-                // Mijozlar bazasini tekshirish
                 database.ref('clients').once('value', (clientSnap) => {
-                    let clients = clientSnap.val();
-                    if (!clients) {
-                        clients = { "parol123": { name: "Test_Mijoz", paid: false } };
-                        database.ref('clients').set(clients);
-                    }
+                    const clients = clientSnap.val() || {};
 
                     if (clients[val]) {
                         showDashboard(clients[val].name, 'client');
@@ -115,7 +98,6 @@
             });
         }
 
-        // Dashboardni ko'rsatish
         function showDashboard(name, role) {
             document.getElementById('login-section').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
@@ -128,7 +110,6 @@
             }
         }
 
-        // Telegram botga fayl yuklash
         async function uploadFileToTelegram() {
             const fileInput = document.getElementById('fileInput');
             if (fileInput.files.length === 0) {
