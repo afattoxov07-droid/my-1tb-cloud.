@@ -8,7 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
-        body { background-color: #05070d; color: #00ff66; min-height: 100vh; padding: 20px; display: flex; justify-content: center; align-items: center; }
+        body { background-color: #05070d; color: #00ff66; min-height: 100vh; padding: 20px; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         
         #toastContainer { position: fixed; top: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; }
         .toast { background: #0b0f19; border: 1px solid #00ff66; color: #00ff66; padding: 12px 20px; font-size: 13px; font-weight: bold; box-shadow: 0 0 20px rgba(0,255,102,0.4); animation: fadeIn 0.3s ease; }
@@ -56,9 +56,6 @@
         .section-box input { flex: 1; min-width: 180px; background: #05070d; border: 1px solid #00ff66; color: #00ff66; padding: 12px 15px; font-family: inherit; outline: none; font-size: 13px; }
         .section-box input::placeholder { color: rgba(0, 255, 102, 0.4); }
 
-        .action-btn { width: 100%; background: transparent; border: 1px solid #00ff66; color: #00ff66; padding: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; font-size: 13px; letter-spacing: 1px; }
-        .section-box.green .action-btn:hover { background: #00ff66; color: #05070d; box-shadow: 0 0 20px rgba(0,255,102,0.4); }
-
         .item-card { border: 1px solid #00ff66; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; background: #05070d; flex-wrap: wrap; gap: 10px; }
         .card-info { font-size: 13px; }
         .card-info span { color: #00ff66; }
@@ -72,6 +69,15 @@
         
         .empty-text { color: rgba(255, 170, 0, 0.6); font-size: 13px; font-style: italic; }
         .badge-text { background: rgba(255, 170, 0, 0.15); border: 1px solid #ffaa00; color: #ffaa00; padding: 2px 8px; font-size: 10px; margin-left: 8px; font-weight: bold; }
+
+        /* Pricing & Author Footer */
+        .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .price-card { border: 1px solid #ffaa00; padding: 15px; text-align: center; background: rgba(255, 170, 0, 0.03); }
+        .price-card h4 { color: #ffaa00; font-size: 14px; margin-bottom: 8px; }
+        .price-card .amount { font-size: 16px; font-weight: bold; color: #00ff66; }
+
+        .author-footer { margin-top: 30px; width: 100%; max-width: 520px; border: 1px dashed rgba(0, 255, 102, 0.3); padding: 15px; text-align: center; font-size: 11px; color: rgba(0, 255, 102, 0.7); line-height: 1.6; background: rgba(0,255,102,0.01); }
+        .author-footer b { color: #00ff66; }
     </style>
 </head>
 <body>
@@ -84,10 +90,10 @@
                 <div class="login-icon">🔒</div>
                 <div class="login-title">CYBER SECURE CLOUD PRO</div>
                 <div class="login-sub">Mijoz va Admin Kirish Portali</div>
-                <input type="text" id="loginName" class="login-input" placeholder="Ismingizni kiriting">
+                <input type="text" id="loginPhone" class="login-input" placeholder="Telefon raqamingiz (+998...)">
                 <input type="password" id="loginPass" class="login-input" placeholder="Parolingizni kiriting">
                 <button class="login-btn" onclick="handleLogin()">TIZIMGA KIRISH</button>
-                <div class="telegram-contact">Parol olish uchun Telegram: <a href="https://t.me/abdulloh20070804" target="_blank">@abdulloh20070804</a> ga yozing.</div>
+                <div class="telegram-contact">Admin Telegram: <a href="https://t.me/abdulloh20070804" target="_blank">@abdulloh20070804</a></div>
             </div>
         </div>
 
@@ -102,30 +108,54 @@
                 </div>
             </header>
 
-            <!-- Admin uchun mijoz qo'shish va boshqarish bo'limi -->
+            <!-- Admin boshqaruv paneli -->
             <div class="section-box green" id="adminControlPanel" style="display: none;">
-                <div class="section-title">> Yangi mijoz qo'shish</div>
-                <div class="form-row">
-                    <input type="text" id="clientName" placeholder="Mijoz ismi">
-                    <input type="text" id="clientPass" placeholder="Mijoz uchun parol">
+                <div class="section-title">> Tariflar narxlari</div>
+                <div class="pricing-grid">
+                    <div class="price-card">
+                        <h4>1 Oylik Obuna</h4>
+                        <div class="amount">59,000 so'm</div>
+                    </div>
+                    <div class="price-card">
+                        <h4>1 Yillik Obuna</h4>
+                        <div class="amount">700,000 so'm</div>
+                    </div>
                 </div>
-                <button class="action-btn" onclick="addNewClient()">+ MIJOZNI QO'SHISH VA PAROL BERISH</button>
-                
-                <div class="section-title" style="margin-top: 25px;">> Shifrlangan mijozlar ro'yxati va Obunalar</div>
+
+                <div class="section-title">> Barcha ro'yxatdan o'tgan mijozlar</div>
                 <div class="form-row" style="margin-bottom: 10px;">
-                    <input type="text" id="clientSearchInput" placeholder="Mijoz ismi bo'yicha qidirish..." oninput="renderDashboard()">
+                    <input type="text" id="clientSearchInput" placeholder="Telefon raqam bo'yicha qidirish..." oninput="renderDashboard()">
                 </div>
                 <div id="clientsList"></div>
             </div>
 
-            <!-- Mijoz uchun shaxsiy kabinet bo'limi -->
+            <!-- Mijoz shaxsiy kabineti -->
             <div class="section-box green" id="clientCabinetPanel" style="display: none;">
-                <div class="section-title">> Shaxsiy Kabinet Ma'lumotlari</div>
-                <div id="clientInfoContent" style="font-size: 14px; line-height: 1.8;">
-                    <!-- Mijoz ma'lumotlari chiqadi -->
+                <div class="section-title">> Shaxsiy Kabinet va Tariflar</div>
+                <div class="pricing-grid">
+                    <div class="price-card">
+                        <h4>1 Oylik Obuna</h4>
+                        <div class="amount">59,000 so'm</div>
+                    </div>
+                    <div class="price-card">
+                        <h4>1 Yillik Obuna</h4>
+                        <div class="amount">700,000 so'm</div>
+                    </div>
+                </div>
+                <div id="clientInfoContent" style="font-size: 14px; line-height: 1.8; margin-top: 15px;">
+                    <!-- Mijoz ma'lumotlari -->
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Muallif haqida ma'lumot -->
+    <div class="author-footer">
+        <b>Dastur muallifi:</b> Fattoxov Abdulloh Toxirjon o'g'li<br>
+        <b>Ta'lim muassasasi:</b> Toshkent menejment va iqtisodiyot instituti Farg'ona filiali<br>
+        <b>Mutaxassislik:</b> Kompyuter injiniringi, 2-kurs talabasi<br>
+        <b>Telefon raqamlari:</b> +998-20-000-57-88 | +998-20-025-29-20<br>
+        <b>Telegram:</b> <a href="https://t.me/abdulloh20070804" target="_blank" style="color:#00ff66;">@abdulloh20070804</a>
     </div>
 
     <script>
@@ -178,34 +208,44 @@
         }
 
         function handleLogin() {
-            const name = document.getElementById('loginName').value.trim();
+            const phone = document.getElementById('loginPhone').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
 
-            if(!name || !pass) {
-                showToast("Iltimos, ism va parolni kiriting!", true);
+            if(!phone || !pass) {
+                showToast("Iltimos, telefon raqam va parolni kiriting!", true);
                 return;
             }
 
-            // ASOSIY ADMIN (Siz)
-            if (name === "Abdulloh" && pass === "2007080411") {
-                const userData = { name: "Abdulloh (Admin)", role: 'admin' };
+            // 1. SIZNING ADMIN PAROLINGIZ
+            if (pass === "2007080411") {
+                const userData = { phone: phone, role: 'admin' };
                 sessionStorage.setItem('cyber_logged_user', JSON.stringify(userData));
                 showDashboard();
-                showToast("Xush kelibsiz, Asosiy Admin!");
+                showToast("Xush kelibsiz, Abdulloh (Admin)!");
                 return;
             }
 
-            // MIJOZLAR
-            let client = clients.find(c => c.name.toLowerCase() === name.toLowerCase() && c.pass === pass);
-            if(client) {
-                const userData = { name: client.name, role: 'client', subscription: client.subscription };
+            // 2. MIJOZLAR (O'z raqami va o'zi kiritgan paroli bilan)
+            let client = clients.find(c => c.phone === phone);
+            
+            if (client) {
+                if (client.pass === pass) {
+                    const userData = { phone: client.phone, role: 'client', subscription: client.subscription };
+                    sessionStorage.setItem('cyber_logged_user', JSON.stringify(userData));
+                    showDashboard();
+                    showToast("Tizimga muvaffaqiyatli kirdingiz!");
+                } else {
+                    showToast("Parol xato!", true);
+                }
+            } else {
+                clients.push({ phone: phone, pass: pass, subscription: 'Obuna belgilanmagan' });
+                saveData();
+                
+                const userData = { phone: phone, role: 'client', subscription: 'Obuna belgilanmagan' };
                 sessionStorage.setItem('cyber_logged_user', JSON.stringify(userData));
                 showDashboard();
-                showToast("Tizimga muvaffaqiyatli kirdingiz!");
-                return;
+                showToast("Muvaffaqiyatli ro'yxatdan o'tdingiz!");
             }
-
-            showToast("Kiritilgan ism yoki parol xato!", true);
         }
 
         function showDashboard() {
@@ -223,16 +263,16 @@
                 renderDashboard();
             } else {
                 document.getElementById('roleBadge').innerText = 'M';
-                document.getElementById('welcomeTitle').innerText = 'MIJOZ PORTALI: ' + logged.name;
+                document.getElementById('welcomeTitle').innerText = 'MIJOZ PORTALI: ' + logged.phone;
                 document.getElementById('adminControlPanel').style.display = 'none';
                 document.getElementById('clientCabinetPanel').style.display = 'block';
                 
-                let currentClient = clients.find(c => c.name === logged.name);
+                let currentClient = clients.find(c => c.phone === logged.phone);
                 let subStatus = currentClient ? currentClient.subscription : logged.subscription;
                 document.getElementById('clientInfoContent').innerHTML = `
-                    <p><b>Ismingiz:</b> ${logged.name}</p>
-                    <p><b>Obuna holati:</b> <span style="color: #ffaa00;">${subStatus}</span></p>
-                    <p style="margin-top: 15px; color: rgba(0,255,102,0.6); font-size: 12px;">> Xotira va xavfsizlik xizmatlari faol holatda.</p>
+                    <p><b>Telefon raqamingiz:</b> ${logged.phone}</p>
+                    <p><b>Sizning obuna holatingiz:</b> <span style="color: #ffaa00;">${subStatus}</span></p>
+                    <p style="margin-top: 15px; color: rgba(0,255,102,0.8); font-size: 12px;">> Obunani faollashtirish uchun admin bilan bog'laning: <a href="https://t.me/abdulloh20070804" target="_blank" style="color:#00ff66;">@abdulloh20070804</a></p>
                 `;
             }
         }
@@ -240,20 +280,6 @@
         function logout() {
             sessionStorage.removeItem('cyber_logged_user');
             location.reload();
-        }
-
-        function addNewClient() {
-            const name = document.getElementById('clientName').value.trim();
-            const pass = document.getElementById('clientPass').value.trim();
-            if(!name || !pass) {
-                showToast("Mijoz ismi va parolini kiriting!", true);
-                return;
-            }
-            clients.push({ name, pass, subscription: 'Obuna belgilanmagan' });
-            document.getElementById('clientName').value = '';
-            document.getElementById('clientPass').value = '';
-            saveData();
-            showToast("Mijoz muvaffaqiyatli qo'shildi!");
         }
 
         function deleteClient(index) {
@@ -264,14 +290,13 @@
             }
         }
 
-        function grantSubscription(clientName, type) {
-            let client = clients.find(c => c.name === clientName);
+        function grantSubscription(clientPhone, type) {
+            let client = clients.find(c => c.phone === clientPhone);
             if(client) {
-                if(type === '1m') client.subscription = '1 Oylik Obuna';
-                else if(type === '1y') client.subscription = '1 Yillik Obuna';
-                else if(type === 'inf') client.subscription = 'Cheksiz Xotira';
+                if(type === '1m') client.subscription = '1 Oylik Obuna (59,000 so\'m)';
+                else if(type === '1y') client.subscription = '1 Yillik Obuna (700,000 so\'m)';
                 saveData();
-                showToast(`${clientName} uchun obuna yangilandi!`);
+                showToast(`${clientPhone} uchun obuna yangilandi!`);
             }
         }
 
@@ -283,8 +308,8 @@
             let clHtml = '';
             
             clients.forEach((c, idx) => {
-                if(c.name.toLowerCase().includes(searchVal)) {
-                    clHtml += `<div class="item-card"><div class="card-info"><strong>${c.name}</strong><span class="badge-text">🔒 ${c.subscription}</span><br><span style="font-size:12px;">Paroli: ${c.pass}</span></div><div class="card-actions"><button class="btn-sm success" onclick="grantSubscription('${c.name}', '1m')">1 Oylik</button><button class="btn-sm success" onclick="grantSubscription('${c.name}', '1y')">1 Yillik</button><button class="btn-sm success" onclick="grantSubscription('${c.name}', 'inf')">Cheksiz</button><button class="btn-sm danger" onclick="deleteClient(${idx})">O'chirish</button></div></div>`;
+                if(c.phone.toLowerCase().includes(searchVal)) {
+                    clHtml += `<div class="item-card"><div class="card-info"><strong>📞 ${c.phone}</strong><span class="badge-text">🔒 ${c.subscription}</span><br><span style="font-size:11px; color:rgba(0,255,102,0.6);">Paroli: ${c.pass}</span></div><div class="card-actions"><button class="btn-sm success" onclick="grantSubscription('${c.phone}', '1m')">1 Oylik (59k)</button><button class="btn-sm success" onclick="grantSubscription('${c.phone}', '1y')">1 Yillik (700k)</button><button class="btn-sm danger" onclick="deleteClient(${idx})">O'chirish</button></div></div>`;
                 }
             });
             document.getElementById('clientsList').innerHTML = clHtml || '<div class="empty-text">> Mijozlar topilmadi.</div>';
