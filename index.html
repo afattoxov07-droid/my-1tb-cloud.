@@ -312,8 +312,10 @@ let totalUploadedCount = 0;
 let activeReceiptIndex = null;
 let allReceiptsCache = [];
 let extraAdminsCache = {};
+let isFirebaseInitialized = false;
 
 window.addEventListener('firebase-ready', async () => {
+  isFirebaseInitialized = true;
   await loadExtraAdmins();
   const savedSession = localStorage.getItem('secure_active_session');
   if (savedSession) {
@@ -322,11 +324,15 @@ window.addEventListener('firebase-ready', async () => {
       currentClient = { password: savedSession, name: adminName };
       openAdminPanel();
     } else {
-      let clientDoc = await window.FB.getDoc(window.FB.doc(window.db, "clients", savedSession));
-      if (clientDoc.exists()) {
-        currentClient = { password: savedSession, ...clientDoc.data() };
-        checkSubscriptionAndOpenApp();
-      } else {
+      try {
+        let clientDoc = await window.FB.getDoc(window.FB.doc(window.db, "clients", savedSession));
+        if (clientDoc.exists()) {
+          currentClient = { password: savedSession, ...clientDoc.data() };
+          checkSubscriptionAndOpenApp();
+        } else {
+          localStorage.removeItem('secure_active_session');
+        }
+      } catch (e) {
         localStorage.removeItem('secure_active_session');
       }
     }
@@ -347,26 +353,28 @@ async function loadExtraAdmins() {
 }
 
 function initRealtimeSync() {
-  window.FB.onSnapshot(window.FB.collection(window.db, "activities"), (snapshot) => {
-    if(document.getElementById('admin-interface') && !document.getElementById('admin-interface').classList.contains('hidden')) {
-      renderAdminActivityFromSnapshot(snapshot);
-    }
-  });
-  window.FB.onSnapshot(window.FB.collection(window.db, "receipts"), (snapshot) => {
-    allReceiptsCache = [];
-    snapshot.forEach(doc => allReceiptsCache.push({ id: doc.id, ...doc.data() }));
-    if(document.getElementById('admin-interface') && !document.getElementById('admin-interface').classList.contains('hidden')) {
-      renderAdminReceipts();
-    }
-  });
-  window.FB.onSnapshot(window.FB.collection(window.db, "support"), (snapshot) => {
-    if(document.getElementById('admin-interface') && !document.getElementById('admin-interface').classList.contains('hidden')) {
-      renderAdminChatFromSnapshot(snapshot);
-    }
-    if(currentClient && currentClient.password !== MASTER_ADMIN_PASSWORD && !extraAdminsCache[currentClient.password]) {
-      checkClientNotificationsFromSnapshot(snapshot);
-    }
-  });
+  try {
+    window.FB.onSnapshot(window.FB.collection(window.db, "activities"), (snapshot) => {
+      if(document.getElementById('admin-interface') && !document.getElementById('admin-interface').classList.contains('hidden')) {
+        renderAdminActivityFromSnapshot(snapshot);
+      }
+    });
+    window.FB.onSnapshot(window.FB.collection(window.db, "receipts"), (snapshot) => {
+      allReceiptsCache = [];
+      snapshot.forEach(doc => allReceiptsCache.push({ id: doc.id, ...doc.data() }));
+      if(document.getElementById('admin-interface') && !document.getElementById('admin-interface').classList.contains('hidden')) {
+        renderAdminReceipts();
+      }
+    });
+    window.FB.onSnapshot(window.FB.collection(window.db, "support"), (snapshot) => {
+      if(document.getElementById('admin-interface') && !document.getElementById('admin-interface').classList.contains('hidden')) {
+        renderAdminChatFromSnapshot(snapshot);
+      }
+      if(currentClient && currentClient.password !== MASTER_ADMIN_PASSWORD && !extraAdminsCache[currentClient.password]) {
+        checkClientNotificationsFromSnapshot(snapshot);
+      }
+    });
+  } catch (e) {}
 }
 
 function openPublicSection(section) {
@@ -394,11 +402,15 @@ async function sendPublicSupportTicket() {
   const name = document.getElementById('public-guest-name').value.trim();
   const msg = document.getElementById('public-guest-msg').value.trim();
   if(!name || !msg) { alert("Maydonlarni to'ldiring!"); return; }
-  await window.FB.setDoc(window.FB.doc(window.db, "support", "ticket_" + Date.now()), {
-    user: name, phone: 'guest', type: 'Mehmon', message: msg, reply: '', date: new Date().toLocaleString(), timestamp: Date.now()
-  });
-  alert("Yuborildi!");
-  closePublicModal();
+  try {
+    await window.FB.setDoc(window.FB.doc(window.db, "support", "ticket_" + Date.now()), {
+      user: name, phone: 'guest', type: 'Mehmon', message: msg, reply: '', date: new Date().toLocaleString(), timestamp: Date.now()
+    });
+    alert("Yuborildi!");
+    closePublicModal();
+  } catch(err) {
+    alert("Xatolik: " + err.message);
+  }
 }
 
 // Kirish / Ro'yxatdan o'tish (Mijoz yoki Admin)
@@ -408,59 +420,72 @@ async function clientRegisterOrLogin() {
   const pwd = document.getElementById('client-login-pwd').value.trim();
   const errBox = document.getElementById('login-error');
 
+  if(!isFirebaseInitialized) {
+    errBox.innerText = "> Internet yoki Firebase ulanishi kutilmoqda. 2 soniya kuting...";
+    errBox.classList.remove('hidden');
+    return;
+  }
+
   if(!pwd) {
     errBox.innerText = "> Parol kiritilishi shart!";
     errBox.classList.remove('hidden');
     return;
   }
 
-  await loadExtraAdmins();
+  try {
+    await loadExtraAdmins();
 
-  // Agar kiritilgan parol admin paroli bo'lsa
-  if(pwd === MASTER_ADMIN_PASSWORD || extraAdminsCache[pwd]) {
-    errBox.classList.add('hidden');
-    localStorage.setItem('secure_active_session', pwd);
-    let adminName = pwd === MASTER_ADMIN_PASSWORD ? "Asosiy Admin" : extraAdminsCache[pwd].name;
-    currentClient = { password: pwd, name: adminName };
-    openAdminPanel();
-    return;
-  }
+    // Agar kiritilgan parol admin paroli bo'lsa
+    if(pwd === MASTER_ADMIN_PASSWORD || extraAdminsCache[pwd]) {
+      errBox.classList.add('hidden');
+      localStorage.setItem('secure_active_session', pwd);
+      let adminName = pwd === MASTER_ADMIN_PASSWORD ? "Asosiy Admin" : extraAdminsCache[pwd].name;
+      currentClient = { password: pwd, name: adminName };
+      openAdminPanel();
+      return;
+    }
 
-  if(!name) {
-    errBox.innerText = "> Iltimos, ismingizni kiriting!";
+    if(!name) {
+      errBox.innerText = "> Iltimos, ismingizni kiriting!";
+      errBox.classList.remove('hidden');
+      return;
+    }
+
+    let docRef = window.FB.doc(window.db, "clients", pwd);
+    let docSnap = await window.FB.getDoc(docRef);
+
+    if(docSnap.exists()) {
+      errBox.classList.add('hidden');
+      localStorage.setItem('secure_active_session', pwd);
+      currentClient = { password: pwd, ...docSnap.data() };
+      logClientActivity(currentClient.name, currentClient.phone);
+      checkSubscriptionAndOpenApp();
+    } else {
+      let newClientData = {
+        name: name,
+        phone: phone || "+998",
+        expiresAt: null,
+        totalUploaded: 0,
+        files: [],
+        trash: [],
+        notes: []
+      };
+      await window.FB.setDoc(docRef, newClientData);
+      
+      try {
+        await window.FB.setDoc(window.FB.doc(window.db, "activities", "act_" + Date.now()), {
+          name: name + " (Yangi profil ochildi)", phone: phone || "+998", date: new Date().toLocaleString(), timestamp: Date.now()
+        });
+      } catch (e) {}
+
+      errBox.classList.add('hidden');
+      localStorage.setItem('secure_active_session', pwd);
+      currentClient = { password: pwd, ...newClientData };
+      checkSubscriptionAndOpenApp();
+    }
+  } catch (err) {
+    errBox.innerText = "> Xatolik yuz berdi: " + err.message;
     errBox.classList.remove('hidden');
-    return;
-  }
-
-  let docRef = window.FB.doc(window.db, "clients", pwd);
-  let docSnap = await window.FB.getDoc(docRef);
-
-  if(docSnap.exists()) {
-    errBox.classList.add('hidden');
-    localStorage.setItem('secure_active_session', pwd);
-    currentClient = { password: pwd, ...docSnap.data() };
-    logClientActivity(currentClient.name, currentClient.phone);
-    checkSubscriptionAndOpenApp();
-  } else {
-    let newClientData = {
-      name: name,
-      phone: phone || "+998",
-      expiresAt: null,
-      totalUploaded: 0,
-      files: [],
-      trash: [],
-      notes: []
-    };
-    await window.FB.setDoc(docRef, newClientData);
-    
-    await window.FB.setDoc(window.FB.doc(window.db, "activities", "act_" + Date.now()), {
-      name: name + " (Yangi profil ochildi)", phone: phone || "+998", date: new Date().toLocaleString(), timestamp: Date.now()
-    });
-
-    errBox.classList.add('hidden');
-    localStorage.setItem('secure_active_session', pwd);
-    currentClient = { password: pwd, ...newClientData };
-    checkSubscriptionAndOpenApp();
   }
 }
 
@@ -490,27 +515,33 @@ async function saveNewAdmin() {
   const pwd = document.getElementById('new-admin-pwd').value.trim();
   if(!name || !pwd) { alert("Ism va parolni kiriting!"); return; }
   
-  await window.FB.setDoc(window.FB.doc(window.db, "admins", pwd), {
-    name: name, createdAt: new Date().toLocaleString()
-  });
-  
-  document.getElementById('new-admin-name').value = '';
-  document.getElementById('new-admin-pwd').value = '';
-  closeAddAdminModal();
-  await loadExtraAdmins();
-  renderAdminList();
-  alert("Yangi admin muvaffaqiyatli qo'shildi!");
+  try {
+    await window.FB.setDoc(window.FB.doc(window.db, "admins", pwd), {
+      name: name, createdAt: new Date().toLocaleString()
+    });
+    
+    document.getElementById('new-admin-name').value = '';
+    document.getElementById('new-admin-pwd').value = '';
+    closeAddAdminModal();
+    await loadExtraAdmins();
+    renderAdminList();
+    alert("Yangi admin muvaffaqiyatli qo'shildi!");
+  } catch(e) {
+    alert("Xatolik: " + e.message);
+  }
 }
 
 async function renderAdminList() {
-  let snap = await window.FB.getDocs(window.FB.collection(window.db, "admins"));
-  let html = `<div class="cyber-card p-2 rounded text-xs flex justify-between items-center"><span><b>Asosiy Admin</b> (Asosiy Parol)</span><span class="text-yellow-400">Doimiy</span></div>`;
-  snap.forEach(doc => {
-    let ad = doc.data();
-    let pwd = doc.id;
-    html += `<div class="cyber-card p-2 rounded text-xs flex justify-between items-center"><span><b>${ad.name}</b> (Parol: <span class="text-yellow-400 font-mono">${pwd}</span>)</span><button onclick="deleteAdmin('${pwd}')" class="px-2 py-1 bg-red-950 border border-red-800 text-red-400 rounded cursor-pointer">O'chirish</button></div>`;
-  });
-  document.getElementById('admin-list-box').innerHTML = html;
+  try {
+    let snap = await window.FB.getDocs(window.FB.collection(window.db, "admins"));
+    let html = `<div class="cyber-card p-2 rounded text-xs flex justify-between items-center"><span><b>Asosiy Admin</b> (Asosiy Parol)</span><span class="text-yellow-400">Doimiy</span></div>`;
+    snap.forEach(doc => {
+      let ad = doc.data();
+      let pwd = doc.id;
+      html += `<div class="cyber-card p-2 rounded text-xs flex justify-between items-center"><span><b>${ad.name}</b> (Parol: <span class="text-yellow-400 font-mono">${pwd}</span>)</span><button onclick="deleteAdmin('${pwd}')" class="px-2 py-1 bg-red-950 border border-red-800 text-red-400 rounded cursor-pointer">O'chirish</button></div>`;
+    });
+    document.getElementById('admin-list-box').innerHTML = html;
+  } catch(e) {}
 }
 
 async function deleteAdmin(pwd) {
@@ -522,13 +553,15 @@ async function deleteAdmin(pwd) {
 }
 
 async function renderAdminActivity() {
-  let snap = await window.FB.getDocs(window.FB.query(window.FB.collection(window.db, "activities"), window.FB.orderBy("timestamp", "desc")));
-  let html = "";
-  snap.forEach(d => {
-    let a = d.data();
-    html += `<div class="cyber-card p-2 rounded text-xs flex justify-between items-center"><span><b>${a.name}</b> (${a.phone})</span><span class="text-cyan-400">${a.date}</span></div>`;
-  });
-  document.getElementById('admin-activity-list').innerHTML = html || '<p class="text-xs text-gray-500">Hozircha faollik yoq</p>';
+  try {
+    let snap = await window.FB.getDocs(window.FB.query(window.FB.collection(window.db, "activities"), window.FB.orderBy("timestamp", "desc")));
+    let html = "";
+    snap.forEach(d => {
+      let a = d.data();
+      html += `<div class="cyber-card p-2 rounded text-xs flex justify-between items-center"><span><b>${a.name}</b> (${a.phone})</span><span class="text-cyan-400">${a.date}</span></div>`;
+    });
+    document.getElementById('admin-activity-list').innerHTML = html || '<p class="text-xs text-gray-500">Hozircha faollik yoq</p>';
+  } catch(e) {}
 }
 
 function renderAdminActivityFromSnapshot(snapshot) {
@@ -539,9 +572,11 @@ function renderAdminActivityFromSnapshot(snapshot) {
 }
 
 async function checkSubscriptionAndOpenApp() {
-  let docRef = window.FB.doc(window.db, "clients", currentClient.password);
-  let snap = await window.FB.getDoc(docRef);
-  if(snap.exists()) { currentClient = { password: currentClient.password, ...snap.data() }; }
+  try {
+    let docRef = window.FB.doc(window.db, "clients", currentClient.password);
+    let snap = await window.FB.getDoc(docRef);
+    if(snap.exists()) { currentClient = { password: currentClient.password, ...snap.data() }; }
+  } catch(e) {}
 
   let now = Date.now();
   let isExpired = currentClient.expiresAt && currentClient.expiresAt < now;
@@ -586,17 +621,19 @@ function logout() {
 }
 
 async function renderAdminClients() {
-  let snap = await window.FB.getDocs(window.FB.collection(window.db, "clients"));
-  let now = Date.now();
-  let html = "";
-  snap.forEach(docSnap => {
-    let pwd = docSnap.id;
-    let c = docSnap.data();
-    let isVip = c.expiresAt && c.expiresAt > now;
-    let expireText = isVip ? new Date(c.expiresAt).toLocaleDateString() : "Muddati tugagan / Test";
-    html += `<div class="cyber-card p-3 rounded text-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"><div class="space-y-0.5"><p><b>${c.name}</b> <span class="text-gray-400">(${c.phone})</span></p><p class="text-[11px] text-gray-400">Paroli: <span class="text-yellow-400 font-mono font-bold">${pwd}</span> | Status: <b class="${isVip ? 'text-green-400' : 'text-yellow-400'}">${expireText}</b></p></div><div class="flex items-center gap-1.5 flex-wrap justify-end"><button onclick="adminGiveDuration('${pwd}', 30)" class="px-2 py-1 bg-emerald-950 border border-green-600 text-green-300 rounded text-[10px] font-bold cursor-pointer">+1 Oy</button><button onclick="adminGiveDuration('${pwd}', 365)" class="px-2 py-1 bg-cyan-950 border border-cyan-600 text-cyan-300 rounded text-[10px] font-bold cursor-pointer">+1 Yil</button><button onclick="adminToggleSub('${pwd}')" class="px-2 py-1 ${isVip ? 'bg-red-950 border-red-700 text-red-300' : 'bg-green-950 border-green-500 text-green-300'} rounded text-[10px] font-bold cursor-pointer">${isVip ? 'Tarifni O\'chirish' : 'Tarifni Yoqish (+1 Oy)'}</button><button onclick="deleteClient('${pwd}')" class="px-2 py-1 bg-red-950/40 border border-red-800 text-red-400 rounded text-[10px] cursor-pointer">O'chirish</button></div></div>`;
-  });
-  document.getElementById('admin-clients-list').innerHTML = html || '<p class="text-xs text-gray-500">Mijozlar yoq</p>';
+  try {
+    let snap = await window.FB.getDocs(window.FB.collection(window.db, "clients"));
+    let now = Date.now();
+    let html = "";
+    snap.forEach(docSnap => {
+      let pwd = docSnap.id;
+      let c = docSnap.data();
+      let isVip = c.expiresAt && c.expiresAt > now;
+      let expireText = isVip ? new Date(c.expiresAt).toLocaleDateString() : "Muddati tugagan / Test";
+      html += `<div class="cyber-card p-3 rounded text-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"><div class="space-y-0.5"><p><b>${c.name}</b> <span class="text-gray-400">(${c.phone})</span></p><p class="text-[11px] text-gray-400">Paroli: <span class="text-yellow-400 font-mono font-bold">${pwd}</span> | Status: <b class="${isVip ? 'text-green-400' : 'text-yellow-400'}">${expireText}</b></p></div><div class="flex items-center gap-1.5 flex-wrap justify-end"><button onclick="adminGiveDuration('${pwd}', 30)" class="px-2 py-1 bg-emerald-950 border border-green-600 text-green-300 rounded text-[10px] font-bold cursor-pointer">+1 Oy</button><button onclick="adminGiveDuration('${pwd}', 365)" class="px-2 py-1 bg-cyan-950 border border-cyan-600 text-cyan-300 rounded text-[10px] font-bold cursor-pointer">+1 Yil</button><button onclick="adminToggleSub('${pwd}')" class="px-2 py-1 ${isVip ? 'bg-red-950 border-red-700 text-red-300' : 'bg-green-950 border-green-500 text-green-300'} rounded text-[10px] font-bold cursor-pointer">${isVip ? 'Tarifni O\'chirish' : 'Tarifni Yoqish (+1 Oy)'}</button><button onclick="deleteClient('${pwd}')" class="px-2 py-1 bg-red-950/40 border border-red-800 text-red-400 rounded text-[10px] cursor-pointer">O'chirish</button></div></div>`;
+    });
+    document.getElementById('admin-clients-list').innerHTML = html || '<p class="text-xs text-gray-500">Mijozlar yoq</p>';
+  } catch(e) {}
 }
 
 async function adminGiveDuration(pwd, days) {
@@ -673,23 +710,29 @@ function closeClientSupportModal() { document.getElementById('client-support-mod
 async function sendClientQuestion() {
   const text = document.getElementById('client-question-input').value.trim();
   if(!text) return;
-  await window.FB.setDoc(window.FB.doc(window.db, "support", "sup_" + Date.now()), {
-    user: currentClient.name, phone: currentClient.phone, type: 'Mijoz', message: text, reply: '', date: new Date().toLocaleString(), timestamp: Date.now()
-  });
-  document.getElementById('client-question-input').value = '';
-  renderClientMessages();
+  try {
+    await window.FB.setDoc(window.FB.doc(window.db, "support", "sup_" + Date.now()), {
+      user: currentClient.name, phone: currentClient.phone, type: 'Mijoz', message: text, reply: '', date: new Date().toLocaleString(), timestamp: Date.now()
+    });
+    document.getElementById('client-question-input').value = '';
+    renderClientMessages();
+  } catch(e) {
+    alert("Xatolik: " + e.message);
+  }
 }
 
 async function renderClientMessages() {
-  let snap = await window.FB.getDocs(window.FB.collection(window.db, "support"));
-  let html = "";
-  snap.forEach(doc => {
-    let t = doc.data();
-    if(t.phone === currentClient.phone || t.user === currentClient.name) {
-      html += `<div class="cyber-card p-2 rounded space-y-1"><div class="text-[10px] text-yellow-500">${t.date} (${t.type})</div><div><b>Xabar:</b> ${t.message}</div>${t.reply ? `<div class="text-green-400 border-t border-green-900 pt-1"><b>Javob:</b> ${t.reply}</div>` : ''}</div>`;
-    }
-  });
-  document.getElementById('client-messages-history').innerHTML = html || '<p class="text-xs text-green-700">Xabarlar yoq</p>';
+  try {
+    let snap = await window.FB.getDocs(window.FB.collection(window.db, "support"));
+    let html = "";
+    snap.forEach(doc => {
+      let t = doc.data();
+      if(t.phone === currentClient.phone || t.user === currentClient.name) {
+        html += `<div class="cyber-card p-2 rounded space-y-1"><div class="text-[10px] text-yellow-500">${t.date} (${t.type})</div><div><b>Xabar:</b> ${t.message}</div>${t.reply ? `<div class="text-green-400 border-t border-green-900 pt-1"><b>Javob:</b> ${t.reply}</div>` : ''}</div>`;
+      }
+    });
+    document.getElementById('client-messages-history').innerHTML = html || '<p class="text-xs text-green-700">Xabarlar yoq</p>';
+  } catch(e) {}
 }
 
 function checkClientNotificationsFromSnapshot(snapshot) {
@@ -702,14 +745,16 @@ function checkClientNotificationsFromSnapshot(snapshot) {
 }
 
 function checkClientNotifications() {
-  window.FB.getDocs(window.FB.collection(window.db, "support")).then(snap => {
-    let hasUnread = false;
-    snap.forEach(doc => {
-      let t = doc.data();
-      if((t.phone === currentClient.phone || t.user === currentClient.name) && t.reply) hasUnread = true;
+  try {
+    window.FB.getDocs(window.FB.collection(window.db, "support")).then(snap => {
+      let hasUnread = false;
+      snap.forEach(doc => {
+        let t = doc.data();
+        if((t.phone === currentClient.phone || t.user === currentClient.name) && t.reply) hasUnread = true;
+      });
+      if(hasUnread) document.getElementById('client-unread-dot').classList.remove('hidden');
     });
-    if(hasUnread) document.getElementById('client-unread-dot').classList.remove('hidden');
-  });
+  } catch(e) {}
 }
 
 function openAdminSupportModal() { document.getElementById('admin-support-modal').classList.remove('hidden'); }
@@ -732,30 +777,36 @@ async function sendAdminReply() {
   const replyText = document.getElementById('admin-reply-text').value.trim();
   if(!userName || !replyText) { alert("Mijoz ismi va javobni kiriting!"); return; }
   
-  let snap = await window.FB.getDocs(window.FB.collection(window.db, "support"));
-  let foundId = null;
-  snap.forEach(doc => { if(doc.data().user === userName) foundId = doc.id; });
+  try {
+    let snap = await window.FB.getDocs(window.FB.collection(window.db, "support"));
+    let foundId = null;
+    snap.forEach(doc => { if(doc.data().user === userName) foundId = doc.id; });
 
-  if(foundId) {
-    await window.FB.updateDoc(window.FB.doc(window.db, "support", foundId), { reply: replyText });
-    document.getElementById('admin-reply-text').value = '';
-    alert("Javob yuborildi!");
-  } else {
-    alert("Bunday mijoz topilmadi!");
+    if(foundId) {
+      await window.FB.updateDoc(window.FB.doc(window.db, "support", foundId), { reply: replyText });
+      document.getElementById('admin-reply-text').value = '';
+      alert("Javob yuborildi!");
+    } else {
+      alert("Bunday mijoz topilmadi!");
+    }
+  } catch(e) {
+    alert("Xatolik: " + e.message);
   }
 }
 
 async function saveClientToCloud() {
   if(!currentClient || !currentClient.password) return;
-  await window.FB.setDoc(window.FB.doc(window.db, "clients", currentClient.password), {
-    name: currentClient.name,
-    phone: currentClient.phone,
-    expiresAt: currentClient.expiresAt || null,
-    totalUploaded: totalUploadedCount,
-    files: savedFiles,
-    trash: trashFiles,
-    notes: currentClient.notes || []
-  });
+  try {
+    await window.FB.setDoc(window.FB.doc(window.db, "clients", currentClient.password), {
+      name: currentClient.name,
+      phone: currentClient.phone,
+      expiresAt: currentClient.expiresAt || null,
+      totalUploaded: totalUploadedCount,
+      files: savedFiles,
+      trash: trashFiles,
+      notes: currentClient.notes || []
+    });
+  } catch(e) {}
 }
 
 const fileInput = document.getElementById('file-input');
@@ -817,18 +868,22 @@ async function deleteForever(i) {
 }
 
 function openBuyModal() { document.getElementById('buy-modal').classList.remove('hidden'); }
-function closeBuyModal() { document.getElementById('buy-modal').classList.add('hidden'); }
+function closeBuyModal() { document.getElementById('buy-modal'].classList.add('hidden'); }
 
 function uploadReceipt() {
   const fileInput = document.getElementById('receipt-file');
   if(fileInput.files && fileInput.files[0]) {
     const reader = new FileReader();
     reader.onload = async function(e) {
-      await window.FB.setDoc(window.FB.doc(window.db, "receipts", "rec_" + Date.now()), {
-        clientName: currentClient.name, clientPhone: currentClient.phone, clientPwd: currentClient.password, image: e.target.result, date: new Date().toLocaleString(), timestamp: Date.now()
-      });
-      alert("Chek muvaffaqiyatli yuborildi!");
-      closeBuyModal();
+      try {
+        await window.FB.setDoc(window.FB.doc(window.db, "receipts", "rec_" + Date.now()), {
+          clientName: currentClient.name, clientPhone: currentClient.phone, clientPwd: currentClient.password, image: e.target.result, date: new Date().toLocaleString(), timestamp: Date.now()</b>
+        });
+        alert("Chek muvaffaqiyatli yuborildi!");
+        closeBuyModal();
+      } catch(err) {
+        alert("Xatolik: " + err.message);
+      }
     }
     reader.readAsDataURL(fileInput.files[0]);
   } else { alert("Iltimos, chek rasmini tanlang!"); }
@@ -839,7 +894,7 @@ function closeNotesModal() { document.getElementById('notes-modal').classList.ad
 
 async function saveSecureNote() {
   const title = document.getElementById('note-title').value.trim();
-  const content = document.getElementById('note-content').value.trim();
+  const content = document.getElementById('note-content').value.text || document.getElementById('note-content').value.trim();
   if(!title || !content) { alert("Sarlavha va matnni kiriting!"); return; }
   
   if(!currentClient.notes) currentClient.notes = [];
