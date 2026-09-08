@@ -18,26 +18,30 @@
         .cyber-button:active { background: #22c55e; color: #000; }
     </style>
     <!-- Firebase SDK va Ulanish -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        
-        const firebaseConfig = {
-            apiKey: "AIzaSyDrvfNcJ0MRRID7VWv8gltIGha8bkAcQ",
-            authDomain: "cheksiz-hotira.firebaseapp.com",
-            projectId: "cheksiz-hotira",
-            storageBucket: "cheksiz-hotira.appspot.com",
-            messagingSenderId: "286196163768",
-            appId: "1:286196163768:web:990f7a842f17d87f289d22",
-            measurementId: "G-61G6NRYXER"
-        };
-        
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        window.db = db;
-        window.FB = { collection, doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, onSnapshot, query, orderBy };
-        window.dispatchEvent(new Event('firebase-ready'));
-    </script>
+   <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, set, get, onValue, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDrvfNcJ0MRRID7VWv8gltIGha8bkAcQ",
+        authDomain: "cheksiz-hotira.firebaseapp.com",
+        databaseURL: "https://cheksiz-hotira-default-rtdb.firebaseio.com", // <-- O'zingizning Realtime Database URL manzilingizni yozasiz
+        projectId: "cheksiz-hotira",
+        storageBucket: "cheksiz-hotira.appspot.com",
+        messagingSenderId: "286196163768",
+        appId: "1:286196163768:web:990f7a842f17d87f289d22",
+        measurementId: "G-61G6NRYXER"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app); // Firestore o'rniga Realtime Database
+
+    function renderAdminChat() {
+        console.log("Admin chat render qilindi");
+    }
+
+    // Agar boshqa funksiyalaringiz `window.db` yoki `window.FB` ga bog'langan bo'lsa, ularni ham yangilashingiz kerak bo'ladi.
+</script>
 </head>
 <body class="min-h-screen flex flex-col relative overflow-x-hidden text-sm md:text-base" onclick="initAudioContext()">
     <div class="pointer-events-none fixed inset-0 z-50 scanline opacity-30"></div>
