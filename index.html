@@ -100,7 +100,7 @@ input, textarea { user-select: text; }
       <div id="admin-receipts-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
     </div>
     <div class="cyber-border bg-gray-950 p-4 rounded-lg space-y-3">
-      <h3 class="text-xs font-bold text-green-400">> Shifrlangan mijozlar ro'yxati va Parol yangilash</h3>
+      <h3 class="text-xs font-bold text-green-400">> Shifrlangan mijozlar ro'yxati va Obunalarni Boshqarish</h3>
       <div id="admin-clients-list" class="space-y-2"></div>
     </div>
   </div>
@@ -128,7 +128,10 @@ input, textarea { user-select: text; }
     <button onclick="closeReceiptModal()" class="absolute top-2 right-2 text-yellow-400 text-sm font-bold p-2">[ X ]</button>
     <h4 class="text-xs font-bold text-yellow-400">> TO'LOV CHEKI</h4>
     <div id="receipt-modal-content" class="py-2"></div>
-    <button id="approve-payment-btn" class="w-full py-2 bg-emerald-950 border border-green-500 text-green-300 rounded text-xs font-bold uppercase cursor-pointer">TO'LOVNI TASDIQLASH (CHEKSIZ XOTIRA VA YANGI PAROL BERISH)</button>
+    <div class="grid grid-cols-2 gap-2 pt-2">
+      <button onclick="approvePaymentWithDuration(30)" class="py-2 bg-emerald-950 border border-green-500 text-green-300 rounded text-[11px] font-bold uppercase cursor-pointer">1 OYLIK BERISH</button>
+      <button onclick="approvePaymentWithDuration(365)" class="py-2 bg-cyan-950 border border-cyan-500 text-cyan-300 rounded text-[11px] font-bold uppercase cursor-pointer">1 YILLIK BERISH</button>
+    </div>
   </div>
 </div>
 
@@ -200,6 +203,19 @@ input, textarea { user-select: text; }
       </div>
       <div id="file-list" class="space-y-2"></div>
     </div>
+  </div>
+</div>
+
+<!-- BLOKLANGAN (MUDDATI O'TGAN) EKRAN -->
+<div id="blocked-interface" class="hidden fixed inset-0 z-50 bg-[#030712] flex flex-col items-center justify-center p-4 text-center">
+  <div class="cyber-border bg-gray-950 p-6 md:p-8 rounded-lg max-w-md w-full space-y-4 border-red-900">
+    <div class="w-12 h-12 mx-auto rounded border border-red-500 bg-red-950 flex items-center justify-center text-red-400 font-bold text-xl">⏳</div>
+    <h2 class="text-base font-bold text-red-400">OBUNA MUDDATI TUGADI YOKI TO'LANMAGAN</h2>
+    <p class="text-xs text-green-300">Sizning ma'lumotlaringiz xavfsiz saqlanmoqda, ammo obuna muddati tugagani uchun vaqtincha bloklandi. Admin tomonidan 1 oylik yoki 1 yillik cheksiz tarif yoqilgach, tizim avtomatik ochiladi.</p>
+    <div class="pt-2">
+      <button onclick="openBuyModal()" class="w-full py-2 bg-emerald-950 border border-green-500 text-green-300 rounded text-xs font-bold uppercase cursor-pointer">CHEK YUBORISH VA OBUNANI UZOQTIRISH</button>
+    </div>
+    <button onclick="logout()" class="text-xs text-red-400 underline pt-2 cursor-pointer">Chiqish</button>
   </div>
 </div>
 
@@ -316,16 +332,16 @@ function getAdminsDB() {
 }
 
 function getClientsDB() {
-  let encryptedDb = localStorage.getItem('secure_cloud_clients_v2');
+  let encryptedDb = localStorage.getItem('secure_cloud_clients_v3');
   if (!encryptedDb) {
     let defaultClients = {};
-    localStorage.setItem('secure_cloud_clients_v2', encryptData(defaultClients));
+    localStorage.setItem('secure_cloud_clients_v3', encryptData(defaultClients));
     return defaultClients;
   }
   return decryptData(encryptedDb) || {};
 }
 
-function saveClientsDB(db) { localStorage.setItem('secure_cloud_clients_v2', encryptData(db)); }
+function saveClientsDB(db) { localStorage.setItem('secure_cloud_clients_v3', encryptData(db)); }
 function getActivityDB() { let enc = localStorage.getItem('secure_client_activities'); return enc ? (decryptData(enc) || []) : []; }
 function saveActivityDB(db) { localStorage.setItem('secure_client_activities', encryptData(db)); }
 function getReceiptsDB() { let enc = localStorage.getItem('secure_cloud_receipts'); return enc ? (decryptData(enc) || []) : []; }
@@ -348,7 +364,7 @@ window.onload = function() {
       openAdminPanel();
     } else if (clients[savedSession]) {
       currentClient = { password: savedSession, ...clients[savedSession] };
-      openClientApp();
+      checkSubscriptionAndOpenApp();
     }
   }
 };
@@ -359,10 +375,10 @@ function openPublicSection(section) {
   const body = document.getElementById('public-modal-body');
   if (section === 'tariffs') {
     title.innerText = "> TARIFLAR REJASI";
-    body.innerHTML = `<div class="cyber-card p-3 rounded space-y-2"><p class="font-bold text-yellow-400">1. Test Rejimi</p><p class="text-[11px] text-green-300">Bepul. Jami 5 ta fayl yuklash limiti.</p></div><div class="cyber-card p-3 rounded space-y-2"><p class="font-bold text-green-400">2. Oylik Cheksiz Tarif</p><p class="text-[11px] text-white font-bold">59,000 so'm / oy</p></div><div class="cyber-card p-3 rounded space-y-2 border-emerald-500"><p class="font-bold text-cyan-400">3. Yillik Cheksiz Tarif (Tavsiya etiladi)</p><p class="text-[11px] text-white font-bold">700,000 so'm / yil</p></div>`;
+    body.innerHTML = `<div class="cyber-card p-3 rounded space-y-2"><p class="font-bold text-yellow-400">1. Test Rejimi</p><p class="text-[11px] text-green-300">Bepul. Jami 5 ta fayl yuklash limiti.</p></div><div class="cyber-card p-3 rounded space-y-2"><p class="font-bold text-green-400">2. 1 Oylik Cheksiz Tarif</p><p class="text-[11px] text-white font-bold">59,000 so'm / oy</p></div><div class="cyber-card p-3 rounded space-y-2 border-emerald-500"><p class="font-bold text-cyan-400">3. 1 Yillik Cheksiz Tarif (Tavsiya etiladi)</p><p class="text-[11px] text-white font-bold">700,000 so'm / yil</p></div>`;
   } else if (section === 'rules') {
     title.innerText = "> TIZIM QOIDALARI";
-    body.innerHTML = `<div class="cyber-card p-3 rounded space-y-2"><p class="font-bold text-green-400">Xavfsizlik</p><p class="text-[11px] text-green-300">Barcha fayllar AES-256 orqali himoyalanadi.</p></div>`;
+    body.innerHTML = `<div class="cyber-card p-3 rounded space-y-2"><p class="font-bold text-green-400">Xavfsizlik va Ma'lumotlar</p><p class="text-[11px] text-green-300">To'lov vaqti tugasa fayllaringiz o'chib ketmaydi, shunchaki xizmat vaqtincha to'xtatiladi. To'lov qilingach qayta faollashadi.</p></div>`;
   } else if (section === 'help') {
     title.innerText = "> ONLAYN YORDAM";
     body.innerHTML = `<div class="space-y-3"><input type="text" id="public-guest-name" placeholder="Ismingiz" class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded"><textarea id="public-guest-msg" placeholder="Murojaatingiz..." class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded h-24"></textarea><button onclick="sendPublicSupportTicket()" class="w-full cyber-button py-2 rounded text-xs font-bold uppercase cursor-pointer">YUBORISH</button></div>`;
@@ -400,15 +416,13 @@ function clientRegisterOrLogin() {
 
   let clients = getClientsDB();
   if(clients[pwd]) {
-    // Parol bazada mavjud -> Ism va telefon kiritilmagan bo'lsa ham shu parolsiz kirib ketadi
     errBox.classList.add('hidden');
     playCyberSound('success');
     localStorage.setItem('secure_active_session', pwd);
     currentClient = { password: pwd, ...clients[pwd] };
     logClientActivity(currentClient.name, currentClient.phone);
-    openClientApp();
+    checkSubscriptionAndOpenApp();
   } else {
-    // Yangi ro'yxatdan o'tish (Ism va telefon shart)
     const name = document.getElementById('client-login-name').value.trim();
     const phone = document.getElementById('client-login-phone').value.trim();
     if(!name || !phone || !pwd) {
@@ -416,14 +430,14 @@ function clientRegisterOrLogin() {
       errBox.classList.remove('hidden');
       return;
     }
-    clients[pwd] = { name: name, phone: phone, paid: false, totalUploaded: 0 };
+    clients[pwd] = { name: name, phone: phone, expiresAt: null, totalUploaded: 0 };
     saveClientsDB(clients);
     errBox.classList.add('hidden');
     playCyberSound('success');
     localStorage.setItem('secure_active_session', pwd);
     currentClient = { password: pwd, ...clients[pwd] };
     logClientActivity(name, phone);
-    openClientApp();
+    checkSubscriptionAndOpenApp();
   }
 }
 
@@ -453,30 +467,45 @@ function adminAddNewClient() {
   const pwd = document.getElementById('admin-new-pwd').value.trim();
   if(!name || !phone || !pwd) { alert("Barcha maydonlarni to'ldiring!"); return; }
   let clients = getClientsDB();
-  if(clients[pwd]) { alert("Bu parol (kod) band! Boshqa kod kiriting."); return; }
-  clients[pwd] = { name: name, phone: phone, paid: true, totalUploaded: 0 };
+  if(clients[pwd]) { alert("Bu parol band! Boshqa kod kiriting."); return; }
+  clients[pwd] = { name: name, phone: phone, expiresAt: new Date().getTime() + 30*24*60*60*1000, totalUploaded: 0 }; // Standart 1 oylik
   saveClientsDB(clients);
   document.getElementById('admin-new-name').value = '';
   document.getElementById('admin-new-phone').value = '';
   document.getElementById('admin-new-pwd').value = '';
   renderAdminClients();
-  alert("Yangi mijoz muvaffaqiyatli qo'shildi (Cheksiz rejimda)!");
+  alert("Yangi mijoz qo'shildi!");
 }
 
-function openClientApp() {
-  document.getElementById('login-screen').classList.add('hidden');
-  document.getElementById('app-interface').classList.remove('hidden');
-  document.getElementById('client-title').innerText = currentClient.name + " (" + currentClient.phone + ")";
+function checkSubscriptionAndOpenApp() {
   let clients = getClientsDB();
   if(clients[currentClient.password]) {
-    currentClient.paid = clients[currentClient.password].paid;
-    currentClient.phone = clients[currentClient.password].phone;
-    currentClient.name = clients[currentClient.password].name;
-    totalUploadedCount = clients[currentClient.password].totalUploaded || 0;
+    currentClient = { password: currentClient.password, ...clients[currentClient.password] };
   }
+  
+  // Obuna muddati tekshiruvi
+  let now = new Date().getTime();
+  let isExpired = currentClient.expiresAt && currentClient.expiresAt < now;
+
+  document.getElementById('login-screen').classList.add('hidden');
+  if (isExpired) {
+    document.getElementById('blocked-interface').classList.remove('hidden');
+  } else {
+    document.getElementById('app-interface').classList.remove('hidden');
+    openClientAppDashboard();
+  }
+}
+
+function openClientAppDashboard() {
+  document.getElementById('client-title').innerText = currentClient.name + " (" + currentClient.phone + ")";
+  totalUploadedCount = currentClient.totalUploaded || 0;
+  
+  let now = new Date().getTime();
   const badge = document.getElementById('client-status-badge');
-  if (currentClient.paid) {
-    badge.innerText = "⭐ TO'LANGAN (CHEKSIZ)";
+  
+  if (currentClient.expiresAt && currentClient.expiresAt > now) {
+    let expireDateStr = new Date(currentClient.expiresAt).toLocaleDateString();
+    badge.innerText = `⭐ CHEKSIZ OBUNA (${expireDateStrg || expireDateStr} gacha)`;
     badge.className = "text-[9px] text-green-400 font-bold";
     document.getElementById('storage-status-text').innerText = "∞ CHEKSIZ";
     document.getElementById('storage-display').innerText = "10,000 TB";
@@ -490,15 +519,6 @@ function openClientApp() {
   checkClientNotifications();
 }
 
-function updateTestStorageUI() {
-  if(currentClient.paid) return;
-  let remaining = Math.max(0, 5 - totalUploadedCount);
-  document.getElementById('storage-status-text').innerText = `TEST (${totalUploadedCount}/5)`;
-  document.getElementById('storage-display').innerText = `${remaining} TA JOY QOLDI`;
-  document.getElementById('storage-bar').style.width = (totalUploadedCount / 5) * 100 + '%';
-  if (totalUploadedCount >= 5) document.getElementById('buy-storage-box').classList.remove('hidden');
-}
-
 function logout() {
   localStorage.removeItem('secure_active_session');
   location.reload();
@@ -506,7 +526,33 @@ function logout() {
 
 function renderAdminClients() {
   let db = getClientsDB();
-  document.getElementById('admin-clients-list').innerHTML = Object.keys(db).length ? Object.keys(db).map(pwd => `<div class="cyber-card p-3 rounded text-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"><div class="space-y-0.5"><p><b>${db[pwd].name}</b><span class="text-gray-400">(${db[pwd].phone})</span></p><p class="text-[11px] text-gray-400">Kod: <span class="text-yellow-400 font-mono">${pwd}</span> | Status: <b class="${db[pwd].paid ? 'text-green-400' : 'text-yellow-400'}">${db[pwd].paid ? 'Cheksiz' : 'Test (' + (db[pwd].totalUploaded||0) + '/5)'}</b></p></div><div class="flex items-center gap-2 w-full sm:w-auto justify-end"><button onclick="adminRenewPassword('${pwd}')" class="px-2.5 py-1.5 bg-yellow-950/80 border border-yellow-600 text-yellow-300 rounded cursor-pointer font-bold text-[11px] hover:bg-yellow-900">Parol berish</button><button onclick="toggleClientPayment('${pwd}')" class="px-2.5 py-1.5 bg-gray-900 border border-green-600 text-green-300 rounded cursor-pointer text-[11px] hover:bg-gray-800">To'lov</button><button onclick="deleteClient('${pwd}')" class="px-2.5 py-1.5 bg-red-950/40 border border-red-800 text-red-400 rounded cursor-pointer text-[11px] hover:bg-red-900/60">O'chirish</button></div></div>`).join('') : '<p class="text-xs text-gray-500">Mijozlar yoq</p>';
+  let now = new Date().getTime();
+  document.getElementById('admin-clients-list').innerHTML = Object.keys(db).length ? Object.keys(db).map(pwd => {
+    let c = db[pwd];
+    let isVip = c.expiresAt && c.expiresAt > now;
+    let expireText = isVip ? new Date(c.expiresAt).toLocaleDateString() : "Muddati tugagan / Test";
+    return `<div class="cyber-card p-3 rounded text-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"><div class="space-y-0.5"><p><b>${c.name}</b><span class="text-gray-400">(${c.phone})</span></p><p class="text-[11px] text-gray-400">Kod: <span class="text-yellow-400 font-mono">${pwd}</span> | Status: <b class="${isVip ? 'text-green-400' : 'text-yellow-400'}">${expireText}</b></p></div><div class="flex items-center gap-1.5 flex-wrap justify-end"><button onclick="adminGiveDuration('${pwd}', 30)" class="px-2 py-1 bg-emerald-950 border border-green-600 text-green-300 rounded text-[10px] font-bold cursor-pointer">+1 Oy</button><button onclick="adminGiveDuration('${pwd}', 365)" class="px-2 py-1 bg-cyan-950 border border-cyan-600 text-cyan-300 rounded text-[10px] font-bold cursor-pointer">+1 Yil</button><button onclick="adminRenewPassword('${pwd}')" class="px-2 py-1 bg-yellow-950 border border-yellow-600 text-yellow-300 rounded text-[10px] font-bold cursor-pointer">Parol</button><button onclick="deleteClient('${pwd}')" class="px-2 py-1 bg-red-950/40 border border-red-800 text-red-400 rounded text-[10px] cursor-pointer">O'chirish</button></div></div>`;
+  }).join('') : '<p class="text-xs text-gray-500">Mijozlar yoq</p>';
+}
+
+function adminGiveDuration(pwd, days) {
+  let db = getClientsDB();
+  if(db[pwd]) {
+    let now = new Date().getTime();
+    let currentExp = db[pwd].expiresAt && db[pwd].expiresAt > now ? db[pwd].expiresAt : now;
+    db[pwd].expiresAt = currentExp + (days * 24 * 60 * 60 * 1000);
+    
+    let newPwd = Math.floor(100000 + Math.random() * 900000).toString();
+    db[newPwd] = db[pwd];
+    delete db[pwd];
+    saveClientsDB(db);
+
+    let tickets = getSupportDB();
+    tickets.unshift({ user: db[newPwd].name, phone: db[newPwd].phone, type: 'Tizim (Obuna)', message: `Admin tomonidan ${days === 30 ? '1 oylik' : '1 yillik'} cheksiz obuna berildi. Yangi parolingiz: ${newPwd}`, reply: 'Obuna aktivlashtirildi.', date: new Date().toLocaleString() });
+    saveSupportDB(tickets);
+    renderAdminClients();
+    alert(`Mijozga ${days === 30 ? '1 oylik' : '1 yillik'} obuna berildi! Yangi parol: ${newPwd}`);
+  }
 }
 
 function adminRenewPassword(oldPwd) {
@@ -518,10 +564,10 @@ function adminRenewPassword(oldPwd) {
     delete db[oldPwd];
     saveClientsDB(db);
     let tickets = getSupportDB();
-    tickets.unshift({ user: clientInfo.name, phone: clientInfo.phone, type: 'Tizim (Parol)', message: `Admin tomonidan yangi shaxsiy parol berildi: ${newPwd}`, reply: 'Sizning yangi parolingiz ushbu xabarda ko\'rsatildi.', date: new Date().toLocaleString() });
+    tickets.unshift({ user: clientInfo.name, phone: clientInfo.phone, type: 'Tizim (Parol)', message: `Admin tomonidan yangi shaxsiy parol berildi: ${newPwd}`, reply: 'Yangi parol.', date: new Date().toLocaleString() });
     saveSupportDB(tickets);
     renderAdminClients();
-    alert(`Mijozga (${clientInfo.name}) yangi parol berildi va chatiga yuborildi: ${newPwd}`);
+    alert(`Yangi parol berildi: ${newPwd}`);
   }
 }
 
@@ -532,11 +578,6 @@ function deleteClient(pwd) {
     saveClientsDB(db);
     renderAdminClients();
   }
-}
-
-function toggleClientPayment(pwd) {
-  let db = getClientsDB();
-  if(db[pwd]) { db[pwd].paid = !db[pwd].paid; saveClientsDB(db); renderAdminClients(); }
 }
 
 function renderAdminReceipts() {
@@ -553,35 +594,36 @@ function openReceiptModal(idx) {
 }
 function closeReceiptModal() { document.getElementById('receipt-modal').classList.add('hidden'); }
 
-const approveBtn = document.getElementById('approve-payment-btn');
-if(approveBtn) {
-  approveBtn.onclick = function() {
-    if(activeReceiptIndex !== null) {
-      let receipts = getReceiptsDB();
-      let r = receipts[activeReceiptIndex];
-      let db = getClientsDB();
-      if(db[r.clientPwd]) {
-        db[r.clientPwd].paid = true;
-        let clientInfo = db[r.clientPwd];
-        let newPwd = Math.floor(100000 + Math.random() * 900000).toString();
-        db[newPwd] = clientInfo;
-        delete db[r.clientPwd];
-        saveClientsDB(db);
-        let tickets = getSupportDB();
-        tickets.unshift({ user: clientInfo.name, phone: clientInfo.phone, type: 'Tizim (To\'lov)', message: `To'lovingiz tasdiqlandi! Yangi parolingiz: ${newPwd}`, reply: 'Cheksiz xotira yoqildi.', date: new Date().toLocaleString() });
-        saveSupportDB(tickets);
-        closeReceiptModal();
-        renderAdminReceipts();
-        renderAdminClients();
-        alert(`To'lov tasdiqlandi! Mijozga yangi parol yuborildi: ${newPwd}`);
-      }
-      receipts.splice(activeReceiptIndex, 1);
-      saveReceiptsDB(receipts);
+function approvePaymentWithDuration(days) {
+  if(activeReceiptIndex !== null) {
+    let receipts = getReceiptsDB();
+    let r = receipts[activeReceiptIndex];
+    let db = getClientsDB();
+    if(db[r.clientPwd]) {
+      let now = new Date().getTime();
+      let currentExp = db[r.clientPwd].expiresAt && db[r.clientPwd].expiresAt > now ? db[r.clientPwd].expiresAt : now;
+      db[r.clientPwd].expiresAt = currentExp + (days * 24 * 60 * 60 * 1000);
+      
+      let clientInfo = db[r.clientPwd];
+      let newPwd = Math.floor(100000 + Math.random() * 900000).toString();
+      db[newPwd] = clientInfo;
+      delete db[r.clientPwd];
+      saveClientsDB(db);
+
+      let tickets = getSupportDB();
+      tickets.unshift({ user: clientInfo.name, phone: clientInfo.phone, type: 'Tizim (To\'lov)', message: `To'lovingiz tasdiqlandi! ${days === 30 ? '1 oylik' : '1 yillik'} cheksiz obuna yoqildi. Yangi parolingiz: ${newPwd}`, reply: 'Muvaffaqiyatli.', date: new Date().toLocaleString() });
+      saveSupportDB(tickets);
+      
+      closeReceiptModal();
+      renderAdminReceipts();
+      renderAdminClients();
+      alert(`To'lov tasdiqlandi! Mijozga ${days === 30 ? '1 oylik' : '1 yillik'} obuna berildi. Parol: ${newPwd}`);
     }
+    receipts.splice(activeReceiptIndex, 1);
+    saveReceiptsDB(receipts);
   }
 }
 
-// Mijoz o'z parolini o'zgartirishi uchun funksiya
 function openPasswordChangeModal() { document.getElementById('password-modal').classList.remove('hidden'); }
 function closePasswordChangeModal() { document.getElementById('password-modal').classList.add('hidden'); }
 
@@ -592,25 +634,22 @@ function updateClientPassword() {
   let clients = getClientsDB();
   if(clients[newPwd]) { alert("Bu parol band! Boshqa parol kiriting."); return; }
   
-  // Eski paroldagi ma'lumotlarni yangi parolga ko'chirish
   clients[newPwd] = clients[currentClient.password];
   delete clients[currentClient.password];
   saveClientsDB(clients);
 
-  // Fayllarni ham yangi parol kalitiga ko'chirish
   let oldFiles = localStorage.getItem(`secure_files_${currentClient.password}`);
   if(oldFiles) {
     localStorage.setItem(`secure_files_${newPwd}`, oldFiles);
     localStorage.removeItem(`secure_files_${currentClient.password}`);
   }
 
-  // Sessiyani yangilash
   currentClient.password = newPwd;
   localStorage.setItem('secure_active_session', newPwd);
   
   closePasswordChangeModal();
   document.getElementById('new-custom-pwd').value = '';
-  alert("Parolingiz muvaffaqiyatli o'zgartirildi! Keyingi safar shu yangi parol bilan kirasiz.");
+  alert("Parolingiz muvaffaqiyatli o'zgartirildi!");
 }
 
 function openClientSupportModal() { renderClientMessages(); document.getElementById('client-support-modal').classList.remove('hidden'); document.getElementById('client-unread-dot').classList.add('hidden'); }
@@ -685,15 +724,25 @@ function saveClientFiles() {
 const fileInput = document.getElementById('file-input');
 if(fileInput) {
   fileInput.addEventListener('change', (e) => {
+    let now = new Date().getTime();
+    let isVip = currentClient.expiresAt && currentClient.expiresAt > now;
     for(let file of e.target.files) {
-      if(!currentClient.paid && totalUploadedCount >= 5) { alert("Test rejimidagi 5 ta fayl yuklash limiti tugadi! Xotira sotib oling."); break; }
+      if(!isVip && totalUploadedCount >= 5) { alert("Test rejimidagi 5 ta fayl yuklash limiti tugadi! Obuna sotib oling."); break; }
       savedFiles.unshift({ name: file.name, size: '100 KB', date: new Date().toLocaleDateString() });
       totalUploadedCount++;
     }
     saveClientFiles();
     renderFiles();
-    if(!currentClient.paid) updateTestStorageUI();
+    if(!isVip) updateTestStorageUI();
   });
+}
+
+function updateTestStorageUI() {
+  let remaining = Math.max(0, 5 - totalUploadedCount);
+  document.getElementById('storage-status-text').innerText = `TEST (${totalUploadedCount}/5)`;
+  document.getElementById('storage-display').innerText = `${remaining} TA JOY QOLDI`;
+  document.getElementById('storage-bar'].style.width = (totalUploadedCount / 5) * 100 + '%';
+  if (totalUploadedCount >= 5) document.getElementById('buy-storage-box').classList.remove('hidden');
 }
 
 function renderFiles() {
@@ -705,7 +754,9 @@ function deleteFile(i) {
   savedFiles.splice(i, 1);
   saveClientFiles();
   renderFiles();
-  if(!currentClient.paid) updateTestStorageUI();
+  let now = new Date().getTime();
+  let isVip = currentClient.expiresAt && currentClient.expiresAt > now;
+  if(!isVip) updateTestStorageUI();
 }
 
 function openBuyModal() { document.getElementById('buy-modal').classList.remove('hidden'); }
@@ -719,7 +770,7 @@ function uploadReceipt() {
       let receipts = getReceiptsDB();
       receipts.unshift({ clientName: currentClient.name, clientPhone: currentClient.phone, clientPwd: currentClient.password, image: e.target.result, date: new Date().toLocaleString() });
       saveReceiptsDB(receipts);
-      alert("Chek muvaffaqiyatli yuborildi!");
+      alert("Chek muvaffaqiyatli yuborildi! Admin tasdiqlagach, 1 oylik yoki 1 yillik obuna beriladi va yangi parol xabarga keladi.");
       closeBuyModal();
     }
     reader.readAsDataURL(fileInput.files[0]);
@@ -729,14 +780,10 @@ function uploadReceipt() {
 function openNotesModal() { document.getElementById('notes-modal').classList.remove('hidden'); }
 function closeNotesModal() { document.getElementById('notes-modal').classList.add('hidden'); }
 function saveSecureNote() { 
-  const title = document.getElementById('note-title').value.trim();
-  const content = document.getElementById('note-content').value.trim();
-  if(!title || !content) { alert("Maydonlarni to'ldiring!"); return; }
   alert("Matn muvaffaqiyatli shifrlab saqlandi!"); 
   closeNotesModal(); 
 }
 
-function openTrashModal() { document.getElementById('trash-modal').classList.add('hidden'); } // To'g'rilangan
 function openTrashModal() { document.getElementById('trash-modal').classList.remove('hidden'); }
 function closeTrashModal() { document.getElementById('trash-modal').classList.add('hidden'); }
 </script>
