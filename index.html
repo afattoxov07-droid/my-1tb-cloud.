@@ -1052,36 +1052,7 @@ function closeTrashModal() { document.getElementById('trash-modal').classList.ad
   
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    const fileInput = document.getElementById('file-input');
-    const dropZone = document.getElementById('drop-zone');
 
-    if (fileInput) {
-       
-    if (dropZone && fileInput) {
-        // Qutiga bosganda fayl tanlash oynasi ochilishi uchun
-        dropZone.addEventListener('click', () => fileInput.click());
-        
-        // Sudrab kelganda rangini o'zgartirish
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('border-green-400');
-        });
-
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('border-green-400');
-        });
-
-        // Faylni tashlab yuborganda
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('border-green-400');
-            const files = e.dataTransfer.files;
-          
-            }
-        });
-    }
-});
 </script>
 </body>
 </html>
