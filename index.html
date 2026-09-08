@@ -208,7 +208,7 @@
             <div class="space-y-3">
                 <div class="flex justify-between items-center">
                     <div class="text-xs font-bold text-green-400">SHIFRLANGAN FAYLLAR (<span id="file-count">0</span>)</div>
-                    <button onclick="openTrashModal()" class="cyber-button px-2.5 py-1 rounded text-[10px] cursor-pointer"><i class="fa-solid fa-box-archive"></i> Arxiv / Savat</button>
+                    <button onclick="openTrashModal()" class="cyber-button px-2.5 py-1 rounded text-[10px] cursor-pointer"><i class="fa-solid fa-box-archive"></i> Arxiv / Savat (<span id="trash-count">0</span>)</button>
                 </div>
                 <div id="file-list" class="space-y-2"></div>
             </div>
@@ -232,7 +232,7 @@
     <div id="password-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
         <div class="cyber-border bg-gray-950 p-5 rounded-lg max-w-sm w-full relative space-y-4 text-center">
             <button onclick="closePasswordChangeModal()" class="absolute top-2 right-2 text-green-400 text-sm font-bold p-2 cursor-pointer">[ X ]</button>
-            <h3 class="text-xs font-bold text-green-400">> SHAXSIY PAROLNI O'ZGARTIRISH</h3>
+            <h3 class="text-xs font-bold text-green-400">> SHAXSIY PAROLni O'ZGARTIRISH</h3>
             <div class="space-y-3">
                 <input type="password" id="new-custom-pwd" placeholder="Yangi parolni kiriting" class="w-full bg-gray-900 border border-green-800 text-xs text-green-300 p-2 rounded focus:outline-none">
                 <button onclick="updateClientPassword()" class="w-full cyber-button py-2 rounded text-xs font-bold uppercase cursor-pointer">SAQLASH VA YANGILASH</button>
@@ -271,7 +271,7 @@
     <div id="trash-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3">
         <div class="cyber-border bg-gray-950 p-4 rounded-lg max-w-xl w-full relative space-y-3">
             <button onclick="closeTrashModal()" class="absolute top-2 right-2 text-green-400 text-sm font-bold p-2 cursor-pointer">[ X ]</button>
-            <h4 class="text-xs font-bold text-green-400">> ARXIVDAN TIKLASH</h4>
+            <h4 class="text-xs font-bold text-green-400">> ARXIV / O'CHIRILGAN FAYLLAR SAVATI</h4>
             <div id="trash-file-list" class="space-y-2 max-h-[50vh] overflow-y-auto"></div>
         </div>
     </div>
@@ -364,6 +364,7 @@
 
         let currentClient = null;
         let savedFiles = [];
+        let trashFiles = []; // Arxivga tashlangan fayllar massivi
         let totalUploadedCount = 0; 
         let activeReceiptIndex = null;
 
@@ -575,18 +576,15 @@
             }
         }
 
-        // Tarifni yoqish yoki o'chirish tugmasi funksiyasi
         function adminToggleSub(pwd) {
             let db = getClientsDB();
             if(db[pwd]) {
                 let now = new Date().getTime();
                 let isVip = db[pwd].expiresAt && db[pwd].expiresAt > now;
                 if(isVip) {
-                    // Tarifni o'chirish (muddatni o'tmishga qo'yish orqali bloklash)
                     db[pwd].expiresAt = now - 1000;
                     alert("Mijozning obunasi o'chirildi va bloklandi!");
                 } else {
-                    // Tarifni yoqish (30 kunga faollashtirish)
                     db[pwd].expiresAt = now + (30 * 24 * 60 * 60 * 1000);
                     alert("Mijozga 1 oylik obuna yoqildi!");
                 }
@@ -668,6 +666,11 @@
                 localStorage.setItem(`secure_files_${newPwd}`, oldFiles);
                 localStorage.removeItem(`secure_files_${currentClient.password}`);
             }
+            let oldTrash = localStorage.getItem(`secure_trash_${currentClient.password}`);
+            if(oldTrash) {
+                localStorage.setItem(`secure_trash_${newPwd}`, oldTrash);
+                localStorage.removeItem(`secure_trash_${currentClient.password}`);
+            }
             currentClient.password = newPwd;
             localStorage.setItem('secure_active_session', newPwd);
             closePasswordChangeModal();
@@ -730,17 +733,23 @@
         }
 
         function loadClientFiles() {
-            let enc = localStorage.getItem(`secure_files_${currentClient.password}`);
-            savedFiles = enc ? (decryptData(enc) || []) : [];
+            let encFiles = localStorage.getItem(`secure_files_${currentClient.password}`);
+            savedFiles = encFiles ? (decryptData(encFiles) || []) : [];
+            
+            let encTrash = localStorage.getItem(`secure_trash_${currentClient.password}`);
+            trashFiles = encTrash ? (decryptData(encTrash) || []) : [];
+
             let clients = getClientsDB();
             if(clients[currentClient.password]) {
                 totalUploadedCount = clients[currentClient.password].totalUploaded || 0;
             }
             renderFiles();
+            renderTrashFiles();
         }
 
         function saveClientFiles() {
             localStorage.setItem(`secure_files_${currentClient.password}`, encryptData(savedFiles));
+            localStorage.setItem(`secure_trash_${currentClient.password}`, encryptData(trashFiles));
             let clients = getClientsDB();
             if(clients[currentClient.password]) {
                 clients[currentClient.password].totalUploaded = totalUploadedCount;
@@ -774,16 +783,39 @@
 
         function renderFiles() {
             document.getElementById('file-count').innerText = savedFiles.length;
-            document.getElementById('file-list').innerHTML = savedFiles.length ? savedFiles.map((f, i) => `<div class="cyber-card p-2 rounded flex justify-between text-xs"><span>${f.name}</span><button onclick="deleteFile(${i})" class="text-red-400 cursor-pointer">O'chirish</button></div>`).join('') : '<div class="text-center py-4 text-xs text-green-700">FAYLLAR YOQ</div>';
+            document.getElementById('file-list').innerHTML = savedFiles.length ? savedFiles.map((f, i) => `<div class="cyber-card p-2 rounded flex justify-between items-center text-xs"><span>${f.name}</span><button onclick="moveToTrash(${i})" class="cyber-button px-2 py-1 text-red-400 border-red-800 rounded cursor-pointer"><i class="fa-solid fa-trash"></i> O'chirish (Arxivga)</button></div>`).join('') : '<div class="text-center py-4 text-xs text-green-700">FAYLLAR YOQ</div>';
         }
 
-        function deleteFile(i) {
-            savedFiles.splice(i, 1);
+        // Faylni o'chirganda arxivga (savatga) o'tkazish funksiyasi
+        function moveToTrash(i) {
+            let file = savedFiles.splice(i, 1)[0];
+            trashFiles.unshift(file);
             saveClientFiles();
             renderFiles();
-            let now = new Date().getTime();
-            let isVip = currentClient.expiresAt && currentClient.expiresAt > now;
-            if(!isVip) updateTestStorageUI();
+            renderTrashFiles();
+        }
+
+        function renderTrashFiles() {
+            document.getElementById('trash-count').innerText = trashFiles.length;
+            document.getElementById('trash-file-list').innerHTML = trashFiles.length ? trashFiles.map((f, i) => `<div class="cyber-card p-2 rounded flex justify-between items-center text-xs"><span>${f.name} <span class="text-[9px] text-gray-500">(${f.date})</span></span><div class="flex gap-1"><button onclick="restoreFromTrash(${i})" class="cyber-button px-2 py-1 text-green-300 rounded cursor-pointer">Tiklash</button><button onclick="deleteForever(${i})" class="px-2 py-1 bg-red-950 border border-red-800 text-red-400 rounded cursor-pointer">Butunlay o'chirish</button></div></div>`).join('') : '<p class="text-xs text-green-700 text-center py-4">Arxiv bo\'sh</p>';
+        }
+
+        // Arxivdan qayta tiklash
+        function restoreFromTrash(i) {
+            let file = trashFiles.splice(i, 1)[0];
+            savedFiles.unshift(file);
+            saveClientFiles();
+            renderFiles();
+            renderTrashFiles();
+        }
+
+        // Arxivdan butunlay o'chirish
+        function deleteForever(i) {
+            if(confirm("Faylni butunlay o'chirib yuborishni tasdiqlaysizmi?")) {
+                trashFiles.splice(i, 1);
+                saveClientFiles();
+                renderTrashFiles();
+            }
         }
 
         function openBuyModal() { document.getElementById('buy-modal').classList.remove('hidden'); }
