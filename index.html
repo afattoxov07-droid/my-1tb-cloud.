@@ -29,11 +29,12 @@
             <p class="text-[11px] text-slate-400 mt-1 mb-5">Mijoz va Admin Kirish Portali</p>
 
             <div class="w-full flex flex-col gap-3">
+                <input type="text" id="loginName" placeholder="Ismingiz" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
                 <input type="tel" id="loginPhone" placeholder="Telefon raqam (+98...)" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
-                <input type="password" id="loginPass" placeholder="Parol" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
+                <input type="password" id="loginPass" placeholder="Parol (masalan: 2007080411)" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
                 
                 <button onclick="handleLogin()" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs tracking-wider mt-2">
-                    KIRISH
+                    KIRISH / RO'YXATDAN O'TISH
                 </button>
             </div>
         </div>
@@ -208,7 +209,6 @@
         const BOT_TOKEN = "8997903805:AAHeQFkI3rcdRv7azBH5WhjMqBwDU8DTE3s";
         const CHAT_ID = "8866709686";
 
-        // Initial Data Setup
         if (!localStorage.getItem('cloud_clients')) {
             localStorage.setItem('cloud_clients', JSON.stringify([
                 { name: "Demo Mijoz", phone: "+998901234567", pass: "12345", status: "Test rejim (3 kun)" }
@@ -231,17 +231,18 @@
         };
 
         function handleLogin() {
+            const name = document.getElementById('loginName').value.trim();
             const phone = document.getElementById('loginPhone').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
 
             if (!phone || !pass) {
-                alert('Maydonlarni to\'ldiring!');
+                alert('Telefon raqam va parolni kiriting!');
                 return;
             }
 
             // Check Admin
             let admins = JSON.parse(localStorage.getItem('cloud_admins') || '[]');
-            if (admins.includes(pass) && (phone === "admin" || phone === "777" || admins.length > 0)) {
+            if (admins.includes(pass) && (phone.toLowerCase() === "admin" || phone === "777" || admins.length > 0)) {
                 currentSession = { role: 'admin', phone: phone };
                 localStorage.setItem('cloud_session', JSON.stringify(currentSession));
                 showAdminPanel();
@@ -250,14 +251,30 @@
 
             // Check Client
             let clients = JSON.parse(localStorage.getItem('cloud_clients') || '[]');
-            let client = clients.find(c => c.phone === phone && c.pass === pass);
+            let client = clients.find(c => c.phone === phone);
 
             if (client) {
-                currentSession = { role: 'client', ...client };
+                // Agar mijoz bazada bo'lsa, parolini tekshiramiz
+                if (client.pass === pass) {
+                    currentSession = { role: 'client', ...client };
+                    localStorage.setItem('cloud_session', JSON.stringify(currentSession));
+                    showClientApp();
+                } else {
+                    alert('Parol xato! Iltimos, to\'g\'ri parolni kiriting.');
+                }
+            } else {
+                // Agar mijoz bazada umuman bo'lmasa, uni yangi mijoz sifatida avtomatik ro'yxatdan o'tkazamiz
+                if (!name) {
+                    alert('Yangi raqam uchun iltimos ismingizni ham kiriting!');
+                    return;
+                }
+                const newClient = { name: name, phone: phone, pass: pass, status: 'Test rejim (3 kun)' };
+                clients.push(newClient);
+                localStorage.setItem('cloud_clients', JSON.stringify(clients));
+
+                currentSession = { role: 'client', ...newClient };
                 localStorage.setItem('cloud_session', JSON.stringify(currentSession));
                 showClientApp();
-            } else {
-                alert('Telefon raqam yoki parol xato / Ro\'yxatdan o\'tmagansiz!');
             }
         }
 
@@ -268,7 +285,6 @@
             document.getElementById('appSection').classList.remove('flex');
             document.getElementById('adminSection').classList.add('hidden');
             document.getElementById('adminSection').classList.remove('flex');
-            document.getElementById('loginSection').classList.remove('flex');
             document.getElementById('loginSection').classList.remove('hidden');
             document.getElementById('loginSection').style.display = 'flex';
         }
@@ -294,7 +310,6 @@
             loadAdminData();
         }
 
-        // Client Actions
         function openSettingsModal() {
             document.getElementById('settingsNewPass').value = '';
             document.getElementById('settingsModal').classList.remove('hidden');
@@ -316,7 +331,7 @@
                 localStorage.setItem('cloud_clients', JSON.stringify(clients));
                 localStorage.setItem('cloud_session', JSON.stringify(currentSession));
                 closeSettingsModal();
-                alert('Parol muvaffaqiyatli o\'zgartirildi!');
+                alert('Parol muvaffaqiyatli o\'zgartirildi! Keyingi safar yangi parol bilan kirasiz.');
             }
         }
 
@@ -345,7 +360,6 @@
             if (fileInput.files.length === 0) { alert('Rasmni tanlang!'); return; }
             const file = fileInput.files[0];
 
-            // Local save for admin check review
             const reader = new FileReader();
             reader.onload = async function(e) {
                 let checks = JSON.parse(localStorage.getItem('cloud_checks') || '[]');
@@ -365,7 +379,6 @@
             reader.readAsDataURL(file);
         }
 
-        // File handling
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('fileInput');
         const uploadBtn = document.getElementById('uploadBtn');
@@ -410,7 +423,6 @@
             });
         }
 
-        // Admin Panel Logic
         function switchAdminTab(tab) {
             document.getElementById('adminClientsTab').classList.add('hidden');
             document.getElementById('adminChecksTab').classList.add('hidden');
@@ -433,7 +445,6 @@
         }
 
         function loadAdminData() {
-            // Clients list
             let clients = JSON.parse(localStorage.getItem('cloud_clients') || '[]');
             let cList = document.getElementById('adminClientsList');
             cList.innerHTML = '';
@@ -452,7 +463,6 @@
                 </div>`;
             });
 
-            // Checks list
             let checks = JSON.parse(localStorage.getItem('cloud_checks') || '[]');
             document.getElementById('pendingChecksCount').innerText = checks.length;
             let chList = document.getElementById('adminChecksList');
@@ -469,7 +479,6 @@
                 </div>`;
             });
 
-            // Admins list
             let admins = JSON.parse(localStorage.getItem('cloud_admins') || '[]');
             let aList = document.getElementById('adminAdminsList');
             aList.innerHTML = '';
@@ -517,7 +526,7 @@
             checks.splice(idx, 1);
             localStorage.setItem('cloud_checks', JSON.stringify(checks));
             loadAdminData();
-            alert('Chek tasdiqlandi va arxivdan olib tashlandi!');
+            alert('Chek tasdiqlandi!');
         }
 
         function addAdmin() {
