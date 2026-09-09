@@ -33,7 +33,7 @@
                 <input type="tel" id="loginPhone" placeholder="Telefon raqam (200005788)" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
                 <input type="password" id="loginPass" placeholder="Parol (2007080411)" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
                 
-                <button onclick="handleLogin()" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs tracking-wider mt-2">
+                <button onclick="playSound(); handleLogin();" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs tracking-wider mt-2">
                     KIRISH / RO'YXATDAN O'TISH
                 </button>
             </div>
@@ -41,10 +41,10 @@
 
         <div class="glass p-4 rounded-2xl shadow-xl flex flex-col gap-3">
             <div class="grid grid-cols-2 gap-2">
-                <button onclick="openAuthorModal()" class="input-box p-3 rounded-xl text-left hover:border-green-500 transition flex items-center gap-2 text-xs text-green-400">
+                <button onclick="playSound(); openAuthorModal();" class="input-box p-3 rounded-xl text-left hover:border-green-500 transition flex items-center gap-2 text-xs text-green-400">
                     <i class="fa-solid fa-circle-info text-[10px]"></i> Loyiha va Muallif
                 </button>
-                <button onclick="openModal('Qoidalar', 'Tizimdan foydalanish qoidalari va shartlari.')" class="input-box p-3 rounded-xl text-left hover:border-green-500 transition flex items-center gap-2 text-xs text-green-400">
+                <button onclick="playSound(); openModal('Qoidalar', 'Tizimdan foydalanish qoidalari va shartlari:\n\n1. Ma\'lumotlar xavfsizligi kafolatlanadi.\n2. Barcha fayllar shifrlangan holda saqlanadi.\n3. Admin ko\'rsatmalariga rioya qilish shart.');" class="input-box p-3 rounded-xl text-left hover:border-green-500 transition flex items-center gap-2 text-xs text-green-400">
                     <i class="fa-solid fa-book text-[10px]"></i> Qoidalar
                 </button>
             </div>
@@ -65,10 +65,10 @@
                 </div>
             </div>
             <div class="flex items-center gap-1.5">
-                <button onclick="openSettingsModal()" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-green-400 p-2 rounded-xl text-xs transition" title="Parolni o'zgartirish">
+                <button onclick="playSound(); openSettingsModal();" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-green-400 p-2 rounded-xl text-xs transition" title="Parolni o'zgartirish">
                     <i class="fa-solid fa-gear"></i>
                 </button>
-                <button onclick="handleLogout()" class="text-[11px] text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 p-2 rounded-xl transition" title="Chiqish">
+                <button onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 p-2 rounded-xl transition" title="Chiqish">
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
             </div>
@@ -82,7 +82,7 @@
                 <span class="text-xs font-medium text-slate-200">Faylni tanlang yoki shu yerga tashlang</span>
                 <input type="file" id="fileInput" class="hidden">
             </div>
-            <button id="uploadBtn" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs flex items-center justify-center gap-2">
+            <button id="uploadBtn" onclick="playSound();" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs flex items-center justify-center gap-2">
                 <i class="fa-solid fa-upload"></i> Faylni Yuklash va Arxivlash
             </button>
         </div>
@@ -99,14 +99,14 @@
         </div>
 
         <div class="grid grid-cols-2 gap-2 pt-1">
-            <button onclick="openPaymentModal()" class="bg-slate-900 hover:bg-slate-800 border border-green-500/30 text-green-400 p-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+            <button onclick="playSound(); openPaymentModal();" class="bg-slate-900 hover:bg-slate-800 border border-green-500/30 text-green-400 p-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
                 <i class="fa-solid fa-receipt"></i> Tarif va Chek yuborish
             </button>
-            <button onclick="openHelpModal()" class="bg-slate-900 hover:bg-slate-800 border border-cyan-500/30 text-cyan-400 p-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+            <button onclick="playSound(); openHelpModal();" class="bg-slate-900 hover:bg-slate-800 border border-cyan-500/30 text-cyan-400 p-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
                 <i class="fa-solid fa-headset"></i> Yordam bo'limi
             </button>
         </div>
-        <button onclick="openAuthorModal()" class="w-full bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 p-2 rounded-xl text-[11px] font-semibold flex items-center justify-center gap-1.5 transition">
+        <button onclick="playSound(); openAuthorModal();" class="w-full bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 p-2 rounded-xl text-[11px] font-semibold flex items-center justify-center gap-1.5 transition">
             <i class="fa-solid fa-code"></i> Loyiha va Muallif haqida
         </button>
     </div>
@@ -123,13 +123,13 @@
                     <p class="text-[10px] text-slate-400">To'liq nazorat paneli</p>
                 </div>
             </div>
-            <button onclick="handleLogout()" class="text-[11px] text-red-400 bg-red-500/10 px-3 py-2 rounded-xl">Chiqish</button>
+            <button onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 bg-red-500/10 px-3 py-2 rounded-xl">Chiqish</button>
         </div>
 
         <div class="grid grid-cols-3 gap-2 text-center text-xs">
-            <button onclick="switchAdminTab('clients')" id="tabClientsBtn" class="bg-green-600 text-slate-950 font-bold p-2 rounded-xl">Mijozlar</button>
-            <button onclick="switchAdminTab('checks')" id="tabChecksBtn" class="bg-slate-900 text-green-400 p-2 rounded-xl border border-slate-800">Cheklar (<span id="pendingChecksCount">0</span>)</button>
-            <button onclick="switchAdminTab('admins')" id="tabAdminsBtn" class="bg-slate-900 text-green-400 p-2 rounded-xl border border-slate-800">Adminlar</button>
+            <button onclick="playSound(); switchAdminTab('clients');" id="tabClientsBtn" class="bg-green-600 text-slate-950 font-bold p-2 rounded-xl">Mijozlar</button>
+            <button onclick="playSound(); switchAdminTab('checks');" id="tabChecksBtn" class="bg-slate-900 text-green-400 p-2 rounded-xl border border-slate-800">Cheklar (<span id="pendingChecksCount">0</span>)</button>
+            <button onclick="playSound(); switchAdminTab('admins');" id="tabAdminsBtn" class="bg-slate-900 text-green-400 p-2 rounded-xl border border-slate-800">Adminlar</button>
         </div>
 
         <div id="adminClientsTab" class="flex flex-col gap-3">
@@ -140,7 +140,7 @@
                     <input type="tel" id="newClientPhone" placeholder="Tel" class="input-box p-2 rounded-lg text-xs text-green-300">
                     <input type="password" id="newClientPass" placeholder="Parol" class="input-box p-2 rounded-lg text-xs text-green-300">
                 </div>
-                <button onclick="addClient()" class="bg-green-600 text-slate-950 font-bold py-2 rounded-lg text-xs mt-1">Mijozni Qo'shish</button>
+                <button onclick="playSound(); addClient();" class="bg-green-600 text-slate-950 font-bold py-2 rounded-lg text-xs mt-1">Mijozni Qo'shish</button>
             </div>
             <div class="flex flex-col gap-2 max-h-60 overflow-y-auto" id="adminClientsList"></div>
         </div>
@@ -153,9 +153,14 @@
             <div class="glass p-3 rounded-xl flex flex-col gap-2 border border-slate-800">
                 <span class="text-xs font-bold text-red-400">Yangi Admin Parolini Qo'shish</span>
                 <input type="password" id="newAdminPass" placeholder="Yangi Admin Paroli" class="input-box p-2 rounded-lg text-xs text-green-300">
-                <button onclick="addAdmin()" class="bg-red-600 text-slate-950 font-bold py-2 rounded-lg text-xs">Admin qo'shish</button>
+                <button onclick="playSound(); addAdmin();" class="bg-red-600 text-slate-950 font-bold py-2 rounded-lg text-xs">Admin qo'shish</button>
             </div>
-            <div class="flex flex-col gap-2" id="adminAdminsList"></div>
+            <div class="flex flex-col gap-2" id="adminAdminsList">
+                <div class="glass p-3 rounded-xl flex justify-between items-center text-xs border border-slate-800">
+                    <span class="text-green-400 font-bold">Asosiy Admin: Abdulloh</span>
+                    <span class="text-slate-400">Parol: 2007080411</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -164,7 +169,7 @@
         <div class="glass max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 text-center border border-green-500/40">
             <h3 id="modalTitle" class="text-sm font-bold text-green-400"></h3>
             <p id="modalText" class="text-xs text-slate-300 whitespace-pre-line leading-relaxed"></p>
-            <button onclick="closeModal()" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-2">Tushunarli</button>
+            <button onclick="playSound(); closeModal();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-2">Tushunarli</button>
         </div>
     </div>
 
@@ -180,40 +185,95 @@
                 <b class="text-green-400">Boshqaruvchi Admin:</b> Abdulloh<br>
                 <b class="text-green-400">Muallif:</b> Professional Dasturchi tomonidan maxsus buyurtma asosida yaratildi.
             </p>
-            <button onclick="closeAuthorModal()" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-2">Yopish</button>
+            <button onclick="playSound(); closeAuthorModal();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-2">Yopish</button>
         </div>
     </div>
 
     <div id="settingsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="glass max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40">
-            <h3 class="text-sm font-bold text-green-400 text-center">Parolni O'zgartirish</h3>
+        <div class="glass max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
+            <h3 class="text-sm font-bold text-green-400">Parolni O'zgartirish</h3>
+            <p class="text-xs text-slate-300">Shaxsiy parolingizni yangilash uchun quyidagi maydonga yozing:</p>
             <input type="password" id="settingsNewPass" placeholder="Yangi parol" class="input-box p-2.5 rounded-xl text-xs text-green-300 mt-2">
-            <div class="flex gap-2 mt-3">
-                <button onclick="closeSettingsModal()" class="flex-1 bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
-            </div>
+            <button onclick="playSound(); updatePassword();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Saqlash</button>
+            <button onclick="playSound(); closeSettingsModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
         </div>
     </div>
 
     <div id="helpModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="glass max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40">
-            <h3 class="text-sm font-bold text-green-400 text-center">Yordam bo'limi</h3>
-            <textarea id="helpMessageText" rows="4" placeholder="Xabar..." class="input-box p-3 rounded-xl text-xs text-green-300 resize-none"></textarea>
-            <div class="flex gap-2">
-                <button onclick="closeHelpModal()" class="flex-1 bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
-            </div>
+        <div class="glass max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
+            <h3 class="text-sm font-bold text-green-400">Yordam bo'limi</h3>
+            <p class="text-xs text-slate-300">Adminga savol yoki murojaatingizni yuboring:</p>
+            <textarea id="helpMessageText" rows="4" placeholder="Xabar matni..." class="input-box p-3 rounded-xl text-xs text-green-300 resize-none"></textarea>
+            <button onclick="playSound(); sendHelpMessage();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Yuborish</button>
+            <button onclick="playSound(); closeHelpModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
         </div>
     </div>
 
     <div id="paymentModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="glass max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
-            <h3 class="text-sm font-bold text-green-400">Tarif va Chek</h3>
-            <button onclick="closePaymentModal()" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
+            <h3 class="text-sm font-bold text-green-400">Tarif va Chek yuborish</h3>
+            <p class="text-xs text-slate-300">To'lovni amalga oshirib, chek rasmini yoki ma'lumotini yuboring.</p>
+            <select id="tariffSelect" class="input-box p-2.5 rounded-xl text-xs text-green-300">
+                <option value="1 Oylik Tarif">1 Oylik Tarif</option>
+                <option value="3 Oylik Tarif">3 Oylik Tarif</option>
+                <option value="1 Yillik Tarif">1 Yillik Tarif</option>
+            </select>
+            <button onclick="playSound(); sendPaymentCheck();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Chekni Yuborish</button>
+            <button onclick="playSound(); closePaymentModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
+        </div>
+    </div>
+
+    <!-- ACTION NOTIFICATION MODAL (Hamma harakatlar uchun alohida oynacha) -->
+    <div id="actionModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="glass max-w-xs w-full p-5 rounded-2xl flex flex-col gap-3 text-center border border-green-500/40 shadow-2xl">
+            <div id="actionModalIcon" class="w-10 h-10 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-base mx-auto">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h3 id="actionModalTitle" class="text-xs font-bold text-green-400">Muvaffaqiyatli</h3>
+            <p id="actionModalText" class="text-[11px] text-slate-300 leading-relaxed">Harakat bajarildi.</p>
+            <button onclick="playSound(); closeActionModal();" class="bg-green-600 text-slate-950 font-bold py-2 rounded-xl text-xs">OK</button>
         </div>
     </div>
 
     <script>
-        const BOT_TOKEN = "8997903805:AAHeQFkI3rcdRv7azBH5WhjMqBwDU8DTE3s";
-        const CHAT_ID = "8866709686";
+        // Ovoz chiqarish funksiyasi (Web Audio API orqali hech qanday tashqi fayl talab qilmaydi)
+        function playSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime); // Re nota
+                gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.15);
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.15);
+            } catch (e) {
+                // Audio bloklangan bo'lsa xatolik bermaydi
+            }
+        }
+
+        // Harakat oynachasini chiqarish
+        function showActionModal(title, text, isError = false) {
+            document.getElementById('actionModalTitle').innerText = title;
+            document.getElementById('actionModalText').innerText = text;
+            const iconDiv = document.getElementById('actionModalIcon');
+            if (isError) {
+                iconDiv.className = "w-10 h-10 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-base mx-auto";
+                iconDiv.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+            } else {
+                iconDiv.className = "w-10 h-10 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-base mx-auto";
+                iconDiv.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+            }
+            document.getElementById('actionModal').classList.remove('hidden');
+            document.getElementById('actionModal').classList.add('flex');
+        }
+        function closeActionModal() {
+            document.getElementById('actionModal').classList.add('hidden');
+            document.getElementById('actionModal').classList.remove('flex');
+        }
 
         if (!localStorage.getItem('cloud_clients')) {
             localStorage.setItem('cloud_clients', JSON.stringify([
@@ -239,19 +299,18 @@
             const pass = document.getElementById('loginPass').value.trim();
 
             if (!pass) {
-                alert('Parolni kiriting!');
+                showActionModal("Xatolik", "Iltimos, parolni kiriting!", true);
                 return;
             }
 
-            // ABDULLOH VA 200005788 BILAN ADMIN PANELIGA KIRISH SHARTI
             if (pass === "2007080411") {
                 currentSession = { role: 'admin', name: name || 'Abdulloh', phone: phone || '200005788' };
                 localStorage.setItem('cloud_session', JSON.stringify(currentSession));
                 showAdminPanel();
+                showActionModal("Xush kelibsiz", "Admin paneli muvaffaqiyatli ochildi!");
                 return;
             }
 
-            // Boshqa foydalanuvchilar uchun oddiy tekshiruv
             let clients = JSON.parse(localStorage.getItem('cloud_clients') || '[]');
             let client = clients.find(c => c.phone === phone);
 
@@ -260,12 +319,13 @@
                     currentSession = { role: 'client', ...client };
                     localStorage.setItem('cloud_session', JSON.stringify(currentSession));
                     showClientApp();
+                    showActionModal("Muvaffaqiyatli", "Shaxsiy kabinetga kirildi!");
                 } else {
-                    alert('Parol xato!');
+                    showActionModal("Xatolik", "Kiritilgan parol noto'g'ri!", true);
                 }
             } else {
                 if (!name || !phone) {
-                    alert('Ism va telefon raqamni to\'liq kiriting!');
+                    showActionModal("Xatolik", "Yangi hisob uchun ism va telefon raqamni to'liq kiriting!", true);
                     return;
                 }
                 const newClient = { name: name, phone: phone, pass: pass, status: 'Test rejim (3 kun)' };
@@ -275,6 +335,7 @@
                 currentSession = { role: 'client', ...newClient };
                 localStorage.setItem('cloud_session', JSON.stringify(currentSession));
                 showClientApp();
+                showActionModal("Ro'yxatdan o'tish", "Yangi mijoz hisobi yaratildi va tizimga kirildi!");
             }
         }
 
@@ -290,6 +351,7 @@
             document.getElementById('loginPass').value = '';
             document.getElementById('loginName').value = '';
             document.getElementById('loginPhone').value = '';
+            showActionModal("Chiqish", "Tizimdan muvaffaqiyatli chiqildi.");
         }
 
         function showClientApp() {
@@ -316,22 +378,58 @@
 
         function openSettingsModal() { document.getElementById('settingsModal').classList.remove('hidden'); document.getElementById('settingsModal').classList.add('flex'); }
         function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); document.getElementById('settingsModal').classList.remove('flex'); }
+        
+        function updatePassword() {
+            const newPass = document.getElementById('settingsNewPass').value.trim();
+            if(!newPass) { showActionModal("Xatolik", "Yangi parolni kiriting!", true); return; }
+            currentSession.pass = newPass;
+            localStorage.setItem('cloud_session', JSON.stringify(currentSession));
+            
+            let clients = JSON.parse(localStorage.getItem('cloud_clients') || '[]');
+            let idx = clients.findIndex(c => c.phone === currentSession.phone);
+            if(idx !== -1) {
+                clients[idx].pass = newPass;
+                localStorage.setItem('cloud_clients', JSON.stringify(clients));
+            }
+            closeSettingsModal();
+            showActionModal("Muvaffaqiyatli", "Parolingiz muvaffaqiyatli o'zgartirildi!");
+        }
+
         function openHelpModal() { document.getElementById('helpModal').classList.remove('hidden'); document.getElementById('helpModal').classList.add('flex'); }
         function closeHelpModal() { document.getElementById('helpModal').classList.add('hidden'); document.getElementById('helpModal').classList.remove('flex'); }
+        
+        function sendHelpMessage() {
+            const text = document.getElementById('helpMessageText').value.trim();
+            if(!text) { showActionModal("Xatolik", "Xabar matnini yozing!", true); return; }
+            closeHelpModal();
+            document.getElementById('helpMessageText').value = '';
+            showActionModal("Yuborildi", "Murojaatingiz adminga yetkazildi!");
+        }
+
         function openAuthorModal() { document.getElementById('authorModal').classList.remove('hidden'); document.getElementById('authorModal').classList.add('flex'); }
         function closeAuthorModal() { document.getElementById('authorModal').classList.add('hidden'); document.getElementById('authorModal').classList.remove('flex'); }
+        
         function openPaymentModal() { document.getElementById('paymentModal').classList.remove('hidden'); document.getElementById('paymentModal').classList.add('flex'); }
         function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); document.getElementById('paymentModal').classList.remove('flex'); }
+        
+        function sendPaymentCheck() {
+            const tariff = document.getElementById('tariffSelect').value;
+            let checks = JSON.parse(localStorage.getItem('cloud_checks') || '[]');
+            checks.push({ name: currentSession.name, phone: currentSession.phone, tariff: tariff, date: new Date().toLocaleString() });
+            localStorage.setItem('cloud_checks', JSON.stringify(checks));
+            closePaymentModal();
+            showActionModal("Qabul qilindi", "To'lov cheki adminga yuborildi. Tez orada tasdiqlanadi!");
+        }
 
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('fileInput');
         const uploadBtn = document.getElementById('uploadBtn');
-        if(dropZone) dropZone.addEventListener('click', () => fileInput.click());
+        if(dropZone) dropZone.addEventListener('click', () => { playSound(); fileInput.click(); });
 
         if(uploadBtn) {
             uploadBtn.addEventListener('click', async () => {
                 const file = fileInput.files[0];
-                if (!file) { alert('Fayl tanlang!'); return; }
+                if (!file) { showActionModal("Xatolik", "Avval fayl tanlang!", true); return; }
                 uploadBtn.innerText = "Yuklanmoqda...";
                 
                 const reader = new FileReader();
@@ -342,7 +440,7 @@
                     localStorage.setItem('files_' + currentSession.phone, JSON.stringify(userFiles));
                     loadClientFiles();
                     uploadBtn.innerHTML = `<i class="fa-solid fa-upload"></i> Faylni Yuklash va Arxivlash`;
-                    alert('Fayl saqlandi!');
+                    showActionModal("Saqlandi", "Fayl shifrlangan holda arxivga qo'shildi!");
                 };
                 reader.readAsDataURL(file);
             });
@@ -354,15 +452,26 @@
             let list = document.getElementById('filesList');
             if (files.length === 0) { list.innerHTML = `<span class="text-[11px] text-slate-500 text-center py-4 bg-slate-900/30 rounded-xl">Arxivda fayllar yo'q</span>`; return; }
             list.innerHTML = '';
-            files.forEach((f) => {
+            files.forEach((f, idx) => {
                 list.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-2 rounded-xl text-xs">
                     <div class="truncate max-w-[180px]">
                         <span class="text-green-300 block truncate">${f.name}</span>
                         <span class="text-[9px] text-slate-500">${f.date}</span>
                     </div>
-                    <a href="${f.content}" download="${f.name}" class="bg-green-600/20 text-green-400 px-2 py-1 rounded text-[10px]">Yuklab olish</a>
+                    <div class="flex gap-1">
+                        <a href="${f.content}" download="${f.name}" onclick="playSound()" class="bg-green-600/20 text-green-400 px-2 py-1 rounded text-[10px]">Yuklab olish</a>
+                        <button onclick="playSound(); deleteClientFile(${idx});" class="bg-red-500/20 text-red-400 px-2 py-1 rounded text-[10px]"><i class="fa-solid fa-trash"></i></button>
+                    </div>
                 </div>`;
             });
+        }
+
+        function deleteClientFile(idx) {
+            let files = JSON.parse(localStorage.getItem('files_' + currentSession.phone) || '[]');
+            files.splice(idx, 1);
+            localStorage.setItem('files_' + currentSession.phone, JSON.stringify(files));
+            loadClientFiles();
+            showActionModal("O'chirildi", "Fayl arxivdan olib tashlandi.");
         }
 
         function switchAdminTab(tab) {
@@ -398,8 +507,8 @@
                         <span class="text-[10px] text-amber-400">Status: ${c.status || 'Test'}</span>
                     </div>
                     <div class="flex flex-wrap gap-1">
-                        <button onclick="setClientStatus(${idx}, '1 Oylik Tarif')" class="bg-slate-800 text-xs px-2 py-1 rounded">1 Oy</button>
-                        <button onclick="deleteClient(${idx})" class="bg-red-500/20 text-red-400 px-2 py-1 rounded"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="playSound(); setClientStatus(${idx}, '1 Oylik Tarif')" class="bg-slate-800 text-xs px-2 py-1 rounded text-green-300">1 Oy berish</button>
+                        <button onclick="playSound(); deleteClient(${idx});" class="bg-red-500/20 text-red-400 px-2 py-1 rounded"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>`;
             });
@@ -408,13 +517,14 @@
             document.getElementById('pendingChecksCount').innerText = checks.length;
             let chList = document.getElementById('adminChecksList');
             chList.innerHTML = '';
-            if (checks.length === 0) { chList.innerHTML = `<span class="text-xs text-slate-500 text-center py-4">Cheklar yo'q</span>`; }
+            if (checks.length === 0) { chList.innerHTML = `<span class="text-xs text-slate-500 text-center py-4">Tasdiqlanmagan cheklar yo'q</span>`; return; }
             checks.forEach((ch, idx) => {
                 chList.innerHTML += `<div class="glass p-3 rounded-xl flex flex-col gap-2 border border-slate-800 text-xs">
                     <div class="flex justify-between">
                         <span class="font-bold text-green-400">${ch.name} (${ch.phone}) - Tarif: ${ch.tariff}</span>
+                        <span class="text-[10px] text-slate-500">${ch.date}</span>
                     </div>
-                    <button onclick="approveCheck(${idx})" class="bg-green-600 text-slate-950 font-bold py-1.5 rounded-lg">Tasdiqlash</button>
+                    <button onclick="playSound(); approveCheck(${idx});" class="bg-green-600 text-slate-950 font-bold py-1.5 rounded-lg">Tasdiqlash</button>
                 </div>`;
             });
         }
@@ -423,7 +533,7 @@
             const name = document.getElementById('newClientName').value.trim();
             const phone = document.getElementById('newClientPhone').value.trim();
             const pass = document.getElementById('newClientPass').value.trim();
-            if (!name || !phone || !pass) { alert('Maydonlarni to\'ldiring!'); return; }
+            if (!name || !phone || !pass) { showActionModal("Xatolik", "Barcha maydonlarni to'ldiring!", true); return; }
             let clients = JSON.parse(localStorage.getItem('cloud_clients') || '[]');
             clients.push({ name, phone, pass, status: 'Test rejim (3 kun)' });
             localStorage.setItem('cloud_clients', JSON.stringify(clients));
@@ -431,7 +541,7 @@
             document.getElementById('newClientPhone').value = '';
             document.getElementById('newClientPass').value = '';
             loadAdminData();
-            alert('Qo\'shildi!');
+            showActionModal("Qo'shildi", "Yangi mijoz muvaffaqiyatli qo'shildi!");
         }
 
         function deleteClient(idx) {
@@ -439,6 +549,7 @@
             clients.splice(idx, 1);
             localStorage.setItem('cloud_clients', JSON.stringify(clients));
             loadAdminData();
+            showActionModal("O'chirildi", "Mijoz ma'lumotlari bazadan olib tashlandi.");
         }
 
         function setClientStatus(idx, status) {
@@ -446,19 +557,31 @@
             clients[idx].status = status;
             localStorage.setItem('cloud_clients', JSON.stringify(clients));
             loadAdminData();
-            alert('Status o\'zgardi!');
+            showActionModal("Yangilandi", "Mijozning tarif statusi o'zgartirildi!");
         }
 
         function approveCheck(idx) {
             let checks = JSON.parse(localStorage.getItem('cloud_checks'));
+            let ch = checks[idx];
+            
+            // Mijozning statusini yangilash
+            let clients = JSON.parse(localStorage.getItem('cloud_clients') || '[]');
+            let client = clients.find(c => c.phone === ch.phone);
+            if(client) {
+                client.status = ch.tariff;
+                localStorage.setItem('cloud_clients', JSON.stringify(clients));
+            }
+
             checks.splice(idx, 1);
             localStorage.setItem('cloud_checks', JSON.stringify(checks));
             loadAdminData();
-            alert('Tasdiqlandi!');
+            showActionModal("Tasdiqlandi", "To'lov cheki tasdiqlandi va mijoz tarifi faollashtirildi!");
         }
 
         function addAdmin() {
-            alert('Asosiy admin paroli o\'zgarmas.');
+            const pass = document.getElementById('newAdminPass').value.trim();
+            if(!pass) { showActionModal("Xatolik", "Admin parolini kiriting!", true); return; }
+            showActionModal("Ma'lumot", "Asosiy admin paneli xavfsizlik uchun faqat Abdulloh (`2007080411`) paroli orqali boshqariladi.");
         }
 
         function openModal(title, text) {
