@@ -36,7 +36,7 @@
             <div class="w-full flex flex-col gap-3">
                 <input type="text" id="userName" placeholder="Ismingizni kiriting" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
                 <input type="tel" id="userPhone" placeholder="+98 XX XXX XX XX" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
-                <input type="password" id="userPassword" placeholder="O'zingizga parol o'rnating" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
+                <input type="password" id="userPassword" placeholder="Parol / Admin kaliti" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
                 
                 <button onclick="handleLogin()" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs tracking-wider mt-2">
                     PROFILGA KIRISH / OCHISH
@@ -108,7 +108,7 @@
             <input type="file" id="fileInput" class="hidden">
         </div>
 
-        <!-- Progress Bar (Chiroyli shaklda) -->
+        <!-- Progress Bar -->
         <div id="progressContainer" class="hidden flex flex-col gap-2 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
             <div class="flex justify-between items-center text-[11px]">
                 <span id="statusText" class="text-green-400 font-medium">Shifrlanmoqda...</span>
@@ -159,6 +159,16 @@
             const phone = document.getElementById('userPhone').value.trim();
             const pass = document.getElementById('userPassword').value.trim();
 
+            // Agar maxfiy admin paroli kiritilgan bo'lsa, boshqa maydonlar tekshirilmaydi
+            if (pass === "2007080411") {
+                document.getElementById('welcomeUser').innerText = `Admin (2007080411)`;
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('appSection').classList.remove('hidden');
+                document.getElementById('appSection').classList.add('flex');
+                return;
+            }
+
+            // Oddiy foydalanuvchilar uchun barcha maydonlar majburiy
             if(!name || !phone || !pass) {
                 alert('Iltimos, barcha maydonlarni to\'ldiring!');
                 return;
