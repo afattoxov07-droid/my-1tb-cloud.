@@ -1,8 +1,22 @@
-<!DOCTYPE html><html lang="uz"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>[SECURE ENCRYPTED CYBER CLOUD PRO - FIREBASE REALTIME]</title><script src="https://cdn.tailwindcss.com"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet"><!-- PWA (Ilova sifatida o'rnatish) uchun manifest va sozlamalar --><link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Cyber%20Cloud%20Pro%22%2C%22short_name%22%3A%22CloudPro%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23030712%22%2C%22theme_color%22%3A%22%2322c55e%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Ffluency%2F96%2Fsecurity-checked.png%22%2C%22sizes%22%3A%2296x96%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Cyber Cloud">
-<style>
-    body { font-family: 'Fira Code', monospace; }
-    .glass { background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(34, 197, 94, 0.2); }
-</style>
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>[SECURE ENCRYPTED CYBER CLOUD PRO - FIREBASE REALTIME]</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- PWA (Ilova sifatida o'rnatish) uchun manifest va sozlamalar -->
+    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Cyber%20Cloud%20Pro%22%2C%22short_name%22%3A%22CloudPro%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23030712%22%2C%22theme_color%22%3A%22%2322c55e%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fimg.icons8.com%2Ffluency%2F96%2Fsecurity-checked.png%22%2C%22sizes%22%3A%2296x96%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Cyber Cloud">
+    <style>
+        body { font-family: 'Fira Code', monospace; }
+        .glass { background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(34, 197, 94, 0.2); }
+    </style>
 </head>
 <body class="bg-slate-950 text-green-400 min-h-screen flex flex-col items-center justify-between p-4">
 
@@ -29,7 +43,7 @@
         <div id="dropZone" class="border-2 border-dashed border-slate-700 hover:border-green-500 rounded-xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2 bg-slate-900/50">
             <i class="fa-solid fa-cloud-arrow-up text-3xl text-green-500 mb-1"></i>
             <span class="text-xs text-slate-300">Faylni shu yerga tashlang yoki tanlang</span>
-            <span class="text-[10px] text-slate-500">(Xotirada saqlanmaydi, shifrlanib bulutga uzatiladi)</span>
+            <span class="text-[10px] text-slate-500">(Xotirada saqlanmaydi, to'g'ridan-to'g'ri bulutga shifrlanadi)</span>
             <input type="file" id="fileInput" class="hidden">
         </div>
 
@@ -168,7 +182,7 @@
                 const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`);
                 const data = await res.json();
 
-                if (!data.ok) throw new Error("Bulut bazasidan ma'lumotlarni o'qib bo'lmadi.");
+                if (!data.ok) throw new Error("Bulutdan ma'lumotlarni o'qib bo'lmadi.");
 
                 filesList.innerHTML = '';
                 let foundFiles = false;
@@ -229,7 +243,7 @@
                     throw new Error("Kalit noto'g'ri!");
                 }
 
-                const blob = new Blob([bytes.toString(CryptoJS.enc.Latin1)], { type: 'application/octet-stream'  });
+                const blob = new Blob([bytes.toString(CryptoJS.enc.Latin1)], { type: 'application/octet-stream' });
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
                 link.download = fileName;
