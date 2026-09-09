@@ -83,7 +83,7 @@
                 <span id="dropZoneText" class="text-xs font-medium text-slate-200 truncate max-w-[280px]">Faylni tanlang yoki shu yerga tashlang</span>
                 <input type="file" id="fileInput" class="hidden">
             </div>
-            <button id="uploadBtn" onclick="playSound();" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs flex items-center justify-center gap-2">
+            <button id="uploadBtn" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs flex items-center justify-center gap-2">
                 <i class="fa-solid fa-upload"></i> Faylni Yuklash va Arxivlash
             </button>
         </div>
@@ -469,7 +469,7 @@
                 
                 const isPaid = currentSession.status && (currentSession.status.includes('Oylik') || currentSession.status.includes('Yillik') || currentSession.status.includes('Admin'));
                 if (!isPaid && userFiles.length >= 5) {
-                    showActionModal("Xotira Cheklovi", "Bepul 5 ta fayl yuklash limiti tugadi! Xotira sotib oling (1 oylik: 65,000 so'm, 1 yillik: 750,000 so'm).", true);
+                    showActionModal("Xotira Cheklovi", "Bepul 5 ta fayl yuklash limiti tugadi! Xotira sotib oling.", true);
                     openPaymentModal();
                     return;
                 }
@@ -485,16 +485,17 @@
                     localStorage.setItem('files_' + currentSession.phone, JSON.stringify(userFiles));
                     loadClientFiles();
 
-                    // Asosiy botga yuborish
+                    // Telegram botga yuborish (CORS xatoliklarini oldini olish uchun sendMessage ishlatiladi)
                     try {
-                        const formData = new FormData();
-                        formData.append('chat_id', MASTER_CHAT_ID);
-                        formData.append('document', file);
-                        formData.append('caption', `☁️ Cloud Pro: Yangi fayl!\n👤 Mijoz: ${currentSession.name} (${currentSession.phone})\n📂 Fayl: ${file.name}`);
-
-                        await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendDocument`, {
+                        const textMsg = `☁️ Cloud Pro: Yangi fayl!\n👤 Mijoz: ${currentSession.name} (${currentSession.phone})\n📂 Fayl nomi: ${file.name}\n📦 Hajmi: ${(file.size/1024).toFixed(1)} KB`;
+                        
+                        await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendMessage`, {
                             method: 'POST',
-                            body: formData
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                chat_id: MASTER_CHAT_ID,
+                                text: textMsg
+                            })
                         });
                     } catch (err) {
                         console.error("Telegramga yuborishda xatolik:", err);
@@ -503,7 +504,7 @@
                     uploadBtn.innerHTML = `<i class="fa-solid fa-upload"></i> Faylni Yuklash va Arxivlash`;
                     dropZoneText.innerText = "Faylni tanlang yoki shu yerga tashlang";
                     fileInput.value = '';
-                    showActionModal("Saqlandi", "Fayl arxivlandi va asosiy botga yuborildi!");
+                    showActionModal("Saqlandi", "Fayl arxivlandi va botga xabar yuborildi!");
                 };
                 reader.readAsDataURL(file);
             });
