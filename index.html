@@ -29,9 +29,9 @@
             <p class="text-[11px] text-slate-400 mt-1 mb-5">Mijoz va Admin Kirish Portali</p>
 
             <div class="w-full flex flex-col gap-3">
-                <input type="text" id="loginName" placeholder="Ismingiz" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
+                <input type="text" id="loginName" placeholder="Ismingiz (Mijozlar uchun)" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
                 <input type="tel" id="loginPhone" placeholder="Telefon raqam (+998...)" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
-                <input type="password" id="loginPass" placeholder="Parol" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
+                <input type="password" id="loginPass" placeholder="Parol (Admin uchun maxsus parol)" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
                 
                 <button onclick="handleLogin()" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs tracking-wider mt-2">
                     KIRISH / RO'YXATDAN O'TISH
@@ -159,7 +159,7 @@
         <!-- Admins Tab Content -->
         <div id="adminAdminsTab" class="hidden flex-col gap-3">
             <div class="glass p-3 rounded-xl flex flex-col gap-2 border border-slate-800">
-                <span class="text-xs font-bold text-red-400">Yangi Admin qo'shish</span>
+                <span class="text-xs font-bold text-red-400">Yangi Admin Parolini Qo'shish</span>
                 <input type="password" id="newAdminPass" placeholder="Yangi Admin Paroli" class="input-box p-2 rounded-lg text-xs text-green-300">
                 <button onclick="addAdmin()" class="bg-red-600 text-slate-950 font-bold py-2 rounded-lg text-xs">Admin qo'shish</button>
             </div>
@@ -196,7 +196,7 @@
     <div id="settingsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="glass max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40">
             <h3 class="text-sm font-bold text-green-400 text-center">Parolni O'zgartirish</h3>
-            <p class="text-[10px] text-slate-400 text-center">Yangi parol o'rnatilgach, admin panelida ham yangilanadi.</p>
+            <p class="text-[10px] text-slate-400 text-center">Yangi parol o'rnatilgach, bazada va admin panelida yangilanadi.</p>
             <input type="password" id="settingsNewPass" placeholder="Yangi parol" class="input-box p-2.5 rounded-xl text-xs text-green-300 mt-2">
             <div class="flex gap-2 mt-3">
                 <button onclick="saveClientPassword()" class="flex-1 bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Saqlash</button>
@@ -242,7 +242,8 @@
             ]));
         }
         if (!localStorage.getItem('cloud_admins')) {
-            localStorage.setItem('cloud_admins', JSON.stringify(["admin123"]));
+            // Asosiy admin paroli siz so'ragan 2007080411 qilib belgilandi
+            localStorage.setItem('cloud_admins', JSON.stringify(["2007080411"]));
         }
         if (!localStorage.getItem('cloud_checks')) {
             localStorage.setItem('cloud_checks', JSON.stringify([]));
@@ -262,21 +263,26 @@
             const phone = document.getElementById('loginPhone').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
 
-            if (!phone || !pass) {
-                alert('Telefon raqam va parolni kiriting!');
+            if (!pass) {
+                alert('Parolni kiriting!');
                 return;
             }
 
-            // Check Admin
+            // 1. FAFAQAT ADMIN PAROLI TEKSHIRILADI (Faqat parolni o'zi yozilsa ham kiradi)
             let admins = JSON.parse(localStorage.getItem('cloud_admins') || '[]');
-            if (admins.includes(pass) && (phone.toLowerCase() === "admin" || phone === "777" || admins.length > 0)) {
-                currentSession = { role: 'admin', phone: phone };
+            if (admins.includes(pass)) {
+                currentSession = { role: 'admin', phone: 'Admin' };
                 localStorage.setItem('cloud_session', JSON.stringify(currentSession));
                 showAdminPanel();
                 return;
             }
 
-            // Check Client
+            // 2. MIJOZLAR UCHUN TEKSHIRUV
+            if (!phone) {
+                alert('Mijozlar uchun telefon raqam va parol talab qilinadi!');
+                return;
+            }
+
             let clients = JSON.parse(localStorage.getItem('cloud_clients') || '[]');
             let client = clients.find(c => c.phone === phone);
 
@@ -286,7 +292,7 @@
                     localStorage.setItem('cloud_session', JSON.stringify(currentSession));
                     showClientApp();
                 } else {
-                    alert('Parol xato! Iltimos, to\'g\'ri parolni kiriting.');
+                    alert('Parol xato!');
                 }
             } else {
                 if (!name) {
@@ -312,6 +318,7 @@
             document.getElementById('adminSection').classList.remove('flex');
             document.getElementById('loginSection').classList.remove('hidden');
             document.getElementById('loginSection').style.display = 'flex';
+            document.getElementById('loginPass').value = '';
         }
 
         function showClientApp() {
