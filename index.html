@@ -25,9 +25,9 @@
 </head>
 <body class="bg-slate-950 dark:bg-slate-950 text-slate-800 dark:text-green-400 min-h-screen flex flex-col items-center justify-center p-4 transition-colors duration-300">
 
-    <!-- TOP CONTROLS (Theme & Forgot Pass) -->
+    <!-- TOP CONTROLS (Theme) -->
     <div class="absolute top-4 right-4 flex items-center gap-2">
-        <button onclick="playSound(); toggleTheme();" class="p-2.5 rounded-xl bg-slate-200 dark:bg-slate-900 border border-green-500/30 text-green-600 dark:text-green-400 text-xs shadow-md transition" title="Rejimni o'zgartirish">
+        <button type="button" onclick="playSound(); toggleTheme();" class="p-2.5 rounded-xl bg-slate-200 dark:bg-slate-900 border border-green-500/30 text-green-600 dark:text-green-400 text-xs shadow-md transition" title="Rejimni o'zgartirish">
             <i class="fa-solid fa-circle-half-stroke" id="themeIcon"></i>
         </button>
     </div>
@@ -45,17 +45,17 @@
                 <input type="text" id="loginName" placeholder="Ismingiz (Yangi bo'lsa)" autocomplete="off" class="input-box-dark w-full rounded-xl p-3 text-xs text-center placeholder-slate-500">
                 <input type="tel" id="loginPhone" placeholder="Telefon raqam" autocomplete="off" class="input-box-dark w-full rounded-xl p-3 text-xs text-center placeholder-slate-500">
                 <input type="password" id="loginPass" placeholder="Parol" autocomplete="new-password" class="input-box-dark w-full rounded-xl p-3 text-xs text-center placeholder-slate-500">
-                <button onclick="playSound(); handleLogin();" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs tracking-wider mt-2">KIRISH / RO'YXATDAN O'TISH</button>
-                <button onclick="playSound(); openForgotModal();" class="text-[11px] text-slate-400 hover:text-green-400 transition mt-1">Parolni unutdingizmi?</button>
+                <button type="button" onclick="playSound(); handleLogin();" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs tracking-wider mt-2">KIRISH / RO'YXATDAN O'TISH</button>
+                <button type="button" onclick="playSound(); openForgotModal();" class="text-[11px] text-slate-400 hover:text-green-400 transition mt-1">Parolni unutdingizmi?</button>
             </div>
         </div>
 
         <div class="glass-dark p-4 rounded-2xl shadow-xl flex flex-col gap-3">
             <div class="grid grid-cols-2 gap-2">
-                <button onclick="playSound(); openAuthorModal();" class="input-box-dark p-3 rounded-xl text-left hover:border-green-500 transition flex items-center gap-2 text-xs text-green-400">
+                <button type="button" onclick="playSound(); openAuthorModal();" class="input-box-dark p-3 rounded-xl text-left hover:border-green-500 transition flex items-center gap-2 text-xs text-green-400">
                     <i class="fa-solid fa-circle-info text-[10px]"></i> Loyiha va Muallif
                 </button>
-                <button onclick="playSound(); openModal('Tariflar va Qoidalar', 'Tizim shartlari:\n\n1. Bepul rejimda maksimum 5 ta fayl yuklash mumkin.\n2. 5 ta fayldan so\'ng xotira sotib olish talab etiladi.\n3. Test tarif: 0 so\'m\n4. 1 oylik tarif: 65,000 so\'m.\n5. 1 yillik tarif: 750,000 so\'m.');" class="input-box-dark p-3 rounded-xl text-left hover:border-green-500 transition flex items-center gap-2 text-xs text-green-400">
+                <button type="button" onclick="playSound(); openModal('Tariflar va Qoidalar', 'Tizim shartlari:\n\n1. Bepul rejimda maksimum fayllar saqlash mumkin.\n2. Xotira sotib olish uchun chek yuboring.\n3. Test tarif: 0 so\'m\n4. 1 oylik tarif: 65,000 so\'m.\n5. 1 yillik tarif: 750,000 so\'m.');" class="input-box-dark p-3 rounded-xl text-left hover:border-green-500 transition flex items-center gap-2 text-xs text-green-400">
                     <i class="fa-solid fa-book text-[10px]"></i> Tariflar
                 </button>
             </div>
@@ -76,7 +76,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-1.5">
-                <button onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 p-2 rounded-xl transition" title="Chiqish">
+                <button type="button" onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 p-2 rounded-xl transition" title="Chiqish">
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
             </div>
@@ -86,7 +86,7 @@
         <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 flex flex-col gap-1.5">
             <div class="flex justify-between text-[10px] text-slate-300">
                 <span>Xotira band qilinishi:</span>
-                <span id="storageText">0 MB / 1 GB</span>
+                <span id="storageText">0 MB / 10 MB</span>
             </div>
             <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
                 <div id="storageBar" class="bg-green-500 h-full transition-all duration-500" style="width: 0%"></div>
@@ -101,7 +101,7 @@
                 <span id="dropZoneText" class="text-xs font-medium text-slate-200 truncate max-w-[280px]">Faylni tanlang yoki shu yerga tashlang</span>
                 <input type="file" id="fileInput" class="hidden">
             </div>
-            <button id="uploadBtn" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs flex items-center justify-center gap-2">
+            <button type="button" id="uploadBtn" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs flex items-center justify-center gap-2">
                 <i class="fa-solid fa-upload"></i> Faylni Bulutga Yuborish
             </button>
         </div>
@@ -112,7 +112,7 @@
                 <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
                     <i class="fa-solid fa-box-archive text-green-400"></i> Fayllar (<span id="fileCount">0</span>)
                 </span>
-                <button onclick="playSound(); fetchCloudData();" class="bg-slate-900 hover:bg-slate-800 border border-green-500/30 text-green-400 px-2 py-1 rounded-lg text-[10px] font-semibold flex items-center gap-1 transition">
+                <button type="button" onclick="playSound(); fetchCloudData();" class="bg-slate-900 hover:bg-slate-800 border border-green-500/30 text-green-400 px-2 py-1 rounded-lg text-[10px] font-semibold flex items-center gap-1 transition">
                     <i class="fa-solid fa-rotate"></i> Sync
                 </button>
             </div>
@@ -133,8 +133,8 @@
                     <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAllFiles(this)" class="accent-green-500"> Barchasini belgilash
                 </label>
                 <div class="flex gap-1.5">
-                    <button onclick="playSound(); bulkDownloadFiles();" class="bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-400 px-2 py-1 rounded-lg transition">Tanlanganni yuklab olish</button>
-                    <button onclick="playSound(); bulkDeleteFiles();" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2 py-1 rounded-lg transition"><i class="fa-solid fa-trash"></i></button>
+                    <button type="button" onclick="playSound(); bulkDownloadFiles();" class="bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-400 px-2 py-1 rounded-lg transition">Yuklab olish</button>
+                    <button type="button" onclick="playSound(); bulkDeleteFiles();" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2 py-1 rounded-lg transition"><i class="fa-solid fa-trash"></i></button>
                 </div>
             </div>
 
@@ -144,14 +144,14 @@
         </div>
 
         <div class="grid grid-cols-2 gap-2 pt-1">
-            <button onclick="playSound(); openPaymentModal();" class="bg-slate-900 hover:bg-slate-800 border border-green-500/30 text-green-400 p-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+            <button type="button" onclick="playSound(); openPaymentModal();" class="bg-slate-900 hover:bg-slate-800 border border-green-500/30 text-green-400 p-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
                 <i class="fa-solid fa-receipt"></i> Xotira Sotib Olish
             </button>
-            <button onclick="playSound(); openHelpModal();" class="bg-slate-900 hover:bg-slate-800 border border-cyan-500/30 text-cyan-400 p-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+            <button type="button" onclick="playSound(); openHelpModal();" class="bg-slate-900 hover:bg-slate-800 border border-cyan-500/30 text-cyan-400 p-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
                 <i class="fa-solid fa-headset"></i> Yordam bo'limi
             </button>
         </div>
-        <button onclick="playSound(); openAuthorModal();" class="w-full bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 p-2 rounded-xl text-[11px] font-semibold flex items-center justify-center gap-1.5 transition">
+        <button type="button" onclick="playSound(); openAuthorModal();" class="w-full bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 p-2 rounded-xl text-[11px] font-semibold flex items-center justify-center gap-1.5 transition">
             <i class="fa-solid fa-code"></i> Loyiha va Muallif haqida
         </button>
     </div>
@@ -168,20 +168,20 @@
                     <p class="text-[10px] text-slate-400">To'liq boshqaruv paneli</p>
                 </div>
             </div>
-            <button onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 bg-red-500/10 hover:bg-red-500/20 px-3 py-2 rounded-xl transition">Chiqish</button>
+            <button type="button" onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 bg-red-500/10 hover:bg-red-500/20 px-3 py-2 rounded-xl transition">Chiqish</button>
         </div>
 
         <div class="grid grid-cols-3 gap-2 bg-slate-900/60 p-1.5 rounded-xl border border-slate-800">
-            <button onclick="playSound(); switchAdminTab('clients')" id="tabClientsBtn" class="py-2 text-xs font-bold rounded-lg bg-green-600 text-slate-950 transition">Mijozlar</button>
-            <button onclick="playSound(); switchAdminTab('checks')" id="tabChecksBtn" class="py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Cheklar (<span id="checkBadge">0</span>)</button>
-            <button onclick="playSound(); switchAdminTab('admins')" id="tabAdminsBtn" class="py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Adminlar</button>
+            <button type="button" onclick="playSound(); switchAdminTab('clients')" id="tabClientsBtn" class="py-2 text-xs font-bold rounded-lg bg-green-600 text-slate-950 transition">Mijozlar</button>
+            <button type="button" onclick="playSound(); switchAdminTab('checks')" id="tabChecksBtn" class="py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Cheklar (<span id="checkBadge">0</span>)</button>
+            <button type="button" onclick="playSound(); switchAdminTab('admins')" id="tabAdminsBtn" class="py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Adminlar</button>
         </div>
 
         <!-- TAB 1: MIJOZLAR -->
         <div id="adminTabClients" class="flex flex-col gap-3">
             <div class="flex justify-between items-center bg-slate-900/80 p-3 rounded-xl border border-slate-800">
                 <span class="text-xs font-bold text-slate-300">Mijoz qo'shish / boshqarish</span>
-                <button onclick="playSound(); openAddClientModal();" class="bg-green-600 hover:bg-green-500 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                <button type="button" onclick="playSound(); openAddClientModal();" class="bg-green-600 hover:bg-green-500 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1">
                     <i class="fa-solid fa-user-plus"></i> Yangi mijoz
                 </button>
             </div>
@@ -200,7 +200,7 @@
         <div id="adminTabAdmins" class="hidden flex flex-col gap-3">
             <div class="flex justify-between items-center bg-slate-900/80 p-3 rounded-xl border border-slate-800">
                 <span class="text-xs font-bold text-slate-300">Tizim adminlari</span>
-                <button onclick="playSound(); openAddAdminModal();" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                <button type="button" onclick="playSound(); openAddAdminModal();" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1">
                     <i class="fa-solid fa-user-shield"></i> Admin qo'shish
                 </button>
             </div>
@@ -209,15 +209,15 @@
     </div>
 
     <!-- MODALS -->
-    <div id="infoModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div id="infoModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 text-center border border-green-500/40">
             <h3 id="modalTitle" class="text-sm font-bold text-green-400"></h3>
             <p id="modalText" class="text-xs text-slate-300 whitespace-pre-line leading-relaxed"></p>
-            <button onclick="playSound(); closeModal();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-2">Tushunarli</button>
+            <button type="button" onclick="playSound(); closeModal();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-2">Tushunarli</button>
         </div>
     </div>
 
-    <div id="authorModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div id="authorModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
             <div class="w-12 h-12 rounded-xl bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-xl mx-auto">
                 <i class="fa-solid fa-code"></i>
@@ -229,32 +229,32 @@
                 <b class="text-green-400">O'qish joyi:</b> Toshkent menejment va iqtisodiyot instituti Farg'ona campusi<br>
                 <b class="text-green-400">Mutaxassislik:</b> Kompyuter injiniringi, 2-kurs talabasi
             </p>
-            <button onclick="playSound(); closeAuthorModal();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-2">Yopish</button>
+            <button type="button" onclick="playSound(); closeAuthorModal();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-2">Yopish</button>
         </div>
     </div>
 
-    <div id="helpModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div id="helpModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
             <h3 class="text-sm font-bold text-green-400">Yordam bo'limi</h3>
             <p class="text-xs text-slate-300">Adminga savol yoki murojaatingizni yuboring:</p>
             <textarea id="helpMessageText" rows="4" placeholder="Xabar matni..." class="input-box-dark p-3 rounded-xl text-xs resize-none"></textarea>
-            <button onclick="playSound(); sendHelpMessage();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Yuborish</button>
-            <button onclick="playSound(); closeHelpModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
+            <button type="button" onclick="playSound(); sendHelpMessage();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Yuborish</button>
+            <button type="button" onclick="playSound(); closeHelpModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
         </div>
     </div>
 
     <!-- FORGOT PASSWORD MODAL -->
-    <div id="forgotModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div id="forgotModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
             <h3 class="text-sm font-bold text-green-400">Parolni Tiklash</h3>
             <p class="text-[11px] text-slate-300">Telefon raqamingizni kiriting, admin parolingizni tiklashda yordam beradi:</p>
             <input type="tel" id="forgotPhone" placeholder="Telefon raqam" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-            <button onclick="playSound(); sendForgotRequest();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">So'rov Yuborish</button>
-            <button onclick="playSound(); closeForgotModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
+            <button type="button" onclick="playSound(); sendForgotRequest();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">So'rov Yuborish</button>
+            <button type="button" onclick="playSound(); closeForgotModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
         </div>
     </div>
 
-    <div id="paymentModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div id="paymentModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
             <h3 class="text-sm font-bold text-green-400">Xotira Sotib Olish va Chek Yuborish</h3>
             <p class="text-[11px] text-slate-300">Tarifni tanlang va to'lov cheki faylini yuklab yuboring:</p>
@@ -267,13 +267,13 @@
                 <label class="text-[10px] text-slate-400">Chek faylini yuklash (Rasm/PDF):</label>
                 <input type="file" id="checkImageInput" class="input-box-dark p-2 rounded-xl text-xs file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-green-600 file:text-slate-950 font-bold">
             </div>
-            <button onclick="playSound(); sendPaymentCheck();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-1">Chek Faylini To'g'ridan-to'g'ri Yuborish</button>
-            <button onclick="playSound(); closePaymentModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
+            <button type="button" onclick="playSound(); sendPaymentCheck();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-1">Chek Faylini To'g'ridan-to'g'ri Yuborish</button>
+            <button type="button" onclick="playSound(); closePaymentModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
         </div>
     </div>
 
     <!-- ADMIN MODALS -->
-    <div id="addClientModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div id="addClientModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
             <h3 class="text-sm font-bold text-green-400">Yangi Mijoz Qo'shish</h3>
             <input type="text" id="newClientName" placeholder="Mijoz ismi" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
@@ -285,23 +285,23 @@
                 <option value="1 Oylik Tarif">1 Oylik Tarif</option>
                 <option value="1 Yillik Tarif">1 Yillik Tarif</option>
             </select>
-            <button onclick="playSound(); saveNewClient();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-1">Qo'shish</button>
-            <button onclick="playSound(); closeAddClientModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
+            <button type="button" onclick="playSound(); saveNewClient();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-1">Qo'shish</button>
+            <button type="button" onclick="playSound(); closeAddClientModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
         </div>
     </div>
 
-    <div id="addAdminModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div id="addAdminModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-red-500/40 text-center">
             <h3 class="text-sm font-bold text-red-400">Yangi Admin Qo'shish</h3>
             <input type="text" id="newAdminName" placeholder="Admin ismi" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
             <input type="tel" id="newAdminPhone" placeholder="Telefon raqami (Login)" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
             <input type="password" id="newAdminPass" placeholder="Parol" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-            <button onclick="playSound(); saveNewAdmin();" class="bg-red-600 text-white font-bold py-2.5 rounded-xl text-xs mt-1">Admin Qo'shish</button>
-            <button onclick="playSound(); closeAddAdminModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
+            <button type="button" onclick="playSound(); saveNewAdmin();" class="bg-red-600 text-white font-bold py-2.5 rounded-xl text-xs mt-1">Admin Qo'shish</button>
+            <button type="button" onclick="playSound(); closeAddAdminModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
         </div>
     </div>
 
-    <div id="editTariffModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div id="editTariffModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
             <h3 class="text-sm font-bold text-green-400">Mijoz Tarifini O'zgartirish</h3>
             <p id="editClientTargetName" class="text-xs text-slate-300 font-bold"></p>
@@ -311,19 +311,19 @@
                 <option value="1 Oylik Tarif">1 Oylik Tarif</option>
                 <option value="1 Yillik Tarif">1 Yillik Tarif</option>
             </select>
-            <button onclick="playSound(); confirmEditTariff();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-1">Saqlash</button>
-            <button onclick="playSound(); closeEditTariffModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
+            <button type="button" onclick="playSound(); confirmEditTariff();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-1">Saqlash</button>
+            <button type="button" onclick="playSound(); closeEditTariffModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
         </div>
     </div>
 
-    <div id="actionModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div id="actionModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="glass-dark max-w-xs w-full p-5 rounded-2xl flex flex-col gap-3 text-center border border-green-500/40 shadow-2xl">
             <div id="actionModalIcon" class="w-10 h-10 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-base mx-auto">
                 <i class="fa-solid fa-circle-check"></i>
             </div>
             <h3 id="actionModalTitle" class="text-xs font-bold text-green-400">Muvaffaqiyatli</h3>
             <p id="actionModalText" class="text-[11px] text-slate-300 leading-relaxed">Harakat bajarildi.</p>
-            <button onclick="playSound(); closeActionModal();" class="bg-green-600 text-slate-950 font-bold py-2 rounded-xl text-xs">OK</button>
+            <button type="button" onclick="playSound(); closeActionModal();" class="bg-green-600 text-slate-950 font-bold py-2 rounded-xl text-xs">OK</button>
         </div>
     </div>
 
@@ -382,13 +382,15 @@
                 iconDiv.className = "w-10 h-10 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-base mx-auto";
                 iconDiv.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
             }
-            document.getElementById('actionModal').classList.remove('hidden');
-            document.getElementById('actionModal').classList.add('flex');
+            const modal = document.getElementById('actionModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
         function closeActionModal() {
-            document.getElementById('actionModal').classList.add('hidden');
-            document.getElementById('actionModal').classList.remove('flex');
+            const modal = document.getElementById('actionModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
         }
 
         async function sendToTelegram(text) {
@@ -415,8 +417,9 @@
             if (foundAdmin) {
                 currentSession = { role: 'admin', name: foundAdmin.name, phone: foundAdmin.phone };
                 document.getElementById('loginSection').style.display = 'none';
-                document.getElementById('adminSection').classList.remove('hidden');
-                document.getElementById('adminSection').classList.add('flex');
+                const adminSec = document.getElementById('adminSection');
+                adminSec.classList.remove('hidden');
+                adminSec.classList.add('flex');
                 document.getElementById('adminNameDisplay').innerText = "ADMIN (" + foundAdmin.name + ")";
                 renderAdminDashboard();
                 showActionModal("Xush kelibsiz", "Admin paneli ochildi!");
@@ -448,8 +451,9 @@
             }
 
             document.getElementById('loginSection').style.display = 'none';
-            document.getElementById('appSection').classList.remove('hidden');
-            document.getElementById('appSection').classList.add('flex');
+            const appSec = document.getElementById('appSection');
+            appSec.classList.remove('hidden');
+            appSec.classList.add('flex');
             document.getElementById('profileNameDisplay').innerText = currentSession.name;
             document.getElementById('profilePhoneDisplay').innerText = "Tel: " + currentSession.phone;
             document.getElementById('profileStatusDisplay').innerText = "Tarif: " + (currentSession.tariff || "Bepul rejim");
@@ -459,10 +463,12 @@
 
         function handleLogout() {
             currentSession = null;
-            document.getElementById('appSection').classList.add('hidden');
-            document.getElementById('appSection').classList.remove('flex');
-            document.getElementById('adminSection').classList.add('hidden');
-            document.getElementById('adminSection').classList.remove('flex');
+            const appSec = document.getElementById('appSection');
+            const adminSec = document.getElementById('adminSection');
+            appSec.classList.add('hidden');
+            appSec.classList.remove('flex');
+            adminSec.classList.add('hidden');
+            adminSec.classList.remove('flex');
             document.getElementById('loginSection').style.display = 'flex';
             document.getElementById('loginPass').value = '';
             document.getElementById('loginName').value = '';
@@ -541,7 +547,6 @@
 
             document.getElementById('fileCount').innerText = files.length;
             
-            // Storage Bar Update (Assuming 10MB limit for local simulation)
             let totalKB = files.reduce((acc, curr) => acc + (curr.sizeKB || 100), 0);
             let totalMB = (totalKB / 1024).toFixed(2);
             let percent = Math.min((totalMB / 10) * 100, 100);
@@ -554,9 +559,9 @@
                 return;
             }
             list.innerHTML = '';
-            filteredFiles.forEach((f, idx) => {
+            filteredFiles.forEach((f) => {
                 let realIdx = files.indexOf(f);
-                list.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-2.5 rounded-xl text-xs border border-slate-800"><div class="flex items-center gap-2 truncate max-w-[160px]"><input type="checkbox" class="fileCheckbox accent-green-500" data-index="${realIdx}"><div class="truncate"><span class="text-green-300 block truncate font-semibold">${f.name}</span><span class="text-[9px] text-slate-500">${f.date} (${f.size})</span></div></div><div class="flex gap-1.5"><a href="${f.content}" download="${f.name}" onclick="playSound()" class="bg-green-600/20 hover:bg-green-600/30 text-green-400 px-2 py-1 rounded-lg text-[10px] font-bold transition">Yuklab olish</a><button onclick="playSound(); deleteClientFile(${realIdx});" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2 py-1 rounded-lg text-[10px] transition"><i class="fa-solid fa-trash"></i></button></div></div>`;
+                list.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-2.5 rounded-xl text-xs border border-slate-800"><div class="flex items-center gap-2 truncate max-w-[160px]"><input type="checkbox" class="fileCheckbox accent-green-500" data-index="${realIdx}"><div class="truncate"><span class="text-green-300 block truncate font-semibold">${f.name}</span><span class="text-[9px] text-slate-500">${f.date} (${f.size})</span></div></div><div class="flex gap-1.5"><a href="${f.content}" download="${f.name}" onclick="playSound()" class="bg-green-600/20 hover:bg-green-600/30 text-green-400 px-2 py-1 rounded-lg text-[10px] font-bold transition">Yuklab olish</a><button type="button" onclick="playSound(); deleteClientFile(${realIdx});" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2 py-1 rounded-lg text-[10px] transition"><i class="fa-solid fa-trash"></i></button></div></div>`;
             });
         }
 
@@ -636,15 +641,15 @@
                 cList.innerHTML = `<span class="text-[11px] text-slate-500 text-center py-4 bg-slate-900/30 rounded-xl">Mijozlar mavjud emas</span>`;
             } else {
                 cList.innerHTML = '';
-                clientsList.forEach((c, i) => {
-                    cList.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-left"><div><span class="text-xs font-bold text-green-400">${c.name}</span><p class="text-[10px] text-slate-400">Tel: ${c.phone} | Parol: ${c.pass}</p><span class="text-[10px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md mt-1 inline-block">Tarif: ${c.tariff || 'Bepul rejim'}</span></div><div class="flex flex-col gap-1.5"><button onclick="playSound(); openEditTariffModal('${c.phone}')" class="bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-400 px-2.5 py-1 rounded-lg text-[10px] font-bold transition">Tarif berish</button><button onclick="playSound(); deleteClient('${c.phone}')" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2.5 py-1 rounded-lg text-[10px] transition">O'chirish</button></div></div>`;
+                clientsList.forEach((c) => {
+                    cList.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-left"><div><span class="text-xs font-bold text-green-400">${c.name}</span><p class="text-[10px] text-slate-400">Tel: ${c.phone} | Parol: ${c.pass}</p><span class="text-[10px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md mt-1 inline-block">Tarif: ${c.tariff || 'Bepul rejim'}</span></div><div class="flex flex-col gap-1.5"><button type="button" onclick="playSound(); openEditTariffModal('${c.phone}')" class="bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-400 px-2.5 py-1 rounded-lg text-[10px] font-bold transition">Tarif berish</button><button type="button" onclick="playSound(); deleteClient('${c.phone}')" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2.5 py-1 rounded-lg text-[10px] transition">O'chirish</button></div></div>`;
                 });
             }
 
             let aList = document.getElementById('adminAdminsList');
             aList.innerHTML = '';
             adminList.forEach((a, i) => {
-                aList.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-left"><div><span class="text-xs font-bold text-red-400">${a.name}</span><p class="text-[10px] text-slate-400">Login/Tel: ${a.phone}</p></div>${adminList.length > 1 ? `<button onclick="playSound(); deleteAdmin(${i})" class="bg-red-500/20 text-red-400 px-2 py-1 rounded-lg text-[10px]">O'chirish</button>` : '<span class="text-[9px] text-slate-500">Asosiy</span>'}</div>`;
+                aList.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-left"><div><span class="text-xs font-bold text-red-400">${a.name}</span><p class="text-[10px] text-slate-400">Login/Tel: ${a.phone}</p></div>${adminList.length > 1 ? `<button type="button" onclick="playSound(); deleteAdmin(${i})" class="bg-red-500/20 text-red-400 px-2 py-1 rounded-lg text-[10px]">O'chirish</button>` : '<span class="text-[9px] text-slate-500">Asosiy</span>'}</div>`;
             });
 
             let chList = document.getElementById('adminChecksList');
@@ -654,13 +659,13 @@
             } else {
                 chList.innerHTML = '';
                 paymentChecks.forEach((chk, idx) => {
-                    chList.innerHTML += `<div class="flex flex-col gap-2 bg-slate-900/90 p-3 rounded-xl border border-slate-800 text-left"><div class="flex justify-between items-center"><span class="text-xs font-bold text-green-400">${chk.name} (${chk.phone})</span><span class="text-[10px] text-amber-400">${chk.tariff}</span></div><div class="text-[10px] text-slate-400">Vaqt: ${chk.date} | Fayl: ${chk.fileName}</div><div class="text-[11px] text-cyan-300 font-semibold bg-slate-800 p-2 rounded-lg">To'lov cheki fayli qabul qilindi</div><div class="flex gap-2 pt-1"><button onclick="playSound(); approveCheck(${idx})" class="w-full bg-green-600 text-slate-950 font-bold py-1.5 rounded-lg text-[10px]">Tasdiqlash & Tarifni Yoqish</button><button onclick="playSound(); removeCheck(${idx})" class="bg-red-500/20 text-red-400 px-3 py-1.5 rounded-lg text-[10px]">Rad etish</button></div></div>`;
+                    chList.innerHTML += `<div class="flex flex-col gap-2 bg-slate-900/90 p-3 rounded-xl border border-slate-800 text-left"><div class="flex justify-between items-center"><span class="text-xs font-bold text-green-400">${chk.name} (${chk.phone})</span><span class="text-[10px] text-amber-400">${chk.tariff}</span></div><div class="text-[10px] text-slate-400">Vaqt: ${chk.date} | Fayl: ${chk.fileName}</div><div class="text-[11px] text-cyan-300 font-semibold bg-slate-800 p-2 rounded-lg">To'lov cheki fayli qabul qilindi</div><div class="flex gap-2 pt-1"><button type="button" onclick="playSound(); approveCheck(${idx})" class="w-full bg-green-600 text-slate-950 font-bold py-1.5 rounded-lg text-[10px]">Tasdiqlash & Tarifni Yoqish</button><button type="button" onclick="playSound(); removeCheck(${idx})" class="bg-red-500/20 text-red-400 px-3 py-1.5 rounded-lg text-[10px]">Rad etish</button></div></div>`;
                 });
             }
         }
 
-        function openAddClientModal() { document.getElementById('addClientModal').classList.remove('hidden'); document.getElementById('addClientModal').classList.add('flex'); }
-        function closeAddClientModal() { document.getElementById('addClientModal').classList.add('hidden'); document.getElementById('addClientModal').classList.remove('flex'); }
+        function openAddClientModal() { const m = document.getElementById('addClientModal'); m.classList.remove('hidden'); m.classList.add('flex'); }
+        function closeAddClientModal() { const m = document.getElementById('addClientModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
         
         function saveNewClient() {
             let name = document.getElementById('newClientName').value.trim();
@@ -686,11 +691,12 @@
             editingPhone = phone;
             let client = clientsList.find(c => c.phone === phone);
             document.getElementById('editClientTargetName').innerText = client.name + " (" + client.phone + ")";
-            document.getElementById('editTariffModal').classList.remove('hidden');
-            document.getElementById('editTariffModal').classList.add('flex');
+            const m = document.getElementById('editTariffModal');
+            m.classList.remove('hidden');
+            m.classList.add('flex');
         }
 
-        function closeEditTariffModal() { document.getElementById('editTariffModal').classList.add('hidden'); document.getElementById('editTariffModal').classList.remove('flex'); }
+        function closeEditTariffModal() { const m = document.getElementById('editTariffModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
         
         function confirmEditTariff() {
             let newTariff = document.getElementById('editClientTariffSelect').value;
@@ -704,8 +710,8 @@
             showActionModal("Yangilandi", "Mijoz tarifi muvaffaqiyatli o'zgartirildi!");
         }
 
-        function openAddAdminModal() { document.getElementById('addAdminModal').classList.remove('hidden'); document.getElementById('addAdminModal').classList.add('flex'); }
-        function closeAddAdminModal() { document.getElementById('addAdminModal').classList.add('hidden'); document.getElementById('addAdminModal').classList.remove('flex'); }
+        function openAddAdminModal() { const m = document.getElementById('addAdminModal'); m.classList.remove('hidden'); m.classList.add('flex'); }
+        function closeAddAdminModal() { const m = document.getElementById('addAdminModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
         
         function saveNewAdmin() {
             let name = document.getElementById('newAdminName').value.trim();
@@ -748,8 +754,8 @@
             showActionModal("Rad etildi", "To'lov cheki o'chirildi.");
         }
 
-        function openHelpModal() { document.getElementById('helpModal').classList.remove('hidden'); document.getElementById('helpModal').classList.add('flex'); }
-        function closeHelpModal() { document.getElementById('helpModal').classList.add('hidden'); document.getElementById('helpModal').classList.remove('flex'); }
+        function openHelpModal() { const m = document.getElementById('helpModal'); m.classList.remove('hidden'); m.classList.add('flex'); }
+        function closeHelpModal() { const m = document.getElementById('helpModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
         
         async function sendHelpMessage() {
             const text = document.getElementById('helpMessageText').value.trim();
@@ -760,8 +766,8 @@
             showActionModal("Yuborildi", "Murojaatingiz adminga yetkazildi!");
         }
 
-        function openForgotModal() { document.getElementById('forgotModal').classList.remove('hidden'); document.getElementById('forgotModal').classList.add('flex'); }
-        function closeForgotModal() { document.getElementById('forgotModal').classList.add('hidden'); document.getElementById('forgotModal').classList.remove('flex'); }
+        function openForgotModal() { const m = document.getElementById('forgotModal'); m.classList.remove('hidden'); m.classList.add('flex'); }
+        function closeForgotModal() { const m = document.getElementById('forgotModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
 
         async function sendForgotRequest() {
             const phone = document.getElementById('forgotPhone').value.trim();
@@ -772,10 +778,10 @@
             showActionModal("Yuborildi", "So'rovingiz adminga yuborildi!");
         }
 
-        function openAuthorModal() { document.getElementById('authorModal').classList.remove('hidden'); document.getElementById('authorModal').classList.add('flex'); }
-        function closeAuthorModal() { document.getElementById('authorModal').classList.add('hidden'); document.getElementById('authorModal'].classList.remove('flex'); }
-        function openPaymentModal() { document.getElementById('paymentModal').classList.remove('hidden'); document.getElementById('paymentModal').classList.add('flex'); }
-        function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); document.getElementById('paymentModal').classList.remove('flex'); }
+        function openAuthorModal() { const m = document.getElementById('authorModal'); m.classList.remove('hidden'); m.classList.add('flex'); }
+        function closeAuthorModal() { const m = document.getElementById('authorModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
+        function openPaymentModal() { const m = document.getElementById('paymentModal'); m.classList.remove('hidden'); m.classList.add('flex'); }
+        function closePaymentModal() { const m = document.getElementById('paymentModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
 
         async function sendPaymentCheck() {
             const tariff = document.getElementById('tariffSelect').value;
@@ -797,9 +803,7 @@
             paymentChecks.unshift(checkObj);
             try {
                 localStorage.setItem('cloud_payment_checks', JSON.stringify(paymentChecks));
-            } catch(e) {
-                // Agar hajmdan oshsa localStorage xato bermasligi uchun e'tiborsiz qoldiramiz
-            }
+            } catch(e) {}
             
             let caption = `💰 Yangi To'lov Cheki!\n👤 Mijoz: ${currentSession.name} (${currentSession.phone})\n📦 Tanlangan tarif: ${tariff}\n📄 Fayl: ${checkFile.name}`;
             
@@ -827,13 +831,15 @@
         function openModal(title, text) {
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalText').innerText = text;
-            document.getElementById('infoModal').classList.remove('hidden');
-            document.getElementById('infoModal').classList.add('flex');
+            const m = document.getElementById('infoModal');
+            m.classList.remove('hidden');
+            m.classList.add('flex');
         }
 
         function closeModal() {
-            document.getElementById('infoModal').classList.add('hidden');
-            document.getElementById('infoModal').classList.remove('flex');
+            const m = document.getElementById('infoModal');
+            m.classList.add('hidden');
+            m.classList.remove('flex');
         }
     </script>
 </body>
