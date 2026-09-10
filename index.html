@@ -1,28 +1,40 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cloud Pro - Online Cloud</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Fira Code', monospace; }
-        .glass { background: rgba(3, 7, 18, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(34, 197, 94, 0.25); }
-        .input-box { background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(34, 197, 94, 0.2); }
-        .input-box:focus { border-color: rgba(34, 197, 94, 0.8); outline: none; }
+        .glass-dark { background: rgba(3, 7, 18, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(34, 197, 94, 0.25); }
+        .glass-light { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(34, 197, 94, 0.3); }
+        .input-box-dark { background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(34, 197, 94, 0.2); color: #4ade80; }
+        .input-box-light { background: rgba(241, 245, 249, 0.95); border: 1px solid rgba(34, 197, 94, 0.4); color: #166534; }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: rgba(3, 7, 18, 0.5); }
         ::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.3); border-radius: 4px; }
     </style>
 </head>
-<body class="bg-slate-950 text-green-400 min-h-screen flex flex-col items-center justify-center p-4">
+<body class="bg-slate-950 dark:bg-slate-950 text-slate-800 dark:text-green-400 min-h-screen flex flex-col items-center justify-center p-4 transition-colors duration-300">
+
+    <!-- TOP CONTROLS (Theme & Forgot Pass) -->
+    <div class="absolute top-4 right-4 flex items-center gap-2">
+        <button onclick="playSound(); toggleTheme();" class="p-2.5 rounded-xl bg-slate-200 dark:bg-slate-900 border border-green-500/30 text-green-600 dark:text-green-400 text-xs shadow-md transition" title="Rejimni o'zgartirish">
+            <i class="fa-solid fa-circle-half-stroke" id="themeIcon"></i>
+        </button>
+    </div>
 
     <!-- LOGIN SECTION -->
     <div id="loginSection" class="w-full max-w-md flex flex-col gap-4">
-        <div class="glass p-6 rounded-2xl shadow-2xl flex flex-col items-center text-center">
-            <!-- RASM LOGOTIBI VA CLOUD PRO NOMI -->
+        <div class="glass-dark dark:glass-dark p-6 rounded-2xl shadow-2xl flex flex-col items-center text-center">
             <div class="w-16 h-16 rounded-2xl bg-slate-900 border border-green-500/40 flex items-center justify-center mb-3 shadow-lg shadow-green-900/30 overflow-hidden p-2">
                 <img src="https://cdn-icons-png.flaticon.com/512/6119/6119772.png" alt="Cloud Pro Logo" class="w-full h-full object-contain filter drop-shadow(0 0 8px rgba(34,197,94,0.6))">
             </div>
@@ -30,19 +42,20 @@
             <p class="text-[11px] text-slate-400 mt-1 mb-5">Onlayn Bulut Tizimi</p>
             
             <div class="w-full flex flex-col gap-3">
-                <input type="text" id="loginName" placeholder="Ismingiz" autocomplete="off" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
-                <input type="tel" id="loginPhone" placeholder="Telefon raqam" autocomplete="off" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
-                <input type="password" id="loginPass" placeholder="Parol" autocomplete="new-password" class="input-box w-full rounded-xl p-3 text-xs text-green-300 text-center placeholder-slate-500">
+                <input type="text" id="loginName" placeholder="Ismingiz (Yangi bo'lsa)" autocomplete="off" class="input-box-dark w-full rounded-xl p-3 text-xs text-center placeholder-slate-500">
+                <input type="tel" id="loginPhone" placeholder="Telefon raqam" autocomplete="off" class="input-box-dark w-full rounded-xl p-3 text-xs text-center placeholder-slate-500">
+                <input type="password" id="loginPass" placeholder="Parol" autocomplete="new-password" class="input-box-dark w-full rounded-xl p-3 text-xs text-center placeholder-slate-500">
                 <button onclick="playSound(); handleLogin();" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs tracking-wider mt-2">KIRISH / RO'YXATDAN O'TISH</button>
+                <button onclick="playSound(); openForgotModal();" class="text-[11px] text-slate-400 hover:text-green-400 transition mt-1">Parolni unutdingizmi?</button>
             </div>
         </div>
 
-        <div class="glass p-4 rounded-2xl shadow-xl flex flex-col gap-3">
+        <div class="glass-dark p-4 rounded-2xl shadow-xl flex flex-col gap-3">
             <div class="grid grid-cols-2 gap-2">
-                <button onclick="playSound(); openAuthorModal();" class="input-box p-3 rounded-xl text-left hover:border-green-500 transition flex items-center gap-2 text-xs text-green-400">
+                <button onclick="playSound(); openAuthorModal();" class="input-box-dark p-3 rounded-xl text-left hover:border-green-500 transition flex items-center gap-2 text-xs text-green-400">
                     <i class="fa-solid fa-circle-info text-[10px]"></i> Loyiha va Muallif
                 </button>
-                <button onclick="playSound(); openModal('Tariflar va Qoidalar', 'Tizim shartlari:\n\n1. Bepul rejimda maksimum 5 ta fayl yuklash mumkin.\n2. 5 ta fayldan so\'ng xotira sotib olish talab etiladi.\n3. Test tarif: 0 so\'m\n4. 1 oylik tarif: 65,000 so\'m.\n5. 1 yillik tarif: 750,000 so\'m.');" class="input-box p-3 rounded-xl text-left hover:border-green-500 transition flex items-center gap-2 text-xs text-green-400">
+                <button onclick="playSound(); openModal('Tariflar va Qoidalar', 'Tizim shartlari:\n\n1. Bepul rejimda maksimum 5 ta fayl yuklash mumkin.\n2. 5 ta fayldan so\'ng xotira sotib olish talab etiladi.\n3. Test tarif: 0 so\'m\n4. 1 oylik tarif: 65,000 so\'m.\n5. 1 yillik tarif: 750,000 so\'m.');" class="input-box-dark p-3 rounded-xl text-left hover:border-green-500 transition flex items-center gap-2 text-xs text-green-400">
                     <i class="fa-solid fa-book text-[10px]"></i> Tariflar
                 </button>
             </div>
@@ -50,7 +63,7 @@
     </div>
 
     <!-- CLIENT APP PANEL -->
-    <div id="appSection" class="w-full max-w-md glass p-6 rounded-3xl shadow-2xl hidden flex-col gap-4">
+    <div id="appSection" class="w-full max-w-md glass-dark p-6 rounded-3xl shadow-2xl hidden flex-col gap-4">
         <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
             <div class="flex items-center gap-2.5">
                 <div class="w-9 h-9 rounded-xl bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-sm">
@@ -59,14 +72,24 @@
                 <div>
                     <h2 id="profileNameDisplay" class="text-xs font-bold tracking-wide text-green-400">Ism</h2>
                     <p id="profilePhoneDisplay" class="text-[10px] text-slate-400">Tel: ...</p>
-                    <p class="text-[10px] text-cyan-400 mt-0.5">Xotira: 1 mlrd TB</p>
-                    <p id="profileStatusDisplay" class="text-[10px] text-amber-400">Tarif: Bepul rejim</p>
+                    <p id="profileStatusDisplay" class="text-[10px] text-amber-400 mt-0.5">Tarif: Bepul rejim</p>
                 </div>
             </div>
             <div class="flex items-center gap-1.5">
                 <button onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 p-2 rounded-xl transition" title="Chiqish">
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
+            </div>
+        </div>
+
+        <!-- STORAGE PROGRESS BAR -->
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 flex flex-col gap-1.5">
+            <div class="flex justify-between text-[10px] text-slate-300">
+                <span>Xotira band qilinishi:</span>
+                <span id="storageText">0 MB / 1 GB</span>
+            </div>
+            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                <div id="storageBar" class="bg-green-500 h-full transition-all duration-500" style="width: 0%"></div>
             </div>
         </div>
 
@@ -83,16 +106,38 @@
             </button>
         </div>
 
-        <!-- ARHIV QISMI -->
-        <div class="flex flex-col gap-2 pt-2 border-t border-slate-800/80">
+        <!-- ARHIV QISMI VA QIDIRUV / FILTR -->
+        <div class="flex flex-col gap-2.5 pt-2 border-t border-slate-800/80">
             <div class="flex justify-between items-center">
                 <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                    <i class="fa-solid fa-box-archive text-green-400"></i> Fayllar Arxivi (<span id="fileCount">0</span> ta)
+                    <i class="fa-solid fa-box-archive text-green-400"></i> Fayllar (<span id="fileCount">0</span>)
                 </span>
-                <button onclick="playSound(); fetchCloudData();" class="bg-slate-900 hover:bg-slate-800 border border-green-500/30 text-green-400 px-2.5 py-1 rounded-lg text-[10px] font-semibold flex items-center gap-1 transition">
-                    <i class="fa-solid fa-rotate"></i> Ma'lumotlarni yig'ib olish
+                <button onclick="playSound(); fetchCloudData();" class="bg-slate-900 hover:bg-slate-800 border border-green-500/30 text-green-400 px-2 py-1 rounded-lg text-[10px] font-semibold flex items-center gap-1 transition">
+                    <i class="fa-solid fa-rotate"></i> Sync
                 </button>
             </div>
+
+            <!-- Search & Filter Controls -->
+            <div class="flex gap-2">
+                <input type="text" id="searchInput" oninput="loadClientFiles()" placeholder="Faylni qidirish..." class="input-box-dark flex-1 p-2 rounded-xl text-[11px] placeholder-slate-500">
+                <select id="fileFilter" onchange="loadClientFiles()" class="input-box-dark p-2 rounded-xl text-[11px]">
+                    <option value="all">Barchasi</option>
+                    <option value="image">Rasmlar</option>
+                    <option value="doc">Hujjatlar</option>
+                </select>
+            </div>
+
+            <!-- Bulk Actions Toolbar -->
+            <div class="flex items-center justify-between bg-slate-900/60 px-2.5 py-1.5 rounded-xl border border-slate-800 text-[10px]">
+                <label class="flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                    <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAllFiles(this)" class="accent-green-500"> Barchasini belgilash
+                </label>
+                <div class="flex gap-1.5">
+                    <button onclick="playSound(); bulkDownloadFiles();" class="bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-400 px-2 py-1 rounded-lg transition">Tanlanganni yuklab olish</button>
+                    <button onclick="playSound(); bulkDeleteFiles();" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2 py-1 rounded-lg transition"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+
             <div id="filesList" class="flex flex-col gap-2 max-h-36 overflow-y-auto pr-1">
                 <span class="text-[11px] text-slate-500 text-center py-3 bg-slate-900/30 rounded-xl border border-slate-900">Arxivda fayllar yo'q</span>
             </div>
@@ -100,7 +145,7 @@
 
         <div class="grid grid-cols-2 gap-2 pt-1">
             <button onclick="playSound(); openPaymentModal();" class="bg-slate-900 hover:bg-slate-800 border border-green-500/30 text-green-400 p-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
-                <i class="fa-solid fa-receipt"></i> Xotira Sotib Olish (Chek)
+                <i class="fa-solid fa-receipt"></i> Xotira Sotib Olish
             </button>
             <button onclick="playSound(); openHelpModal();" class="bg-slate-900 hover:bg-slate-800 border border-cyan-500/30 text-cyan-400 p-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
                 <i class="fa-solid fa-headset"></i> Yordam bo'limi
@@ -112,7 +157,7 @@
     </div>
 
     <!-- ADMIN PANEL -->
-    <div id="adminSection" class="w-full max-w-xl glass p-6 rounded-3xl shadow-2xl hidden flex-col gap-4 text-center">
+    <div id="adminSection" class="w-full max-w-xl glass-dark p-6 rounded-3xl shadow-2xl hidden flex-col gap-4 text-center">
         <div class="flex items-center justify-between pb-3 border-b border-slate-800">
             <div class="flex items-center gap-2">
                 <div class="w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-sm">
@@ -126,7 +171,6 @@
             <button onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 bg-red-500/10 hover:bg-red-500/20 px-3 py-2 rounded-xl transition">Chiqish</button>
         </div>
 
-        <!-- Admin Tabs Navigation -->
         <div class="grid grid-cols-3 gap-2 bg-slate-900/60 p-1.5 rounded-xl border border-slate-800">
             <button onclick="playSound(); switchAdminTab('clients')" id="tabClientsBtn" class="py-2 text-xs font-bold rounded-lg bg-green-600 text-slate-950 transition">Mijozlar</button>
             <button onclick="playSound(); switchAdminTab('checks')" id="tabChecksBtn" class="py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Cheklar (<span id="checkBadge">0</span>)</button>
@@ -166,7 +210,7 @@
 
     <!-- MODALS -->
     <div id="infoModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="glass max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 text-center border border-green-500/40">
+        <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 text-center border border-green-500/40">
             <h3 id="modalTitle" class="text-sm font-bold text-green-400"></h3>
             <p id="modalText" class="text-xs text-slate-300 whitespace-pre-line leading-relaxed"></p>
             <button onclick="playSound(); closeModal();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-2">Tushunarli</button>
@@ -174,7 +218,7 @@
     </div>
 
     <div id="authorModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="glass max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
+        <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
             <div class="w-12 h-12 rounded-xl bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-xl mx-auto">
                 <i class="fa-solid fa-code"></i>
             </div>
@@ -190,41 +234,52 @@
     </div>
 
     <div id="helpModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="glass max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
+        <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
             <h3 class="text-sm font-bold text-green-400">Yordam bo'limi</h3>
             <p class="text-xs text-slate-300">Adminga savol yoki murojaatingizni yuboring:</p>
-            <textarea id="helpMessageText" rows="4" placeholder="Xabar matni..." class="input-box p-3 rounded-xl text-xs text-green-300 resize-none"></textarea>
+            <textarea id="helpMessageText" rows="4" placeholder="Xabar matni..." class="input-box-dark p-3 rounded-xl text-xs resize-none"></textarea>
             <button onclick="playSound(); sendHelpMessage();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Yuborish</button>
             <button onclick="playSound(); closeHelpModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
         </div>
     </div>
 
+    <!-- FORGOT PASSWORD MODAL -->
+    <div id="forgotModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
+            <h3 class="text-sm font-bold text-green-400">Parolni Tiklash</h3>
+            <p class="text-[11px] text-slate-300">Telefon raqamingizni kiriting, admin parolingizni tiklashda yordam beradi:</p>
+            <input type="tel" id="forgotPhone" placeholder="Telefon raqam" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
+            <button onclick="playSound(); sendForgotRequest();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">So'rov Yuborish</button>
+            <button onclick="playSound(); closeForgotModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
+        </div>
+    </div>
+
     <div id="paymentModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="glass max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
+        <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
             <h3 class="text-sm font-bold text-green-400">Xotira Sotib Olish va Chek Yuborish</h3>
             <p class="text-[11px] text-slate-300">Tarifni tanlang va to'lov cheki faylini yuklab yuboring:</p>
-            <select id="tariffSelect" class="input-box p-2.5 rounded-xl text-xs text-green-300">
+            <select id="tariffSelect" class="input-box-dark p-2.5 rounded-xl text-xs">
                 <option value="Test Tarif (0 so'm)">Test Tarif - 0 so'm</option>
                 <option value="1 Oylik Tarif (65,000 so'm)">1 Oylik Tarif - 65,000 so'm</option>
                 <option value="1 Yillik Tarif (750,000 so'm)">1 Yillik Tarif - 750,000 so'm</option>
             </select>
             <div class="flex flex-col gap-1 text-left">
                 <label class="text-[10px] text-slate-400">Chek faylini yuklash (Rasm/PDF):</label>
-                <input type="file" id="checkImageInput" class="input-box p-2 rounded-xl text-xs text-green-300 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-green-600 file:text-slate-950 font-bold">
+                <input type="file" id="checkImageInput" class="input-box-dark p-2 rounded-xl text-xs file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-green-600 file:text-slate-950 font-bold">
             </div>
-            <button onclick="playSound(); sendPaymentCheck();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-1">Chek Faylini Yuborish</button>
+            <button onclick="playSound(); sendPaymentCheck();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-1">Chek Faylini To'g'ridan-to'g'ri Yuborish</button>
             <button onclick="playSound(); closePaymentModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
         </div>
     </div>
 
     <!-- ADMIN MODALS -->
     <div id="addClientModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="glass max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
+        <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
             <h3 class="text-sm font-bold text-green-400">Yangi Mijoz Qo'shish</h3>
-            <input type="text" id="newClientName" placeholder="Mijoz ismi" class="input-box p-2.5 rounded-xl text-xs text-green-300 text-center">
-            <input type="tel" id="newClientPhone" placeholder="Telefon raqami" class="input-box p-2.5 rounded-xl text-xs text-green-300 text-center">
-            <input type="password" id="newClientPass" placeholder="Paroli" class="input-box p-2.5 rounded-xl text-xs text-green-300 text-center">
-            <select id="newClientTariff" class="input-box p-2.5 rounded-xl text-xs text-green-300">
+            <input type="text" id="newClientName" placeholder="Mijoz ismi" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
+            <input type="tel" id="newClientPhone" placeholder="Telefon raqami" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
+            <input type="password" id="newClientPass" placeholder="Paroli" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
+            <select id="newClientTariff" class="input-box-dark p-2.5 rounded-xl text-xs">
                 <option value="Bepul rejim">Bepul rejim</option>
                 <option value="Test Tarif">Test Tarif</option>
                 <option value="1 Oylik Tarif">1 Oylik Tarif</option>
@@ -236,21 +291,21 @@
     </div>
 
     <div id="addAdminModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="glass max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-red-500/40 text-center">
+        <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-red-500/40 text-center">
             <h3 class="text-sm font-bold text-red-400">Yangi Admin Qo'shish</h3>
-            <input type="text" id="newAdminName" placeholder="Admin ismi" class="input-box p-2.5 rounded-xl text-xs text-green-300 text-center">
-            <input type="tel" id="newAdminPhone" placeholder="Telefon raqami (Login)" class="input-box p-2.5 rounded-xl text-xs text-green-300 text-center">
-            <input type="password" id="newAdminPass" placeholder="Parol" class="input-box p-2.5 rounded-xl text-xs text-green-300 text-center">
+            <input type="text" id="newAdminName" placeholder="Admin ismi" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
+            <input type="tel" id="newAdminPhone" placeholder="Telefon raqami (Login)" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
+            <input type="password" id="newAdminPass" placeholder="Parol" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
             <button onclick="playSound(); saveNewAdmin();" class="bg-red-600 text-white font-bold py-2.5 rounded-xl text-xs mt-1">Admin Qo'shish</button>
             <button onclick="playSound(); closeAddAdminModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
         </div>
     </div>
 
     <div id="editTariffModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="glass max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
+        <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
             <h3 class="text-sm font-bold text-green-400">Mijoz Tarifini O'zgartirish</h3>
             <p id="editClientTargetName" class="text-xs text-slate-300 font-bold"></p>
-            <select id="editClientTariffSelect" class="input-box p-2.5 rounded-xl text-xs text-green-300">
+            <select id="editClientTariffSelect" class="input-box-dark p-2.5 rounded-xl text-xs">
                 <option value="Bepul rejim">Bepul rejim</option>
                 <option value="Test Tarif">Test Tarif</option>
                 <option value="1 Oylik Tarif">1 Oylik Tarif</option>
@@ -262,7 +317,7 @@
     </div>
 
     <div id="actionModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="glass max-w-xs w-full p-5 rounded-2xl flex flex-col gap-3 text-center border border-green-500/40 shadow-2xl">
+        <div class="glass-dark max-w-xs w-full p-5 rounded-2xl flex flex-col gap-3 text-center border border-green-500/40 shadow-2xl">
             <div id="actionModalIcon" class="w-10 h-10 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-base mx-auto">
                 <i class="fa-solid fa-circle-check"></i>
             </div>
@@ -310,6 +365,12 @@
             } catch (e) {}
         }
 
+        function toggleTheme() {
+            const body = document.body;
+            const isDark = body.classList.toggle('dark');
+            document.getElementById('themeIcon').className = isDark ? "fa-solid fa-moon" : "fa-solid fa-sun";
+        }
+
         function showActionModal(title, text, isError = false) {
             document.getElementById('actionModalTitle').innerText = title;
             document.getElementById('actionModalText').innerText = text;
@@ -336,19 +397,6 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ chat_id: MASTER_CHAT_ID, text: text })
-                });
-            } catch (e) {}
-        }
-
-        async function sendPhotoToTelegram(photoBlob, caption) {
-            try {
-                let formData = new FormData();
-                formData.append('chat_id', MASTER_CHAT_ID);
-                formData.append('photo', photoBlob, 'check.jpg');
-                formData.append('caption', caption);
-                await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendPhoto`, {
-                    method: 'POST',
-                    body: formData
                 });
             } catch (e) {}
         }
@@ -450,9 +498,11 @@
                     if(!memoryFiles[currentSession.phone]) memoryFiles[currentSession.phone] = [];
                     let fileObj = {
                         name: file.name,
+                        sizeKB: file.size / 1024,
                         size: (file.size / 1024).toFixed(1) + ' KB',
                         date: new Date().toLocaleString(),
-                        content: e.target.result
+                        content: e.target.result,
+                        type: file.type.includes('image') ? 'image' : 'doc'
                     };
                     memoryFiles[currentSession.phone].unshift(fileObj);
                     try { localStorage.setItem('cloud_user_files', JSON.stringify(memoryFiles)); } catch(err) {}
@@ -479,16 +529,69 @@
             if(!currentSession) return;
             if(!memoryFiles[currentSession.phone]) memoryFiles[currentSession.phone] = [];
             let files = memoryFiles[currentSession.phone];
+            
+            let searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            let filterType = document.getElementById('fileFilter').value;
+
+            let filteredFiles = files.filter(f => {
+                let matchesSearch = f.name.toLowerCase().includes(searchQuery);
+                let matchesFilter = filterType === 'all' || f.type === filterType;
+                return matchesSearch && matchesFilter;
+            });
+
             document.getElementById('fileCount').innerText = files.length;
+            
+            // Storage Bar Update (Assuming 10MB limit for local simulation)
+            let totalKB = files.reduce((acc, curr) => acc + (curr.sizeKB || 100), 0);
+            let totalMB = (totalKB / 1024).toFixed(2);
+            let percent = Math.min((totalMB / 10) * 100, 100);
+            document.getElementById('storageBar').style.width = percent + '%';
+            document.getElementById('storageText').innerText = totalMB + " MB / 10 MB";
+
             let list = document.getElementById('filesList');
-            if(files.length === 0) {
-                list.innerHTML = `<span class="text-[11px] text-slate-500 text-center py-3 bg-slate-900/30 rounded-xl border border-slate-900">Arxivda fayllar yo'q</span>`;
+            if(filteredFiles.length === 0) {
+                list.innerHTML = `<span class="text-[11px] text-slate-500 text-center py-3 bg-slate-900/30 rounded-xl border border-slate-900">Arxivda fayllar topilmadi</span>`;
                 return;
             }
             list.innerHTML = '';
-            files.forEach((f, idx) => {
-                list.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-2.5 rounded-xl text-xs border border-slate-800"><div class="truncate max-w-[170px]"><span class="text-green-300 block truncate font-semibold">${f.name}</span><span class="text-[9px] text-slate-500">${f.date} (${f.size})</span></div><div class="flex gap-1.5"><a href="${f.content}" download="${f.name}" onclick="playSound()" class="bg-green-600/20 hover:bg-green-600/30 text-green-400 px-2.5 py-1 rounded-lg text-[10px] font-bold transition">Yuklab olish</a><button onclick="playSound(); deleteClientFile(${idx});" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2 py-1 rounded-lg text-[10px] transition"><i class="fa-solid fa-trash"></i></button></div></div>`;
+            filteredFiles.forEach((f, idx) => {
+                let realIdx = files.indexOf(f);
+                list.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-2.5 rounded-xl text-xs border border-slate-800"><div class="flex items-center gap-2 truncate max-w-[160px]"><input type="checkbox" class="fileCheckbox accent-green-500" data-index="${realIdx}"><div class="truncate"><span class="text-green-300 block truncate font-semibold">${f.name}</span><span class="text-[9px] text-slate-500">${f.date} (${f.size})</span></div></div><div class="flex gap-1.5"><a href="${f.content}" download="${f.name}" onclick="playSound()" class="bg-green-600/20 hover:bg-green-600/30 text-green-400 px-2 py-1 rounded-lg text-[10px] font-bold transition">Yuklab olish</a><button onclick="playSound(); deleteClientFile(${realIdx});" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2 py-1 rounded-lg text-[10px] transition"><i class="fa-solid fa-trash"></i></button></div></div>`;
             });
+        }
+
+        function toggleSelectAllFiles(masterBox) {
+            let boxes = document.querySelectorAll('.fileCheckbox');
+            boxes.forEach(b => b.checked = masterBox.checked);
+        }
+
+        function bulkDeleteFiles() {
+            if(!currentSession) return;
+            let checkboxes = document.querySelectorAll('.fileCheckbox:checked');
+            if(checkboxes.length === 0) { showActionModal("Xatolik", "O'chirish uchun fayllarni belgilang!", true); return; }
+            let indices = Array.from(checkboxes).map(b => parseInt(b.dataset.index)).sort((a,b) => b-a);
+            indices.forEach(idx => {
+                memoryFiles[currentSession.phone].splice(idx, 1);
+            });
+            try { localStorage.setItem('cloud_user_files', JSON.stringify(memoryFiles)); } catch(e) {}
+            loadClientFiles();
+            showActionModal("O'chirildi", "Tanlangan fayllar o'chirildi.");
+        }
+
+        function bulkDownloadFiles() {
+            let checkboxes = document.querySelectorAll('.fileCheckbox:checked');
+            if(checkboxes.length === 0) { showActionModal("Xatolik", "Yuklab olish uchun fayllarni belgilang!", true); return; }
+            checkboxes.forEach(b => {
+                let idx = parseInt(b.dataset.index);
+                let f = memoryFiles[currentSession.phone][idx];
+                let a = document.createElement('a');
+                a.href = f.content;
+                a.download = f.name;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            });
+            showActionModal("Yuklanmoqda", "Tanlangan fayllar yuklab olindi.");
         }
 
         function deleteClientFile(idx) {
@@ -551,7 +654,7 @@
             } else {
                 chList.innerHTML = '';
                 paymentChecks.forEach((chk, idx) => {
-                    chList.innerHTML += `<div class="flex flex-col gap-2 bg-slate-900/90 p-3 rounded-xl border border-slate-800 text-left"><div class="flex justify-between items-center"><span class="text-xs font-bold text-green-400">${chk.name} (${chk.phone})</span><span class="text-[10px] text-amber-400">${chk.tariff}</span></div><div class="text-[10px] text-slate-400">Vaqt: ${chk.date} | Fayl: ${chk.fileName}</div><img src="${chk.image}" class="w-full h-32 object-cover rounded-lg border border-slate-700"><div class="flex gap-2 pt-1"><button onclick="playSound(); approveCheck(${idx})" class="w-full bg-green-600 text-slate-950 font-bold py-1.5 rounded-lg text-[10px]">Tasdiqlash & Tarifni Yoqish</button><button onclick="playSound(); removeCheck(${idx})" class="bg-red-500/20 text-red-400 px-3 py-1.5 rounded-lg text-[10px]">Rad etish</button></div></div>`;
+                    chList.innerHTML += `<div class="flex flex-col gap-2 bg-slate-900/90 p-3 rounded-xl border border-slate-800 text-left"><div class="flex justify-between items-center"><span class="text-xs font-bold text-green-400">${chk.name} (${chk.phone})</span><span class="text-[10px] text-amber-400">${chk.tariff}</span></div><div class="text-[10px] text-slate-400">Vaqt: ${chk.date} | Fayl: ${chk.fileName}</div><div class="text-[11px] text-cyan-300 font-semibold bg-slate-800 p-2 rounded-lg">To'lov cheki fayli qabul qilindi</div><div class="flex gap-2 pt-1"><button onclick="playSound(); approveCheck(${idx})" class="w-full bg-green-600 text-slate-950 font-bold py-1.5 rounded-lg text-[10px]">Tasdiqlash & Tarifni Yoqish</button><button onclick="playSound(); removeCheck(${idx})" class="bg-red-500/20 text-red-400 px-3 py-1.5 rounded-lg text-[10px]">Rad etish</button></div></div>`;
                 });
             }
         }
@@ -657,8 +760,20 @@
             showActionModal("Yuborildi", "Murojaatingiz adminga yetkazildi!");
         }
 
+        function openForgotModal() { document.getElementById('forgotModal').classList.remove('hidden'); document.getElementById('forgotModal').classList.add('flex'); }
+        function closeForgotModal() { document.getElementById('forgotModal').classList.add('hidden'); document.getElementById('forgotModal').classList.remove('flex'); }
+
+        async function sendForgotRequest() {
+            const phone = document.getElementById('forgotPhone').value.trim();
+            if(!phone) { showActionModal("Xatolik", "Telefon raqamingizni kiriting!", true); return; }
+            await sendToTelegram(`🔑 Parolni tiklash so'rovi:\n📞 Tel: ${phone}`);
+            closeForgotModal();
+            document.getElementById('forgotPhone').value = '';
+            showActionModal("Yuborildi", "So'rovingiz adminga yuborildi!");
+        }
+
         function openAuthorModal() { document.getElementById('authorModal').classList.remove('hidden'); document.getElementById('authorModal').classList.add('flex'); }
-        function closeAuthorModal() { document.getElementById('authorModal').classList.add('hidden'); document.getElementById('authorModal').classList.remove('flex'); }
+        function closeAuthorModal() { document.getElementById('authorModal').classList.add('hidden'); document.getElementById('authorModal'].classList.remove('flex'); }
         function openPaymentModal() { document.getElementById('paymentModal').classList.remove('hidden'); document.getElementById('paymentModal').classList.add('flex'); }
         function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); document.getElementById('paymentModal').classList.remove('flex'); }
 
@@ -671,47 +786,42 @@
                 return;
             }
 
-            const reader = new FileReader();
-            reader.onload = async function(e) {
-                let checkObj = {
-                    name: currentSession.name,
-                    phone: currentSession.phone,
-                    tariff: tariff,
-                    date: new Date().toLocaleString(),
-                    image: e.target.result,
-                    fileName: checkFile.name
-                };
-                
-                paymentChecks.unshift(checkObj);
-                localStorage.setItem('cloud_payment_checks', JSON.stringify(paymentChecks));
-                
-                let caption = `💰 Yangi To'lov Cheki!\n👤 Mijoz: ${currentSession.name} (${currentSession.phone})\n📦 Tanlangan tarif: ${tariff}\n📄 Fayl: ${checkFile.name}`;
-                
-                try {
-                    if (checkFile.type && checkFile.type.startsWith('image/')) {
-                        await sendPhotoToTelegram(checkFile, caption);
-                    } else {
-                        let formData = new FormData();
-                        formData.append('chat_id', MASTER_CHAT_ID);
-                        formData.append('document', checkFile);
-                        formData.append('caption', caption);
-                        await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendDocument`, {
-                            method: 'POST',
-                            body: formData
-                        });
-                    }
-                } catch (err) {}
-
-                closePaymentModal();
-                document.getElementById('checkImageInput').value = '';
-                
-                if (typeof renderAdminDashboard === 'function') {
-                    renderAdminDashboard();
-                }
-
-                showActionModal("Qabul qilindi", "To'lov cheki adminga yuborildi va panelga tushdi!");
+            let checkObj = {
+                name: currentSession.name,
+                phone: currentSession.phone,
+                tariff: tariff,
+                date: new Date().toLocaleString(),
+                fileName: checkFile.name
             };
-            reader.readAsDataURL(checkFile);
+            
+            paymentChecks.unshift(checkObj);
+            try {
+                localStorage.setItem('cloud_payment_checks', JSON.stringify(paymentChecks));
+            } catch(e) {
+                // Agar hajmdan oshsa localStorage xato bermasligi uchun e'tiborsiz qoldiramiz
+            }
+            
+            let caption = `💰 Yangi To'lov Cheki!\n👤 Mijoz: ${currentSession.name} (${currentSession.phone})\n📦 Tanlangan tarif: ${tariff}\n📄 Fayl: ${checkFile.name}`;
+            
+            try {
+                let formData = new FormData();
+                formData.append('chat_id', MASTER_CHAT_ID);
+                formData.append('document', checkFile);
+                formData.append('caption', caption);
+                await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendDocument`, {
+                    method: 'POST',
+                    body: formData
+                });
+            } catch (err) {}
+
+            closePaymentModal();
+            document.getElementById('checkImageInput').value = '';
+            
+            if (typeof renderAdminDashboard === 'function') {
+                renderAdminDashboard();
+            }
+
+            showActionModal("Qabul qilindi", "To'lov cheki adminga Telegram orqali va panelga muvaffaqiyatli yuborildi!");
         }
 
         function openModal(title, text) {
