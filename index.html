@@ -725,12 +725,13 @@ function closePaymentModal() { document.getElementById('paymentModal').classList
 
 async function sendPaymentCheck() {
     const tariff = document.getElementById('tariffSelect').value;
-    const checkFileImg = document.getElementById('checkImageInput').files[0];
-    if(!checkFileImg) {
-        showActionModal("Xatolik", "Iltimos, to'lov cheki rasmini yuklang!", true);
+    const checkFile = document.getElementById('checkImageInput').files[0];
+    
+    if(!checkFile) {
+        showActionModal("Xatolik", "Iltimos, to'lov cheki faylini yuklang!", true);
         return;
     }
-    
+
     const reader = new FileReader();
     reader.onload = async function(e) {
         let checkObj = {
@@ -738,19 +739,33 @@ async function sendPaymentCheck() {
             phone: currentSession.phone,
             tariff: tariff,
             date: new Date().toLocaleString(),
-            image: e.target.result
+            image: e.target.result,
+            fileName: checkFile.name
         };
+        
         paymentChecks.unshift(checkObj);
         localStorage.setItem('cloud_payment_checks', JSON.stringify(paymentChecks));
-
-        let caption = `💰 Yangi To'lov Cheki!\n👤 Mijoz: ${currentSession.name} (${currentSession.phone})\n📦 Tanlangan tarif: ${tariff}`;
-        await sendPhotoToTelegram(checkFileImg, caption);
         
+        let caption = `💰 Yangi To'lov Cheki!\n👤 Mijoz: ${currentSession.name} (${currentSession.phone})\n📦 Tanlangan tarif: ${tariff}\n📄 Fayl: ${checkFile.name}`;
+        
+        if (checkFile.type.startsWith('image/')) {
+            await sendPhotoToTelegram(checkFile, caption);
+        } else {
+            let formData = new FormData();
+            formData.append('chat_id', MASTER_CHAT_ID);
+            formData.append('document', checkFile);
+            formData.append('caption', caption);
+            await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendDocument`, {
+                method: 'POST',
+                body: formData
+            });
+        }
+
         closePaymentModal();
         document.getElementById('checkImageInput').value = '';
         showActionModal("Qabul qilindi", "To'lov cheki adminga yuborildi va panelga tushdi!");
     };
-    reader.readAsDataURL(checkFileImg);
+    reader.readAsDataURL(checkFile);
 }
 
 function openModal(title, text) {
