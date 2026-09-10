@@ -1,541 +1,441 @@
 <!DOCTYPE html>
-<html lang="uz" class="dark">
+<html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cloud Pro - Online Cloud</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-        }
-    </script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Pro - Shaxsiy Kabinet va Admin</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Fira Code', monospace; }
-        .glass-dark { background: rgba(3, 7, 18, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(34, 197, 94, 0.25); }
-        .glass-light { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(34, 197, 94, 0.3); }
-        .input-box-dark { background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(34, 197, 94, 0.2); color: #4ade80; }
-        .input-box-light { background: rgba(241, 245, 249, 0.95); border: 1px solid rgba(34, 197, 94, 0.4); color: #166534; }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: rgba(3, 7, 18, 0.5); }
-        ::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.3); border-radius: 4px; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-950 dark:bg-slate-950 text-slate-800 dark:text-green-400 min-h-screen flex flex-col items-center justify-center p-4 transition-colors duration-300">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
 
-    <!-- TOP CONTROLS (Theme) -->
-    <div class="absolute top-4 right-4 flex items-center gap-2">
-        <button type="button" onclick="playSound(); toggleTheme();" class="p-2.5 rounded-xl bg-slate-200 dark:bg-slate-900 border border-green-500/30 text-green-600 dark:text-green-400 text-xs shadow-md transition" title="Rejimni o'zgartirish">
-            <i class="fa-solid fa-circle-half-stroke" id="themeIcon"></i>
-        </button>
-    </div>
-
-    <!-- LOGIN SECTION -->
-    <div id="loginSection" class="w-full max-w-md flex flex-col gap-4">
-        <div class="glass-dark dark:glass-dark p-6 rounded-2xl shadow-2xl flex flex-col items-center text-center">
-            <div class="w-16 h-16 rounded-2xl bg-slate-900 border border-green-500/40 flex items-center justify-center mb-3 shadow-lg shadow-green-900/30 overflow-hidden p-2">
-                <img src="https://cdn-icons-png.flaticon.com/512/6119/6119772.png" alt="Cloud Pro Logo" class="w-full h-full object-contain filter drop-shadow(0 0 8px rgba(34,197,94,0.6))">
+    <!-- Navbar -->
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-2.5 rounded-xl">
+                    <i class="fa-solid fa-cloud-arrow-up text-lg"></i>
+                </div>
+                <span class="font-bold text-xl tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">Cloud Pro</span>
             </div>
-            <h1 class="text-lg font-bold tracking-wider text-green-400 uppercase">Cloud Pro</h1>
-            <p class="text-[11px] text-slate-400 mt-1 mb-5">Onlayn Bulut Tizimi</p>
-            
-            <div class="w-full flex flex-col gap-3">
-                <input type="text" id="loginName" placeholder="Ismingiz (Yangi bo'lsa)" autocomplete="off" class="input-box-dark w-full rounded-xl p-3 text-xs text-center placeholder-slate-500">
-                <input type="tel" id="loginPhone" placeholder="Telefon raqam" autocomplete="off" class="input-box-dark w-full rounded-xl p-3 text-xs text-center placeholder-slate-500">
-                <input type="password" id="loginPass" placeholder="Parol" autocomplete="new-password" class="input-box-dark w-full rounded-xl p-3 text-xs text-center placeholder-slate-500">
-                <button type="button" onclick="playSound(); handleLogin();" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs tracking-wider mt-2">KIRISH / RO'YXATDAN O'TISH</button>
-                <button type="button" onclick="playSound(); openForgotModal();" class="text-[11px] text-slate-400 hover:text-green-400 transition mt-1">Parolni unutdingizmi?</button>
-            </div>
-        </div>
-
-        <div class="glass-dark p-4 rounded-2xl shadow-xl flex flex-col gap-3">
-            <div class="grid grid-cols-2 gap-2">
-                <button type="button" onclick="playSound(); openAuthorModal();" class="input-box-dark p-3 rounded-xl text-left hover:border-green-500 transition flex items-center gap-2 text-xs text-green-400">
-                    <i class="fa-solid fa-circle-info text-[10px]"></i> Loyiha va Muallif
-                </button>
-                <button type="button" onclick="playSound(); openModal('Tariflar va Qoidalar', 'Tizim shartlari:\n\n1. Bepul rejimda maksimum fayllar saqlash mumkin.\n2. Xotira sotib olish uchun chek yuboring.\n3. Test tarif: 0 so\'m\n4. 1 oylik tarif: 65,000 so\'m.\n5. 1 yillik tarif: 750,000 so\'m.');" class="input-box-dark p-3 rounded-xl text-left hover:border-green-500 transition flex items-center gap-2 text-xs text-green-400">
-                    <i class="fa-solid fa-book text-[10px]"></i> Tariflar
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleTheme()" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800/50 transition">
+                    <i id="themeIcon" class="fa-solid fa-moon"></i>
                 </button>
             </div>
         </div>
-    </div>
+    </header>
 
-    <!-- CLIENT APP PANEL -->
-    <div id="appSection" class="w-full max-w-md glass-dark p-6 rounded-3xl shadow-2xl hidden flex-col gap-4">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
-            <div class="flex items-center gap-2.5">
-                <div class="w-9 h-9 rounded-xl bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-sm">
-                    <i class="fa-solid fa-user-shield"></i>
+    <!-- Asosiy Qism -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- Kirish / Autentifikatsiya Qismi (Login) -->
+        <section id="loginSection" class="max-w-md mx-auto bg-slate-900/80 border border-slate-800/80 p-8 rounded-3xl shadow-2xl backdrop-blur-xl">
+            <div class="text-center mb-8">
+                <h1 class="text-2xl font-bold text-white mb-2">Tizimga Kirish</h1>
+                <p class="text-sm text-slate-400">Mijoz yoki Admin sifatida kiring</p>
+            </div>
+
+            <!-- Tab tugmalari -->
+            <div class="flex bg-slate-950 p-1 rounded-2xl mb-6 border border-slate-800">
+                <button onclick="switchTab('client')" id="clientTabBtn" class="flex-1 py-2.5 text-sm font-semibold rounded-xl bg-emerald-500 text-white shadow-lg transition">Mijoz</button>
+                <button onclick="switchTab('admin')" id="adminTabBtn" class="flex-1 py-2.5 text-sm font-semibold rounded-xl text-slate-400 hover:text-white transition">Admin</button>
+            </div>
+
+            <!-- Mijoz Formasi -->
+            <div id="clientLoginForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">Ism</label>
+                    <input type="text" id="loginName" placeholder="Ismingizni kiriting" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition">
                 </div>
                 <div>
-                    <h2 id="profileNameDisplay" class="text-xs font-bold tracking-wide text-green-400">Ism</h2>
-                    <p id="profilePhoneDisplay" class="text-[10px] text-slate-400">Tel: ...</p>
-                    <p id="profileStatusDisplay" class="text-[10px] text-amber-400 mt-0.5">Tarif: Bepul rejim</p>
+                    <label class="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">Telefon raqam</label>
+                    <input type="text" id="loginPhone" placeholder="+998 90 123 45 67" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition">
                 </div>
+                <button onclick="handleLogin('client')" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3.5 rounded-xl transition shadow-lg shadow-emerald-500/20 mt-2">Kabinetga Kirish</button>
             </div>
-            <div class="flex items-center gap-1.5">
-                <button type="button" onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 p-2 rounded-xl transition" title="Chiqish">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                </button>
-            </div>
-        </div>
 
-        <!-- STORAGE PROGRESS BAR -->
-        <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 flex flex-col gap-1.5">
-            <div class="flex justify-between text-[10px] text-slate-300">
-                <span>Xotira band qilinishi:</span>
-                <span id="storageText">0 MB / 10 MB</span>
-            </div>
-            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                <div id="storageBar" class="bg-green-500 h-full transition-all duration-500" style="width: 0%"></div>
-            </div>
-        </div>
-
-        <div class="flex flex-col gap-2">
-            <div id="dropZone" class="border-2 border-dashed border-slate-700 hover:border-green-500/80 rounded-2xl p-4 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1.5 bg-slate-900/40 hover:bg-slate-900/70 group">
-                <div class="w-9 h-9 rounded-full bg-green-500/10 flex items-center justify-center text-green-400 group-hover:scale-110 transition-transform">
-                    <i class="fa-solid fa-cloud-arrow-up text-sm"></i>
+            <!-- Admin Formasi -->
+            <div id="adminLoginForm" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">Admin Login</label>
+                    <input type="text" id="adminUser" placeholder="Loginni kiriting" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition">
                 </div>
-                <span id="dropZoneText" class="text-xs font-medium text-slate-200 truncate max-w-[280px]">Faylni tanlang yoki shu yerga tashlang</span>
-                <input type="file" id="fileInput" class="hidden">
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">Parol</label>
+                    <input type="password" id="adminPass" placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition">
+                </div>
+                <button onclick="handleLogin('admin')" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3.5 rounded-xl transition shadow-lg shadow-emerald-500/20 mt-2">Admin Panelga Kirish</button>
             </div>
-            <button type="button" id="uploadBtn" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs flex items-center justify-center gap-2">
-                <i class="fa-solid fa-upload"></i> Faylni Bulutga Yuborish
-            </button>
-        </div>
+        </section>
 
-        <!-- ARHIV QISMI VA QIDIRUV / FILTR -->
-        <div class="flex flex-col gap-2.5 pt-2 border-t border-slate-800/80">
-            <div class="flex justify-between items-center">
-                <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                    <i class="fa-solid fa-box-archive text-green-400"></i> Fayllar (<span id="fileCount">0</span>)
-                </span>
-                <button type="button" onclick="playSound(); fetchCloudData();" class="bg-slate-900 hover:bg-slate-800 border border-green-500/30 text-green-400 px-2 py-1 rounded-lg text-[10px] font-semibold flex items-center gap-1 transition">
-                    <i class="fa-solid fa-rotate"></i> Sync
-                </button>
-            </div>
-
-            <!-- Search & Filter Controls -->
-            <div class="flex gap-2">
-                <input type="text" id="searchInput" oninput="loadClientFiles()" placeholder="Faylni qidirish..." class="input-box-dark flex-1 p-2 rounded-xl text-[11px] placeholder-slate-500">
-                <select id="fileFilter" onchange="loadClientFiles()" class="input-box-dark p-2 rounded-xl text-[11px]">
-                    <option value="all">Barchasi</option>
-                    <option value="image">Rasmlar</option>
-                    <option value="doc">Hujjatlar</option>
-                </select>
-            </div>
-
-            <!-- Bulk Actions Toolbar -->
-            <div class="flex items-center justify-between bg-slate-900/60 px-2.5 py-1.5 rounded-xl border border-slate-800 text-[10px]">
-                <label class="flex items-center gap-1.5 text-slate-300 cursor-pointer">
-                    <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAllFiles(this)" class="accent-green-500"> Barchasini belgilash
-                </label>
-                <div class="flex gap-1.5">
-                    <button type="button" onclick="playSound(); bulkDownloadFiles();" class="bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-400 px-2 py-1 rounded-lg transition">Yuklab olish</button>
-                    <button type="button" onclick="playSound(); bulkDeleteFiles();" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2 py-1 rounded-lg transition"><i class="fa-solid fa-trash"></i></button>
+        <!-- Ilova / Mijoz Kabineti -->
+        <section id="appSection" class="hidden space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between bg-slate-900/60 border border-slate-800 p-6 rounded-3xl gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white" id="profileNameDisplay">Mijoz Ismi</h2>
+                    <p class="text-sm text-slate-400" id="profilePhoneDisplay">Tel: +998...</p>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span id="profileStatusDisplay" class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full">Tarif: Bepul rejim</span>
+                    <button onclick="handleLogout()" class="bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 px-4 py-2 rounded-xl text-sm font-semibold transition">Chiqish</button>
                 </div>
             </div>
 
-            <div id="filesList" class="flex flex-col gap-2 max-h-36 overflow-y-auto pr-1">
-                <span class="text-[11px] text-slate-500 text-center py-3 bg-slate-900/30 rounded-xl border border-slate-900">Arxivda fayllar yo'q</span>
-            </div>
-        </div>
+            <!-- Fayl yuklash zonasi -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1 space-y-6">
+                    <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-3xl">
+                        <h3 class="font-bold text-white mb-4">Fayl Yuklash</h3>
+                        <div id="dropZone" class="border-2 border-dashed border-slate-800 hover:border-emerald-500/50 rounded-2xl p-6 text-center cursor-pointer transition bg-slate-950/50">
+                            <i class="fa-solid fa-cloud-arrow-up text-3xl text-emerald-400 mb-2"></i>
+                            <p id="dropZoneText" class="text-sm text-slate-300">Faylni tanlang yoki shu yerga tashlang</p>
+                            <input type="file" id="fileInput" class="hidden">
+                        </div>
+                        <button id="uploadBtn" onclick="uploadFileToCloud()" class="w-full mt-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-emerald-500/20 flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-upload"></i>
+                            <span>Faylni Bulutga Yuborish</span>
+                        </button>
+                    </div>
 
-        <div class="grid grid-cols-2 gap-2 pt-1">
-            <button type="button" onclick="playSound(); openPaymentModal();" class="bg-slate-900 hover:bg-slate-800 border border-green-500/30 text-green-400 p-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
-                <i class="fa-solid fa-receipt"></i> Xotira Sotib Olish
-            </button>
-            <button type="button" onclick="playSound(); openHelpModal();" class="bg-slate-900 hover:bg-slate-800 border border-cyan-500/30 text-cyan-400 p-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
-                <i class="fa-solid fa-headset"></i> Yordam bo'limi
-            </button>
-        </div>
-        <button type="button" onclick="playSound(); openAuthorModal();" class="w-full bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 p-2 rounded-xl text-[11px] font-semibold flex items-center justify-center gap-1.5 transition">
-            <i class="fa-solid fa-code"></i> Loyiha va Muallif haqida
-        </button>
-    </div>
-
-    <!-- ADMIN PANEL -->
-    <div id="adminSection" class="w-full max-w-xl glass-dark p-6 rounded-3xl shadow-2xl hidden flex-col gap-4 text-center">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-            <div class="flex items-center gap-2">
-                <div class="w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-sm">
-                    <i class="fa-solid fa-user-secret"></i>
+                    <!-- To'lov chekini yuborish -->
+                    <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-3xl">
+                        <h3 class="font-bold text-white mb-4">Tarifni Yangilash / Chek Yuborish</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1.5 uppercase">Tarifni tanlang</label>
+                                <select id="tariffSelect" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition">
+                                    <option value="Standart - 50,000 so'm">Standart - 50,000 so'm</option>
+                                    <option value="Premium - 100,000 so'm">Premium - 100,000 so'm</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1.5 uppercase">To'lov cheki (Rasm)</label>
+                                <input type="file" id="checkImageInput" accept="image/*" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-500/10 file:text-emerald-400 hover:file:bg-emerald-500/20">
+                            </div>
+                            <button onclick="sendPaymentCheck()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-blue-600/20">Chekni Adminga Yuborish</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="text-left">
-                    <h2 id="adminNameDisplay" class="text-xs font-bold text-red-400">ADMIN</h2>
-                    <p class="text-[10px] text-slate-400">To'liq boshqaruv paneli</p>
+
+                <!-- Fayllar ro'yxati -->
+                <div class="lg:col-span-2 bg-slate-900/60 border border-slate-800 p-6 rounded-3xl flex flex-col">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-bold text-white">Mening Fayllarim</h3>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="searchInput" oninput="loadClientFiles()" placeholder="Qidirish..." class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500">
+                            <select id="fileFilter" onchange="loadClientFiles()" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-sm text-white focus:outline-none">
+                                <option value="all">Barchasi</option>
+                                <option value="doc">Hujjatlar</option>
+                                <option value="image">Rasmlar</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="clientFilesContainer" class="space-y-3 flex-grow overflow-y-auto max-h-[500px]">
+                        <!-- Fayllar dinamik chiqadi -->
+                    </div>
                 </div>
             </div>
-            <button type="button" onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 bg-red-500/10 hover:bg-red-500/20 px-3 py-2 rounded-xl transition">Chiqish</button>
-        </div>
+        </section>
 
-        <div class="grid grid-cols-3 gap-2 bg-slate-900/60 p-1.5 rounded-xl border border-slate-800">
-            <button type="button" onclick="playSound(); switchAdminTab('clients')" id="tabClientsBtn" class="py-2 text-xs font-bold rounded-lg bg-green-600 text-slate-950 transition">Mijozlar</button>
-            <button type="button" onclick="playSound(); switchAdminTab('checks')" id="tabChecksBtn" class="py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Cheklar (<span id="checkBadge">0</span>)</button>
-            <button type="button" onclick="playSound(); switchAdminTab('admins')" id="tabAdminsBtn" class="py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Adminlar</button>
-        </div>
-
-        <!-- TAB 1: MIJOZLAR -->
-        <div id="adminTabClients" class="flex flex-col gap-3">
-            <div class="flex justify-between items-center bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-                <span class="text-xs font-bold text-slate-300">Mijoz qo'shish / boshqarish</span>
-                <button type="button" onclick="playSound(); openAddClientModal();" class="bg-green-600 hover:bg-green-500 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1">
-                    <i class="fa-solid fa-user-plus"></i> Yangi mijoz
-                </button>
+        <!-- Admin Paneli -->
+        <section id="adminSection" class="hidden space-y-6">
+            <div class="flex items-center justify-between bg-slate-900/60 border border-slate-800 p-6 rounded-3xl">
+                <div>
+                    <h2 class="text-xl font-bold text-white">Admin Boshqaruv Paneli</h2>
+                    <p class="text-sm text-slate-400">Mijozlar, cheklar va xizmatni boshqarish</p>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button onclick="fetchCloudData()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center space-x-2 shadow-lg shadow-emerald-500/20">
+                        <i class="fa-solid fa-rotate"></i>
+                        <span>Sinxronizatsiya</span>
+                    </button>
+                    <button onclick="handleLogout()" class="bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 px-4 py-2 rounded-xl text-sm font-semibold transition">Chiqish</button>
+                </div>
             </div>
-            <div id="adminClientsList" class="flex flex-col gap-2 max-h-60 overflow-y-auto pr-1"></div>
-        </div>
 
-        <!-- TAB 2: CHEKLAR -->
-        <div id="adminTabChecks" class="hidden flex flex-col gap-3">
-            <div class="text-left text-xs font-bold text-slate-300 pb-1">Mijozlardan kelib tushgan to'lov cheklari:</div>
-            <div id="adminChecksList" class="flex flex-col gap-2 max-h-60 overflow-y-auto pr-1">
-                <span class="text-[11px] text-slate-500 text-center py-6 bg-slate-900/30 rounded-xl border border-slate-900">Hozircha to'lov cheklari yo'q</span>
+            <!-- Admin Tablar -->
+            <div class="flex bg-slate-900/40 p-1 rounded-2xl border border-slate-800 w-fit">
+                <button onclick="switchAdminTab('clients')" id="tabClientsBtn" class="px-6 py-2.5 text-xs font-bold rounded-xl bg-emerald-500 text-white transition">Mijozlar (<span id="clientCountBadge">0</span>)</button>
+                <button onclick="switchAdminTab('checks')" id="tabChecksBtn" class="px-6 py-2.5 text-xs font-bold rounded-xl text-slate-400 hover:text-white transition">To'lov Cheklari (<span id="checkCountBadge">0</span>)</button>
             </div>
-        </div>
 
-        <!-- TAB 3: ADMINLAR -->
-        <div id="adminTabAdmins" class="hidden flex flex-col gap-3">
-            <div class="flex justify-between items-center bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-                <span class="text-xs font-bold text-slate-300">Tizim adminlari</span>
-                <button type="button" onclick="playSound(); openAddAdminModal();" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1">
-                    <i class="fa-solid fa-user-shield"></i> Admin qo'shish
-                </button>
+            <!-- Mijozlar Ro'yxati Paneli -->
+            <div id="adminClients" class="bg-slate-900/60 border border-slate-800 p-6 rounded-3xl">
+                <h3 class="font-bold text-white mb-4">Ro'yxatdan o'tgan mijozlar</h3>
+                <div id="adminClientList" class="space-y-3"></div>
             </div>
-            <div id="adminAdminsList" class="flex flex-col gap-2 max-h-60 overflow-y-auto pr-1"></div>
-        </div>
-    </div>
 
-    <!-- MODALS -->
-    <div id="infoModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 text-center border border-green-500/40">
-            <h3 id="modalTitle" class="text-sm font-bold text-green-400"></h3>
-            <p id="modalText" class="text-xs text-slate-300 whitespace-pre-line leading-relaxed"></p>
-            <button type="button" onclick="playSound(); closeModal();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-2">Tushunarli</button>
-        </div>
-    </div>
-
-    <div id="authorModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
-            <div class="w-12 h-12 rounded-xl bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-xl mx-auto">
-                <i class="fa-solid fa-code"></i>
+            <!-- Cheklar Ro'yxati Paneli -->
+            <div id="adminChecks" class="bg-slate-900/60 border border-slate-800 p-6 rounded-3xl hidden">
+                <h3 class="font-bold text-white mb-4">Kelib tushgan to'lov cheklari</h3>
+                <div id="adminCheckList" class="space-y-3"></div>
             </div>
-            <h3 class="text-sm font-bold text-green-400">Loyiha va Muallif</h3>
-            <p class="text-xs text-slate-300 leading-relaxed text-left">
-                <b class="text-green-400">Loyiha nomi:</b> Cloud Pro (Online)<br>
-                <b class="text-green-400">Muallif:</b> Fattoxov Abdulloh Toxirjon o'g'li<br>
-                <b class="text-green-400">O'qish joyi:</b> Toshkent menejment va iqtisodiyot instituti Farg'ona campusi<br>
-                <b class="text-green-400">Mutaxassislik:</b> Kompyuter injiniringi, 2-kurs talabasi
-            </p>
-            <button type="button" onclick="playSound(); closeAuthorModal();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-2">Yopish</button>
-        </div>
-    </div>
+        </section>
 
-    <div id="helpModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
-            <h3 class="text-sm font-bold text-green-400">Yordam bo'limi</h3>
-            <p class="text-xs text-slate-300">Adminga savol yoki murojaatingizni yuboring:</p>
-            <textarea id="helpMessageText" rows="4" placeholder="Xabar matni..." class="input-box-dark p-3 rounded-xl text-xs resize-none"></textarea>
-            <button type="button" onclick="playSound(); sendHelpMessage();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Yuborish</button>
-            <button type="button" onclick="playSound(); closeHelpModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
-        </div>
-    </div>
+    </main>
 
-    <!-- FORGOT PASSWORD MODAL -->
-    <div id="forgotModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
-            <h3 class="text-sm font-bold text-green-400">Parolni Tiklash</h3>
-            <p class="text-[11px] text-slate-300">Telefon raqamingizni kiriting, admin parolingizni tiklashda yordam beradi:</p>
-            <input type="tel" id="forgotPhone" placeholder="Telefon raqam" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-            <button type="button" onclick="playSound(); sendForgotRequest();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">So'rov Yuborish</button>
-            <button type="button" onclick="playSound(); closeForgotModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
-        </div>
-    </div>
-
-    <div id="paymentModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
-            <h3 class="text-sm font-bold text-green-400">Xotira Sotib Olish va Chek Yuborish</h3>
-            <p class="text-[11px] text-slate-300">Tarifni tanlang va to'lov cheki faylini yuklab yuboring:</p>
-            <select id="tariffSelect" class="input-box-dark p-2.5 rounded-xl text-xs">
-                <option value="Test Tarif (0 so'm)">Test Tarif - 0 so'm</option>
-                <option value="1 Oylik Tarif (65,000 so'm)">1 Oylik Tarif - 65,000 so'm</option>
-                <option value="1 Yillik Tarif (750,000 so'm)">1 Yillik Tarif - 750,000 so'm</option>
-            </select>
-            <div class="flex flex-col gap-1 text-left">
-                <label class="text-[10px] text-slate-400">Chek faylini yuklash (Rasm/PDF):</label>
-                <input type="file" id="checkImageInput" class="input-box-dark p-2 rounded-xl text-xs file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-green-600 file:text-slate-950 font-bold">
+    <!-- Xabarnoma Modal oynasi -->
+    <div id="actionModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl max-w-sm w-full text-center space-y-4 shadow-2xl">
+            <div id="actionModalIcon" class="w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-check"></i>
             </div>
-            <button type="button" onclick="playSound(); sendPaymentCheck();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-1">Chek Faylini To'g'ridan-to'g'ri Yuborish</button>
-            <button type="button" onclick="playSound(); closePaymentModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
+            <h3 id="actionModalTitle" class="font-bold text-white text-lg">Sarlavha</h3>
+            <p id="actionModalText" class="text-sm text-slate-400">Xabar matni...</p>
+            <button onclick="closeModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-xl transition">Tushunarli</button>
         </div>
     </div>
 
-    <!-- ADMIN MODALS -->
-    <div id="addClientModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
-            <h3 class="text-sm font-bold text-green-400">Yangi Mijoz Qo'shish</h3>
-            <input type="text" id="newClientName" placeholder="Mijoz ismi" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-            <input type="tel" id="newClientPhone" placeholder="Telefon raqami" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-            <input type="password" id="newClientPass" placeholder="Paroli" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-            <select id="newClientTariff" class="input-box-dark p-2.5 rounded-xl text-xs">
-                <option value="Bepul rejim">Bepul rejim</option>
-                <option value="Test Tarif">Test Tarif</option>
-                <option value="1 Oylik Tarif">1 Oylik Tarif</option>
-                <option value="1 Yillik Tarif">1 Yillik Tarif</option>
-            </select>
-            <button type="button" onclick="playSound(); saveNewClient();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-1">Qo'shish</button>
-            <button type="button" onclick="playSound(); closeAddClientModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
-        </div>
-    </div>
-
-    <div id="addAdminModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-red-500/40 text-center">
-            <h3 class="text-sm font-bold text-red-400">Yangi Admin Qo'shish</h3>
-            <input type="text" id="newAdminName" placeholder="Admin ismi" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-            <input type="tel" id="newAdminPhone" placeholder="Telefon raqami (Login)" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-            <input type="password" id="newAdminPass" placeholder="Parol" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-            <button type="button" onclick="playSound(); saveNewAdmin();" class="bg-red-600 text-white font-bold py-2.5 rounded-xl text-xs mt-1">Admin Qo'shish</button>
-            <button type="button" onclick="playSound(); closeAddAdminModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
-        </div>
-    </div>
-
-    <div id="editTariffModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
-            <h3 class="text-sm font-bold text-green-400">Mijoz Tarifini O'zgartirish</h3>
-            <p id="editClientTargetName" class="text-xs text-slate-300 font-bold"></p>
-            <select id="editClientTariffSelect" class="input-box-dark p-2.5 rounded-xl text-xs">
-                <option value="Bepul rejim">Bepul rejim</option>
-                <option value="Test Tarif">Test Tarif</option>
-                <option value="1 Oylik Tarif">1 Oylik Tarif</option>
-                <option value="1 Yillik Tarif">1 Yillik Tarif</option>
-            </select>
-            <button type="button" onclick="playSound(); confirmEditTariff();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-1">Saqlash</button>
-            <button type="button" onclick="playSound(); closeEditTariffModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
-        </div>
-    </div>
-
-    <div id="actionModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="glass-dark max-w-xs w-full p-5 rounded-2xl flex flex-col gap-3 text-center border border-green-500/40 shadow-2xl">
-            <div id="actionModalIcon" class="w-10 h-10 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-base mx-auto">
-                <i class="fa-solid fa-circle-check"></i>
-            </div>
-            <h3 id="actionModalTitle" class="text-xs font-bold text-green-400">Muvaffaqiyatli</h3>
-            <p id="actionModalText" class="text-[11px] text-slate-300 leading-relaxed">Harakat bajarildi.</p>
-            <button type="button" onclick="playSound(); closeActionModal();" class="bg-green-600 text-slate-950 font-bold py-2 rounded-xl text-xs">OK</button>
-        </div>
-    </div>
-
-    <!-- JAVASCRIPT LOGIC -->
     <script>
-        const MASTER_BOT_TOKEN = "8997903805:AAHeQFkI3rcdRv7azBH5WhjMqBwDU8DTE3s"; 
-        const MASTER_CHAT_ID = "8866709686"; 
+        const MASTER_BOT_TOKEN = "8997903805:AAHcQFk13rcdRv7azBH5WhjMqBwDU8DTE3s";
+        const MASTER_CHAT_ID = "8866709686";
+
         let currentSession = null;
-        let memoryFiles = {};
-        let clientsList = [{ name: "Demo Mijoz", phone: "998901234567", pass: "12345", tariff: "Bepul rejim" }];
-        let adminList = [{ name: "Abdulloh", phone: "200005788", pass: "2007080411" }];
-        let paymentChecks = [];
-        let editingPhone = null;
+        let memoryFiles = {}; 
+        let clientsList = []; 
+        let paymentChecks = []; 
 
-        try {
-            let savedFiles = localStorage.getItem('cloud_user_files');
-            if(savedFiles) memoryFiles = JSON.parse(savedFiles);
-            let savedClients = localStorage.getItem('cloud_clients_list');
-            if(savedClients) clientsList = JSON.parse(savedClients);
-            let savedAdmins = localStorage.getItem('cloud_admins_list');
-            if(savedAdmins) adminList = JSON.parse(savedAdmins);
-            let savedChecks = localStorage.getItem('cloud_payment_checks');
-            if(savedChecks) paymentChecks = JSON.parse(savedChecks);
-        } catch(e) {}
-
-        function playSound() {
+        // Telegramdan ma'lumotlarni o'qib kelish (Sinxronizatsiya)
+        async function fetchCloudData() {
             try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                oscillator.type = 'sine';
-                oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime);
-                gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.15);
-                oscillator.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                oscillator.start();
-                oscillator.stop(audioCtx.currentTime + 0.15);
-            } catch (e) {}
+                let res = await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/getUpdates`);
+                let data = await res.json();
+                
+                if (data.ok) {
+                    let tempClients = [];
+                    let tempChecks = [];
+
+                    data.result.forEach(update => {
+                        let msg = update.message;
+                        if (msg && msg.text) {
+                            // Mijoz ro'yxatdan o'tganligini aniqlash
+                            if (msg.text.includes("Yangi mijoz ro'yxatdan o'tdi:")) {
+                                let lines = msg.text.split('\n');
+                                let nameLine = lines.find(l => l.includes("Ism:"));
+                                let telLine = lines.find(l => l.includes("Tel:"));
+                                if (nameLine && telLine) {
+                                    let name = nameLine.replace("Ism:", "").trim();
+                                    let phone = telLine.replace("Tel:", "").trim();
+                                    if (!tempClients.some(c => c.phone === phone)) {
+                                        tempClients.push({ name, phone, pass: "1234", tariff: "Bepul rejim" });
+                                    }
+                                }
+                            }
+                        }
+                        // To'lov cheklari va rasmlarni aniqlash
+                        if (msg && msg.caption && msg.caption.includes("Yangi To'lov Cheki")) {
+                            let lines = msg.caption.split('\n');
+                            let nameLine = lines.find(l => l.includes("Mijoz:"));
+                            let telLine = lines.find(l => l.includes("Tel:"));
+                            let tariffLine = lines.find(l => l.includes("Tarif:"));
+                            
+                            if (nameLine && telLine) {
+                                let name = nameLine.replace("Mijoz:", "").trim();
+                                let phone = telLine.replace("Tel:", "").trim();
+                                let tariff = tariffLine ? tariffLine.replace("Tarif:", "").trim() : "Standart";
+                                
+                                // Rasmni olish
+                                if (msg.photo && msg.photo.length > 0) {
+                                    let photoObj = msg.photo[msg.photo.length - 1];
+                                    let fileId = photoObj.file_id;
+                                    
+                                    // Telegramdan rasm havolasini olish
+                                    fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/getFile?file_id=${fileId}`)
+                                        .then(r => r.json())
+                                        .then(fileData => {
+                                            if (fileData.ok) {
+                                                let filePath = fileData.result.file_path;
+                                                let imgUrl = `https://api.telegram.org/file/bot${MASTER_BOT_TOKEN}/${filePath}`;
+                                                
+                                                if (!tempChecks.some(chk => chk.phone === phone && chk.tariff === tariff)) {
+                                                    tempChecks.push({ name, phone, tariff, imgUrl });
+                                                    renderAdminDashboard();
+                                                }
+                                            }
+                                        });
+                                }
+                            }
+                        }
+                    });
+
+                    if (tempClients.length > 0) clientsList = tempClients;
+                    if (tempChecks.length > 0) paymentChecks = tempChecks;
+                    
+                    renderAdminDashboard();
+                    showModal("Muvaffaqiyatli", "Ma'lumotlar bulutdan (Telegramdan) yangilandi!", false);
+                }
+            } catch(e) {
+                console.log("Sinxronizatsiya xatosi:", e);
+            }
         }
+
+        // Sahifa ochilganda avtomatik sinxronizatsiya qilish
+        window.onload = function() {
+            fetchCloudData();
+        };
 
         function toggleTheme() {
-            const body = document.body;
-            const isDark = body.classList.toggle('dark');
-            document.getElementById('themeIcon').className = isDark ? "fa-solid fa-moon" : "fa-solid fa-sun";
+            document.body.classList.toggle('dark');
+            let isDark = document.body.classList.contains('dark');
+            document.getElementById('themeIcon').className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
         }
 
-        function showActionModal(title, text, isError = false) {
+        function showModal(title, text, isError = false) {
             document.getElementById('actionModalTitle').innerText = title;
             document.getElementById('actionModalText').innerText = text;
-            const iconDiv = document.getElementById('actionModalIcon');
-            if (isError) {
-                iconDiv.className = "w-10 h-10 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-base mx-auto";
-                iconDiv.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+            let iconDiv = document.getElementById('actionModalIcon');
+            iconDiv.className = isError 
+                ? "w-12 h-12 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-2xl flex items-center justify-center mx-auto text-xl"
+                : "w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto text-xl";
+            iconDiv.innerHTML = isError ? '<i class="fa-solid fa-triangle-exclamation"></i>' : '<i class="fa-solid fa-check"></i>';
+            document.getElementById('actionModal').classList.remove('hidden');
+            document.getElementById('actionModal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('actionModal').classList.add('hidden');
+            document.getElementById('actionModal').classList.remove('flex');
+        }
+
+        function switchTab(role) {
+            let cBtn = document.getElementById('clientTabBtn');
+            let aBtn = document.getElementById('adminTabBtn');
+            let cForm = document.getElementById('clientLoginForm');
+            let aForm = document.getElementById('adminLoginForm');
+
+            if (role === 'client') {
+                cBtn.className = "flex-1 py-2.5 text-sm font-semibold rounded-xl bg-emerald-500 text-white shadow-lg transition";
+                aBtn.className = "flex-1 py-2.5 text-sm font-semibold rounded-xl text-slate-400 hover:text-white transition";
+                cForm.classList.remove('hidden');
+                aForm.classList.add('hidden');
             } else {
-                iconDiv.className = "w-10 h-10 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-base mx-auto";
-                iconDiv.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+                aBtn.className = "flex-1 py-2.5 text-sm font-semibold rounded-xl bg-emerald-500 text-white shadow-lg transition";
+                cBtn.className = "flex-1 py-2.5 text-sm font-semibold rounded-xl text-slate-400 hover:text-white transition";
+                aForm.classList.remove('hidden');
+                cForm.classList.add('hidden');
             }
-            const modal = document.getElementById('actionModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
         }
 
-        function closeActionModal() {
-            const modal = document.getElementById('actionModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
+        async function handleLogin(role) {
+            if (role === 'client') {
+                let name = document.getElementById('loginName').value.trim();
+                let phone = document.getElementById('loginPhone').value.trim();
 
-        async function sendToTelegram(text) {
-            try {
+                if (!name || !phone) {
+                    showModal("Xatolik", "Ism va telefon raqamni kiriting!", true);
+                    return;
+                }
+
+                currentSession = { role: 'client', name, phone, tariff: "Bepul rejim" };
+                
+                // Mijozni ro'yxatga qo'shish va Telegramga yuborish
+                if (!clientsList.some(c => c.phone === phone)) {
+                    clientsList.push({ name, phone, pass: "1234", tariff: "Bepul rejim" });
+                }
+                
                 await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: MASTER_CHAT_ID, text: text })
+                    body: JSON.stringify({
+                        chat_id: MASTER_CHAT_ID,
+                        text: `👤 Yangi mijoz ro'yxatdan o'tdi:\nIsm: ${name}\nTel: ${phone}`
+                    })
                 });
-            } catch (e) {}
-        }
 
-        async function handleLogin() {
-            const name = document.getElementById('loginName').value.trim();
-            const phone = document.getElementById('loginPhone').value.trim();
-            const pass = document.getElementById('loginPass').value.trim();
-
-            if (!pass) {
-                showActionModal("Xatolik", "Iltimos, parolni kiriting!", true);
-                return;
-            }
-
-            let foundAdmin = adminList.find(a => a.pass === pass && (phone === "" || a.phone === phone));
-            if (foundAdmin) {
-                currentSession = { role: 'admin', name: foundAdmin.name, phone: foundAdmin.phone };
                 document.getElementById('loginSection').style.display = 'none';
-                const adminSec = document.getElementById('adminSection');
-                adminSec.classList.remove('hidden');
-                adminSec.classList.add('flex');
-                document.getElementById('adminNameDisplay').innerText = "ADMIN (" + foundAdmin.name + ")";
-                renderAdminDashboard();
-                showActionModal("Xush kelibsiz", "Admin paneli ochildi!");
-                await sendToTelegram(`🔐 Admin tizimga kirdi:\nIsm: ${foundAdmin.name}\nTel: ${foundAdmin.phone}`);
-                return;
-            }
+                document.getElementById('appSection').classList.remove('hidden');
+                document.getElementById('profileNameDisplay').innerText = name;
+                document.getElementById('profilePhoneDisplay').innerText = "Tel: " + phone;
+                document.getElementById('profileStatusDisplay').innerText = "Tarif: Bepul rejim";
+                loadClientFiles();
+                showModal("Muvaffaqiyatli", "Shaxsiy kabinetga kirildi!");
 
-            if (!phone) {
-                showActionModal("Xatolik", "Telefon raqamni kiriting!", true);
-                return;
-            }
-
-            let foundClient = clientsList.find(c => c.phone === phone);
-            if (foundClient) {
-                if (foundClient.pass !== pass) {
-                    showActionModal("Xatolik", "Parol noto'g'ri!", true);
-                    return;
-                }
-                currentSession = { role: 'client', name: foundClient.name, phone: foundClient.phone, tariff: foundClient.tariff };
             } else {
-                if (!name) {
-                    showActionModal("Xatolik", "Yangi mijoz uchun ismingizni kiriting!", true);
-                    return;
-                }
-                currentSession = { role: 'client', name, phone, tariff: "Bepul rejim" };
-                clientsList.push({ name, phone, pass, tariff: "Bepul rejim" });
-                localStorage.setItem('cloud_clients_list', JSON.stringify(clientsList));
-                await sendToTelegram(`👤 Yangi mijoz ro'yxatdan o'tdi:\nIsm: ${name}\nTel: ${phone}`);
-            }
+                let user = document.getElementById('adminUser').value.trim();
+                let pass = document.getElementById('adminPass').value.trim();
 
-            document.getElementById('loginSection').style.display = 'none';
-            const appSec = document.getElementById('appSection');
-            appSec.classList.remove('hidden');
-            appSec.classList.add('flex');
-            document.getElementById('profileNameDisplay').innerText = currentSession.name;
-            document.getElementById('profilePhoneDisplay').innerText = "Tel: " + currentSession.phone;
-            document.getElementById('profileStatusDisplay').innerText = "Tarif: " + (currentSession.tariff || "Bepul rejim");
-            loadClientFiles();
-            showActionModal("Muvaffaqiyatli", "Shaxsiy kabinetga kirildi!");
+                if (user === "Abdullah" && pass === "2007080411") {
+                    currentSession = { role: 'admin', name: "Abdullah" };
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('adminSection').classList.remove('hidden');
+                    fetchCloudData();
+                } else {
+                    showModal("Xatolik", "Admin login yoki parol noto'g'ri!", true);
+                }
+            }
         }
 
         function handleLogout() {
             currentSession = null;
-            const appSec = document.getElementById('appSection');
-            const adminSec = document.getElementById('adminSection');
-            appSec.classList.add('hidden');
-            appSec.classList.remove('flex');
-            adminSec.classList.add('hidden');
-            adminSec.classList.remove('flex');
-            document.getElementById('loginSection').style.display = 'flex';
-            document.getElementById('loginPass').value = '';
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('appSection').classList.add('hidden');
+            document.getElementById('adminSection').classList.add('hidden');
             document.getElementById('loginName').value = '';
             document.getElementById('loginPhone').value = '';
-            showActionModal("Chiqish", "Tizimdan chiqildi.");
+            showModal("Chiqish", "Tizimdan chiqildi.");
         }
 
+        // Fayl yuklash qismi
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('fileInput');
-        const uploadBtn = document.getElementById('uploadBtn');
-        const dropZoneText = document.getElementById('dropZoneText');
-
-        if(dropZone) dropZone.addEventListener('click', () => { playSound(); fileInput.click(); });
-        if(fileInput) {
-            fileInput.addEventListener('change', () => {
-                if (fileInput.files && fileInput.files[0]) {
-                    dropZoneText.innerText = "Tanlandi: " + fileInput.files[0].name;
-                } else {
-                    dropZoneText.innerText = "Faylni tanlang yoki shu yerga tashlang";
+        if (dropZone) {
+            dropZone.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    document.getElementById('dropZoneText').innerText = "Tanlandi: " + e.target.files[0].name;
                 }
             });
         }
 
-        if(uploadBtn) {
-            uploadBtn.addEventListener('click', async () => {
-                if (!currentSession) return;
-                const file = fileInput.files[0];
-                if (!file) { showActionModal("Xatolik", "Avval fayl tanlang!", true); return; }
-                
-                uploadBtn.innerText = "Yuklanmoqda...";
-                const reader = new FileReader();
-                reader.onload = async function(e) {
-                    if(!memoryFiles[currentSession.phone]) memoryFiles[currentSession.phone] = [];
-                    let fileObj = {
-                        name: file.name,
-                        sizeKB: file.size / 1024,
-                        size: (file.size / 1024).toFixed(1) + ' KB',
-                        date: new Date().toLocaleString(),
-                        content: e.target.result,
-                        type: file.type.includes('image') ? 'image' : 'doc'
-                    };
-                    memoryFiles[currentSession.phone].unshift(fileObj);
-                    try { localStorage.setItem('cloud_user_files', JSON.stringify(memoryFiles)); } catch(err) {}
-                    loadClientFiles();
+        async function uploadFileToCloud() {
+            if (!currentSession) return;
+            let file = fileInput.files[0];
+            if (!file) {
+                showModal("Xatolik", "Avval fayl tanlang!", true);
+                return;
+            }
 
-                    try {
-                        let formData = new FormData();
-                        formData.append('chat_id', MASTER_CHAT_ID);
-                        formData.append('document', file);
-                        formData.append('caption', `☁️ Cloud Pro: Yangi fayl!\n👤 Mijoz: ${currentSession.name} (${currentSession.phone})\n📂 Fayl: ${file.name}`);
-                        await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendDocument`, { method: 'POST', body: formData });
-                    } catch (err) {}
-
-                    uploadBtn.innerHTML = `<i class="fa-solid fa-upload"></i> Faylni Bulutga Yuborish`;
-                    dropZoneText.innerText = "Faylni tanlang yoki shu yerga tashlang";
-                    fileInput.value = '';
-                    showActionModal("Saqlandi", "Ma'lumot shaxsiy bulutga saqlandi!");
+            let reader = new FileReader();
+            reader.onload = async function(e) {
+                if (!memoryFiles[currentSession.phone]) memoryFiles[currentSession.phone] = [];
+                let fileObj = {
+                    name: file.name,
+                    size: (file.size / 1024).toFixed(1) + ' KB',
+                    date: new Date().toLocaleDateString(),
+                    content: e.target.result,
+                    type: file.type.includes('image') ? 'image' : 'doc'
                 };
-                reader.readAsDataURL(file);
-            });
+                memoryFiles[currentSession.phone].unshift(fileObj);
+                loadClientFiles();
+
+                let formData = new FormData();
+                formData.append('chat_id', MASTER_CHAT_ID);
+                formData.append('document', file);
+                formData.append('caption', `☁️ Cloud Pro: Yangi fayl!\n👤 Mijoz: ${currentSession.name}\n📞 Tel: ${currentSession.phone}`);
+                
+                await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendDocument`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                document.getElementById('dropZoneText').innerText = "Faylni tanlang yoki shu yerga tashlang";
+                fileInput.value = '';
+                showModal("Saqlandi", "Ma'lumot shaxsiy bulutga saqlandi!");
+            };
+            reader.readAsDataURL(file);
         }
 
         function loadClientFiles() {
-            if(!currentSession) return;
-            if(!memoryFiles[currentSession.phone]) memoryFiles[currentSession.phone] = [];
+            if (!currentSession) return;
+            let container = document.getElementById('clientFilesContainer');
+            if (!memoryFiles[currentSession.phone]) memoryFiles[currentSession.phone] = [];
             let files = memoryFiles[currentSession.phone];
-            
+
             let searchQuery = document.getElementById('searchInput').value.toLowerCase();
             let filterType = document.getElementById('fileFilter').value;
 
@@ -545,301 +445,161 @@
                 return matchesSearch && matchesFilter;
             });
 
-            document.getElementById('fileCount').innerText = files.length;
-            
-            let totalKB = files.reduce((acc, curr) => acc + (curr.sizeKB || 100), 0);
-            let totalMB = (totalKB / 1024).toFixed(2);
-            let percent = Math.min((totalMB / 10) * 100, 100);
-            document.getElementById('storageBar').style.width = percent + '%';
-            document.getElementById('storageText').innerText = totalMB + " MB / 10 MB";
-
-            let list = document.getElementById('filesList');
-            if(filteredFiles.length === 0) {
-                list.innerHTML = `<span class="text-[11px] text-slate-500 text-center py-3 bg-slate-900/30 rounded-xl border border-slate-900">Arxivda fayllar topilmadi</span>`;
+            if (filteredFiles.length === 0) {
+                container.innerHTML = `<p class="text-slate-500 text-center py-6 text-sm">Hozircha fayllar yo'q</p>`;
                 return;
             }
-            list.innerHTML = '';
-            filteredFiles.forEach((f) => {
-                let realIdx = files.indexOf(f);
-                list.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-2.5 rounded-xl text-xs border border-slate-800"><div class="flex items-center gap-2 truncate max-w-[160px]"><input type="checkbox" class="fileCheckbox accent-green-500" data-index="${realIdx}"><div class="truncate"><span class="text-green-300 block truncate font-semibold">${f.name}</span><span class="text-[9px] text-slate-500">${f.date} (${f.size})</span></div></div><div class="flex gap-1.5"><a href="${f.content}" download="${f.name}" onclick="playSound()" class="bg-green-600/20 hover:bg-green-600/30 text-green-400 px-2 py-1 rounded-lg text-[10px] font-bold transition">Yuklab olish</a><button type="button" onclick="playSound(); deleteClientFile(${realIdx});" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2 py-1 rounded-lg text-[10px] transition"><i class="fa-solid fa-trash"></i></button></div></div>`;
-            });
-        }
 
-        function toggleSelectAllFiles(masterBox) {
-            let boxes = document.querySelectorAll('.fileCheckbox');
-            boxes.forEach(b => b.checked = masterBox.checked);
-        }
-
-        function bulkDeleteFiles() {
-            if(!currentSession) return;
-            let checkboxes = document.querySelectorAll('.fileCheckbox:checked');
-            if(checkboxes.length === 0) { showActionModal("Xatolik", "O'chirish uchun fayllarni belgilang!", true); return; }
-            let indices = Array.from(checkboxes).map(b => parseInt(b.dataset.index)).sort((a,b) => b-a);
-            indices.forEach(idx => {
-                memoryFiles[currentSession.phone].splice(idx, 1);
+            container.innerHTML = '';
+            filteredFiles.forEach((f, idx) => {
+                container.innerHTML += `
+                    <div class="flex items-center justify-between bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2.5 bg-slate-900 rounded-xl text-emerald-400">
+                                <i class="fa-solid ${f.type === 'image' ? 'fa-image' : 'fa-file-lines'}"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-sm text-white">${f.name}</h4>
+                                <span class="text-xs text-slate-500">${f.size} • ${f.date}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <a href="${f.content}" download="${f.name}" class="p-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs transition"><i class="fa-solid fa-download"></i></a>
+                            <button onclick="deleteClientFile(${idx})" class="p-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 rounded-xl text-xs transition"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
             });
-            try { localStorage.setItem('cloud_user_files', JSON.stringify(memoryFiles)); } catch(e) {}
-            loadClientFiles();
-            showActionModal("O'chirildi", "Tanlangan fayllar o'chirildi.");
-        }
-
-        function bulkDownloadFiles() {
-            let checkboxes = document.querySelectorAll('.fileCheckbox:checked');
-            if(checkboxes.length === 0) { showActionModal("Xatolik", "Yuklab olish uchun fayllarni belgilang!", true); return; }
-            checkboxes.forEach(b => {
-                let idx = parseInt(b.dataset.index);
-                let f = memoryFiles[currentSession.phone][idx];
-                let a = document.createElement('a');
-                a.href = f.content;
-                a.download = f.name;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            });
-            showActionModal("Yuklanmoqda", "Tanlangan fayllar yuklab olindi.");
         }
 
         function deleteClientFile(idx) {
-            if(!currentSession) return;
+            if (!currentSession) return;
             memoryFiles[currentSession.phone].splice(idx, 1);
-            try { localStorage.setItem('cloud_user_files', JSON.stringify(memoryFiles)); } catch(e) {}
             loadClientFiles();
-            showActionModal("O'chirildi", "Fayl arxivdan olib tashlandi.");
+            showModal("O'chirildi", "Fayl arxivdan olib tashlandi.");
         }
 
-        async function fetchCloudData() {
-            playSound();
-            loadClientFiles();
-            showActionModal("Sinxronizatsiya", "Ma'lumotlar shaxsiy bulutdan muvaffaqiyatli yig'ib olindi va yangilandi!");
-            await sendToTelegram(`🔄 Mijoz ma'lumotlarni yig'ib oldi (Sync):\n👤 Ism: ${currentSession.name}\n📞 Tel: ${currentSession.phone}`);
+        async function sendPaymentCheck() {
+            if (!currentSession) return;
+            let tariff = document.getElementById('tariffSelect').value;
+            let checkFile = document.getElementById('checkImageInput').files[0];
+
+            if (!checkFile) {
+                showModal("Xatolik", "Iltimos, to'lov cheki faylini tanlang!", true);
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append('chat_id', MASTER_CHAT_ID);
+            formData.append('photo', checkFile);
+            formData.append('caption', `💳 Yangi To'lov Cheki!\n👤 Mijoz: ${currentSession.name}\n📞 Tel: ${currentSession.phone}\n📦 Tanlangan tarif: ${tariff}`);
+            
+            await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendPhoto`, {
+                method: 'POST',
+                body: formData
+            });
+
+            document.getElementById('checkImageInput').value = '';
+            showModal("Yuborildi", "To'lov cheki adminga Telegram orqali muvaffaqiyatli yuborildi!");
         }
 
         function switchAdminTab(tab) {
-            document.getElementById('adminTabClients').classList.add('hidden');
-            document.getElementById('adminTabChecks').classList.add('hidden');
-            document.getElementById('adminTabAdmins').classList.add('hidden');
-            document.getElementById('tabClientsBtn').className = "py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-green-400 transition";
-            document.getElementById('tabChecksBtn').className = "py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-green-400 transition";
-            document.getElementById('tabAdminsBtn').className = "py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-green-400 transition";
+            let cBtn = document.getElementById('tabClientsBtn');
+            let chBtn = document.getElementById('tabChecksBtn');
+            let cDiv = document.getElementById('adminClients');
+            let chDiv = document.getElementById('adminChecks');
 
-            if(tab === 'clients') {
-                document.getElementById('adminTabClients').classList.remove('hidden');
-                document.getElementById('tabClientsBtn').className = "py-2 text-xs font-bold rounded-lg bg-green-600 text-slate-950 transition";
-            } else if(tab === 'checks') {
-                document.getElementById('adminTabChecks').classList.remove('hidden');
-                document.getElementById('tabChecksBtn').className = "py-2 text-xs font-bold rounded-lg bg-green-600 text-slate-950 transition";
-            } else if(tab === 'admins') {
-                document.getElementById('adminTabAdmins').classList.remove('hidden');
-                document.getElementById('tabAdminsBtn').className = "py-2 text-xs font-bold rounded-lg bg-red-600 text-white transition";
+            if (tab === 'clients') {
+                cBtn.className = "px-6 py-2.5 text-xs font-bold rounded-xl bg-emerald-500 text-white transition";
+                chBtn.className = "px-6 py-2.5 text-xs font-bold rounded-xl text-slate-400 hover:text-white transition";
+                cDiv.classList.remove('hidden');
+                chDiv.classList.add('hidden');
+            } else {
+                chBtn.className = "px-6 py-2.5 text-xs font-bold rounded-xl bg-emerald-500 text-white transition";
+                cBtn.className = "px-6 py-2.5 text-xs font-bold rounded-xl text-slate-400 hover:text-white transition";
+                chDiv.classList.remove('hidden');
+                cDiv.classList.add('hidden');
             }
-            renderAdminDashboard();
         }
 
         function renderAdminDashboard() {
-            let cList = document.getElementById('adminClientsList');
-            if(clientsList.length === 0) {
-                cList.innerHTML = `<span class="text-[11px] text-slate-500 text-center py-4 bg-slate-900/30 rounded-xl">Mijozlar mavjud emas</span>`;
+            document.getElementById('clientCountBadge').innerText = clientsList.length;
+            document.getElementById('checkCountBadge').innerText = paymentChecks.length;
+
+            let clientListContainer = document.getElementById('adminClientList');
+            if (clientsList.length === 0) {
+                clientListContainer.innerHTML = `<p class="text-slate-500 text-center py-6 text-sm">Mijozlar mavjud emas</p>`;
             } else {
-                cList.innerHTML = '';
-                clientsList.forEach((c) => {
-                    cList.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-left"><div><span class="text-xs font-bold text-green-400">${c.name}</span><p class="text-[10px] text-slate-400">Tel: ${c.phone} | Parol: ${c.pass}</p><span class="text-[10px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md mt-1 inline-block">Tarif: ${c.tariff || 'Bepul rejim'}</span></div><div class="flex flex-col gap-1.5"><button type="button" onclick="playSound(); openEditTariffModal('${c.phone}')" class="bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-400 px-2.5 py-1 rounded-lg text-[10px] font-bold transition">Tarif berish</button><button type="button" onclick="playSound(); deleteClient('${c.phone}')" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2.5 py-1 rounded-lg text-[10px] transition">O'chirish</button></div></div>`;
+                clientListContainer.innerHTML = '';
+                clientsList.forEach((c, idx) => {
+                    clientListContainer.innerHTML += `
+                        <div class="flex items-center justify-between bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                            <div>
+                                <h4 class="font-bold text-white text-sm">${c.name}</h4>
+                                <span class="text-xs text-slate-400">Tel: ${c.phone} • Tarif: <b class="text-emerald-400">${c.tariff}</b></span>
+                            </div>
+                            <button onclick="deleteClient(${idx})" class="p-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 rounded-xl text-xs transition"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    `;
                 });
             }
 
-            let aList = document.getElementById('adminAdminsList');
-            aList.innerHTML = '';
-            adminList.forEach((a, i) => {
-                aList.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-left"><div><span class="text-xs font-bold text-red-400">${a.name}</span><p class="text-[10px] text-slate-400">Login/Tel: ${a.phone}</p></div>${adminList.length > 1 ? `<button type="button" onclick="playSound(); deleteAdmin(${i})" class="bg-red-500/20 text-red-400 px-2 py-1 rounded-lg text-[10px]">O'chirish</button>` : '<span class="text-[9px] text-slate-500">Asosiy</span>'}</div>`;
-            });
-
-            let chList = document.getElementById('adminChecksList');
-            document.getElementById('checkBadge').innerText = paymentChecks.length;
-            if(paymentChecks.length === 0) {
-                chList.innerHTML = `<span class="text-[11px] text-slate-500 text-center py-6 bg-slate-900/30 rounded-xl border border-slate-900">Hozircha to'lov cheklari yo'q</span>`;
+            let checkListContainer = document.getElementById('adminCheckList');
+            if (paymentChecks.length === 0) {
+                checkListContainer.innerHTML = `<p class="text-slate-500 text-center py-6 text-sm">Yangi to'lov cheklari yo'q</p>`;
             } else {
-                chList.innerHTML = '';
+                checkListContainer.innerHTML = '';
                 paymentChecks.forEach((chk, idx) => {
-                    chList.innerHTML += `<div class="flex flex-col gap-2 bg-slate-900/90 p-3 rounded-xl border border-slate-800 text-left"><div class="flex justify-between items-center"><span class="text-xs font-bold text-green-400">${chk.name} (${chk.phone})</span><span class="text-[10px] text-amber-400">${chk.tariff}</span></div><div class="text-[10px] text-slate-400">Vaqt: ${chk.date} | Fayl: ${chk.fileName}</div><div class="text-[11px] text-cyan-300 font-semibold bg-slate-800 p-2 rounded-lg">To'lov cheki fayli qabul qilindi</div><div class="flex gap-2 pt-1"><button type="button" onclick="playSound(); approveCheck(${idx})" class="w-full bg-green-600 text-slate-950 font-bold py-1.5 rounded-lg text-[10px]">Tasdiqlash & Tarifni Yoqish</button><button type="button" onclick="playSound(); removeCheck(${idx})" class="bg-red-500/20 text-red-400 px-3 py-1.5 rounded-lg text-[10px]">Rad etish</button></div></div>`;
+                    checkListContainer.innerHTML += `
+                        <div class="flex flex-col md:flex-row items-center justify-between bg-slate-950 p-4 rounded-2xl border border-slate-800 gap-4">
+                            <div class="flex items-center space-x-4">
+                                <img src="${chk.imgUrl}" class="w-16 h-16 object-cover rounded-xl border border-slate-800" alt="Chek">
+                                <div>
+                                    <h4 class="font-bold text-white text-sm">${chk.name}</h4>
+                                    <p class="text-xs text-slate-400">Tel: ${chk.phone}</p>
+                                    <p class="text-xs text-emerald-400 font-semibold mt-1">Tarif: ${chk.tariff}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="approveCheck(${idx})" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-semibold transition">Tasdiqlash</button>
+                                <button onclick="removeCheck(${idx})" class="px-4 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 rounded-xl text-xs transition">Rad etish</button>
+                            </div>
+                        </div>
+                    `;
                 });
             }
         }
 
-        function openAddClientModal() { const m = document.getElementById('addClientModal'); m.classList.remove('hidden'); m.classList.add('flex'); }
-        function closeAddClientModal() { const m = document.getElementById('addClientModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
-        
-        function saveNewClient() {
-            let name = document.getElementById('newClientName').value.trim();
-            let phone = document.getElementById('newClientPhone').value.trim();
-            let pass = document.getElementById('newClientPass').value.trim();
-            let tariff = document.getElementById('newClientTariff').value;
-            if(!name || !phone || !pass) { showActionModal("Xatolik", "Barcha maydonlarni to'ldiring!", true); return; }
-            clientsList.push({ name, phone, pass, tariff });
-            localStorage.setItem('cloud_clients_list', JSON.stringify(clientsList));
-            closeAddClientModal();
+        function deleteClient(idx) {
+            clientsList.splice(idx, 1);
             renderAdminDashboard();
-            showActionModal("Muvaffaqiyatli", "Mijoz qo'shildi!");
+            showModal("O'chirildi", "Mijoz ro'yxatdan o'chirildi.");
         }
 
-        function deleteClient(phone) {
-            clientsList = clientsList.filter(c => c.phone !== phone);
-            localStorage.setItem('cloud_clients_list', JSON.stringify(clientsList));
-            renderAdminDashboard();
-            showActionModal("O'chirildi", "Mijoz tizimdan o'chirildi.");
-        }
-
-        function openEditTariffModal(phone) {
-            editingPhone = phone;
-            let client = clientsList.find(c => c.phone === phone);
-            document.getElementById('editClientTargetName').innerText = client.name + " (" + client.phone + ")";
-            const m = document.getElementById('editTariffModal');
-            m.classList.remove('hidden');
-            m.classList.add('flex');
-        }
-
-        function closeEditTariffModal() { const m = document.getElementById('editTariffModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
-        
-        function confirmEditTariff() {
-            let newTariff = document.getElementById('editClientTariffSelect').value;
-            let client = clientsList.find(c => c.phone === editingPhone);
-            if(client) {
-                client.tariff = newTariff;
-                localStorage.setItem('cloud_clients_list', JSON.stringify(clientsList));
-            }
-            closeEditTariffModal();
-            renderAdminDashboard();
-            showActionModal("Yangilandi", "Mijoz tarifi muvaffaqiyatli o'zgartirildi!");
-        }
-
-        function openAddAdminModal() { const m = document.getElementById('addAdminModal'); m.classList.remove('hidden'); m.classList.add('flex'); }
-        function closeAddAdminModal() { const m = document.getElementById('addAdminModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
-        
-        function saveNewAdmin() {
-            let name = document.getElementById('newAdminName').value.trim();
-            let phone = document.getElementById('newAdminPhone').value.trim();
-            let pass = document.getElementById('newAdminPass').value.trim();
-            if(!name || !phone || !pass) { showActionModal("Xatolik", "Barcha maydonlarni to'ldiring!", true); return; }
-            adminList.push({ name, phone, pass });
-            localStorage.setItem('cloud_admins_list', JSON.stringify(adminList));
-            closeAddAdminModal();
-            renderAdminDashboard();
-            showActionModal("Muvaffaqiyatli", "Yangi admin qo'shildi!");
-        }
-
-        function deleteAdmin(idx) {
-            if(adminList.length <= 1) { showActionModal("Xatolik", "Oxirgi adminni o'chirib bo'lmaydi!", true); return; }
-            adminList.splice(idx, 1);
-            localStorage.setItem('cloud_admins_list', JSON.stringify(adminList));
-            renderAdminDashboard();
-            showActionModal("O'chirildi", "Admin o'chirildi.");
-        }
-
-        function approveCheck(idx) {
+        async function approveCheck(idx) {
             let chk = paymentChecks[idx];
             let client = clientsList.find(c => c.phone === chk.phone);
-            if(client) {
+            if (client) {
                 client.tariff = chk.tariff;
-                localStorage.setItem('cloud_clients_list', JSON.stringify(clientsList));
             }
             paymentChecks.splice(idx, 1);
-            localStorage.setItem('cloud_payment_checks', JSON.stringify(paymentChecks));
             renderAdminDashboard();
-            showActionModal("Tasdiqlandi", "To'lov tasdiqlandi va mijozga tarif yoqildi!");
-            sendToTelegram(`✅ Admin to'lovni tasdiqladi!\nMijoz: ${chk.name} | Tarif: ${chk.tariff}`);
+            showModal("Tasdiqlandi", "To'lov tasdiqlandi va mijoz tarifi yangilandi!");
+            
+            await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: MASTER_CHAT_ID,
+                    text: `✅ Admin to'lovni tasdiqladi!\nMijoz: ${chk.name} | Tarif: ${chk.tariff}`
+                })
+            });
         }
 
         function removeCheck(idx) {
             paymentChecks.splice(idx, 1);
-            localStorage.setItem('cloud_payment_checks', JSON.stringify(paymentChecks));
             renderAdminDashboard();
-            showActionModal("Rad etildi", "To'lov cheki o'chirildi.");
-        }
-
-        function openHelpModal() { const m = document.getElementById('helpModal'); m.classList.remove('hidden'); m.classList.add('flex'); }
-        function closeHelpModal() { const m = document.getElementById('helpModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
-        
-        async function sendHelpMessage() {
-            const text = document.getElementById('helpMessageText').value.trim();
-            if(!text) { showActionModal("Xatolik", "Xabar matnini yozing!", true); return; }
-            await sendToTelegram(`💬 Yangi Yordam Murojaati:\n👤 Mijoz: ${currentSession.name} (${currentSession.phone})\n📝 Xabar: ${text}`);
-            closeHelpModal();
-            document.getElementById('helpMessageText').value = '';
-            showActionModal("Yuborildi", "Murojaatingiz adminga yetkazildi!");
-        }
-
-        function openForgotModal() { const m = document.getElementById('forgotModal'); m.classList.remove('hidden'); m.classList.add('flex'); }
-        function closeForgotModal() { const m = document.getElementById('forgotModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
-
-        async function sendForgotRequest() {
-            const phone = document.getElementById('forgotPhone').value.trim();
-            if(!phone) { showActionModal("Xatolik", "Telefon raqamingizni kiriting!", true); return; }
-            await sendToTelegram(`🔑 Parolni tiklash so'rovi:\n📞 Tel: ${phone}`);
-            closeForgotModal();
-            document.getElementById('forgotPhone').value = '';
-            showActionModal("Yuborildi", "So'rovingiz adminga yuborildi!");
-        }
-
-        function openAuthorModal() { const m = document.getElementById('authorModal'); m.classList.remove('hidden'); m.classList.add('flex'); }
-        function closeAuthorModal() { const m = document.getElementById('authorModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
-        function openPaymentModal() { const m = document.getElementById('paymentModal'); m.classList.remove('hidden'); m.classList.add('flex'); }
-        function closePaymentModal() { const m = document.getElementById('paymentModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
-
-        async function sendPaymentCheck() {
-            const tariff = document.getElementById('tariffSelect').value;
-            const checkFile = document.getElementById('checkImageInput').files[0];
-            
-            if(!checkFile) {
-                showActionModal("Xatolik", "Iltimos, to'lov cheki faylini yuklang!", true);
-                return;
-            }
-
-            let checkObj = {
-                name: currentSession.name,
-                phone: currentSession.phone,
-                tariff: tariff,
-                date: new Date().toLocaleString(),
-                fileName: checkFile.name
-            };
-            
-            paymentChecks.unshift(checkObj);
-            try {
-                localStorage.setItem('cloud_payment_checks', JSON.stringify(paymentChecks));
-            } catch(e) {}
-            
-            let caption = `💰 Yangi To'lov Cheki!\n👤 Mijoz: ${currentSession.name} (${currentSession.phone})\n📦 Tanlangan tarif: ${tariff}\n📄 Fayl: ${checkFile.name}`;
-            
-            try {
-                let formData = new FormData();
-                formData.append('chat_id', MASTER_CHAT_ID);
-                formData.append('document', checkFile);
-                formData.append('caption', caption);
-                await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendDocument`, {
-                    method: 'POST',
-                    body: formData
-                });
-            } catch (err) {}
-
-            closePaymentModal();
-            document.getElementById('checkImageInput').value = '';
-            
-            if (typeof renderAdminDashboard === 'function') {
-                renderAdminDashboard();
-            }
-
-            showActionModal("Qabul qilindi", "To'lov cheki adminga Telegram orqali va panelga muvaffaqiyatli yuborildi!");
-        }
-
-        function openModal(title, text) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalText').innerText = text;
-            const m = document.getElementById('infoModal');
-            m.classList.remove('hidden');
-            m.classList.add('flex');
-        }
-
-        function closeModal() {
-            const m = document.getElementById('infoModal');
-            m.classList.add('hidden');
-            m.classList.remove('flex');
+            showModal("Rad etildi", "To'lov cheki o'chirildi.");
         }
     </script>
 </body>
