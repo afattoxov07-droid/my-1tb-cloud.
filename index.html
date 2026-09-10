@@ -761,14 +761,16 @@ async function sendPaymentCheck() {
             });
         }
 
-       closePaymentModal();
+        closePaymentModal();
         document.getElementById('checkImageInput').value = '';
         
         if (typeof renderAdminDashboard === 'function') {
             renderAdminDashboard();
         }
 
-        showActionModal("Qabul qilindi", "To'lov cheki adminga yuborildi!");
+        showActionModal("Qabul qilindi", "To'lov cheki adminga yuborildi va panelga tushdi!");
+    };
+    reader.readAsDataURL(checkFile);
 }
 
 function openModal(title, text) {
