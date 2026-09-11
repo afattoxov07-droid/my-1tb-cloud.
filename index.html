@@ -541,8 +541,7 @@
             let totalMB = (totalKB / 1024).toFixed(2);
             let percent = 0;
             document.getElementById('storageBar').style.width = percent + '%';
-           document.getElementById('storageText').innerText = totalMB + " MB / 10.000.000.000 TB";
-
+        document.getElementById('storageText').innerText = totalMB + " MB / 10.000.000.000 TB";
             let list = document.getElementById('filesList');
             if(filteredFiles.length === 0) {
                 list.innerHTML = `<span class="text-[11px] text-slate-500 text-center py-3 bg-slate-900/30 rounded-xl border border-slate-900">Arxivda fayllar topilmadi</span>`;
