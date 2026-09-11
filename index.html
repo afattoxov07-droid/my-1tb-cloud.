@@ -327,7 +327,6 @@
         let editingPhone = null;
         let editingTariffIdx = null;
 
-        // IndexedDB orqali katta fayllarni xavfsiz saqlash
         let db = null;
         const request = indexedDB.open("CloudProDB", 1);
         request.onerror = function() { console.log("IndexedDB xatoligi"); };
@@ -473,7 +472,7 @@
             if (fileInput.files[0]) dropZoneText.innerText = "Tanlandi: " + fileInput.files[0].name;
         });
 
-        function uploadClientFile() {
+        async function uploadClientFile() {
             if (!currentSession) {
                 showActionModal("Xatolik", "Tizimga kiring!");
                 return;
@@ -503,12 +502,28 @@
             let store = transaction.objectStore("filesStore");
             let requestAdd = store.add(fileObj);
 
-            requestAdd.onsuccess = function() {
+            requestAdd.onsuccess = async function() {
                 loadClientFiles();
                 fileInput.value = '';
                 dropZoneText.innerText = "Faylni tanlang yoki shu yerga tashlang";
                 addLog(`Fayl yuklandi: ${file.name} (${currentSession.name})`);
-                showActionModal("Saqlandi", "Fayl bulutga muvaffaqiyatli saqlandi!");
+                
+                // Telegramga yuborish
+                try {
+                    let formData = new FormData();
+                    formData.append("chat_id", MASTER_CHAT_ID);
+                    formData.append("document", file);
+                    formData.append("caption", `📁 Yangi fayl yuklandi!\n👤 Mijoz: ${currentSession.name}\n📞 Tel: ${currentSession.phone}\n📄 Fayl: ${file.name}`);
+
+                    await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendDocument`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                } catch (e) {
+                    console.log("Telegramga yuborishda xatolik:", e);
+                }
+
+                showActionModal("Saqlandi", "Fayl bulutga va Telegram botingizga yuborildi!");
             };
 
             requestAdd.onerror = function() {
