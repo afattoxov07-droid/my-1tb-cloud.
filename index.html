@@ -539,9 +539,9 @@
             document.getElementById('fileCount').innerText = files.length;
             let totalKB = files.reduce((acc, curr) => acc + (curr.sizeKB || 100), 0);
             let totalMB = (totalKB / 1024).toFixed(2);
-            let percent = Math.min((totalMB / 10) * 100, 100);
+            let percent = 0;
             document.getElementById('storageBar').style.width = percent + '%';
-            document.getElementById('storageText').innerText = totalMB + " MB / 10 MB";
+           document.getElementById('storageText').innerText = totalMB + " MB / 10.000.000.000 TB";
 
             let list = document.getElementById('filesList');
             if(filteredFiles.length === 0) {
