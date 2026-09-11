@@ -56,7 +56,7 @@
                 <div>
                     <h2 id="profileNameDisplay" class="text-xs font-bold tracking-wide text-green-400">Ism</h2>
                     <p id="profilePhoneDisplay" class="text-[10px] text-slate-400">Tel: ...</p>
-                    <p id="profileStatusDisplay" class="text-[10px] text-amber-400 mt-0.5">Tarif: Bepul rejim</p>
+                    <p id="profileStatusDisplay" class="text-[10px] text-amber-400 mt-0.5">Tarif: ...</p>
                 </div>
             </div>
             <button type="button" onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 hover:text-red-300 bg-red-500/10 p-2 rounded-xl transition"><i class="fa-solid fa-right-from-bracket"></i></button>
@@ -66,7 +66,7 @@
         <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 flex flex-col gap-1.5">
             <div class="flex justify-between text-[10px] text-slate-300">
                 <span>Xotira band qilinishi:</span>
-                <span id="storageText">0 MB / 1 GB</span>
+                <span id="storageText">0 MB / 10 mlrd TB</span>
             </div>
             <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
                 <div id="storageBar" class="bg-green-500 h-full transition-all duration-500" style="width: 0%"></div>
@@ -135,19 +135,20 @@
             </div>
             <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800">
                 <span class="text-[10px] text-slate-400 block">Tizim Xotirasi</span>
-                <span class="text-sm font-bold text-cyan-400">10 TB</span>
+                <span class="text-sm font-bold text-cyan-400">10 mlrd TB</span>
             </div>
         </div>
 
         <!-- ADMIN NAVIGATION TABS -->
-        <div class="grid grid-cols-4 gap-1 bg-slate-900/60 p-1.5 rounded-xl border border-slate-800">
-            <button type="button" onclick="playSound(); switchAdminTab('clients')" id="tabClientsBtn" class="py-2 text-[11px] font-bold rounded-lg bg-green-600 text-slate-950 transition">Mijozlar</button>
-            <button type="button" onclick="playSound(); switchAdminTab('checks')" id="tabChecksBtn" class="py-2 text-[11px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Cheklar (<span id="checkBadge">0</span>)</button>
-            <button type="button" onclick="playSound(); switchAdminTab('admins')" id="tabAdminsBtn" class="py-2 text-[11px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Adminlar</button>
-            <button type="button" onclick="playSound(); switchAdminTab('logs')" id="tabLogsBtn" class="py-2 text-[11px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Loglar</button>
+        <div class="grid grid-cols-5 gap-1 bg-slate-900/60 p-1.5 rounded-xl border border-slate-800">
+            <button type="button" onclick="playSound(); switchAdminTab('clients')" id="tabClientsBtn" class="py-2 text-[10px] font-bold rounded-lg bg-green-600 text-slate-950 transition">Mijozlar</button>
+            <button type="button" onclick="playSound(); switchAdminTab('checks')" id="tabChecksBtn" class="py-2 text-[10px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Cheklar (<span id="checkBadge">0</span>)</button>
+            <button type="button" onclick="playSound(); switchAdminTab('tariffs')" id="tabTariffsBtn" class="py-2 text-[10px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Tariflar</button>
+            <button type="button" onclick="playSound(); switchAdminTab('admins')" id="tabAdminsBtn" class="py-2 text-[10px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Adminlar</button>
+            <button type="button" onclick="playSound(); switchAdminTab('logs')" id="tabLogsBtn" class="py-2 text-[10px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Loglar</button>
         </div>
 
-        <!-- TAB 1: MIJOZLAR (Filter, Search, Status & Quota) -->
+        <!-- TAB 1: MIJOZLAR -->
         <div id="adminTabClients" class="flex flex-col gap-3">
             <div class="flex flex-wrap justify-between items-center gap-2 bg-slate-900/80 p-3 rounded-xl border border-slate-800">
                 <input type="text" id="adminSearchClient" oninput="renderAdminDashboard()" placeholder="Mijozni qidirish..." class="input-box-dark px-3 py-1.5 rounded-lg text-[11px] flex-1">
@@ -163,7 +164,16 @@
             <div id="adminChecksList" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1"></div>
         </div>
 
-        <!-- TAB 3: ADMINLAR -->
+        <!-- TAB 3: TARIFLAR -->
+        <div id="adminTabTariffs" class="hidden flex flex-col gap-3">
+            <div class="flex justify-between items-center bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+                <span class="text-xs font-bold text-slate-300">Tariflar va Kartalar ro'yxati</span>
+                <button type="button" onclick="playSound(); openAddTariffModal();" class="bg-green-600 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-bold transition"><i class="fa-solid fa-plus"></i> Tarif qo'shish</button>
+            </div>
+            <div id="adminTariffsList" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1"></div>
+        </div>
+
+        <!-- TAB 4: ADMINLAR -->
         <div id="adminTabAdmins" class="hidden flex flex-col gap-3">
             <div class="flex justify-between items-center bg-slate-900/80 p-3 rounded-xl border border-slate-800">
                 <span class="text-xs font-bold text-slate-300">Tizim adminlari ro'yxati</span>
@@ -172,7 +182,7 @@
             <div id="adminAdminsList" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1"></div>
         </div>
 
-        <!-- TAB 4: LOGLAR (Tizim faoliyat tarixi) -->
+        <!-- TAB 5: LOGLAR -->
         <div id="adminTabLogs" class="hidden flex flex-col gap-3">
             <div class="flex justify-between items-center bg-slate-900/80 p-3 rounded-xl border border-slate-800">
                 <span class="text-xs font-bold text-slate-300">So'nggi tizim harakatlari (Logs)</span>
@@ -186,14 +196,21 @@
     <div id="paymentModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
             <h3 class="text-sm font-bold text-green-400">Xotira Sotib Olish</h3>
-            <select id="tariffSelect" class="input-box-dark p-2.5 rounded-xl text-xs">
-                <option value="Test Tarif (0 so'm)">Test Tarif - 0 so'm</option>
-                <option value="1 Oylik Tarif (65,000 so'm)">1 Oylik Tarif - 65,000 so'm</option>
-                <option value="1 Yillik Tarif (750,000 so'm)">1 Yillik Tarif - 750,000 so'm</option>
-            </select>
+            <select id="tariffSelect" class="input-box-dark p-2.5 rounded-xl text-xs"></select>
             <input type="file" id="checkImageInput" class="input-box-dark p-2 rounded-xl text-xs">
             <button type="button" onclick="playSound(); sendPaymentCheck();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Chekni Yuborish</button>
             <button type="button" onclick="playSound(); closePaymentModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
+        </div>
+    </div>
+
+    <!-- ADD/EDIT TARIFF MODAL -->
+    <div id="addTariffModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
+            <h3 class="text-sm font-bold text-green-400" id="tariffModalTitle">Yangi Tarif Qo'shish</h3>
+            <input type="text" id="newTariffName" placeholder="Tarif nomi (masalan: Test rejim)" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
+            <input type="text" id="newTariffPrice" placeholder="Narxi va muddati (masalan: 50,000 so'm)" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
+            <button type="button" onclick="playSound(); saveTariff();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Saqlash</button>
+            <button type="button" onclick="playSound(); closeAddTariffModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
         </div>
     </div>
 
@@ -244,7 +261,7 @@
         </div>
     </div>
 
-    <!-- EDIT CLIENT MODAL (Status & Limit) -->
+    <!-- EDIT CLIENT MODAL -->
     <div id="editClientModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
             <h3 class="text-sm font-bold text-green-400">Mijozni Sozlash</h3>
@@ -254,13 +271,8 @@
                 <option value="Muddati tugagan">Muddati tugagan</option>
                 <option value="Bloklangan">Bloklangan</option>
             </select>
-            <select id="editClientTariffSelect" class="input-box-dark p-2.5 rounded-xl text-xs">
-                <option value="Bepul rejim">Bepul rejim</option>
-                <option value="Test Tarif">Test Tarif</option>
-                <option value="1 Oylik Tarif">1 Oylik Tarif</option>
-                <option value="1 Yillik Tarif">1 Yillik Tarif</option>
-            </select>
-            <input type="text" id="editClientLimit" placeholder="Xotira limiti (Masalan: 50 GB)" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
+            <select id="editClientTariffSelect" class="input-box-dark p-2.5 rounded-xl text-xs"></select>
+            <input type="text" id="editClientLimit" placeholder="Xotira limiti" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
             <button type="button" onclick="playSound(); confirmEditClient();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Saqlash</button>
             <button type="button" onclick="playSound(); closeEditClientModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
         </div>
@@ -282,16 +294,23 @@
         
         let currentSession = null;
         let memoryFiles = {};
-        let clientsList = [{ name: "Demo Mijoz", phone: "998901234567", pass: "12345", tariff: "Bepul rejim", status: "Faol", limit: "10 GB" }];
+        let clientsList = [{ name: "Demo Mijoz", phone: "998901234567", pass: "12345", tariff: "Test rejim", status: "Faol", limit: "10 mlrd TB" }];
         let adminList = [{ name: "Abdulloh", phone: "200005788", pass: "2007080411" }];
+        let tariffsList = [
+            { name: "Test rejim", price: "0 so'm" },
+            { name: "1 Oylik Tarif", price: "65,000 so'm" },
+            { name: "1 Yillik Tarif", price: "750,000 so'm" }
+        ];
         let paymentChecks = [];
         let systemLogs = [];
         let editingPhone = null;
+        let editingTariffIdx = null;
 
         try {
             if(localStorage.getItem('cloud_user_files')) memoryFiles = JSON.parse(localStorage.getItem('cloud_user_files'));
             if(localStorage.getItem('cloud_clients_list')) clientsList = JSON.parse(localStorage.getItem('cloud_clients_list'));
             if(localStorage.getItem('cloud_admins_list')) adminList = JSON.parse(localStorage.getItem('cloud_admins_list'));
+            if(localStorage.getItem('cloud_tariffs_list')) tariffsList = JSON.parse(localStorage.getItem('cloud_tariffs_list'));
             if(localStorage.getItem('cloud_payment_checks')) paymentChecks = JSON.parse(localStorage.getItem('cloud_payment_checks'));
             if(localStorage.getItem('cloud_system_logs')) systemLogs = JSON.parse(localStorage.getItem('cloud_system_logs'));
         } catch(e) {}
@@ -338,6 +357,17 @@
             } catch (e) {}
         }
 
+        function updateTariffSelects() {
+            let selects = [document.getElementById('tariffSelect'), document.getElementById('editClientTariffSelect')];
+            selects.forEach(sel => {
+                if(!sel) return;
+                sel.innerHTML = '';
+                tariffsList.forEach(t => {
+                    sel.innerHTML += `<option value="${t.name}">${t.name} (${t.price})</option>`;
+                });
+            });
+        }
+
         async function handleLogin() {
             const name = document.getElementById('loginName').value.trim();
             const phone = document.getElementById('loginPhone').value.trim();
@@ -366,7 +396,8 @@
                 currentSession = { role: 'client', ...foundClient };
             } else {
                 if (!name) { showActionModal("Xatolik", "Ismingizni kiriting!"); return; }
-                currentSession = { role: 'client', name, phone, pass, tariff: "Bepul rejim", status: "Faol", limit: "1 GB" };
+                let defaultTariff = tariffsList.length > 0 ? tariffsList[0].name : "Test rejim";
+                currentSession = { role: 'client', name, phone, pass, tariff: defaultTariff, status: "Faol", limit: "10 mlrd TB" };
                 clientsList.push(currentSession);
                 localStorage.setItem('cloud_clients_list', JSON.stringify(clientsList));
                 addLog(`Yangi mijoz: ${name} (${phone})`);
@@ -378,7 +409,8 @@
             appSec.classList.remove('hidden'); appSec.classList.add('flex');
             document.getElementById('profileNameDisplay').innerText = currentSession.name;
             document.getElementById('profilePhoneDisplay').innerText = "Tel: " + currentSession.phone;
-            document.getElementById('profileStatusDisplay').innerText = "Tarif: " + (currentSession.tariff || "Bepul") + " | Status: " + (currentSession.status || "Faol");
+            document.getElementById('profileStatusDisplay').innerText = "Tarif: " + (currentSession.tariff || "Test rejim") + " | Status: " + (currentSession.status || "Faol");
+            updateTariffSelects();
             loadClientFiles();
         }
 
@@ -431,8 +463,8 @@
             document.getElementById('fileCount').innerText = files.length;
             let totalKB = files.reduce((acc, curr) => acc + (curr.sizeKB || 100), 0);
             let totalMB = (totalKB / 1024).toFixed(2);
-            document.getElementById('storageBar').style.width = Math.min(Math.round((totalMB / 1000) * 100), 100) + '%';
-            document.getElementById('storageText').innerText = totalMB + " MB / " + (currentSession.limit || "1 GB");
+            document.getElementById('storageBar').style.width = '1%';
+            document.getElementById('storageText').innerText = totalMB + " MB / 10 mlrd TB";
 
             let list = document.getElementById('filesList');
             if(filtered.length === 0) { list.innerHTML = `<span class="text-[11px] text-slate-500 text-center py-3">Fayllar topilmadi</span>`; return; }
@@ -464,12 +496,16 @@
         function fetchCloudData() { loadClientFiles(); showActionModal("Sinxronizatsiya", "Yangilandi!"); }
 
         function switchAdminTab(tab) {
-            ['Clients', 'Checks', 'Admins', 'Logs'].forEach(t => {
-                document.getElementById('adminTab' + t).classList.add('hidden');
-                document.getElementById('tab' + t + 'Btn').className = "py-2 text-[11px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition";
+            ['Clients', 'Checks', 'Tariffs', 'Admins', 'Logs'].forEach(t => {
+                let el = document.getElementById('adminTab' + t);
+                let btn = document.getElementById('tab' + t + 'Btn');
+                if(el) el.classList.add('hidden');
+                if(btn) btn.className = "py-2 text-[10px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition";
             });
-            document.getElementById('adminTab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('hidden');
-            document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1) + 'Btn').className = "py-2 text-[11px] font-bold rounded-lg bg-green-600 text-slate-950 transition";
+            let targetEl = document.getElementById('adminTab' + tab.charAt(0).toUpperCase() + tab.slice(1));
+            let targetBtn = document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1) + 'Btn');
+            if(targetEl) targetEl.classList.remove('hidden');
+            if(targetBtn) targetBtn.className = "py-2 text-[10px] font-bold rounded-lg bg-green-600 text-slate-950 transition";
             renderAdminDashboard();
         }
 
@@ -489,8 +525,8 @@
                     <div class="flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-left">
                         <div>
                             <span class="text-xs font-bold text-green-400">${c.name}</span>
-                            <p class="text-[10px] text-slate-400">Tel: ${c.phone} | Limit: ${c.limit || '1 GB'}</p>
-                            <span class="text-[9px] ${statusColor} px-2 py-0.5 rounded-md mt-1 inline-block">${c.status || 'Faol'} | Tarif: ${c.tariff || 'Bepul'}</span>
+                            <p class="text-[10px] text-slate-400">Tel: ${c.phone} | Limit: ${c.limit || '10 mlrd TB'}</p>
+                            <span class="text-[9px] ${statusColor} px-2 py-0.5 rounded-md mt-1 inline-block">${c.status || 'Faol'} | Tarif: ${c.tariff || 'Test'}</span>
                         </div>
                         <div class="flex flex-col gap-1">
                             <button type="button" onclick="openEditClientModal('${c.phone}')" class="bg-cyan-600/20 text-cyan-400 px-2 py-1 rounded-lg text-[10px]">Sozlash</button>
@@ -514,6 +550,23 @@
                 `;
             });
 
+            let tList = document.getElementById('adminTariffsList');
+            tList.innerHTML = '';
+            tariffsList.forEach((t, i) => {
+                tList.innerHTML += `
+                    <div class="flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-left">
+                        <div>
+                            <span class="text-xs font-bold text-green-400">${t.name}</span>
+                            <p class="text-[10px] text-slate-400">Narxi: ${t.price}</p>
+                        </div>
+                        <div class="flex gap-1">
+                            <button type="button" onclick="openEditTariffModal(${i})" class="bg-cyan-600/20 text-cyan-400 px-2 py-1 rounded-lg text-[10px]">Tahrirlash</button>
+                            <button type="button" onclick="deleteTariff(${i})" class="bg-red-500/20 text-red-400 px-2 py-1 rounded-lg text-[10px]">O'chirish</button>
+                        </div>
+                    </div>
+                `;
+            });
+
             let aList = document.getElementById('adminAdminsList');
             aList.innerHTML = '';
             adminList.forEach((a, i) => {
@@ -532,6 +585,42 @@
             });
         }
 
+        function openAddTariffModal() {
+            editingTariffIdx = null;
+            document.getElementById('tariffModalTitle').innerText = "Yangi Tarif Qo'shish";
+            document.getElementById('newTariffName').value = '';
+            document.getElementById('newTariffPrice').value = '';
+            document.getElementById('addTariffModal').classList.remove('hidden'); document.getElementById('addTariffModal').classList.add('flex');
+        }
+        function openEditTariffModal(idx) {
+            editingTariffIdx = idx;
+            let t = tariffsList[idx];
+            document.getElementById('tariffModalTitle').innerText = "Tarifni Tahrirlash";
+            document.getElementById('newTariffName').value = t.name;
+            document.getElementById('newTariffPrice').value = t.price;
+            document.getElementById('addTariffModal').classList.remove('hidden'); document.getElementById('addTariffModal').classList.add('flex');
+        }
+        function closeAddTariffModal() { document.getElementById('addTariffModal').classList.add('hidden'); document.getElementById('addTariffModal').classList.remove('flex'); }
+        function saveTariff() {
+            let name = document.getElementById('newTariffName').value.trim();
+            let price = document.getElementById('newTariffPrice').value.trim();
+            if(!name || !price) { showActionModal("Xatolik", "Barcha maydonlarni to'ldiring!"); return; }
+            if(editingTariffIdx !== null) {
+                tariffsList[editingTariffIdx] = { name, price };
+            } else {
+                tariffsList.push({ name, price });
+            }
+            localStorage.setItem('cloud_tariffs_list', JSON.stringify(tariffsList));
+            closeAddTariffModal(); renderAdminDashboard(); updateTariffSelects();
+            showActionModal("Muvaffaqiyatli", "Tarif saqlandi!");
+        }
+        function deleteTariff(idx) {
+            if(tariffsList.length <= 1) { showActionModal("Xatolik", "Kamida bitta tarif qolishi kerak!"); return; }
+            tariffsList.splice(idx, 1);
+            localStorage.setItem('cloud_tariffs_list', JSON.stringify(tariffsList));
+            renderAdminDashboard(); updateTariffSelects();
+        }
+
         function openAddClientModal() { document.getElementById('addClientModal').classList.remove('hidden'); document.getElementById('addClientModal').classList.add('flex'); }
         function closeAddClientModal() { document.getElementById('addClientModal').classList.add('hidden'); document.getElementById('addClientModal').classList.remove('flex'); }
         function saveNewClient() {
@@ -540,7 +629,8 @@
             let pass = document.getElementById('newClientPass').value.trim();
             let status = document.getElementById('newClientStatus').value;
             if(!name || !phone || !pass) { showActionModal("Xatolik", "Maydonlarni to'ldiring!"); return; }
-            clientsList.push({ name, phone, pass, tariff: "Bepul rejim", status, limit: "1 GB" });
+            let defTariff = tariffsList.length > 0 ? tariffsList[0].name : "Test rejim";
+            clientsList.push({ name, phone, pass, tariff: defTariff, status, limit: "10 mlrd TB" });
             localStorage.setItem('cloud_clients_list', JSON.stringify(clientsList));
             closeAddClientModal(); renderAdminDashboard();
             addLog(`Mijoz qo'shildi: ${name}`);
@@ -558,8 +648,9 @@
             let c = clientsList.find(x => x.phone === phone);
             document.getElementById('editClientTargetName').innerText = c.name + " (" + c.phone + ")";
             document.getElementById('editClientStatusSelect').value = c.status || 'Faol';
-            document.getElementById('editClientTariffSelect').value = c.tariff || 'Bepul rejim';
-            document.getElementById('editClientLimit').value = c.limit || '1 GB';
+            updateTariffSelects();
+            document.getElementById('editClientTariffSelect').value = c.tariff || (tariffsList[0] ? tariffsList[0].name : '');
+            document.getElementById('editClientLimit').value = c.limit || '10 mlrd TB';
             document.getElementById('editClientModal').classList.remove('hidden'); document.getElementById('editClientModal').classList.add('flex');
         }
         function closeEditClientModal() { document.getElementById('editClientModal').classList.add('hidden'); document.getElementById('editClientModal').classList.remove('flex'); }
@@ -568,7 +659,7 @@
             if(c) {
                 c.status = document.getElementById('editClientStatusSelect').value;
                 c.tariff = document.getElementById('editClientTariffSelect').value;
-                c.limit = document.getElementById('editClientLimit').value || '1 GB';
+                c.limit = document.getElementById('editClientLimit').value || '10 mlrd TB';
                 localStorage.setItem('cloud_clients_list', JSON.stringify(clientsList));
             }
             closeEditClientModal(); renderAdminDashboard(); addLog(`Mijoz sozlandi: ${c.name}`);
@@ -607,7 +698,10 @@
         }
         function clearLogs() { systemLogs = []; localStorage.removeItem('cloud_system_logs'); renderAdminDashboard(); }
 
-        function openPaymentModal() { document.getElementById('paymentModal').classList.remove('hidden'); document.getElementById('paymentModal').classList.add('flex'); }
+        function openPaymentModal() {
+            updateTariffSelects();
+            document.getElementById('paymentModal').classList.remove('hidden'); document.getElementById('paymentModal').classList.add('flex');
+        }
         function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); document.getElementById('paymentModal').classList.remove('flex'); }
         async function sendPaymentCheck() {
             let tariff = document.getElementById('tariffSelect').value;
@@ -635,6 +729,8 @@
             await sendToTelegram(`🔑 Parolni tiklash: ${phone}`);
             closeForgotModal(); showActionModal("Yuborildi", "So'rov yuborildi!");
         }
+
+        updateTariffSelects();
     </script>
 </body>
 </html>
