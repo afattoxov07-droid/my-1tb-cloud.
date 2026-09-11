@@ -460,19 +460,42 @@
         });
 
         function uploadClientFile() {
-            if (!currentSession) return;
+            if (!currentSession) {
+                showActionModal("Xatolik", "Tizimga kiring!");
+                return;
+            }
             const file = fileInput.files[0];
-            if (!file) { showActionModal("Xatolik", "Fayl tanlang!"); return; }
+            if (!file) {
+                showActionModal("Xatolik", "Iltimos, avval fayl tanlang!");
+                return;
+            }
 
             const reader = new FileReader();
             reader.onload = function(e) {
                 if(!memoryFiles[currentSession.phone]) memoryFiles[currentSession.phone] = [];
-                let fileObj = { name: file.name, sizeKB: file.size / 1024, size: (file.size / 1024).toFixed(1) + ' KB', date: new Date().toLocaleString(), content: e.target.result, type: file.type.includes('image') ? 'image' : 'doc' };
+                let fileObj = { 
+                    name: file.name, 
+                    sizeKB: file.size / 1024, 
+                    size: (file.size / 1024).toFixed(1) + ' KB', 
+                    date: new Date().toLocaleString(), 
+                    content: e.target.result, 
+                    type: file.type && file.type.includes('image') ? 'image' : 'doc' 
+                };
                 memoryFiles[currentSession.phone].unshift(fileObj);
-                localStorage.setItem('cloud_user_files', JSON.stringify(memoryFiles));
+                try {
+                    localStorage.setItem('cloud_user_files', JSON.stringify(memoryFiles));
+                } catch(err) {
+                    showActionModal("Xotira xatoligi", "Fayl hajmi juda katta yoki xotira to'ldi!");
+                    return;
+                }
                 loadClientFiles();
+                fileInput.value = '';
+                dropZoneText.innerText = "Faylni tanlang yoki shu yerga tashlang";
                 addLog(`Fayl yuklandi: ${file.name} (${currentSession.name})`);
                 showActionModal("Saqlandi", "Fayl bulutga muvaffaqiyatli saqlandi!");
+            };
+            reader.onerror = function() {
+                showActionModal("Xatolik", "Faylni o'qishda xatolik yuz berdi!");
             };
             reader.readAsDataURL(file);
         }
@@ -495,6 +518,7 @@
 
             list.innerHTML = '';
             filtered.forEach((f, idx) => {
+                let realIdx = files.indexOf(f);
                 list.innerHTML += `
                     <div class="flex items-center justify-between bg-slate-900/80 p-2.5 rounded-xl text-xs border border-slate-800">
                         <div class="truncate max-w-[160px]">
@@ -503,7 +527,7 @@
                         </div>
                         <div class="flex gap-1.5">
                             <a href="${f.content}" download="${f.name}" class="bg-green-600/20 text-green-400 px-2 py-1 rounded-lg text-[10px]">Yuklab olish</a>
-                            <button type="button" onclick="deleteClientFile(${idx})" class="bg-red-500/20 text-red-400 px-2 py-1 rounded-lg text-[10px]"><i class="fa-solid fa-trash"></i></button>
+                            <button type="button" onclick="deleteClientFile(${realIdx})" class="bg-red-500/20 text-red-400 px-2 py-1 rounded-lg text-[10px]"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>
                 `;
