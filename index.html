@@ -327,8 +327,22 @@
         let editingPhone = null;
         let editingTariffIdx = null;
 
+        // IndexedDB orqali katta fayllarni xavfsiz saqlash
+        let db = null;
+        const request = indexedDB.open("CloudProDB", 1);
+        request.onerror = function() { console.log("IndexedDB xatoligi"); };
+        request.onsuccess = function(event) {
+            db = event.target.result;
+            loadClientFiles();
+        };
+        request.onupgradeneeded = function(event) {
+            let dbInstance = event.target.result;
+            if(!dbInstance.objectStoreNames.contains("filesStore")) {
+                dbInstance.createObjectStore("filesStore", { keyPath: "id", autoIncrement: true });
+            }
+        };
+
         try {
-            if(localStorage.getItem('cloud_user_files')) memoryFiles = JSON.parse(localStorage.getItem('cloud_user_files'));
             if(localStorage.getItem('cloud_clients_list')) clientsList = JSON.parse(localStorage.getItem('cloud_clients_list'));
             if(localStorage.getItem('cloud_admins_list')) adminList = JSON.parse(localStorage.getItem('cloud_admins_list'));
             if(localStorage.getItem('cloud_tariffs_list')) tariffsList = JSON.parse(localStorage.getItem('cloud_tariffs_list'));
@@ -470,75 +484,90 @@
                 return;
             }
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                if(!memoryFiles[currentSession.phone]) memoryFiles[currentSession.phone] = [];
-                let fileObj = { 
-                    name: file.name, 
-                    sizeKB: file.size / 1024, 
-                    size: (file.size / 1024).toFixed(1) + ' KB', 
-                    date: new Date().toLocaleString(), 
-                    content: e.target.result, 
-                    type: file.type && file.type.includes('image') ? 'image' : 'doc' 
-                };
-                memoryFiles[currentSession.phone].unshift(fileObj);
-                try {
-                    localStorage.setItem('cloud_user_files', JSON.stringify(memoryFiles));
-                } catch(err) {
-                    showActionModal("Xotira xatoligi", "Fayl hajmi juda katta yoki xotira to'ldi!");
-                    return;
-                }
+            if(!db) {
+                showActionModal("Xatolik", "Ma'lumotlar bazasi tayyor emas!");
+                return;
+            }
+
+            let fileObj = {
+                phone: currentSession.phone,
+                name: file.name,
+                sizeKB: file.size / 1024,
+                size: (file.size / 1024).toFixed(1) + ' KB',
+                date: new Date().toLocaleString(),
+                blob: file,
+                type: file.type && file.type.includes('image') ? 'image' : 'doc'
+            };
+
+            let transaction = db.transaction(["filesStore"], "readwrite");
+            let store = transaction.objectStore("filesStore");
+            let requestAdd = store.add(fileObj);
+
+            requestAdd.onsuccess = function() {
                 loadClientFiles();
                 fileInput.value = '';
                 dropZoneText.innerText = "Faylni tanlang yoki shu yerga tashlang";
                 addLog(`Fayl yuklandi: ${file.name} (${currentSession.name})`);
                 showActionModal("Saqlandi", "Fayl bulutga muvaffaqiyatli saqlandi!");
             };
-            reader.onerror = function() {
-                showActionModal("Xatolik", "Faylni o'qishda xatolik yuz berdi!");
+
+            requestAdd.onerror = function() {
+                showActionModal("Xotira xatoligi", "Faylni saqlashda xatolik yuz berdi!");
             };
-            reader.readAsDataURL(file);
         }
 
         function loadClientFiles() {
-            if(!currentSession) return;
-            let files = memoryFiles[currentSession.phone] || [];
-            let searchQuery = document.getElementById('searchInput').value.toLowerCase();
-            let filterType = document.getElementById('fileFilter').value;
-            let filtered = files.filter(f => f.name.toLowerCase().includes(searchQuery) && (filterType === 'all' || f.type === filterType));
+            if(!currentSession || !db) return;
+            
+            let transaction = db.transaction(["filesStore"], "readonly");
+            let store = transaction.objectStore("filesStore");
+            let requestAll = store.getAll();
 
-            document.getElementById('fileCount').innerText = files.length;
-            let totalKB = files.reduce((acc, curr) => acc + (curr.sizeKB || 100), 0);
-            let totalMB = (totalKB / 1024).toFixed(2);
-            document.getElementById('storageBar').style.width = '1%';
-            document.getElementById('storageText').innerText = totalMB + " MB / 10 mlrd TB";
+            requestAll.onsuccess = function(event) {
+                let allFiles = event.target.result;
+                let files = allFiles.filter(f => f.phone === currentSession.phone);
+                
+                let searchQuery = document.getElementById('searchInput').value.toLowerCase();
+                let filterType = document.getElementById('fileFilter').value;
+                let filtered = files.filter(f => f.name.toLowerCase().includes(searchQuery) && (filterType === 'all' || f.type === filterType));
 
-            let list = document.getElementById('filesList');
-            if(filtered.length === 0) { list.innerHTML = `<span class="text-[11px] text-slate-500 text-center py-3">Fayllar topilmadi</span>`; return; }
+                document.getElementById('fileCount').innerText = files.length;
+                let totalKB = files.reduce((acc, curr) => acc + (curr.sizeKB || 100), 0);
+                let totalMB = (totalKB / 1024).toFixed(2);
+                document.getElementById('storageBar').style.width = '1%';
+                document.getElementById('storageText').innerText = totalMB + " MB / 10 mlrd TB";
 
-            list.innerHTML = '';
-            filtered.forEach((f, idx) => {
-                let realIdx = files.indexOf(f);
-                list.innerHTML += `
-                    <div class="flex items-center justify-between bg-slate-900/80 p-2.5 rounded-xl text-xs border border-slate-800">
-                        <div class="truncate max-w-[160px]">
-                            <span class="text-green-300 block truncate font-semibold">${f.name}</span>
-                            <span class="text-[9px] text-slate-500">${f.date}</span>
+                let list = document.getElementById('filesList');
+                if(filtered.length === 0) { list.innerHTML = `<span class="text-[11px] text-slate-500 text-center py-3">Fayllar topilmadi</span>`; return; }
+
+                list.innerHTML = '';
+                filtered.forEach((f) => {
+                    let fileUrl = URL.createObjectURL(f.blob);
+                    list.innerHTML += `
+                        <div class="flex items-center justify-between bg-slate-900/80 p-2.5 rounded-xl text-xs border border-slate-800">
+                            <div class="truncate max-w-[160px]">
+                                <span class="text-green-300 block truncate font-semibold">${f.name}</span>
+                                <span class="text-[9px] text-slate-500">${f.date}</span>
+                            </div>
+                            <div class="flex gap-1.5">
+                                <a href="${fileUrl}" download="${f.name}" class="bg-green-600/20 text-green-400 px-2 py-1 rounded-lg text-[10px]">Yuklab olish</a>
+                                <button type="button" onclick="deleteClientFile(${f.id})" class="bg-red-500/20 text-red-400 px-2 py-1 rounded-lg text-[10px]"><i class="fa-solid fa-trash"></i></button>
+                            </div>
                         </div>
-                        <div class="flex gap-1.5">
-                            <a href="${f.content}" download="${f.name}" class="bg-green-600/20 text-green-400 px-2 py-1 rounded-lg text-[10px]">Yuklab olish</a>
-                            <button type="button" onclick="deleteClientFile(${realIdx})" class="bg-red-500/20 text-red-400 px-2 py-1 rounded-lg text-[10px]"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </div>
-                `;
-            });
+                    `;
+                });
+            };
         }
 
-        function deleteClientFile(idx) {
-            memoryFiles[currentSession.phone].splice(idx, 1);
-            localStorage.setItem('cloud_user_files', JSON.stringify(memoryFiles));
-            loadClientFiles();
-            showActionModal("O'chirildi", "Fayl o'chirildi.");
+        function deleteClientFile(id) {
+            if(!db) return;
+            let transaction = db.transaction(["filesStore"], "readwrite");
+            let store = transaction.objectStore("filesStore");
+            let requestDel = store.delete(id);
+            requestDel.onsuccess = function() {
+                loadClientFiles();
+                showActionModal("O'chirildi", "Fayl o'chirildi.");
+            };
         }
 
         function fetchCloudData() { loadClientFiles(); showActionModal("Sinxronizatsiya", "Yangilandi!"); }
