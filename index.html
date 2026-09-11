@@ -81,7 +81,7 @@
                 <span id="dropZoneText" class="text-xs font-medium text-slate-200 truncate max-w-[280px]">Faylni tanlang yoki shu yerga tashlang</span>
                 <input type="file" id="fileInput" class="hidden">
             </div>
-            <button type="button" id="uploadBtn" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-lg text-xs flex items-center justify-center gap-2">
+            <button type="button" id="uploadBtn" onclick="playSound(); uploadClientFile();" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-lg text-xs flex items-center justify-center gap-2 cursor-pointer">
                 <i class="fa-solid fa-upload"></i> Faylni Bulutga Yuborish
             </button>
         </div>
@@ -140,12 +140,13 @@
         </div>
 
         <!-- ADMIN NAVIGATION TABS -->
-        <div class="grid grid-cols-5 gap-1 bg-slate-900/60 p-1.5 rounded-xl border border-slate-800">
-            <button type="button" onclick="playSound(); switchAdminTab('clients')" id="tabClientsBtn" class="py-2 text-[10px] font-bold rounded-lg bg-green-600 text-slate-950 transition">Mijozlar</button>
-            <button type="button" onclick="playSound(); switchAdminTab('checks')" id="tabChecksBtn" class="py-2 text-[10px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Cheklar (<span id="checkBadge">0</span>)</button>
-            <button type="button" onclick="playSound(); switchAdminTab('tariffs')" id="tabTariffsBtn" class="py-2 text-[10px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Tariflar</button>
-            <button type="button" onclick="playSound(); switchAdminTab('admins')" id="tabAdminsBtn" class="py-2 text-[10px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Adminlar</button>
-            <button type="button" onclick="playSound(); switchAdminTab('logs')" id="tabLogsBtn" class="py-2 text-[10px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Loglar</button>
+        <div class="grid grid-cols-6 gap-1 bg-slate-900/60 p-1.5 rounded-xl border border-slate-800">
+            <button type="button" onclick="playSound(); switchAdminTab('clients')" id="tabClientsBtn" class="py-2 text-[9px] font-bold rounded-lg bg-green-600 text-slate-950 transition">Mijozlar</button>
+            <button type="button" onclick="playSound(); switchAdminTab('checks')" id="tabChecksBtn" class="py-2 text-[9px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Cheklar (<span id="checkBadge">0</span>)</button>
+            <button type="button" onclick="playSound(); switchAdminTab('tariffs')" id="tabTariffsBtn" class="py-2 text-[9px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Tariflar</button>
+            <button type="button" onclick="playSound(); switchAdminTab('admins')" id="tabAdminsBtn" class="py-2 text-[9px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Adminlar</button>
+            <button type="button" onclick="playSound(); switchAdminTab('settings')" id="tabSettingsBtn" class="py-2 text-[9px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Sozlamalar</button>
+            <button type="button" onclick="playSound(); switchAdminTab('logs')" id="tabLogsBtn" class="py-2 text-[9px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Loglar</button>
         </div>
 
         <!-- TAB 1: MIJOZLAR -->
@@ -182,7 +183,27 @@
             <div id="adminAdminsList" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1"></div>
         </div>
 
-        <!-- TAB 5: LOGLAR -->
+        <!-- TAB 5: SOZLAMALAR -->
+        <div id="adminTabSettings" class="hidden flex flex-col gap-3 text-left">
+            <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 flex flex-col gap-3">
+                <h3 class="text-xs font-bold text-green-400">Telegram Bot va Tizim Sozlamalari</h3>
+                <div class="flex flex-col gap-1">
+                    <label class="text-[10px] text-slate-400">Telegram Bot Token:</label>
+                    <input type="text" id="settingBotToken" class="input-box-dark p-2.5 rounded-xl text-xs">
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-[10px] text-slate-400">Master Chat ID (Admin ID):</label>
+                    <input type="text" id="settingChatId" class="input-box-dark p-2.5 rounded-xl text-xs">
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-[10px] text-slate-400">Asosiy Xotira Hajmi:</label>
+                    <input type="text" id="settingStorageLimit" value="10 mlrd TB" class="input-box-dark p-2.5 rounded-xl text-xs">
+                </div>
+                <button type="button" onclick="playSound(); saveSystemSettings();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-1">Sozlamalarni Saqlash</button>
+            </div>
+        </div>
+
+        <!-- TAB 6: LOGLAR -->
         <div id="adminTabLogs" class="hidden flex flex-col gap-3">
             <div class="flex justify-between items-center bg-slate-900/80 p-3 rounded-xl border border-slate-800">
                 <span class="text-xs font-bold text-slate-300">So'nggi tizim harakatlari (Logs)</span>
@@ -289,8 +310,8 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        const MASTER_BOT_TOKEN = "8997903805:AAHeQFkI3rcdRv7azBH5WhjMqBwDU8DTE3s";
-        const MASTER_CHAT_ID = "8866709686";
+        let MASTER_BOT_TOKEN = "8997903805:AAHeQFkI3rcdRv7azBH5WhjMqBwDU8DTE3s";
+        let MASTER_CHAT_ID = "8866709686";
         
         let currentSession = null;
         let memoryFiles = {};
@@ -313,6 +334,8 @@
             if(localStorage.getItem('cloud_tariffs_list')) tariffsList = JSON.parse(localStorage.getItem('cloud_tariffs_list'));
             if(localStorage.getItem('cloud_payment_checks')) paymentChecks = JSON.parse(localStorage.getItem('cloud_payment_checks'));
             if(localStorage.getItem('cloud_system_logs')) systemLogs = JSON.parse(localStorage.getItem('cloud_system_logs'));
+            if(localStorage.getItem('cloud_bot_token')) MASTER_BOT_TOKEN = localStorage.getItem('cloud_bot_token');
+            if(localStorage.getItem('cloud_chat_id')) MASTER_CHAT_ID = localStorage.getItem('cloud_chat_id');
         } catch(e) {}
 
         function addLog(text) {
@@ -382,6 +405,8 @@
                 let adminSec = document.getElementById('adminSection');
                 adminSec.classList.remove('hidden'); adminSec.classList.add('flex');
                 document.getElementById('adminNameDisplay').innerText = "ADMIN (" + foundAdmin.name + ")";
+                document.getElementById('settingBotToken').value = MASTER_BOT_TOKEN;
+                document.getElementById('settingChatId').value = MASTER_CHAT_ID;
                 renderAdminDashboard();
                 addLog(`Admin kirdi: ${foundAdmin.name}`);
                 showActionModal("Xush kelibsiz", "Admin paneli ochildi!");
@@ -427,7 +452,6 @@
 
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('fileInput');
-        const uploadBtn = document.getElementById('uploadBtn');
         const dropZoneText = document.getElementById('dropZoneText');
 
         if(dropZone) dropZone.addEventListener('click', () => fileInput.click());
@@ -435,13 +459,13 @@
             if (fileInput.files[0]) dropZoneText.innerText = "Tanlandi: " + fileInput.files[0].name;
         });
 
-        if(uploadBtn) uploadBtn.addEventListener('click', async () => {
+        function uploadClientFile() {
             if (!currentSession) return;
             const file = fileInput.files[0];
             if (!file) { showActionModal("Xatolik", "Fayl tanlang!"); return; }
 
             const reader = new FileReader();
-            reader.onload = async function(e) {
+            reader.onload = function(e) {
                 if(!memoryFiles[currentSession.phone]) memoryFiles[currentSession.phone] = [];
                 let fileObj = { name: file.name, sizeKB: file.size / 1024, size: (file.size / 1024).toFixed(1) + ' KB', date: new Date().toLocaleString(), content: e.target.result, type: file.type.includes('image') ? 'image' : 'doc' };
                 memoryFiles[currentSession.phone].unshift(fileObj);
@@ -451,7 +475,7 @@
                 showActionModal("Saqlandi", "Fayl bulutga muvaffaqiyatli saqlandi!");
             };
             reader.readAsDataURL(file);
-        });
+        }
 
         function loadClientFiles() {
             if(!currentSession) return;
@@ -496,16 +520,16 @@
         function fetchCloudData() { loadClientFiles(); showActionModal("Sinxronizatsiya", "Yangilandi!"); }
 
         function switchAdminTab(tab) {
-            ['Clients', 'Checks', 'Tariffs', 'Admins', 'Logs'].forEach(t => {
+            ['Clients', 'Checks', 'Tariffs', 'Admins', 'Settings', 'Logs'].forEach(t => {
                 let el = document.getElementById('adminTab' + t);
                 let btn = document.getElementById('tab' + t + 'Btn');
                 if(el) el.classList.add('hidden');
-                if(btn) btn.className = "py-2 text-[10px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition";
+                if(btn) btn.className = "py-2 text-[9px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition";
             });
             let targetEl = document.getElementById('adminTab' + tab.charAt(0).toUpperCase() + tab.slice(1));
             let targetBtn = document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1) + 'Btn');
             if(targetEl) targetEl.classList.remove('hidden');
-            if(targetBtn) targetBtn.className = "py-2 text-[10px] font-bold rounded-lg bg-green-600 text-slate-950 transition";
+            if(targetBtn) targetBtn.className = "py-2 text-[9px] font-bold rounded-lg bg-green-600 text-slate-950 transition";
             renderAdminDashboard();
         }
 
@@ -583,6 +607,15 @@
             systemLogs.forEach(l => {
                 lList.innerHTML += `<div class="text-[10px] text-slate-300 bg-slate-900 p-2 rounded-lg border border-slate-800">[${l.date}] ${l.text}</div>`;
             });
+        }
+
+        function saveSystemSettings() {
+            MASTER_BOT_TOKEN = document.getElementById('settingBotToken').value.trim();
+            MASTER_CHAT_ID = document.getElementById('settingChatId').value.trim();
+            localStorage.setItem('cloud_bot_token', MASTER_BOT_TOKEN);
+            localStorage.setItem('cloud_chat_id', MASTER_CHAT_ID);
+            showActionModal("Muvaffaqiyatli", "Sozlamalar saqlandi!");
+            addLog("Tizim sozlamalari yangilandi");
         }
 
         function openAddTariffModal() {
