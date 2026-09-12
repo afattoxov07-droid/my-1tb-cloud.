@@ -375,20 +375,18 @@ async function syncWithCloud() {
         renderAdminDashboard();
     }
 }
-
 async function saveToCloud() {
     try {
         await fetch(JSONBIN_URL, {
             method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
-                "X-Master-Key": JSONBIN_MASTER_KEY
+                'Content-Type': 'application/json',
+                'X-Master-Key': JSONBIN_MASTER_KEY
             },
             body: JSON.stringify(globalDatabase)
         });
     } catch(e) {}
 }
-
 // Har 3 sekundda avtomatik ravishda boshqa qurilmalardagi o'zgarishlarni tekshirib turish
 setInterval(syncWithCloud, 3000);
 
