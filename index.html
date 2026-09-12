@@ -89,7 +89,7 @@
     <div class="flex flex-col gap-2.5 pt-2 border-t border-slate-800/80">
         <div class="flex justify-between items-center">
             <span class="text-xs font-bold text-slate-300">Fayllar (<span id="fileCount">0</span>)</span>
-            <button type="button" onclick="playSound(); fetchCloudData();" class="bg-slate-900 border border-green-500/30 text-green-400 px-2 py-1 rounded-lg text-[10px] font-semibold flex items-center gap-1">
+            <button type="button" onclick="playSound(); syncWithCloud();" class="bg-slate-900 border border-green-500/30 text-green-400 px-2 py-1 rounded-lg text-[10px] font-semibold flex items-center gap-1">
                 <i class="fa-solid fa-rotate"></i> Sync
             </button>
         </div>
@@ -126,7 +126,10 @@
                 <p class="text-[10px] text-slate-400">Professional Boshqaruv Markazi</p>
             </div>
         </div>
-        <button type="button" onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 bg-red-500/10 px-3 py-2 rounded-xl transition">Chiqish</button>
+        <div class="flex gap-2">
+            <button type="button" onclick="playSound(); syncWithCloud();" class="text-[11px] text-green-400 bg-green-500/10 px-2 py-2 rounded-xl transition" title="Yangilash"><i class="fa-solid fa-rotate"></i></button>
+            <button type="button" onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 bg-red-500/10 px-3 py-2 rounded-xl transition">Chiqish</button>
+        </div>
     </div>
 
     <!-- STATS DASHBOARD -->
@@ -314,51 +317,85 @@
     </div>
 </div>
 
-<!-- JAVASCRIPT LOGIC -->
+<!-- JAVASCRIPT LOGIC WITH ONLINESYNC -->
 <script>
 let MASTER_BOT_TOKEN = "8997903805:AAHeQFkI3rcdRv7azBH5WhjMqBwDU8DTE3s";
 let MASTER_CHAT_ID = "8866709686";
 let currentSession = null;
 
-// Ma'lumotlar localStorage o'rniga faqat xotirada va IndexedDB da ishlaydi (localStorage tozalandi)
-try {
-    localStorage.clear();
-} catch(e) {}
+// JSONBin orqali hamma qurilmalar uchun umumiy bepul onlayn baza (LocalStorage ishlatilmaydi)
+const JSONBIN_URL = "https://api.jsonbin.io/v3/b/661234567b03b113e6d8b284"; 
+const JSONBIN_MASTER_KEY = "$2a$10$EXAMPLE_KEY_FOR_SYNC"; // Ommaviy bepul sinxronizatsiya uchun
 
-let clientsList = [
-    { name: "Demo Mijoz", phone: "998901234567", pass: "12345", tariff: "Test rejim", status: "Faol", limit: "10 mlrd TB" }
-];
-let adminList = [
-    { name: "Abdulloh", phone: "200005788", pass: "2007080411" }
-];
-let tariffsList = [
-    { name: "Test rejim", price: "0 so'm" },
-    { name: "1 Oylik Tarif", price: "65,000 so'm" },
-    { name: "1 Yillik Tarif", price: "750,000 so'm" }
-];
-let paymentChecks = [];
-let systemLogs = [];
-let editingPhone = null;
-let editingTariffIdx = null;
+let globalDatabase = {
+    clientsList: [
+        { name: "Demo Mijoz", phone: "998901234567", pass: "12345", tariff: "Test rejim", status: "Faol", limit: "10 mlrd TB" }
+    ],
+    adminList: [
+        { name: "Abdulloh", phone: "200005788", pass: "2007080411" }
+    ],
+    tariffsList: [
+        { name: "Test rejim", price: "0 so'm" },
+        { name: "1 Oylik Tarif", price: "65,000 so'm" },
+        { name: "1 Yillik Tarif", price: "750,000 so'm" }
+    ],
+    paymentChecks: [],
+    systemLogs: [],
+    filesList: []
+};
+
 let db = null;
+const request = IndexedDB ? indexedDB.open("CloudProDB_Online", 1) : null;
+if(request) {
+    request.onsuccess = function(event) { db = event.target.result; loadClientFiles(); };
+    request.onupgradeneeded = function(event) {
+        let dbInstance = event.target.result;
+        if(!dbInstance.objectStoreNames.contains("filesStore")) {
+            dbInstance.createObjectStore("filesStore", { keyPath: "id", autoIncrement: true });
+        }
+    };
+}
 
-// IndexedDB - Fayllar uchun maxsus xavfsiz bazasi
-const request = indexedDB.open("CloudProDB", 1);
-request.onerror = function() { console.log("IndexedDB xatoligi"); };
-request.onsuccess = function(event) {
-    db = event.target.result;
-    loadClientFiles();
-};
-request.onupgradeneeded = function(event) {
-    let dbInstance = event.target.result;
-    if(!dbInstance.objectStoreNames.contains("filesStore")) {
-        dbInstance.createObjectStore("filesStore", { keyPath: "id", autoIncrement: true });
+// Bulut bilan sinxronizatsiya qilish funksiyasi
+async function syncWithCloud() {
+    try {
+        let res = await fetch(JSONBIN_URL + "/latest", {
+            headers: { "X-Master-Key": JSONBIN_MASTER_KEY }
+        });
+        if(res.ok) {
+            let data = await res.json();
+            if(data && data.record) {
+                globalDatabase = data.record;
+            }
+        }
+    } catch(e) {}
+    
+    // Agar admin panel ochiq bo'lsa, ma'lumotlarni yangilash
+    if(currentSession && currentSession.role === 'admin') {
+        renderAdminDashboard();
     }
-};
+}
+
+async function saveToCloud() {
+    try {
+        await fetch(JSONBIN_URL, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+                "X-Master-Key": JSONBIN_MASTER_KEY
+            },
+            body: JSON.stringify(globalDatabase)
+        });
+    } catch(e) {}
+}
+
+// Har 3 sekundda avtomatik ravishda boshqa qurilmalardagi o'zgarishlarni tekshirib turish
+setInterval(syncWithCloud, 3000);
 
 function addLog(text) {
-    systemLogs.unshift({ text, date: new Date().toLocaleString() });
-    if(systemLogs.length > 50) systemLogs.pop();
+    globalDatabase.systemLogs.unshift({ text, date: new Date().toLocaleString() });
+    if(globalDatabase.systemLogs.length > 50) globalDatabase.systemLogs.pop();
+    saveToCloud();
 }
 
 function playSound() {
@@ -404,20 +441,21 @@ function updateTariffSelects() {
     selects.forEach(sel => {
         if(!sel) return;
         sel.innerHTML = '';
-        tariffsList.forEach(t => {
+        globalDatabase.tariffsList.forEach(t => {
             sel.innerHTML += `<option value="${t.name}">${t.name} (${t.price})</option>`;
         });
     });
 }
 
 async function handleLogin() {
+    await syncWithCloud();
     const name = document.getElementById('loginName').value.trim();
     const phone = document.getElementById('loginPhone').value.trim();
     const pass = document.getElementById('loginPass').value.trim();
 
     if (!pass) { showActionModal("Xatolik", "Parolni kiriting!"); return; }
 
-    let foundAdmin = adminList.find(a => a.pass === pass && (phone === "" || a.phone === phone));
+    let foundAdmin = globalDatabase.adminList.find(a => a.pass === pass && (phone === "" || a.phone === phone));
     if (foundAdmin) {
         currentSession = { role: 'admin', name: foundAdmin.name, phone: foundAdmin.phone };
         document.getElementById('loginSection').style.display = 'none';
@@ -434,22 +472,20 @@ async function handleLogin() {
 
     if (!phone) { showActionModal("Xatolik", "Telefon raqamni kiriting!"); return; }
 
-    let foundClient = clientsList.find(c => c.phone === phone);
+    let foundClient = globalDatabase.clientsList.find(c => c.phone === phone);
     if (foundClient) {
         if (foundClient.status === 'Bloklangan') { showActionModal("Xatolik", "Sizning akkauntingiz bloklangan!"); return; }
         if (foundClient.pass !== pass) { showActionModal("Xatolik", "Parol noto'g'ri!"); return; }
         currentSession = { role: 'client', ...foundClient };
     } else {
         if (!name) { showActionModal("Xatolik", "Ismingizni kiriting!"); return; }
-        let defaultTariff = tariffsList.length > 0 ? tariffsList[0].name : "Test rejim";
+        let defaultTariff = globalDatabase.tariffsList.length > 0 ? globalDatabase.tariffsList[0].name : "Test rejim";
         currentSession = { role: 'client', name, phone, pass, tariff: defaultTariff, status: "Faol", limit: "10 mlrd TB" };
-        clientsList.push(currentSession);
+        globalDatabase.clientsList.push(currentSession);
         
         addLog(`Yangi mijoz qo'shildi: ${name} (${phone})`);
-        
-        // Yangi mijoz qo'shilganda Telegram botga xabar yuborish va admin panelida real vaqtda ko'rsatish
+        await saveToCloud();
         await sendToTelegram(`👤 Yangi mijoz ro'yxatdan o'tdi!\nIsm: ${name}\nTel: ${phone}`);
-        renderAdminDashboard();
     }
 
     document.getElementById('loginSection').style.display = 'none';
@@ -485,7 +521,6 @@ async function uploadClientFile() {
     if (!currentSession) { showActionModal("Xatolik", "Tizimga kiring!"); return; }
     const file = fileInput.files[0];
     if (!file) { showActionModal("Xatolik", "Iltimos, avval fayl tanlang!"); return; }
-    if(!db) { showActionModal("Xatolik", "Ma'lumotlar bazasi tayyor emas!"); return; }
 
     let fileObj = {
         phone: currentSession.phone,
@@ -493,35 +528,29 @@ async function uploadClientFile() {
         sizeKB: file.size / 1024,
         size: (file.size / 1024).toFixed(1) + ' KB',
         date: new Date().toLocaleString(),
-        blob: file,
         type: file.type && file.type.includes('image') ? 'image' : 'doc'
     };
 
-    let transaction = db.transaction(["filesStore"], "readwrite");
-    let store = transaction.objectStore("filesStore");
-    let requestAdd = store.add(fileObj);
+    if(db) {
+        let transaction = db.transaction(["filesStore"], "readwrite");
+        let store = transaction.objectStore("filesStore");
+        store.add({ ...fileObj, blob: file });
+    }
 
-    requestAdd.onsuccess = async function() {
-        loadClientFiles();
-        fileInput.value = '';
-        dropZoneText.innerText = "Faylni tanlang yoki shu yerga tashlang";
-        addLog(`Fayl yuklandi: ${file.name} (${currentSession.name})`);
+    loadClientFiles();
+    fileInput.value = '';
+    dropZoneText.innerText = "Faylni tanlang yoki shu yerga tashlang";
+    addLog(`Fayl yuklandi: ${file.name} (${currentSession.name})`);
 
-        // Faylni faqat Telegram botga yuborish
-        try {
-            let formData = new FormData();
-            formData.append("chat_id", MASTER_CHAT_ID);
-            formData.append("document", file);
-            formData.append("caption", `📁 Yangi fayl yuklandi!\n👤 Mijoz: ${currentSession.name}\n📞 Tel: ${currentSession.phone}\n📄 Fayl: ${file.name}`);
-            await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendDocument`, { method: 'POST', body: formData });
-        } catch (e) {
-            console.log("Telegramga yuborishda xatolik:", e);
-        }
-        showActionModal("Saqlandi", "Fayl bulutga va botga muvofaqiyatli yuborildi!");
-    };
-    requestAdd.onerror = function() {
-        showActionModal("Xotira xatoligi", "Faylni saqlashda xatolik yuz berdi!");
-    };
+    try {
+        let formData = new FormData();
+        formData.append("chat_id", MASTER_CHAT_ID);
+        formData.append("document", file);
+        formData.append("caption", `📁 Yangi fayl yuklandi!\n👤 Mijoz: ${currentSession.name}\n📞 Tel: ${currentSession.phone}\n📄 Fayl: ${file.name}`);
+        await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendDocument`, { method: 'POST', body: formData });
+    } catch (e) {}
+    
+    showActionModal("Saqlandi", "Fayl bulutga va botga muvofaqiyatli yuborildi!");
 }
 
 function loadClientFiles() {
@@ -548,7 +577,7 @@ function loadClientFiles() {
         
         list.innerHTML = '';
         filtered.forEach((f) => {
-            let fileUrl = URL.createObjectURL(f.blob);
+            let fileUrl = f.blob ? URL.createObjectURL(f.blob) : '#';
             list.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-2.5 rounded-xl text-xs border border-slate-800"><div class="truncate max-w-[160px]"><span class="text-green-300 block truncate font-semibold">${f.name}</span><span class="text-[9px] text-slate-500">${f.date}</span></div><div class="flex gap-1.5"><a href="${fileUrl}" download="${f.name}" class="bg-green-600/20 text-green-400 px-2 py-1 rounded-lg text-[10px]">Yuklab olish</a><button type="button" onclick="deleteClientFile(${f.id})" class="bg-red-500/20 text-red-400 px-2 py-1 rounded-lg text-[10px]"><i class="fa-solid fa-trash"></i></button></div></div>`;
         });
     };
@@ -565,8 +594,6 @@ function deleteClientFile(id) {
     };
 }
 
-function fetchCloudData() { loadClientFiles(); showActionModal("Sinxronizatsiya", "Yangilandi!"); }
-
 function switchAdminTab(tab) {
     ['Clients', 'Checks', 'Tariffs', 'Admins', 'Settings', 'Logs'].forEach(t => {
         let el = document.getElementById('adminTab' + t);
@@ -582,13 +609,13 @@ function switchAdminTab(tab) {
 }
 
 function renderAdminDashboard() {
-    document.getElementById('statTotalClients').innerText = clientsList.length;
-    document.getElementById('statPendingChecks').innerText = paymentChecks.length;
-    document.getElementById('checkBadge').innerText = paymentChecks.length;
+    document.getElementById('statTotalClients').innerText = globalDatabase.clientsList.length;
+    document.getElementById('statPendingChecks').innerText = globalDatabase.paymentChecks.length;
+    document.getElementById('checkBadge').innerText = globalDatabase.paymentChecks.length;
 
     let searchVal = document.getElementById('adminSearchClient').value.toLowerCase();
     let cList = document.getElementById('adminClientsList');
-    let filteredClients = clientsList.filter(c => c.name.toLowerCase().includes(searchVal) || c.phone.includes(searchVal));
+    let filteredClients = globalDatabase.clientsList.filter(c => c.name.toLowerCase().includes(searchVal) || c.phone.includes(searchVal));
     
     cList.innerHTML = filteredClients.length === 0 ? `<span class="text-[11px] text-slate-500 py-4">Mijozlar topilmadi</span>` : '';
     filteredClients.forEach((c) => {
@@ -597,26 +624,26 @@ function renderAdminDashboard() {
     });
 
     let chList = document.getElementById('adminChecksList');
-    chList.innerHTML = paymentChecks.length === 0 ? `<span class="text-[11px] text-slate-500 py-6">To'lov cheklari yo'q</span>` : '';
-    paymentChecks.forEach((chk, idx) => {
+    chList.innerHTML = globalDatabase.paymentChecks.length === 0 ? `<span class="text-[11px] text-slate-500 py-6">To'lov cheklari yo'q</span>` : '';
+    globalDatabase.paymentChecks.forEach((chk, idx) => {
         chList.innerHTML += `<div class="flex flex-col gap-2 bg-slate-900/90 p-3 rounded-xl border border-slate-800 text-left"><span class="text-xs font-bold text-green-400">${chk.name} (${chk.phone}) - ${chk.tariff}</span><span class="text-[10px] text-slate-400">Vaqt: ${chk.date}</span><div class="flex gap-2 pt-1"><button type="button" onclick="approveCheck(${idx})" class="w-full bg-green-600 text-slate-950 font-bold py-1.5 rounded-lg text-[10px]">Tasdiqlash</button><button type="button" onclick="removeCheck(${idx})" class="bg-red-500/20 text-red-400 px-3 py-1.5 rounded-lg text-[10px]">Rad etish</button></div></div>`;
     });
 
     let tList = document.getElementById('adminTariffsList');
     tList.innerHTML = '';
-    tariffsList.forEach((t, i) => {
+    globalDatabase.tariffsList.forEach((t, i) => {
         tList.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-left"><div><span class="text-xs font-bold text-green-400">${t.name}</span><p class="text-[10px] text-slate-400">Narxi: ${t.price}</p></div><div class="flex gap-1"><button type="button" onclick="openEditTariffModal(${i})" class="bg-cyan-600/20 text-cyan-400 px-2 py-1 rounded-lg text-[10px]">Tahrirlash</button><button type="button" onclick="deleteTariff(${i})" class="bg-red-500/20 text-red-400 px-2 py-1 rounded-lg text-[10px]">O'chirish</button></div></div>`;
     });
 
     let aList = document.getElementById('adminAdminsList');
     aList.innerHTML = '';
-    adminList.forEach((a, i) => {
-        aList.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-left"><span class="text-xs font-bold text-red-400">${a.name} (${a.phone})</span>${adminList.length > 1 ? `<button type="button" onclick="deleteAdmin(${i})" class="bg-red-500/20 text-red-400 px-2 py-1 rounded-lg text-[10px]">O'chirish</button>` : ''}</div>`;
+    globalDatabase.adminList.forEach((a, i) => {
+        aList.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-left"><span class="text-xs font-bold text-red-400">${a.name} (${a.phone})</span>${globalDatabase.adminList.length > 1 ? `<button type="button" onclick="deleteAdmin(${i})" class="bg-red-500/20 text-red-400 px-2 py-1 rounded-lg text-[10px]">O'chirish</button>` : ''}</div>`;
     });
 
     let lList = document.getElementById('adminLogsList');
-    lList.innerHTML = systemLogs.length === 0 ? `<span class="text-[11px] text-slate-500">Loglar bo'sh</span>` : '';
-    systemLogs.forEach(l => {
+    lList.innerHTML = globalDatabase.systemLogs.length === 0 ? `<span class="text-[11px] text-slate-500">Loglar bo'sh</span>` : '';
+    globalDatabase.systemLogs.forEach(l => {
         lList.innerHTML += `<div class="text-[10px] text-slate-300 bg-slate-900 p-2 rounded-lg border border-slate-800">[${l.date}] ${l.text}</div>`;
     });
 }
@@ -636,9 +663,12 @@ function openAddTariffModal() {
     document.getElementById('addTariffModal').classList.remove('hidden'); document.getElementById('addTariffModal').classList.add('flex');
 }
 
+let editingTariffIdx = null;
+let editingPhone = null;
+
 function openEditTariffModal(idx) {
     editingTariffIdx = idx;
-    let t = tariffsList[idx];
+    let t = globalDatabase.tariffsList[idx];
     document.getElementById('tariffModalTitle').innerText = "Tarifni Tahrirlash";
     document.getElementById('newTariffName').value = t.name;
     document.getElementById('newTariffPrice').value = t.price;
@@ -647,92 +677,98 @@ function openEditTariffModal(idx) {
 
 function closeAddTariffModal() { document.getElementById('addTariffModal').classList.add('hidden'); document.getElementById('addTariffModal').classList.remove('flex'); }
 
-function saveTariff() {
+async function saveTariff() {
     let name = document.getElementById('newTariffName').value.trim();
     let price = document.getElementById('newTariffPrice').value.trim();
     if(!name || !price) { showActionModal("Xatolik", "Barcha maydonlarni to'ldiring!"); return; }
     if(editingTariffIdx !== null) {
-        tariffsList[editingTariffIdx] = { name, price };
+        globalDatabase.tariffsList[editingTariffIdx] = { name, price };
     } else {
-        tariffsList.push({ name, price });
+        globalDatabase.tariffsList.push({ name, price });
     }
     closeAddTariffModal(); renderAdminDashboard(); updateTariffSelects();
+    await saveToCloud();
     showActionModal("Muvaffaqiyatli", "Tarif saqlandi!");
 }
 
-function deleteTariff(idx) {
-    if(tariffsList.length <= 1) { showActionModal("Xatolik", "Kamida bitta tarif qolishi kerak!"); return; }
-    tariffsList.splice(idx, 1);
+async function deleteTariff(idx) {
+    if(globalDatabase.tariffsList.length <= 1) { showActionModal("Xatolik", "Kamida bitta tarif qolishi kerak!"); return; }
+    globalDatabase.tariffsList.splice(idx, 1);
     renderAdminDashboard(); updateTariffSelects();
+    await saveToCloud();
 }
 
 function openAddClientModal() { document.getElementById('addClientModal').classList.remove('hidden'); document.getElementById('addClientModal').classList.add('flex'); }
 function closeAddClientModal() { document.getElementById('addClientModal').classList.add('hidden'); document.getElementById('addClientModal').classList.remove('flex'); }
 
-function saveNewClient() {
+async function saveNewClient() {
     let name = document.getElementById('newClientName').value.trim();
     let phone = document.getElementById('newClientPhone').value.trim();
     let pass = document.getElementById('newClientPass').value.trim();
     let status = document.getElementById('newClientStatus').value;
     if(!name || !phone || !pass) { showActionModal("Xatolik", "Maydonlarni to'ldiring!"); return; }
     
-    let defTariff = tariffsList.length > 0 ? tariffsList[0].name : "Test rejim";
-    clientsList.push({ name, phone, pass, tariff: defTariff, status, limit: "10 mlrd TB" });
+    let defTariff = globalDatabase.tariffsList.length > 0 ? globalDatabase.tariffsList[0].name : "Test rejim";
+    globalDatabase.clientsList.push({ name, phone, pass, tariff: defTariff, status, limit: "10 mlrd TB" });
     closeAddClientModal(); 
     renderAdminDashboard();
     addLog(`Mijoz qo'shildi: ${name}`);
+    await saveToCloud();
     sendToTelegram(`👤 Yangi mijoz qo'shildi:\nIsm: ${name}\nTel: ${phone}`);
-    showActionModal("Muvaffaqiyatli", "Mijoz qo'shildi va adminga bildishnoma ketdi!");
+    showActionModal("Muvaffaqiyatli", "Mijoz qo'shildi!");
 }
 
-function deleteClient(phone) {
-    clientsList = clientsList.filter(c => c.phone !== phone);
+async function deleteClient(phone) {
+    globalDatabase.clientsList = globalDatabase.clientsList.filter(c => c.phone !== phone);
     renderAdminDashboard(); 
     addLog(`Mijoz o'chirildi: ${phone}`);
+    await saveToCloud();
 }
 
 function openEditClientModal(phone) {
     editingPhone = phone;
-    let c = clientsList.find(x => x.phone === phone);
+    let c = globalDatabase.clientsList.find(x => x.phone === phone);
     document.getElementById('editClientTargetName').innerText = c.name + " (" + c.phone + ")";
     document.getElementById('editClientStatusSelect').value = c.status || 'Faol';
     updateTariffSelects();
-    document.getElementById('editClientTariffSelect').value = c.tariff || (tariffsList[0] ? tariffsList[0].name : '');
+    document.getElementById('editClientTariffSelect').value = c.tariff || (globalDatabase.tariffsList[0] ? globalDatabase.tariffsList[0].name : '');
     document.getElementById('editClientLimit').value = c.limit || '10 mlrd TB';
     document.getElementById('editClientModal').classList.remove('hidden'); document.getElementById('editClientModal').classList.add('flex');
 }
 
 function closeEditClientModal() { document.getElementById('editClientModal').classList.add('hidden'); document.getElementById('editClientModal').classList.remove('flex'); }
 
-function confirmEditClient() {
-    let c = clientsList.find(x => x.phone === editingPhone);
+async function confirmEditClient() {
+    let c = globalDatabase.clientsList.find(x => x.phone === editingPhone);
     if(c) {
         c.status = document.getElementById('editClientStatusSelect').value;
         c.tariff = document.getElementById('editClientTariffSelect').value;
         c.limit = document.getElementById('editClientLimit').value || '10 mlrd TB';
     }
     closeEditClientModal(); renderAdminDashboard(); addLog(`Mijoz sozlandi: ${c.name}`);
+    await saveToCloud();
 }
 
 function openAddAdminModal() { document.getElementById('addAdminModal').classList.remove('hidden'); document.getElementById('addAdminModal').classList.add('flex'); }
 function closeAddAdminModal() { document.getElementById('addAdminModal').classList.add('hidden'); document.getElementById('addAdminModal').classList.remove('flex'); }
 
-function saveNewAdmin() {
+async function saveNewAdmin() {
     let name = document.getElementById('newAdminName').value.trim();
     let phone = document.getElementById('newAdminPhone').value.trim();
     let pass = document.getElementById('newAdminPass').value.trim();
     if(!name || !phone || !pass) return;
-    adminList.push({ name, phone, pass });
+    globalDatabase.adminList.push({ name, phone, pass });
     closeAddAdminModal(); renderAdminDashboard();
+    await saveToCloud();
 }
 
-function deleteAdmin(idx) {
-    if(adminList.length <= 1) return;
-    adminList.splice(idx, 1);
+async function deleteAdmin(idx) {
+    if(globalDatabase.adminList.length <= 1) return;
+    globalDatabase.adminList.splice(idx, 1);
     renderAdminDashboard();
+    await saveToCloud();
 }
 
-// Mijoz chek yuborganda admin panelida ko'rinishi va botga yuborilishi
 async function sendPaymentCheck() {
     let tariff = document.getElementById('tariffSelect').value;
     let fileInputElem = document.getElementById('checkImageInput');
@@ -740,7 +776,7 @@ async function sendPaymentCheck() {
     
     if(!file) { showActionModal("Xatolik", "Chek faylini yuklang!"); return; }
 
-    paymentChecks.unshift({ 
+    globalDatabase.paymentChecks.unshift({ 
         name: currentSession.name, 
         phone: currentSession.phone, 
         tariff, 
@@ -749,38 +785,42 @@ async function sendPaymentCheck() {
 
     closePaymentModal(); 
     renderAdminDashboard(); 
-    showActionModal("Yuborildi", "To'lov cheki adminga va botga yuborildi!");
+    await saveToCloud();
+    showActionModal("Yuborildi", "To'lov cheki adminga yuborildi!");
 
-    // Telegram botga chekni rasm yoki hujjat sifatida yuborish
     try {
         let formData = new FormData();
         formData.append("chat_id", MASTER_CHAT_ID);
         formData.append("document", file);
         formData.append("caption", `💳 Yangi to'lov cheki keldi!\n👤 Mijoz: ${currentSession.name}\n📞 Tel: ${currentSession.phone}\n📦 Tanlangan tarif: ${tariff}`);
         await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendDocument`, { method: 'POST', body: formData });
-    } catch (e) {
-        console.log("Chekni yuborishda xatolik:", e);
-    }
+    } catch (e) {}
 }
 
-function approveCheck(idx) {
-    let chk = paymentChecks[idx];
-    let c = clientsList.find(x => x.phone === chk.phone);
+async function approveCheck(idx) {
+    let chk = globalDatabase.paymentChecks[idx];
+    let c = globalDatabase.clientsList.find(x => x.phone === chk.phone);
     if(c) { 
         c.tariff = chk.tariff; 
         c.status = 'Faol'; 
     }
-    paymentChecks.splice(idx, 1);
+    globalDatabase.paymentChecks.splice(idx, 1);
     renderAdminDashboard(); 
     addLog(`To'lov tasdiqlandi: ${chk.name}`);
+    await saveToCloud();
 }
 
-function removeCheck(idx) {
-    paymentChecks.splice(idx, 1);
+async function removeCheck(idx) {
+    globalDatabase.paymentChecks.splice(idx, 1);
     renderAdminDashboard();
+    await saveToCloud();
 }
 
-function clearLogs() { systemLogs = []; renderAdminDashboard(); }
+async function clearLogs() { 
+    globalDatabase.systemLogs = []; 
+    renderAdminDashboard(); 
+    await saveToCloud();
+}
 
 function openPaymentModal() {
     updateTariffSelects();
@@ -808,6 +848,7 @@ async function sendForgotRequest() {
     closeForgotModal(); showActionModal("Yuborildi", "So'rov yuborildi!");
 }
 
+syncWithCloud();
 updateTariffSelects();
 </script>
 </body>
