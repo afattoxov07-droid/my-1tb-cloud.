@@ -1,339 +1,15 @@
-<!DOCTYPE html>
-<html lang="uz" class="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cloud Pro - Professional Online Cloud</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>tailwind.config = { darkMode: 'class', }</script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Fira Code', monospace; }
-        .glass-dark { background: rgba(3, 7, 18, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(34, 197, 94, 0.25); }
-        .input-box-dark { background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(34, 197, 94, 0.2); color: #4ade80; }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: rgba(3, 7, 18, 0.5); }
-        ::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.3); border-radius: 4px; }
-    </style>
-</head>
-<body class="bg-slate-950 text-slate-800 dark:text-green-400 min-h-screen flex flex-col items-center justify-center p-4 transition-colors duration-300">
-
-<!-- TOP CONTROLS -->
-<div class="absolute top-4 right-4 flex items-center gap-2">
-    <button type="button" onclick="playSound(); toggleTheme();" class="p-2.5 rounded-xl bg-slate-900 border border-green-500/30 text-green-400 text-xs shadow-md transition" title="Rejimni o'zgartirish">
-        <i class="fa-solid fa-circle-half-stroke" id="themeIcon"></i>
-    </button>
-</div>
-
-<!-- LOGIN SECTION -->
-<div id="loginSection" class="w-full max-w-md flex flex-col gap-4">
-    <div class="glass-dark p-6 rounded-2xl shadow-2xl flex flex-col items-center text-center">
-        <div class="w-16 h-16 rounded-2xl bg-slate-900 border border-green-500/40 flex items-center justify-center mb-3 shadow-lg shadow-green-900/30 overflow-hidden p-2">
-            <img src="https://cdn-icons-png.flaticon.com/512/6119/6119772.png" alt="Cloud Pro Logo" class="w-full h-full object-contain filter drop-shadow(0 0 8px rgba(34,197,94,0.6))">
-        </div>
-        <h1 class="text-lg font-bold tracking-wider text-green-400 uppercase">Cloud Pro</h1>
-        <p class="text-[11px] text-slate-400 mt-1 mb-5">Professional Onlayn Bulut Tizimi</p>
-        <div class="w-full flex flex-col gap-3">
-            <input type="text" id="loginName" placeholder="Ismingiz (Yangi bo'lsa)" autocomplete="off" class="input-box-dark w-full rounded-xl p-3 text-xs text-center placeholder-slate-500">
-            <input type="tel" id="loginPhone" placeholder="Telefon raqam" autocomplete="off" class="input-box-dark w-full rounded-xl p-3 text-xs text-center placeholder-slate-500">
-            <input type="password" id="loginPass" placeholder="Parol" autocomplete="new-password" class="input-box-dark w-full rounded-xl p-3 text-xs text-center placeholder-slate-500">
-            <button type="button" onclick="playSound(); handleLogin();" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs tracking-wider mt-2">KIRISH / RO'YXATDAN O'TISH</button>
-            <button type="button" onclick="playSound(); openForgotModal();" class="text-[11px] text-slate-400 hover:text-green-400 transition mt-1">Parolni unutdingizmi?</button>
-        </div>
-    </div>
-</div>
-
-<!-- CLIENT APP PANEL -->
-<div id="appSection" class="w-full max-w-md glass-dark p-6 rounded-3xl shadow-2xl hidden flex-col gap-4">
-    <div class="flex items-center justify-between pb-3 border-b border-slate-800/80">
-        <div class="flex items-center gap-2.5">
-            <div class="w-9 h-9 rounded-xl bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-sm">
-                <i class="fa-solid fa-user-shield"></i>
-            </div>
-            <div>
-                <h2 id="profileNameDisplay" class="text-xs font-bold tracking-wide text-green-400">Ism</h2>
-                <p id="profilePhoneDisplay" class="text-[10px] text-slate-400">Tel: ...</p>
-                <p id="profileStatusDisplay" class="text-[10px] text-amber-400 mt-0.5">Tarif: ...</p>
-            </div>
-        </div>
-        <button type="button" onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 hover:text-red-300 bg-red-500/10 p-2 rounded-xl transition">
-            <i class="fa-solid fa-right-from-bracket"></i>
-        </button>
-    </div>
-    
-    <!-- STORAGE PROGRESS BAR -->
-    <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 flex flex-col gap-1.5">
-        <div class="flex justify-between text-[10px] text-slate-300">
-            <span>Xotira band qilinishi:</span>
-            <span id="storageText">0 MB / 10 mlrd TB</span>
-        </div>
-        <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-            <div id="storageBar" class="bg-green-500 h-full transition-all duration-500" style="width: 0%"></div>
-        </div>
-    </div>
-
-    <div class="flex flex-col gap-2">
-        <div id="dropZone" class="border-2 border-dashed border-slate-700 hover:border-green-500/85 rounded-2xl p-4 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1.5 bg-slate-900/40 group">
-            <div class="w-9 h-9 rounded-full bg-green-500/10 flex items-center justify-center text-green-400">
-                <i class="fa-solid fa-cloud-arrow-up text-sm"></i>
-            </div>
-            <span id="dropZoneText" class="text-xs font-medium text-slate-200 truncate max-w-[280px]">Faylni tanlang yoki shu yerga tashlang</span>
-            <input type="file" id="fileInput" class="hidden">
-        </div>
-        <button type="button" id="uploadBtn" onclick="playSound(); uploadClientFile();" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-lg text-xs flex items-center justify-center gap-2 cursor-pointer">
-            <i class="fa-solid fa-upload"></i> Faylni Bulutga (Botga) Yuborish
-        </button>
-    </div>
-
-    <div class="flex flex-col gap-2.5 pt-2 border-t border-slate-800/80">
-        <div class="flex justify-between items-center">
-            <span class="text-xs font-bold text-slate-300">Fayllar (<span id="fileCount">0</span>)</span>
-            <button type="button" onclick="playSound(); syncWithCloud();" class="bg-slate-900 border border-green-500/30 text-green-400 px-2 py-1 rounded-lg text-[10px] font-semibold flex items-center gap-1">
-                <i class="fa-solid fa-rotate"></i> Sync
-            </button>
-        </div>
-        <div class="flex gap-2">
-            <input type="text" id="searchInput" oninput="loadClientFiles()" placeholder="Qidirish..." class="input-box-dark flex-1 p-2 rounded-xl text-[11px]">
-            <select id="fileFilter" onchange="loadClientFiles()" class="input-box-dark p-2 rounded-xl text-[11px]">
-                <option value="all">Barchasi</option>
-                <option value="image">Rasmlar</option>
-                <option value="doc">Hujjatlar</option>
-            </select>
-        </div>
-        <div id="filesList" class="flex flex-col gap-2 max-h-36 overflow-y-auto pr-1"></div>
-    </div>
-
-    <div class="grid grid-cols-2 gap-2 pt-1">
-        <button type="button" onclick="playSound(); openPaymentModal();" class="bg-slate-900 border border-green-500/30 text-green-400 p-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5">
-            <i class="fa-solid fa-receipt"></i> Xotira Sotib Olish
-        </button>
-        <button type="button" onclick="playSound(); openHelpModal();" class="bg-slate-900 border border-cyan-500/30 text-cyan-400 p-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5">
-            <i class="fa-solid fa-headset"></i> Yordam
-        </button>
-    </div>
-</div>
-
-<!-- PROFESSIONAL ADMIN PANEL -->
-<div id="adminSection" class="w-full max-w-2xl glass-dark p-6 rounded-3xl shadow-2xl hidden flex-col gap-4 text-center">
-    <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-        <div class="flex items-center gap-2">
-            <div class="w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-sm">
-                <i class="fa-solid fa-user-secret"></i>
-            </div>
-            <div class="text-left">
-                <h2 id="adminNameDisplay" class="text-xs font-bold text-red-400">ADMIN</h2>
-                <p class="text-[10px] text-slate-400">Professional Boshqaruv Markazi</p>
-            </div>
-        </div>
-        <div class="flex gap-2">
-            <button type="button" onclick="playSound(); syncWithCloud();" class="text-[11px] text-green-400 bg-green-500/10 px-2 py-2 rounded-xl transition" title="Yangilash"><i class="fa-solid fa-rotate"></i></button>
-            <button type="button" onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 bg-red-500/10 px-3 py-2 rounded-xl transition">Chiqish</button>
-        </div>
-    </div>
-
-    <!-- STATS DASHBOARD -->
-    <div class="grid grid-cols-3 gap-2 text-left">
-        <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800">
-            <span class="text-[10px] text-slate-400 block">Jami Mijozlar</span>
-            <span id="statTotalClients" class="text-sm font-bold text-green-400">0</span>
-        </div>
-        <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800">
-            <span class="text-[10px] text-slate-400 block">Kutilayotgan Cheklar</span>
-            <span id="statPendingChecks" class="text-sm font-bold text-amber-400">0</span>
-        </div>
-        <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800">
-            <span class="text-[10px] text-slate-400 block">Tizim Xotirasi</span>
-            <span class="text-sm font-bold text-cyan-400">10 mlrd TB</span>
-        </div>
-    </div>
-
-    <!-- ADMIN NAVIGATION TABS -->
-    <div class="grid grid-cols-6 gap-1 bg-slate-900/60 p-1.5 rounded-xl border border-slate-800">
-        <button type="button" onclick="playSound(); switchAdminTab('clients')" id="tabClientsBtn" class="py-2 text-[9px] font-bold rounded-lg bg-green-600 text-slate-950 transition">Mijozlar</button>
-        <button type="button" onclick="playSound(); switchAdminTab('checks')" id="tabChecksBtn" class="py-2 text-[9px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Cheklar (<span id="checkBadge">0</span>)</button>
-        <button type="button" onclick="playSound(); switchAdminTab('tariffs')" id="tabTariffsBtn" class="py-2 text-[9px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Tariflar</button>
-        <button type="button" onclick="playSound(); switchAdminTab('admins')" id="tabAdminsBtn" class="py-2 text-[9px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Adminlar</button>
-        <button type="button" onclick="playSound(); switchAdminTab('settings')" id="tabSettingsBtn" class="py-2 text-[9px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Sozlamalar</button>
-        <button type="button" onclick="playSound(); switchAdminTab('logs')" id="tabLogsBtn" class="py-2 text-[9px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Loglar</button>
-    </div>
-
-    <!-- TAB 1: MIJOZLAR -->
-    <div id="adminTabClients" class="flex flex-col gap-3">
-        <div class="flex flex-wrap justify-between items-center gap-2 bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-            <input type="text" id="adminSearchClient" oninput="renderAdminDashboard()" placeholder="Mijozni qidirish..." class="input-box-dark px-3 py-1.5 rounded-lg text-[11px] flex-1">
-            <button type="button" onclick="playSound(); openAddClientModal();" class="bg-green-600 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1">
-                <i class="fa-solid fa-user-plus"></i> Qo'shish
-            </button>
-        </div>
-        <div id="adminClientsList" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1"></div>
-    </div>
-
-    <!-- TAB 2: CHEKLAR -->
-    <div id="adminTabChecks" class="hidden flex flex-col gap-3">
-        <div id="adminChecksList" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1"></div>
-    </div>
-
-    <!-- TAB 3: TARIFLAR -->
-    <div id="adminTabTariffs" class="hidden flex flex-col gap-3">
-        <div class="flex justify-between items-center bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-            <span class="text-xs font-bold text-slate-300">Tariflar va Kartalar ro'yxati</span>
-            <button type="button" onclick="playSound(); openAddTariffModal();" class="bg-green-600 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-bold transition"><i class="fa-solid fa-plus"></i> Tarif qo'shish</button>
-        </div>
-        <div id="adminTariffsList" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1"></div>
-    </div>
-
-    <!-- TAB 4: ADMINLAR -->
-    <div id="adminTabAdmins" class="hidden flex flex-col gap-3">
-        <div class="flex justify-between items-center bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-            <span class="text-xs font-bold text-slate-300">Tizim adminlari ro'yxati</span>
-            <button type="button" onclick="playSound(); openAddAdminModal();" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition"><i class="fa-solid fa-user-shield"></i> Admin qo'shish</button>
-        </div>
-        <div id="adminAdminsList" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1"></div>
-    </div>
-
-    <!-- TAB 5: SOZLAMALAR -->
-    <div id="adminTabSettings" class="hidden flex flex-col gap-3 text-left">
-        <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 flex flex-col gap-3">
-            <h3 class="text-xs font-bold text-green-400">Telegram Bot va Tizim Sozlamalari</h3>
-            <div class="flex flex-col gap-1">
-                <label class="text-[10px] text-slate-400">Telegram Bot Token:</label>
-                <input type="text" id="settingBotToken" class="input-box-dark p-2.5 rounded-xl text-xs">
-            </div>
-            <div class="flex flex-col gap-1">
-                <label class="text-[10px] text-slate-400">Master Chat ID (Admin ID):</label>
-                <input type="text" id="settingChatId" class="input-box-dark p-2.5 rounded-xl text-xs">
-            </div>
-            <div class="flex flex-col gap-1">
-                <label class="text-[10px] text-slate-400">Asosiy Xotira Hajmi:</label>
-                <input type="text" id="settingStorageLimit" value="10 mlrd TB" class="input-box-dark p-2.5 rounded-xl text-xs">
-            </div>
-            <button type="button" onclick="playSound(); saveSystemSettings();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-1">Sozlamalarni Saqlash</button>
-        </div>
-    </div>
-
-    <!-- TAB 6: LOGLAR -->
-    <div id="adminTabLogs" class="hidden flex flex-col gap-3">
-        <div class="flex justify-between items-center bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-            <span class="text-xs font-bold text-slate-300">So'nggi tizim harakatlari (Logs)</span>
-            <button type="button" onclick="playSound(); clearLogs();" class="bg-red-500/20 text-red-400 px-2 py-1 rounded-lg text-[10px]">Tozalash</button>
-        </div>
-        <div id="adminLogsList" class="flex flex-col gap-1.5 max-h-56 overflow-y-auto pr-1 text-left"></div>
-    </div>
-</div>
-
-<!-- MODALS -->
-<div id="paymentModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-    <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
-        <h3 class="text-sm font-bold text-green-400">Xotira Sotib Olish (Chek Yuborish)</h3>
-        <select id="tariffSelect" class="input-box-dark p-2.5 rounded-xl text-xs"></select>
-        <input type="file" id="checkImageInput" class="input-box-dark p-2 rounded-xl text-xs">
-        <button type="button" onclick="playSound(); sendPaymentCheck();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Chekni Botga Yuborish</button>
-        <button type="button" onclick="playSound(); closePaymentModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
-    </div>
-</div>
-
-<!-- ADD/EDIT TARIFF MODAL -->
-<div id="addTariffModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-    <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
-        <h3 class="text-sm font-bold text-green-400" id="tariffModalTitle">Yangi Tarif Qo'shish</h3>
-        <input type="text" id="newTariffName" placeholder="Tarif nomi" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-        <input type="text" id="newTariffPrice" placeholder="Narxi" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-        <button type="button" onclick="playSound(); saveTariff();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Saqlash</button>
-        <button type="button" onclick="playSound(); closeAddTariffModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
-    </div>
-</div>
-
-<div id="helpModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-    <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
-        <h3 class="text-sm font-bold text-green-400">Yordam bo'limi</h3>
-        <textarea id="helpMessageText" rows="4" placeholder="Xabar matni..." class="input-box-dark p-3 rounded-xl text-xs resize-none"></textarea>
-        <button type="button" onclick="playSound(); sendHelpMessage();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Yuborish</button>
-        <button type="button" onclick="playSound(); closeHelpModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
-    </div>
-</div>
-
-<div id="forgotModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-    <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
-        <h3 class="text-sm font-bold text-green-400">Parolni Tiklash</h3>
-        <input type="tel" id="forgotPhone" placeholder="Telefon raqam" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-        <button type="button" onclick="playSound(); sendForgotRequest();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">So'rov Yuborish</button>
-        <button type="button" onclick="playSound(); closeForgotModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
-    </div>
-</div>
-
-<!-- ADD CLIENT MODAL -->
-<div id="addClientModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-    <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
-        <h3 class="text-sm font-bold text-green-400">Yangi Mijoz Qo'shish</h3>
-        <input type="text" id="newClientName" placeholder="Mijoz ismi" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-        <input type="tel" id="newClientPhone" placeholder="Telefon raqami" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-        <input type="password" id="newClientPass" placeholder="Parol" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-        <select id="newClientStatus" class="input-box-dark p-2.5 rounded-xl text-xs">
-            <option value="Faol">Faol</option>
-            <option value="Muddati tugagan">Muddati tugagan</option>
-            <option value="Bloklangan">Bloklangan</option>
-        </select>
-        <button type="button" onclick="playSound(); saveNewClient();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Qo'shish</button>
-        <button type="button" onclick="playSound(); closeAddClientModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
-    </div>
-</div>
-
-<!-- ADD ADMIN MODAL -->
-<div id="addAdminModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-    <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-red-500/40 text-center">
-        <h3 class="text-sm font-bold text-red-400">Yangi Admin Qo'shish</h3>
-        <input type="text" id="newAdminName" placeholder="Ismi" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-        <input type="tel" id="newAdminPhone" placeholder="Telefon (Login)" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-        <input type="password" id="newAdminPass" placeholder="Parol" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-        <button type="button" onclick="playSound(); saveNewAdmin();" class="bg-red-600 text-white font-bold py-2.5 rounded-xl text-xs">Saqlash</button>
-        <button type="button" onclick="playSound(); closeAddAdminModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
-    </div>
-</div>
-
-<!-- EDIT CLIENT MODAL -->
-<div id="editClientModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-    <div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center">
-        <h3 class="text-sm font-bold text-green-400">Mijozni Sozlash</h3>
-        <p id="editClientTargetName" class="text-xs text-slate-300 font-bold"></p>
-        <select id="editClientStatusSelect" class="input-box-dark p-2.5 rounded-xl text-xs">
-            <option value="Faol">Faol</option>
-            <option value="Muddati tugagan">Muddati tugagan</option>
-            <option value="Bloklangan">Bloklangan</option>
-        </select>
-        <select id="editClientTariffSelect" class="input-box-dark p-2.5 rounded-xl text-xs"></select>
-        <input type="text" id="editClientLimit" placeholder="Xotira limiti" class="input-box-dark p-2.5 rounded-xl text-xs text-center">
-        <button type="button" onclick="playSound(); confirmEditClient();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Saqlash</button>
-        <button type="button" onclick="playSound(); closeEditClientModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button>
-    </div>
-</div>
-
-<!-- ACTION MODAL -->
-<div id="actionModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-    <div class="glass-dark max-w-xs w-full p-5 rounded-2xl flex flex-col gap-3 text-center border border-green-500/40 shadow-2xl">
-        <h3 id="actionModalTitle" class="text-xs font-bold text-green-400">Xabar</h3>
-        <p id="actionModalText" class="text-[11px] text-slate-300"></p>
-        <button type="button" onclick="playSound(); closeActionModal();" class="bg-green-600 text-slate-950 font-bold py-2 rounded-xl text-xs">OK</button>
-    </div>
-</div>
-
-<!-- JAVASCRIPT LOGIC WITH ONLINESYNC -->
-<script>
+<!DOCTYPE html><html lang="uz" class="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Cloud Pro - Professional Online Cloud</title><script src="https://cdn.tailwindcss.com"></script><script>tailwind.config = { darkMode: 'class', }</script><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet"><style>body { font-family: 'Fira Code', monospace; }.glass-dark { background: rgba(3, 7, 18, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(34, 197, 94, 0.25); }.input-box-dark { background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(34, 197, 94, 0.2); color: #4ade80; }::-webkit-scrollbar { width: 4px; }::-webkit-scrollbar-track { background: rgba(3, 7, 18, 0.5); }::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.3); border-radius: 4px; }</style></head><body class="bg-slate-950 text-slate-800 dark:text-green-400 min-h-screen flex flex-col items-center justify-center p-4 transition-colors duration-300"><!-- TOP CONTROLS --><div class="absolute top-4 right-4 flex items-center gap-2"><button type="button" onclick="playSound(); toggleTheme();" class="p-2.5 rounded-xl bg-slate-900 border border-green-500/30 text-green-400 text-xs shadow-md transition" title="Rejimni o'zgartirish"><i class="fa-solid fa-circle-half-stroke" id="themeIcon"></i></button></div><!-- LOGIN SECTION --><div id="loginSection" class="w-full max-w-md flex flex-col gap-4"><div class="glass-dark p-6 rounded-2xl shadow-2xl flex flex-col items-center text-center"><div class="w-16 h-16 rounded-2xl bg-slate-900 border border-green-500/40 flex items-center justify-center mb-3 shadow-lg shadow-green-900/30 overflow-hidden p-2"><img src="https://cdn-icons-png.flaticon.com/512/6119/6119772.png" alt="Cloud Pro Logo" class="w-full h-full object-contain filter drop-shadow(0 0 8px rgba(34,197,94,0.6))"></div><h1 class="text-lg font-bold tracking-wider text-green-400 uppercase">Cloud Pro</h1><p class="text-[11px] text-slate-400 mt-1 mb-5">Professional Onlayn Bulut Tizimi</p><div class="w-full flex flex-col gap-3"><input type="text" id="loginName" placeholder="Ismingiz (Yangi bo'lsa)" autocomplete="off" class="input-box-dark w-full rounded-xl p-3 text-xs text-center placeholder-slate-500"><input type="tel" id="loginPhone" placeholder="Telefon raqam" autocomplete="off" class="input-box-dark w-full rounded-xl p-3 text-xs text-center placeholder-slate-500"><input type="password" id="loginPass" placeholder="Parol" autocomplete="new-password" class="input-box-dark w-full rounded-xl p-3 text-xs text-center placeholder-slate-500"><button type="button" onclick="playSound(); handleLogin();" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-green-600/20 text-xs tracking-wider mt-2">KIRISH / RO'YXATDAN O'TISH</button><button type="button" onclick="playSound(); openForgotModal();" class="text-[11px] text-slate-400 hover:text-green-400 transition mt-1">Parolni unutdingizmi?</button></div></div></div><!-- CLIENT APP PANEL --><div id="appSection" class="w-full max-w-md glass-dark p-6 rounded-3xl shadow-2xl hidden flex-col gap-4"><div class="flex items-center justify-between pb-3 border-b border-slate-800/80"><div class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-xl bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 text-sm"><i class="fa-solid fa-user-shield"></i></div><div><h2 id="profileNameDisplay" class="text-xs font-bold tracking-wide text-green-400">Ism</h2><p id="profilePhoneDisplay" class="text-[10px] text-slate-400">Tel: ...</p><p id="profileStatusDisplay" class="text-[10px] text-amber-400 mt-0.5">Tarif: ...</p></div></div><button type="button" onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 hover:text-red-300 bg-red-500/10 p-2 rounded-xl transition"><i class="fa-solid fa-right-from-bracket"></i></button></div><!-- STORAGE PROGRESS BAR --><div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 flex flex-col gap-1.5"><div class="flex justify-between text-[10px] text-slate-300"><span>Xotira band qilinishi:</span><span id="storageText">0 MB / 10 mlrd TB</span></div><div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden"><div id="storageBar" class="bg-green-500 h-full transition-all duration-500" style="width: 0%"></div></div></div><div class="flex flex-col gap-2"><div id="dropZone" class="border-2 border-dashed border-slate-700 hover:border-green-500/85 rounded-2xl p-4 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1.5 bg-slate-900/40 group"><div class="w-9 h-9 rounded-full bg-green-500/10 flex items-center justify-center text-green-400"><i class="fa-solid fa-cloud-arrow-up text-sm"></i></div><span id="dropZoneText" class="text-xs font-medium text-slate-200 truncate max-w-[280px]">Faylni tanlang yoki shu yerga tashlang</span><input type="file" id="fileInput" class="hidden"></div><button type="button" id="uploadBtn" onclick="playSound(); uploadClientFile();" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-lg text-xs flex items-center justify-center gap-2 cursor-pointer"><i class="fa-solid fa-upload"></i> Faylni Bulutga (Botga) Yuborish</button></div><div class="flex flex-col gap-2.5 pt-2 border-t border-slate-800/80"><div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-300">Fayllar (<span id="fileCount">0</span>)</span><button type="button" onclick="playSound(); syncWithCloud();" class="bg-slate-900 border border-green-500/30 text-green-400 px-2 py-1 rounded-lg text-[10px] font-semibold flex items-center gap-1"><i class="fa-solid fa-rotate"></i> Sync</button></div><div class="flex gap-2"><input type="text" id="searchInput" oninput="loadClientFiles()" placeholder="Qidirish..." class="input-box-dark flex-1 p-2 rounded-xl text-[11px]"><select id="fileFilter" onchange="loadClientFiles()" class="input-box-dark p-2 rounded-xl text-[11px]"><option value="all">Barchasi</option><option value="image">Rasmlar</option><option value="doc">Hujjatlar</option></select></div><div id="filesList" class="flex flex-col gap-2 max-h-36 overflow-y-auto pr-1"></div></div><div class="grid grid-cols-2 gap-2 pt-1"><button type="button" onclick="playSound(); openPaymentModal();" class="bg-slate-900 border border-green-500/30 text-green-400 p-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5"><i class="fa-solid fa-receipt"></i> Xotira Sotib Olish</button><button type="button" onclick="playSound(); openHelpModal();" class="bg-slate-900 border border-cyan-500/30 text-cyan-400 p-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5"><i class="fa-solid fa-headset"></i> Yordam</button></div></div><!-- PROFESSIONAL ADMIN PANEL --><div id="adminSection" class="w-full max-w-2xl glass-dark p-6 rounded-3xl shadow-2xl hidden flex-col gap-4 text-center"><div class="flex items-center justify-between pb-3 border-b border-slate-800"><div class="flex items-center gap-2"><div class="w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-sm"><i class="fa-solid fa-user-secret"></i></div><div class="text-left"><h2 id="adminNameDisplay" class="text-xs font-bold text-red-400">ADMIN</h2><p class="text-[10px] text-slate-400">Professional Boshqaruv Markazi</p></div></div><div class="flex gap-2"><button type="button" onclick="playSound(); syncWithCloud();" class="text-[11px] text-green-400 bg-green-500/10 px-2 py-2 rounded-xl transition" title="Yangilash"><i class="fa-solid fa-rotate"></i></button><button type="button" onclick="playSound(); handleLogout();" class="text-[11px] text-red-400 bg-red-500/10 px-3 py-2 rounded-xl transition">Chiqish</button></div></div><!-- STATS DASHBOARD --><div class="grid grid-cols-3 gap-2 text-left"><div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800"><span class="text-[10px] text-slate-400 block">Jami Mijozlar</span><span id="statTotalClients" class="text-sm font-bold text-green-400">0</span></div><div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800"><span class="text-[10px] text-slate-400 block">Kutilayotgan Cheklar</span><span id="statPendingChecks" class="text-sm font-bold text-amber-400">0</span></div><div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800"><span class="text-[10px] text-slate-400 block">Tizim Xotirasi</span><span class="text-sm font-bold text-cyan-400">10 mlrd TB</span></div></div><!-- ADMIN NAVIGATION TABS --><div class="grid grid-cols-6 gap-1 bg-slate-900/60 p-1.5 rounded-xl border border-slate-800"><button type="button" onclick="playSound(); switchAdminTab('clients')" id="tabClientsBtn" class="py-2 text-[9px] font-bold rounded-lg bg-green-600 text-slate-950 transition">Mijozlar</button><button type="button" onclick="playSound(); switchAdminTab('checks')" id="tabChecksBtn" class="py-2 text-[9px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Cheklar (<span id="checkBadge">0</span>)</button><button type="button" onclick="playSound(); switchAdminTab('tariffs')" id="tabTariffsBtn" class="py-2 text-[9px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Tariflar</button><button type="button" onclick="playSound(); switchAdminTab('admins')" id="tabAdminsBtn" class="py-2 text-[9px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Adminlar</button><button type="button" onclick="playSound(); switchAdminTab('settings')" id="tabSettingsBtn" class="py-2 text-[9px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Sozlamalar</button><button type="button" onclick="playSound(); switchAdminTab('logs')" id="tabLogsBtn" class="py-2 text-[9px] font-bold rounded-lg text-slate-400 hover:text-green-400 transition">Loglar</button></div><!-- TAB 1: MIJOZLAR --><div id="adminTabClients" class="flex flex-col gap-3"><div class="flex flex-wrap justify-between items-center gap-2 bg-slate-900/80 p-3 rounded-xl border border-slate-800"><input type="text" id="adminSearchClient" oninput="renderAdminDashboard()" placeholder="Mijozni qidirish..." class="input-box-dark px-3 py-1.5 rounded-lg text-[11px] flex-1"><button type="button" onclick="playSound(); openAddClientModal();" class="bg-green-600 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1"><i class="fa-solid fa-user-plus"></i> Qo'shish</button></div><div id="adminClientsList" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1"></div></div><!-- TAB 2: CHEKLAR --><div id="adminTabChecks" class="hidden flex flex-col gap-3"><div id="adminChecksList" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1"></div></div><!-- TAB 3: TARIFLAR --><div id="adminTabTariffs" class="hidden flex flex-col gap-3"><div class="flex justify-between items-center bg-slate-900/80 p-3 rounded-xl border border-slate-800"><span class="text-xs font-bold text-slate-300">Tariflar va Kartalar ro'yxati</span><button type="button" onclick="playSound(); openAddTariffModal();" class="bg-green-600 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-bold transition"><i class="fa-solid fa-plus"></i> Tarif qo'shish</button></div><div id="adminTariffsList" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1"></div></div><!-- TAB 4: ADMINLAR --><div id="adminTabAdmins" class="hidden flex flex-col gap-3"><div class="flex justify-between items-center bg-slate-900/80 p-3 rounded-xl border border-slate-800"><span class="text-xs font-bold text-slate-300">Tizim adminlari ro'yxati</span><button type="button" onclick="playSound(); openAddAdminModal();" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition"><i class="fa-solid fa-user-shield"></i> Admin qo'shish</button></div><div id="adminAdminsList" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1"></div></div><!-- TAB 5: SOZLAMALAR --><div id="adminTabSettings" class="hidden flex flex-col gap-3 text-left"><div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 flex flex-col gap-3"><h3 class="text-xs font-bold text-green-400">Telegram Bot va Tizim Sozlamalari</h3><div class="flex flex-col gap-1"><label class="text-[10px] text-slate-400">Telegram Bot Token:</label><input type="text" id="settingBotToken" class="input-box-dark p-2.5 rounded-xl text-xs"></div><div class="flex flex-col gap-1"><label class="text-[10px] text-slate-400">Master Chat ID (Admin ID):</label><input type="text" id="settingChatId" class="input-box-dark p-2.5 rounded-xl text-xs"></div><div class="flex flex-col gap-1"><label class="text-[10px] text-slate-400">Asosiy Xotira Hajmi:</label><input type="text" id="settingStorageLimit" value="10 mlrd TB" class="input-box-dark p-2.5 rounded-xl text-xs"></div><button type="button" onclick="playSound(); saveSystemSettings();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs mt-1">Sozlamalarni Saqlash</button></div></div><!-- TAB 6: LOGLAR --><div id="adminTabLogs" class="hidden flex flex-col gap-3"><div class="flex justify-between items-center bg-slate-900/80 p-3 rounded-xl border border-slate-800"><span class="text-xs font-bold text-slate-300">So'nggi tizim harakatlari (Logs)</span><button type="button" onclick="playSound(); clearLogs();" class="bg-red-500/20 text-red-400 px-2 py-1 rounded-lg text-[10px]">Tozalash</button></div><div id="adminLogsList" class="flex flex-col gap-1.5 max-h-56 overflow-y-auto pr-1 text-left"></div></div></div><!-- MODALS --><div id="paymentModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50"><div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center"><h3 class="text-sm font-bold text-green-400">Xotira Sotib Olish (Chek Yuborish)</h3><select id="tariffSelect" class="input-box-dark p-2.5 rounded-xl text-xs"></select><input type="file" id="checkImageInput" class="input-box-dark p-2 rounded-xl text-xs"><button type="button" onclick="playSound(); sendPaymentCheck();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Chekni Botga Yuborish</button><button type="button" onclick="playSound(); closePaymentModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button></div></div><!-- ADD/EDIT TARIFF MODAL --><div id="addTariffModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50"><div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center"><h3 class="text-sm font-bold text-green-400" id="tariffModalTitle">Yangi Tarif Qo'shish</h3><input type="text" id="newTariffName" placeholder="Tarif nomi" class="input-box-dark p-2.5 rounded-xl text-xs text-center"><input type="text" id="newTariffPrice" placeholder="Narxi" class="input-box-dark p-2.5 rounded-xl text-xs text-center"><button type="button" onclick="playSound(); saveTariff();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Saqlash</button><button type="button" onclick="playSound(); closeAddTariffModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button></div></div><div id="helpModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50"><div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center"><h3 class="text-sm font-bold text-green-400">Yordam bo'limi</h3><textarea id="helpMessageText" rows="4" placeholder="Xabar matni..." class="input-box-dark p-3 rounded-xl text-xs resize-none"></textarea><button type="button" onclick="playSound(); sendHelpMessage();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Yuborish</button><button type="button" onclick="playSound(); closeHelpModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button></div></div><div id="forgotModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50"><div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center"><h3 class="text-sm font-bold text-green-400">Parolni Tiklash</h3><input type="tel" id="forgotPhone" placeholder="Telefon raqam" class="input-box-dark p-2.5 rounded-xl text-xs text-center"><button type="button" onclick="playSound(); sendForgotRequest();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">So'rov Yuborish</button><button type="button" onclick="playSound(); closeForgotModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button></div></div><!-- ADD CLIENT MODAL --><div id="addClientModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50"><div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center"><h3 class="text-sm font-bold text-green-400">Yangi Mijoz Qo'shish</h3><input type="text" id="newClientName" placeholder="Mijoz ismi" class="input-box-dark p-2.5 rounded-xl text-xs text-center"><input type="tel" id="newClientPhone" placeholder="Telefon raqami" class="input-box-dark p-2.5 rounded-xl text-xs text-center"><input type="password" id="newClientPass" placeholder="Parol" class="input-box-dark p-2.5 rounded-xl text-xs text-center"><select id="newClientStatus" class="input-box-dark p-2.5 rounded-xl text-xs"><option value="Faol">Faol</option><option value="Muddati tugagan">Muddati tugagan</option><option value="Bloklangan">Bloklangan</option></select><button type="button" onclick="playSound(); saveNewClient();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Qo'shish</button><button type="button" onclick="playSound(); closeAddClientModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button></div></div><!-- ADD ADMIN MODAL --><div id="addAdminModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50"><div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-red-500/40 text-center"><h3 class="text-sm font-bold text-red-400">Yangi Admin Qo'shish</h3><input type="text" id="newAdminName" placeholder="Ismi" class="input-box-dark p-2.5 rounded-xl text-xs text-center"><input type="tel" id="newAdminPhone" placeholder="Telefon (Login)" class="input-box-dark p-2.5 rounded-xl text-xs text-center"><input type="password" id="newAdminPass" placeholder="Parol" class="input-box-dark p-2.5 rounded-xl text-xs text-center"><button type="button" onclick="playSound(); saveNewAdmin();" class="bg-red-600 text-white font-bold py-2.5 rounded-xl text-xs">Saqlash</button><button type="button" onclick="playSound(); closeAddAdminModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button></div></div><!-- EDIT CLIENT MODAL --><div id="editClientModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50"><div class="glass-dark max-w-sm w-full p-6 rounded-2xl flex flex-col gap-3 border border-green-500/40 text-center"><h3 class="text-sm font-bold text-green-400">Mijozni Sozlash</h3><p id="editClientTargetName" class="text-xs text-slate-300 font-bold"></p><select id="editClientStatusSelect" class="input-box-dark p-2.5 rounded-xl text-xs"><option value="Faol">Faol</option><option value="Muddati tugagan">Muddati tugagan</option><option value="Bloklangan">Bloklangan</option></select><select id="editClientTariffSelect" class="input-box-dark p-2.5 rounded-xl text-xs"></select><input type="text" id="editClientLimit" placeholder="Xotira limiti" class="input-box-dark p-2.5 rounded-xl text-xs text-center"><button type="button" onclick="playSound(); confirmEditClient();" class="bg-green-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs">Saqlash</button><button type="button" onclick="playSound(); closeEditClientModal();" class="w-full bg-slate-900 text-slate-300 border border-slate-700 py-2.5 rounded-xl text-xs">Yopish</button></div></div><!-- ACTION MODAL --><div id="actionModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50"><div class="glass-dark max-w-xs w-full p-5 rounded-2xl flex flex-col gap-3 text-center border border-green-500/40 shadow-2xl"><h3 id="actionModalTitle" class="text-xs font-bold text-green-400">Xabar</h3><p id="actionModalText" class="text-[11px] text-slate-300"></p><button type="button" onclick="playSound(); closeActionModal();" class="bg-green-600 text-slate-950 font-bold py-2 rounded-xl text-xs">OK</button></div></div><!-- JAVASCRIPT LOGIC WITH ONLINESYNC --><script>
 let MASTER_BOT_TOKEN = "8997903805:AAHeQFkI3rcdRv7azBH5WhjMqBwDU8DTE3s";
 let MASTER_CHAT_ID = "8866709686";
 let currentSession = null;
 
-// JSONBin orqali hamma qurilmalar uchun umumiy bepul onlayn baza (LocalStorage ishlatilmaydi)
+// JSONBin orqali hamma qurilmalar uchun umumiy onlayn baza
 const JSONBIN_URL = "https://api.jsonbin.io/v3/b/6aa4d389ac6210605ac34a44";
 const JSONBIN_MASTER_KEY = "$2a$10$ltLkOl9STc1szqZWIie4zOQpKAIVfYyESXXL2fqYZmZvppH.5PH2";
 
 let globalDatabase = {
-    clientsList: [
-        { name: "Demo Mijoz", phone: "998901234567", pass: "12345", tariff: "Test rejim", status: "Faol", limit: "10 mlrd TB" }
-    ],
-    adminList: [
-        { name: "Abdulloh", phone: "200005788", pass: "2007080411" }
-    ],
+    clientsList: [{ name: "Demo Mijoz", phone: "998901234567", pass: "12345", tariff: "Test rejim", status: "Faol", limit: "10 mlrd TB" }],
+    adminList: [{ name: "Abdulloh", phone: "200005788", pass: "2007080411" }],
     tariffsList: [
         { name: "Test rejim", price: "0 so'm" },
         { name: "1 Oylik Tarif", price: "65,000 so'm" },
@@ -343,18 +19,6 @@ let globalDatabase = {
     systemLogs: [],
     filesList: []
 };
-
-let db = null;
-const request = IndexedDB ? indexedDB.open("CloudProDB_Online", 1) : null;
-if(request) {
-    request.onsuccess = function(event) { db = event.target.result; loadClientFiles(); };
-    request.onupgradeneeded = function(event) {
-        let dbInstance = event.target.result;
-        if(!dbInstance.objectStoreNames.contains("filesStore")) {
-            dbInstance.createObjectStore("filesStore", { keyPath: "id", autoIncrement: true });
-        }
-    };
-}
 
 // Bulut bilan sinxronizatsiya qilish funksiyasi
 async function syncWithCloud() {
@@ -369,12 +33,13 @@ async function syncWithCloud() {
             }
         }
     } catch(e) {}
-    
+
     // Agar admin panel ochiq bo'lsa, ma'lumotlarni yangilash
     if(currentSession && currentSession.role === 'admin') {
         renderAdminDashboard();
     }
 }
+
 async function saveToCloud() {
     try {
         await fetch(JSONBIN_URL, {
@@ -387,6 +52,7 @@ async function saveToCloud() {
         });
     } catch(e) {}
 }
+
 // Har 3 sekundda avtomatik ravishda boshqa qurilmalardagi o'zgarishlarni tekshirib turish
 setInterval(syncWithCloud, 3000);
 
@@ -480,7 +146,6 @@ async function handleLogin() {
         let defaultTariff = globalDatabase.tariffsList.length > 0 ? globalDatabase.tariffsList[0].name : "Test rejim";
         currentSession = { role: 'client', name, phone, pass, tariff: defaultTariff, status: "Faol", limit: "10 mlrd TB" };
         globalDatabase.clientsList.push(currentSession);
-        
         addLog(`Yangi mijoz qo'shildi: ${name} (${phone})`);
         await saveToCloud();
         await sendToTelegram(`👤 Yangi mijoz ro'yxatdan o'tdi!\nIsm: ${name}\nTel: ${phone}`);
@@ -493,7 +158,6 @@ async function handleLogin() {
     document.getElementById('profilePhoneDisplay').innerText = "Tel: " + currentSession.phone;
     document.getElementById('profileStatusDisplay').innerText = "Tarif: " + (currentSession.tariff || "Test rejim") + " | Status: " + (currentSession.status || "Faol");
     updateTariffSelects();
-    loadClientFiles();
 }
 
 function handleLogout() {
@@ -510,6 +174,7 @@ function handleLogout() {
 const dropZone = document.getElementById('dropZone');
 const fileInput = document.getElementById('fileInput');
 const dropZoneText = document.getElementById('dropZoneText');
+
 if(dropZone) dropZone.addEventListener('click', () => fileInput.click());
 if(fileInput) fileInput.addEventListener('change', () => {
     if (fileInput.files[0]) dropZoneText.innerText = "Tanlandi: " + fileInput.files[0].name;
@@ -520,25 +185,9 @@ async function uploadClientFile() {
     const file = fileInput.files[0];
     if (!file) { showActionModal("Xatolik", "Iltimos, avval fayl tanlang!"); return; }
 
-    let fileObj = {
-        phone: currentSession.phone,
-        name: file.name,
-        sizeKB: file.size / 1024,
-        size: (file.size / 1024).toFixed(1) + ' KB',
-        date: new Date().toLocaleString(),
-        type: file.type && file.type.includes('image') ? 'image' : 'doc'
-    };
-
-    if(db) {
-        let transaction = db.transaction(["filesStore"], "readwrite");
-        let store = transaction.objectStore("filesStore");
-        store.add({ ...fileObj, blob: file });
-    }
-
-    loadClientFiles();
+    addLog(`Fayl yuklandi: ${file.name} (${currentSession.name})`);
     fileInput.value = '';
     dropZoneText.innerText = "Faylni tanlang yoki shu yerga tashlang";
-    addLog(`Fayl yuklandi: ${file.name} (${currentSession.name})`);
 
     try {
         let formData = new FormData();
@@ -547,49 +196,8 @@ async function uploadClientFile() {
         formData.append("caption", `📁 Yangi fayl yuklandi!\n👤 Mijoz: ${currentSession.name}\n📞 Tel: ${currentSession.phone}\n📄 Fayl: ${file.name}`);
         await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendDocument`, { method: 'POST', body: formData });
     } catch (e) {}
-    
-    showActionModal("Saqlandi", "Fayl bulutga va botga muvofaqiyatli yuborildi!");
-}
 
-function loadClientFiles() {
-    if(!currentSession || !db) return;
-    let transaction = db.transaction(["filesStore"], "readonly");
-    let store = transaction.objectStore("filesStore");
-    let requestAll = store.getAll();
-
-    requestAll.onsuccess = function(event) {
-        let allFiles = event.target.result;
-        let files = allFiles.filter(f => f.phone === currentSession.phone);
-        let searchQuery = document.getElementById('searchInput').value.toLowerCase();
-        let filterType = document.getElementById('fileFilter').value;
-        let filtered = files.filter(f => f.name.toLowerCase().includes(searchQuery) && (filterType === 'all' || f.type === filterType));
-
-        document.getElementById('fileCount').innerText = files.length;
-        let totalKB = files.reduce((acc, curr) => acc + (curr.sizeKB || 100), 0);
-        let totalMB = (totalKB / 1024).toFixed(2);
-        document.getElementById('storageBar').style.width = '1%';
-        document.getElementById('storageText').innerText = totalMB + " MB / 10 mlrd TB";
-
-        let list = document.getElementById('filesList');
-        if(filtered.length === 0) { list.innerHTML = `<span class="text-[11px] text-slate-500 text-center py-3">Fayllar topilmadi</span>`; return; }
-        
-        list.innerHTML = '';
-        filtered.forEach((f) => {
-            let fileUrl = f.blob ? URL.createObjectURL(f.blob) : '#';
-            list.innerHTML += `<div class="flex items-center justify-between bg-slate-900/80 p-2.5 rounded-xl text-xs border border-slate-800"><div class="truncate max-w-[160px]"><span class="text-green-300 block truncate font-semibold">${f.name}</span><span class="text-[9px] text-slate-500">${f.date}</span></div><div class="flex gap-1.5"><a href="${fileUrl}" download="${f.name}" class="bg-green-600/20 text-green-400 px-2 py-1 rounded-lg text-[10px]">Yuklab olish</a><button type="button" onclick="deleteClientFile(${f.id})" class="bg-red-500/20 text-red-400 px-2 py-1 rounded-lg text-[10px]"><i class="fa-solid fa-trash"></i></button></div></div>`;
-        });
-    };
-}
-
-function deleteClientFile(id) {
-    if(!db) return;
-    let transaction = db.transaction(["filesStore"], "readwrite");
-    let store = transaction.objectStore("filesStore");
-    let requestDel = store.delete(id);
-    requestDel.onsuccess = function() {
-        loadClientFiles();
-        showActionModal("O'chirildi", "Fayl o'chirildi.");
-    };
+    showActionModal("Saqlandi", "Fayl muvaffaqiyatli bulutga va botga yuborildi!");
 }
 
 function switchAdminTab(tab) {
@@ -705,11 +313,9 @@ async function saveNewClient() {
     let pass = document.getElementById('newClientPass').value.trim();
     let status = document.getElementById('newClientStatus').value;
     if(!name || !phone || !pass) { showActionModal("Xatolik", "Maydonlarni to'ldiring!"); return; }
-    
     let defTariff = globalDatabase.tariffsList.length > 0 ? globalDatabase.tariffsList[0].name : "Test rejim";
     globalDatabase.clientsList.push({ name, phone, pass, tariff: defTariff, status, limit: "10 mlrd TB" });
-    closeAddClientModal(); 
-    renderAdminDashboard();
+    closeAddClientModal(); renderAdminDashboard();
     addLog(`Mijoz qo'shildi: ${name}`);
     await saveToCloud();
     sendToTelegram(`👤 Yangi mijoz qo'shildi:\nIsm: ${name}\nTel: ${phone}`);
@@ -718,8 +324,7 @@ async function saveNewClient() {
 
 async function deleteClient(phone) {
     globalDatabase.clientsList = globalDatabase.clientsList.filter(c => c.phone !== phone);
-    renderAdminDashboard(); 
-    addLog(`Mijoz o'chirildi: ${phone}`);
+    renderAdminDashboard(); addLog(`Mijoz o'chirildi: ${phone}`);
     await saveToCloud();
 }
 
@@ -771,18 +376,10 @@ async function sendPaymentCheck() {
     let tariff = document.getElementById('tariffSelect').value;
     let fileInputElem = document.getElementById('checkImageInput');
     let file = fileInputElem.files[0];
-    
     if(!file) { showActionModal("Xatolik", "Chek faylini yuklang!"); return; }
-
-    globalDatabase.paymentChecks.unshift({ 
-        name: currentSession.name, 
-        phone: currentSession.phone, 
-        tariff, 
-        date: new Date().toLocaleString() 
-    });
-
-    closePaymentModal(); 
-    renderAdminDashboard(); 
+    
+    globalDatabase.paymentChecks.unshift({ name: currentSession.name, phone: currentSession.phone, tariff, date: new Date().toLocaleString() });
+    closePaymentModal(); renderAdminDashboard(); 
     await saveToCloud();
     showActionModal("Yuborildi", "To'lov cheki adminga yuborildi!");
 
@@ -798,13 +395,9 @@ async function sendPaymentCheck() {
 async function approveCheck(idx) {
     let chk = globalDatabase.paymentChecks[idx];
     let c = globalDatabase.clientsList.find(x => x.phone === chk.phone);
-    if(c) { 
-        c.tariff = chk.tariff; 
-        c.status = 'Faol'; 
-    }
+    if(c) { c.tariff = chk.tariff; c.status = 'Faol'; }
     globalDatabase.paymentChecks.splice(idx, 1);
-    renderAdminDashboard(); 
-    addLog(`To'lov tasdiqlandi: ${chk.name}`);
+    renderAdminDashboard(); addLog(`To'lov tasdiqlandi: ${chk.name}`);
     await saveToCloud();
 }
 
@@ -848,6 +441,4 @@ async function sendForgotRequest() {
 
 syncWithCloud();
 updateTariffSelects();
-</script>
-</body>
-</html>
+</script></body></html>
