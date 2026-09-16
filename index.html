@@ -9,42 +9,14 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Fira Code', monospace; 
-            background: radial-gradient(circle at 50% 10%, #064e3b 0%, #022c22 40%, #030712 100%);
-            background-attachment: fixed;
-        }
-        .glass-dark { 
-            background: rgba(3, 7, 18, 0.85); 
-            backdrop-filter: blur(20px); 
-            border: 1px solid rgba(34, 197, 94, 0.3); 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-        }
-        .input-box-dark { 
-            background: rgba(15, 23, 42, 0.9); 
-            border: 1px solid rgba(34, 197, 94, 0.25); 
-            color: #4ade80; 
-            transition: all 0.3s ease;
-        }
-        .input-box-dark:focus {
-            border-color: #4ade80;
-            box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
-            outline: none;
-        }
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 15px rgba(34, 197, 94, 0.4); }
-            50% { box-shadow: 0 0 30px rgba(34, 197, 94, 0.8); }
-        }
-        .animate-glow {
-            animation: pulseGlow 3s infinite;
-        }
-        @keyframes floatAnim {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
-        .animate-float {
-            animation: floatAnim 4s ease-in-out infinite;
-        }
+        body { font-family: 'Fira Code', monospace; background: radial-gradient(circle at 50% 10%, #064e3b 0%, #022c22 40%, #030712 100%); background-attachment: fixed; }
+        .glass-dark { background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(34, 197, 94, 0.3); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); }
+        .input-box-dark { background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(34, 197, 94, 0.25); color: #4ade80; transition: all 0.3s ease; }
+        .input-box-dark:focus { border-color: #4ade80; box-shadow: 0 0 15px rgba(34, 197, 94, 0.2); outline: none; }
+        @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 15px rgba(34, 197, 94, 0.4); } 50% { box-shadow: 0 0 30px rgba(34, 197, 94, 0.8); } }
+        .animate-glow { animation: pulseGlow 3s infinite; }
+        @keyframes floatAnim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        .animate-float { animation: floatAnim 4s ease-in-out infinite; }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: rgba(3, 7, 18, 0.5); }
         ::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.4); border-radius: 4px; }
@@ -71,9 +43,7 @@
                 <input type="text" id="loginName" placeholder="Ismingiz (Yangi bo'lsangiz)" autocomplete="off" class="input-box-dark w-full rounded-xl p-3.5 text-xs text-center placeholder-slate-500">
                 <input type="tel" id="loginPhone" placeholder="Telefon raqam (masalan: 901234567)" autocomplete="off" class="input-box-dark w-full rounded-xl p-3.5 text-xs text-center placeholder-slate-500">
                 <input type="password" id="loginPass" placeholder="Parol" autocomplete="new-password" class="input-box-dark w-full rounded-xl p-3.5 text-xs text-center placeholder-slate-500">
-                <button type="button" onclick="playSound(); handleLogin();" class="w-full bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-500 hover:to-emerald-400 text-slate-950 font-extrabold py-3.5 rounded-xl transition-all duration-300 shadow-lg shadow-green-600/30 text-xs tracking-wider mt-2 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">
-                    KIRISH / RO'YXATDAN O'TISH
-                </button>
+                <button type="button" onclick="playSound(); handleLogin();" class="w-full bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-500 hover:to-emerald-400 text-slate-950 font-extrabold py-3.5 rounded-xl transition-all duration-300 shadow-lg shadow-green-600/30 text-xs tracking-wider mt-2 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">KIRISH / RO'YXATDAN O'TISH</button>
                 <button type="button" onclick="playSound(); openForgotModal();" class="text-[11px] text-slate-400 hover:text-green-400 transition mt-1">Parolni unutdingizmi?</button>
             </div>
         </div>
@@ -92,7 +62,9 @@
                     <p id="profileStatusDisplay" class="text-[10px] text-amber-400 mt-0.5 font-semibold">Tarif: ...</p>
                 </div>
             </div>
-            <button type="button" onclick="playSound(); handleLogout();" class="text-xs text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 p-2.5 rounded-xl transition transform hover:scale-105"><i class="fa-solid fa-right-from-bracket"></i></button>
+            <button type="button" onclick="playSound(); handleLogout();" class="text-xs text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 p-2.5 rounded-xl transition transform hover:scale-105">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
         </div>
 
         <!-- STORAGE PROGRESS BAR -->
@@ -122,7 +94,9 @@
         <div class="flex flex-col gap-2.5 pt-2 border-t border-green-500/20">
             <div class="flex justify-between items-center">
                 <span class="text-xs font-bold text-slate-300">Mening fayllarim tarixi</span>
-                <button type="button" onclick="playSound(); syncWithCloud();" class="bg-slate-900 border border-green-500/30 text-green-400 px-2.5 py-1 rounded-lg text-[10px] font-semibold flex items-center gap-1 hover:bg-green-500/10 transition"><i class="fa-solid fa-rotate"></i> Sync</button>
+                <button type="button" onclick="playSound(); syncWithCloud();" class="bg-slate-900 border border-green-500/30 text-green-400 px-2.5 py-1 rounded-lg text-[10px] font-semibold flex items-center gap-1 hover:bg-green-500/10 transition">
+                    <i class="fa-solid fa-rotate"></i> Sync
+                </button>
             </div>
             <div id="filesList" class="flex flex-col gap-2 max-h-36 overflow-y-auto pr-1"></div>
         </div>
@@ -150,7 +124,9 @@
                 </div>
             </div>
             <div class="flex gap-2">
-                <button type="button" onclick="playSound(); syncWithCloud();" class="text-xs text-green-400 bg-green-500/10 hover:bg-green-500/20 px-3 py-2 rounded-xl transition" title="Yangilash"><i class="fa-solid fa-rotate"></i></button>
+                <button type="button" onclick="playSound(); syncWithCloud();" class="text-xs text-green-400 bg-green-500/10 hover:bg-green-500/20 px-3 py-2 rounded-xl transition" title="Yangilash">
+                    <i class="fa-solid fa-rotate"></i>
+                </button>
                 <button type="button" onclick="playSound(); handleLogout();" class="text-xs text-red-400 bg-red-500/10 hover:bg-red-500/20 px-3 py-2 rounded-xl transition">Chiqish</button>
             </div>
         </div>
@@ -185,7 +161,9 @@
         <div id="adminTabClients" class="flex flex-col gap-3">
             <div class="flex flex-wrap justify-between items-center gap-2 bg-slate-900/80 p-3.5 rounded-2xl border border-green-500/20">
                 <input type="text" id="adminSearchClient" oninput="renderAdminDashboard()" placeholder="Mijoz ismi yoki tel raqami..." class="input-box-dark px-3.5 py-2 rounded-xl text-xs flex-1">
-                <button type="button" onclick="playSound(); openAddClientModal();" class="bg-green-600 hover:bg-green-500 text-slate-950 px-4 py-2 rounded-xl text-xs font-extrabold transition flex items-center gap-1.5 shadow"><i class="fa-solid fa-user-plus"></i> Qo'shish</button>
+                <button type="button" onclick="playSound(); openAddClientModal();" class="bg-green-600 hover:bg-green-500 text-slate-950 px-4 py-2 rounded-xl text-xs font-extrabold transition flex items-center gap-1.5 shadow">
+                    <i class="fa-solid fa-user-plus"></i> Qo'shish
+                </button>
             </div>
             <div id="adminClientsList" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1"></div>
         </div>
@@ -199,7 +177,9 @@
         <div id="adminTabTariffs" class="hidden flex flex-col gap-3">
             <div class="flex justify-between items-center bg-slate-900/80 p-3.5 rounded-2xl border border-green-500/20">
                 <span class="text-xs font-bold text-slate-300">Tariflar ro'yxati</span>
-                <button type="button" onclick="playSound(); openAddTariffModal();" class="bg-green-600 hover:bg-green-500 text-slate-950 px-3.5 py-2 rounded-xl text-xs font-extrabold transition"><i class="fa-solid fa-plus"></i> Tarif qo'shish</button>
+                <button type="button" onclick="playSound(); openAddTariffModal();" class="bg-green-600 hover:bg-green-500 text-slate-950 px-3.5 py-2 rounded-xl text-xs font-extrabold transition">
+                    <i class="fa-solid fa-plus"></i> Tarif qo'shish
+                </button>
             </div>
             <div id="adminTariffsList" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1"></div>
         </div>
@@ -208,7 +188,9 @@
         <div id="adminTabAdmins" class="hidden flex flex-col gap-3">
             <div class="flex justify-between items-center bg-slate-900/80 p-3.5 rounded-2xl border border-green-500/20">
                 <span class="text-xs font-bold text-slate-300">Tizim adminlari</span>
-                <button type="button" onclick="playSound(); openAddAdminModal();" class="bg-red-600 hover:bg-red-500 text-white px-3.5 py-2 rounded-xl text-xs font-extrabold transition"><i class="fa-solid fa-user-shield"></i> Admin qo'shish</button>
+                <button type="button" onclick="playSound(); openAddAdminModal();" class="bg-red-600 hover:bg-red-500 text-white px-3.5 py-2 rounded-xl text-xs font-extrabold transition">
+                    <i class="fa-solid fa-user-shield"></i> Admin qo'shish
+                </button>
             </div>
             <div id="adminAdminsList" class="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1"></div>
         </div>
@@ -325,7 +307,7 @@
     </div>
 
     <!-- ACTION MODAL -->
-    <div id="actionModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+    <div id="actionModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-4 z-50 transition-all">
         <div class="glass-dark max-w-xs w-full p-5 rounded-3xl flex flex-col gap-3.5 text-center border border-green-500/40 shadow-2xl animate-glow">
             <h3 id="actionModalTitle" class="text-xs font-bold text-green-400">Xabar</h3>
             <p id="actionModalText" class="text-[11px] text-slate-300"></p>
@@ -335,468 +317,470 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-    let MASTER_BOT_TOKEN = "8997903805:AAHeQFkI3rcdRv7azBH5WhjMqBwDU8DTE3s";
-    let MASTER_CHAT_ID = "8866709686";
-    let currentSession = null;
+        let MASTER_BOT_TOKEN = "8997903805:AAHeQFkI3rcdRv7azBH5WhjMqBwDU8DTE3s";
+        let MASTER_CHAT_ID = "8866709686";
+        let currentSession = null;
 
-    let globalDatabase = {
-        clientsList: [{ name: "Demo Mijoz", phone: "998901234567", pass: "12345", tariff: "Test rejim", status: "Faol", filesCount: 0 }],
-        adminList: [{ name: "Abdulloh", phone: "200005788", pass: "2007080411" }],
-        tariffsList: [
-            { name: "Test rejim", price: "0 so'm" },
-            { name: "1 Oylik Tarif", price: "65,000 so'm" },
-            { name: "1 Yillik Tarif", price: "750,000 so'm" }
-        ],
-        paymentChecks: [],
-        systemLogs: []
-    };
+        let globalDatabase = {
+            clientsList: [{ name: "Demo Mijoz", phone: "998901234567", pass: "12345", tariff: "Test rejim", status: "Faol", filesCount: 0 }],
+            adminList: [{ name: "Abdulloh", phone: "200005788", pass: "2007080411" }],
+            tariffsList: [
+                { name: "Test rejim", price: "0 so'm" },
+                { name: "1 Oylik Tarif", price: "65,000 so'm" },
+                { name: "1 Yillik Tarif", price: "750,000 so'm" }
+            ],
+            paymentChecks: [],
+            systemLogs: []
+        };
 
-    function syncWithCloud() {
-        let saved = localStorage.getItem('cloudProDatabase');
-        if(saved) {
-            try { globalDatabase = JSON.parse(saved); } catch(e) {}
-        }
-        if(currentSession && currentSession.role === 'client') {
-            let updated = globalDatabase.clientsList.find(c => c.phone === currentSession.phone);
-            if(updated) currentSession = { role: 'client', ...updated };
-            updateClientUI();
-        }
-        if(currentSession && currentSession.role === 'admin') {
-            renderAdminDashboard();
-        }
-    }
-
-    function saveToCloud() {
-        localStorage.setItem('cloudProDatabase', JSON.stringify(globalDatabase));
-        if(currentSession && currentSession.role === 'admin') {
-            renderAdminDashboard();
-        }
-    }
-
-    setInterval(syncWithCloud, 2000);
-
-    function addLog(text) {
-        globalDatabase.systemLogs.unshift({ text, date: new Date().toLocaleString() });
-        if(globalDatabase.systemLogs.length > 50) globalDatabase.systemLogs.pop();
-        saveToCloud();
-    }
-
-    function playSound() {
-        try {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.15);
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.15);
-        } catch(e) {}
-    }
-
-    function toggleTheme() { document.body.classList.toggle('dark'); }
-
-    function showActionModal(title, text) {
-        document.getElementById('actionModalTitle').innerText = title;
-        document.getElementById('actionModalText').innerText = text;
-        let m = document.getElementById('actionModal');
-        m.classList.remove('hidden'); m.classList.add('flex');
-    }
-
-    function closeActionModal() {
-        let m = document.getElementById('actionModal');
-        m.classList.add('hidden'); m.classList.remove('flex');
-    }
-
-    async function sendToTelegram(text) {
-        try {
-            await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: MASTER_CHAT_ID, text: text })
-            });
-        } catch (e) {}
-    }
-
-    function updateTariffSelects() {
-        let selects = [document.getElementById('tariffSelect'), document.getElementById('editClientTariffSelect')];
-        selects.forEach(sel => {
-            if(!sel) return;
-            sel.innerHTML = '';
-            globalDatabase.tariffsList.forEach(t => {
-                sel.innerHTML += `<option value="${t.name}">${t.name} (${t.price})</option>`;
-            });
-        });
-    }
-
-    function updateClientUI() {
-        document.getElementById('profileNameDisplay').innerText = currentSession.name;
-        document.getElementById('profilePhoneDisplay').innerText = "Tel: " + currentSession.phone;
-        let tariff = currentSession.tariff || "Test rejim";
-        document.getElementById('profileStatusDisplay').innerText = "Tarif: " + tariff;
-
-        let count = currentSession.filesCount || 0;
-        if (tariff === "Test rejim") {
-            document.getElementById('storageText').innerText = `${count} / 5 ta (Test rejim)`;
-            let percent = (count / 5) * 100;
-            document.getElementById('storageBar').style.width = percent + "%";
-            document.getElementById('storageBar').className = count >= 5 ? "bg-red-500 h-full rounded-full transition-all duration-500" : "bg-gradient-to-r from-green-500 to-emerald-400 h-full rounded-full transition-all duration-500";
-        } else {
-            document.getElementById('storageText').innerText = `${count} ta fayl (Cheksiz tarif)`;
-            document.getElementById('storageBar').style.width = "100%";
-            document.getElementById('storageBar').className = "bg-gradient-to-r from-cyan-500 to-blue-500 h-full rounded-full transition-all duration-500";
+        function syncWithCloud() {
+            let saved = localStorage.getItem('cloudProDatabase');
+            if(saved) {
+                try { globalDatabase = JSON.parse(saved); } catch(e) {}
+            }
+            if(currentSession && currentSession.role === 'client') {
+                let updated = globalDatabase.clientsList.find(c => c.phone === currentSession.phone);
+                if(updated) currentSession = { role: 'client', ...updated };
+                updateClientUI();
+            }
+            if(currentSession && currentSession.role === 'admin') {
+                renderAdminDashboard();
+            }
         }
 
-        let fList = document.getElementById('filesList');
-        fList.innerHTML = `<span class="text-[11px] text-slate-400 py-2">Yuklangan fayllar miqdori: ${count} ta</span>`;
-    }
-
-    function handleLogin() {
-        syncWithCloud();
-        const name = document.getElementById('loginName').value.trim();
-        const phone = document.getElementById('loginPhone').value.trim();
-        const pass = document.getElementById('loginPass').value.trim();
-
-        if (!pass) { showActionModal("Xatolik", "Parolni kiriting!"); return; }
-
-        let foundAdmin = globalDatabase.adminList.find(a => a.pass === pass && (phone === "" || a.phone === phone));
-        if (foundAdmin) {
-            currentSession = { role: 'admin', name: foundAdmin.name, phone: foundAdmin.phone };
-            document.getElementById('loginSection').style.display = 'none';
-            let adminSec = document.getElementById('adminSection');
-            adminSec.classList.remove('hidden'); adminSec.classList.add('flex');
-            document.getElementById('adminNameDisplay').innerText = "ADMIN (" + foundAdmin.name + ")";
-            document.getElementById('settingBotToken').value = MASTER_BOT_TOKEN;
-            document.getElementById('settingChatId').value = MASTER_CHAT_ID;
-            renderAdminDashboard();
-            addLog(`Admin kirdi: ${foundAdmin.name}`);
-            showActionModal("Xush kelibsiz", "Admin paneli ochildi!");
-            return;
+        function saveToCloud() {
+            localStorage.setItem('cloudProDatabase', JSON.stringify(globalDatabase));
+            if(currentSession && currentSession.role === 'admin') {
+                renderAdminDashboard();
+            }
         }
 
-        if (!phone) { showActionModal("Xatolik", "Telefon raqamni kiriting!"); return; }
+        setInterval(syncWithCloud, 2000);
 
-        let foundClient = globalDatabase.clientsList.find(c => c.phone === phone);
-        if (foundClient) {
-            if (foundClient.status === 'Bloklangan') { showActionModal("Xatolik", "Sizning akkauntingiz bloklangan!"); return; }
-            if (foundClient.pass !== pass) { showActionModal("Xatolik", "Parol noto'g'ri!"); return; }
-            currentSession = { role: 'client', ...foundClient };
-        } else {
-            if (!name) { showActionModal("Xatolik", "Ismingizni kiriting!"); return; }
-            let defaultTariff = globalDatabase.tariffsList.length > 0 ? globalDatabase.tariffsList[0].name : "Test rejim";
-            currentSession = { role: 'client', name, phone, pass, tariff: defaultTariff, status: "Faol", filesCount: 0 };
-            globalDatabase.clientsList.push(currentSession);
-            addLog(`Yangi mijoz qo'shildi: ${name} (${phone})`);
+        function addLog(text) {
+            globalDatabase.systemLogs.unshift({ text, date: new Date().toLocaleString() });
+            if(globalDatabase.systemLogs.length > 50) globalDatabase.systemLogs.pop();
             saveToCloud();
-            sendToTelegram(`👤 Yangi mijoz ro'yxatdan o'tdi!\nIsm: ${name}\nTel: ${phone}`);
         }
 
-        document.getElementById('loginSection').style.display = 'none';
-        let appSec = document.getElementById('appSection');
-        appSec.classList.remove('hidden'); appSec.classList.add('flex');
-        updateClientUI();
-        updateTariffSelects();
-    }
-
-    function handleLogout() {
-        currentSession = null;
-        document.getElementById('appSection').classList.add('hidden');
-        document.getElementById('appSection').classList.remove('flex');
-        document.getElementById('adminSection').classList.add('hidden');
-        document.getElementById('adminSection').classList.remove('flex');
-        document.getElementById('loginSection').style.display = 'flex';
-        document.getElementById('loginPass').value = '';
-        showActionModal("Chiqish", "Tizimdan muvaffaqiyatli chiqildi.");
-    }
-
-    const dropZone = document.getElementById('dropZone');
-    const fileInput = document.getElementById('fileInput');
-    const dropZoneText = document.getElementById('dropZoneText');
-
-    if(dropZone) dropZone.addEventListener('click', () => fileInput.click());
-    if(fileInput) fileInput.addEventListener('change', () => {
-        if (fileInput.files[0]) dropZoneText.innerText = "Tanlandi: " + fileInput.files[0].name;
-    });
-
-    async function uploadClientFile() {
-        if (!currentSession) { showActionModal("Xatolik", "Tizimga kiring!"); return; }
-        
-        let currentTariff = currentSession.tariff || "Test rejim";
-        let count = currentSession.filesCount || 0;
-        if (currentTariff === "Test rejim" && count >= 5) {
-            showActionModal("Limit tugadi!", "Test rejimda faqat 5 dona fayl yuklash mumkin! Iltimos, xotira (tarif) sotib oling.");
-            return;
+        function playSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.15);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+            } catch(e) {}
         }
 
-        const file = fileInput.files[0];
-        if (!file) { showActionModal("Xatolik", "Iltimos, avval fayl tanlang!"); return; }
+        function toggleTheme() { document.body.classList.toggle('dark'); }
 
-        currentSession.filesCount = count + 1;
-        let globalClient = globalDatabase.clientsList.find(c => c.phone === currentSession.phone);
-        if(globalClient) {
-            globalClient.filesCount = currentSession.filesCount;
+        function showActionModal(title, text) {
+            document.getElementById('actionModalTitle').innerText = title;
+            document.getElementById('actionModalText').innerText = text;
+            let m = document.getElementById('actionModal');
+            m.classList.remove('hidden'); m.classList.add('flex');
         }
 
-        addLog(`Fayl yuklandi: ${file.name} (${currentSession.name})`);
-        fileInput.value = '';
-        dropZoneText.innerText = "Faylni tanlang yoki shu yerga tashlang";
-        updateClientUI();
-        saveToCloud();
+        function closeActionModal() {
+            let m = document.getElementById('actionModal');
+            m.classList.add('hidden'); m.classList.remove('flex');
+        }
 
-        try {
-            let formData = new FormData();
-            formData.append("chat_id", MASTER_CHAT_ID);
-            formData.append("document", file);
-            formData.append("caption", `📁 Yangi fayl yuklandi!\n👤 Mijoz: ${currentSession.name}\n📞 Tel: ${currentSession.phone}\n📄 Fayl: ${file.name}`);
-            await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendDocument`, { method: 'POST', body: formData });
-        } catch (e) {}
+        async function sendToTelegram(text) {
+            try {
+                let res = await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: MASTER_CHAT_ID, text: text })
+                });
+                let data = await res.json();
+                console.log("Telegram sendMessage javobi:", data);
+            } catch (e) {
+                console.error("Telegram xabar yuborishda xatolik:", e);
+            }
+        }
 
-        showActionModal("Saqlandi", "Fayl muvaffaqiyatli bulutga va botga yuborildi!");
-    }
+        function updateTariffSelects() {
+            let selects = [document.getElementById('tariffSelect'), document.getElementById('editClientTariffSelect')];
+            selects.forEach(sel => {
+                if(!sel) return;
+                sel.innerHTML = '';
+                globalDatabase.tariffsList.forEach(t => {
+                    sel.innerHTML += `<option value="${t.name}">${t.name} (${t.price})</option>`;
+                });
+            });
+        }
 
-    function switchAdminTab(tab) {
-        ['Clients', 'Checks', 'Tariffs', 'Admins', 'Settings', 'Logs'].forEach(t => {
-            let el = document.getElementById('adminTab' + t);
-            let btn = document.getElementById('tab' + t + 'Btn');
-            if(el) el.classList.add('hidden');
-            if(btn) btn.className = "py-2.5 text-[10px] font-bold rounded-xl text-slate-400 hover:text-green-400 transition";
+        function updateClientUI() {
+            document.getElementById('profileNameDisplay').innerText = currentSession.name;
+            document.getElementById('profilePhoneDisplay').innerText = "Tel: " + currentSession.phone;
+            let tariff = currentSession.tariff || "Test rejim";
+            document.getElementById('profileStatusDisplay').innerText = "Tarif: " + tariff;
+            let count = currentSession.filesCount || 0;
+
+            if (tariff === "Test rejim") {
+                document.getElementById('storageText').innerText = `${count} / 5 ta (Test rejim)`;
+                let percent = (count / 5) * 100;
+                document.getElementById('storageBar').style.width = percent + "%";
+                document.getElementById('storageBar').className = count >= 5 ? "bg-red-500 h-full rounded-full transition-all duration-500" : "bg-gradient-to-r from-green-500 to-emerald-400 h-full rounded-full transition-all duration-500";
+            } else {
+                document.getElementById('storageText').innerText = `${count} ta fayl (Cheksiz tarif)`;
+                document.getElementById('storageBar').style.width = "100%";
+                document.getElementById('storageBar').className = "bg-gradient-to-r from-cyan-500 to-blue-500 h-full rounded-full transition-all duration-500";
+            }
+
+            let fList = document.getElementById('filesList');
+            fList.innerHTML = `<span class="text-[11px] text-slate-400 py-2">Yuklangan fayllar miqdori: ${count} ta</span>`;
+        }
+
+        async function handleLogin() {
+            syncWithCloud();
+            const name = document.getElementById('loginName').value.trim();
+            const phone = document.getElementById('loginPhone').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+
+            if (!pass) { showActionModal("Xatolik", "Parolni kiriting!"); return; }
+
+            let foundAdmin = globalDatabase.adminList.find(a => a.pass === pass && (phone === "" || a.phone === phone));
+            if (foundAdmin) {
+                currentSession = { role: 'admin', name: foundAdmin.name, phone: foundAdmin.phone };
+                document.getElementById('loginSection').style.display = 'none';
+                let adminSec = document.getElementById('adminSection');
+                adminSec.classList.remove('hidden'); adminSec.classList.add('flex');
+                document.getElementById('adminNameDisplay').innerText = "ADMIN (" + foundAdmin.name + ")";
+                document.getElementById('settingBotToken').value = MASTER_BOT_TOKEN;
+                document.getElementById('settingChatId').value = MASTER_CHAT_ID;
+                renderAdminDashboard();
+                addLog(`Admin kirdi: ${foundAdmin.name}`);
+                showActionModal("Xush kelibsiz", "Admin paneli ochildi!");
+                return;
+            }
+
+            if (!phone) { showActionModal("Xatolik", "Telefon raqamni kiriting!"); return; }
+
+            let foundClient = globalDatabase.clientsList.find(c => c.phone === phone);
+            if (foundClient) {
+                if (foundClient.status === 'Bloklangan') { showActionModal("Xatolik", "Sizning akkauntingiz bloklangan!"); return; }
+                if (foundClient.pass !== pass) { showActionModal("Xatolik", "Parol noto'g'ri!"); return; }
+                currentSession = { role: 'client', ...foundClient };
+            } else {
+                if (!name) { showActionModal("Xatolik", "Ismingizni kiriting!"); return; }
+                let defaultTariff = globalDatabase.tariffsList.length > 0 ? globalDatabase.tariffsList[0].name : "Test rejim";
+                currentSession = { role: 'client', name, phone, pass, tariff: defaultTariff, status: "Faol", filesCount: 0 };
+                globalDatabase.clientsList.push(currentSession);
+                addLog(`Yangi mijoz qo'shildi: ${name} (${phone})`);
+                saveToCloud();
+                await sendToTelegram(`👤 Yangi mijoz ro'yxatdan o'tdi!\nIsm: ${name}\nTel: ${phone}`);
+            }
+
+            document.getElementById('loginSection').style.display = 'none';
+            let appSec = document.getElementById('appSection');
+            appSec.classList.remove('hidden'); appSec.classList.add('flex');
+            updateClientUI();
+            updateTariffSelects();
+        }
+
+        function handleLogout() {
+            currentSession = null;
+            document.getElementById('appSection').classList.add('hidden');
+            document.getElementById('appSection').classList.remove('flex');
+            document.getElementById('adminSection').classList.add('hidden');
+            document.getElementById('adminSection').classList.remove('flex');
+            document.getElementById('loginSection').style.display = 'flex';
+            document.getElementById('loginPass').value = '';
+            showActionModal("Chiqish", "Tizimdan muvaffaqiyatli chiqildi.");
+        }
+
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const dropZoneText = document.getElementById('dropZoneText');
+
+        if(dropZone) dropZone.addEventListener('click', () => fileInput.click());
+        if(fileInput) fileInput.addEventListener('change', () => {
+            if (fileInput.files[0]) dropZoneText.innerText = "Tanlandi: " + fileInput.files[0].name;
         });
-        let targetEl = document.getElementById('adminTab' + tab.charAt(0).toUpperCase() + tab.slice(1));
-        let targetBtn = document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1) + 'Btn');
-        if(targetEl) targetEl.classList.remove('hidden');
-        if(targetBtn) targetBtn.className = "py-2.5 text-[10px] font-bold rounded-xl bg-green-600 text-slate-950 transition shadow";
-        renderAdminDashboard();
-    }
 
-    function renderAdminDashboard() {
+        async function uploadClientFile() {
+            if (!currentSession) { showActionModal("Xatolik", "Tizimga kiring!"); return; }
+            let currentTariff = currentSession.tariff || "Test rejim";
+            let count = currentSession.filesCount || 0;
+
+            if (currentTariff === "Test rejim" && count >= 5) {
+                showActionModal("Limit tugadi!", "Test rejimda faqat 5 dona fayl yuklash mumkin! Iltimos, xotira (tarif) sotib oling.");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            if (!file) { showActionModal("Xatolik", "Iltimos, avval fayl tanlang!"); return; }
+
+            currentSession.filesCount = count + 1;
+            let globalClient = globalDatabase.clientsList.find(c => c.phone === currentSession.phone);
+            if(globalClient) { globalClient.filesCount = currentSession.filesCount; }
+
+            addLog(`Fayl yuklandi: ${file.name} (${currentSession.name})`);
+            fileInput.value = '';
+            dropZoneText.innerText = "Faylni tanlang yoki shu yerga tashlang";
+            updateClientUI();
+            saveToCloud();
+
+            try {
+                let formData = new FormData();
+                formData.append("chat_id", MASTER_CHAT_ID);
+                formData.append("document", file);
+                formData.append("caption", `📁 Yangi fayl yuklandi!\n👤 Mijoz: ${currentSession.name}\n📞 Tel: ${currentSession.phone}\n📄 Fayl: ${file.name}`);
+                let res = await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendDocument`, { method: 'POST', body: formData });
+                let data = await res.json();
+                console.log("Telegram sendDocument javobi:", data);
+            } catch (e) {
+                console.error("Fayl yuborishda xatolik:", e);
+            }
+
+            showActionModal("Saqlandi", "Fayl muvaffaqiyatli bulutga va botga yuborildi!");
+        }
+
+        function switchAdminTab(tab) {
+            ['Clients', 'Checks', 'Tariffs', 'Admins', 'Settings', 'Logs'].forEach(t => {
+                let el = document.getElementById('adminTab' + t);
+                let btn = document.getElementById('tab' + t + 'Btn');
+                if(el) el.classList.add('hidden');
+                if(btn) btn.className = "py-2.5 text-[10px] font-bold rounded-xl text-slate-400 hover:text-green-400 transition";
+            });
+            let targetEl = document.getElementById('adminTab' + tab.charAt(0).toUpperCase() + tab.slice(1));
+            let targetBtn = document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1) + 'Btn');
+            if(targetEl) targetEl.classList.remove('hidden');
+            if(targetBtn) targetBtn.className = "py-2.5 text-[10px] font-bold rounded-xl bg-green-600 text-slate-950 transition shadow";
+            renderAdminDashboard();
+        }
+
+        function renderAdminDashboard() {
+            syncWithCloud();
+            document.getElementById('statTotalClients').innerText = globalDatabase.clientsList.length;
+            document.getElementById('statPendingChecks').innerText = globalDatabase.paymentChecks.length;
+            document.getElementById('checkBadge').innerText = globalDatabase.paymentChecks.length;
+
+            let searchVal = document.getElementById('adminSearchClient').value.toLowerCase();
+            let cList = document.getElementById('adminClientsList');
+            let filteredClients = globalDatabase.clientsList.filter(c => c.name.toLowerCase().includes(searchVal) || c.phone.includes(searchVal));
+
+            cList.innerHTML = filteredClients.length === 0 ? `<span class="text-[11px] text-slate-400 py-4">Mijozlar topilmadi</span>` : '';
+            filteredClients.forEach((c) => {
+                let statusColor = c.status === 'Bloklangan' ? 'text-red-400 bg-red-500/10' : (c.status === 'Muddati tugagan' ? 'text-amber-400 bg-amber-500/10' : 'text-green-400 bg-green-500/10');
+                cList.innerHTML += `<div class="flex items-center justify-between bg-slate-900/90 p-3.5 rounded-2xl border border-green-500/20 text-left shadow"><div><span class="text-xs font-bold text-green-400">${c.name}</span><p class="text-[10px] text-slate-400">Tel: ${c.phone} | Fayllar: ${c.filesCount || 0} ta</p><span class="text-[9px] ${statusColor} px-2 py-0.5 rounded-md mt-1 inline-block font-semibold">${c.status || 'Faol'} | Tarif: ${c.tariff || 'Test'}</span></div><div class="flex flex-col gap-1.5"><button type="button" onclick="openEditClientModal('${c.phone}')" class="bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-400 px-2.5 py-1 rounded-xl text-[10px] transition">Sozlash</button><button type="button" onclick="deleteClient('${c.phone}')" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2.5 py-1 rounded-xl text-[10px] transition">O'chirish</button></div></div>`;
+            });
+
+            let chList = document.getElementById('adminChecksList');
+            chList.innerHTML = globalDatabase.paymentChecks.length === 0 ? `<span class="text-[11px] text-slate-400 py-6">To'lov cheklari mavjud emas</span>` : '';
+            globalDatabase.paymentChecks.forEach((chk, idx) => {
+                chList.innerHTML += `<div class="flex flex-col gap-2.5 bg-slate-900/90 p-4 rounded-2xl border border-amber-500/30 text-left shadow"><span class="text-xs font-bold text-green-400">${chk.name} (${chk.phone}) — <span class="text-amber-400">${chk.tariff}</span></span><span class="text-[10px] text-slate-400">Yuborilgan vaqti: ${chk.date}</span><div class="flex gap-2 pt-1"><button type="button" onclick="approveCheck(${idx})" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-extrabold py-2 rounded-xl text-[10px] transition">Tasdiqlash (Tarif berish)</button><button type="button" onclick="removeCheck(${idx})" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-4 py-2 rounded-xl text-[10px] font-semibold transition">Rad etish</button></div></div>`;
+            });
+
+            let tList = document.getElementById('adminTariffsList');
+            tList.innerHTML = '';
+            globalDatabase.tariffsList.forEach((t, i) => {
+                tList.innerHTML += `<div class="flex items-center justify-between bg-slate-900/90 p-3.5 rounded-2xl border border-green-500/20 text-left shadow"><div><span class="text-xs font-bold text-green-400">${t.name}</span><p class="text-[10px] text-slate-400">Narxi: ${t.price}</p></div><div class="flex gap-1.5"><button type="button" onclick="openEditTariffModal(${i})" class="bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-400 px-2.5 py-1 rounded-xl text-[10px] transition">Tahrirlash</button><button type="button" onclick="deleteTariff(${i})" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2.5 py-1 rounded-xl text-[10px] transition">O'chirish</button></div></div>`;
+            });
+
+            let aList = document.getElementById('adminAdminsList');
+            aList.innerHTML = '';
+            globalDatabase.adminList.forEach((a, i) => {
+                aList.innerHTML += `<div class="flex items-center justify-between bg-slate-900/90 p-3.5 rounded-2xl border border-red-500/20 text-left shadow"><span class="text-xs font-bold text-red-400">${a.name} (${a.phone})</span>${globalDatabase.adminList.length > 1 ? `<button type="button" onclick="deleteAdmin(${i})" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2.5 py-1 rounded-xl text-[10px] transition">O'chirish</button>` : ''}</div>`;
+            });
+
+            let lList = document.getElementById('adminLogsList');
+            lList.innerHTML = globalDatabase.systemLogs.length === 0 ? `<span class="text-[11px] text-slate-400">Loglar bo'sh</span>` : '';
+            globalDatabase.systemLogs.forEach(l => {
+                lList.innerHTML += `<div class="text-[10px] text-slate-300 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">[${l.date}] ${l.text}</div>`;
+            });
+        }
+
+        function saveSystemSettings() {
+            MASTER_BOT_TOKEN = document.getElementById('settingBotToken').value.trim();
+            MASTER_CHAT_ID = document.getElementById('settingChatId').value.trim();
+            showActionModal("Muvaffaqiyatli", "Tizim sozlamalari saqlandi!");
+            addLog("Tizim sozlamalari yangilandi");
+        }
+
+        function openAddTariffModal() {
+            editingTariffIdx = null;
+            document.getElementById('tariffModalTitle').innerText = "Yangi Tarif Qo'shish";
+            document.getElementById('newTariffName').value = '';
+            document.getElementById('newTariffPrice').value = '';
+            document.getElementById('addTariffModal').classList.remove('hidden'); document.getElementById('addTariffModal').classList.add('flex');
+        }
+
+        let editingTariffIdx = null;
+        let editingPhone = null;
+
+        function openEditTariffModal(idx) {
+            editingTariffIdx = idx;
+            let t = globalDatabase.tariffsList[idx];
+            document.getElementById('tariffModalTitle').innerText = "Tarifni Tahrirlash";
+            document.getElementById('newTariffName').value = t.name;
+            document.getElementById('newTariffPrice').value = t.price;
+            document.getElementById('addTariffModal').classList.remove('hidden'); document.getElementById('addTariffModal').classList.add('flex');
+        }
+
+        function closeAddTariffModal() { document.getElementById('addTariffModal').classList.add('hidden'); document.getElementById('addTariffModal').classList.remove('flex'); }
+
+        function saveTariff() {
+            let name = document.getElementById('newTariffName').value.trim();
+            let price = document.getElementById('newTariffPrice').value.trim();
+            if(!name || !price) { showActionModal("Xatolik", "Barcha maydonlarni to'ldiring!"); return; }
+            if(editingTariffIdx !== null) {
+                globalDatabase.tariffsList[editingTariffIdx] = { name, price };
+            } else {
+                globalDatabase.tariffsList.push({ name, price });
+            }
+            closeAddTariffModal(); renderAdminDashboard(); updateTariffSelects();
+            saveToCloud();
+            showActionModal("Muvaffaqiyatli", "Tarif muvaffaqiyatli saqlandi!");
+        }
+
+        function deleteTariff(idx) {
+            if(globalDatabase.tariffsList.length <= 1) { showActionModal("Xatolik", "Kamida bitta tarif qolishi kerak!"); return; }
+            globalDatabase.tariffsList.splice(idx, 1);
+            renderAdminDashboard(); updateTariffSelects();
+            saveToCloud();
+        }
+
+        function openAddClientModal() { document.getElementById('addClientModal').classList.remove('hidden'); document.getElementById('addClientModal').classList.add('flex'); }
+        function closeAddClientModal() { document.getElementById('addClientModal').classList.add('hidden'); document.getElementById('addClientModal').classList.remove('flex'); }
+
+        async function saveNewClient() {
+            let name = document.getElementById('newClientName').value.trim();
+            let phone = document.getElementById('newClientPhone').value.trim();
+            let pass = document.getElementById('newClientPass').value.trim();
+            let status = document.getElementById('newClientStatus').value;
+            if(!name || !phone || !pass) { showActionModal("Xatolik", "Maydonlarni to'ldiring!"); return; }
+            let defTariff = globalDatabase.tariffsList.length > 0 ? globalDatabase.tariffsList[0].name : "Test rejim";
+            globalDatabase.clientsList.push({ name, phone, pass, tariff: defTariff, status, filesCount: 0 });
+            closeAddClientModal(); renderAdminDashboard();
+            addLog(`Mijoz qo'shildi: ${name}`);
+            saveToCloud();
+            await sendToTelegram(`👤 Yangi mijoz qo'shildi:\nIsm: ${name}\nTel: ${phone}`);
+            showActionModal("Muvaffaqiyatli", "Mijoz qo'shildi va ma'lumotlar yangilandi!");
+        }
+
+        function deleteClient(phone) {
+            globalDatabase.clientsList = globalDatabase.clientsList.filter(c => c.phone !== phone);
+            renderAdminDashboard(); addLog(`Mijoz o'chirildi: ${phone}`);
+            saveToCloud();
+        }
+
+        function openEditClientModal(phone) {
+            editingPhone = phone;
+            let c = globalDatabase.clientsList.find(x => x.phone === phone);
+            document.getElementById('editClientTargetName').innerText = c.name + " (" + c.phone + ")";
+            document.getElementById('editClientStatusSelect').value = c.status || 'Faol';
+            updateTariffSelects();
+            document.getElementById('editClientTariffSelect').value = c.tariff || (globalDatabase.tariffsList[0] ? globalDatabase.tariffsList[0].name : '');
+            document.getElementById('editClientModal').classList.remove('hidden'); document.getElementById('editClientModal').classList.add('flex');
+        }
+
+        function closeEditClientModal() { document.getElementById('editClientModal').classList.add('hidden'); document.getElementById('editClientModal').classList.remove('flex'); }
+
+        function confirmEditClient() {
+            let c = globalDatabase.clientsList.find(x => x.phone === editingPhone);
+            if(c) {
+                c.status = document.getElementById('editClientStatusSelect').value;
+                c.tariff = document.getElementById('editClientTariffSelect').value;
+            }
+            closeEditClientModal(); renderAdminDashboard(); addLog(`Mijoz sozlandi: ${c.name}`);
+            saveToCloud();
+        }
+
+        function openAddAdminModal() { document.getElementById('addAdminModal').classList.remove('hidden'); document.getElementById('addAdminModal').classList.add('flex'); }
+        function closeAddAdminModal() { document.getElementById('addAdminModal').classList.add('hidden'); document.getElementById('addAdminModal').classList.remove('flex'); }
+
+        function saveNewAdmin() {
+            let name = document.getElementById('newAdminName').value.trim();
+            let phone = document.getElementById('newAdminPhone').value.trim();
+            let pass = document.getElementById('newAdminPass').value.trim();
+            if(!name || !phone || !pass) return;
+            globalDatabase.adminList.push({ name, phone, pass });
+            closeAddAdminModal(); renderAdminDashboard();
+            saveToCloud();
+        }
+
+        function deleteAdmin(idx) {
+            if(globalDatabase.adminList.length <= 1) return;
+            globalDatabase.adminList.splice(idx, 1);
+            renderAdminDashboard();
+            saveToCloud();
+        }
+
+        async function sendPaymentCheck() {
+            let tariff = document.getElementById('tariffSelect').value;
+            let fileInputElem = document.getElementById('checkImageInput');
+            let file = fileInputElem.files[0];
+            if(!file) { showActionModal("Xatolik", "Chek faylini (skrinshotini) yuklab bering!"); return; }
+
+            globalDatabase.paymentChecks.unshift({ name: currentSession.name, phone: currentSession.phone, tariff, date: new Date().toLocaleString() });
+            closePaymentModal(); renderAdminDashboard(); saveToCloud();
+            showActionModal("Yuborildi", "To'lov cheki adminga yuborildi! Tez orada tasdiqlanadi.");
+
+            try {
+                let formData = new FormData();
+                formData.append("chat_id", MASTER_CHAT_ID);
+                formData.append("document", file);
+                formData.append("caption", `💳 Yangi to'lov cheki keldi!\n👤 Mijoz: ${currentSession.name}\n📞 Tel: ${currentSession.phone}\n📦 Tanlangan tarif: ${tariff}`);
+                let res = await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendDocument`, { method: 'POST', body: formData });
+                let data = await res.json();
+                console.log("Telegram sendDocument (chek) javobi:", data);
+            } catch (e) {
+                console.error("Chek yuborishda xatolik:", e);
+            }
+        }
+
+        function approveCheck(idx) {
+            let chk = globalDatabase.paymentChecks[idx];
+            let c = globalDatabase.clientsList.find(x => x.phone === chk.phone);
+            if(c) { c.tariff = chk.tariff; c.status = 'Faol'; }
+            globalDatabase.paymentChecks.splice(idx, 1);
+            renderAdminDashboard(); addLog(`To'lov tasdiqlandi: ${chk.name} (${chk.tariff})`);
+            saveToCloud();
+            showActionModal("Tasdiqlandi", "Mijozga tanlangan tarif berildi va statusi faollashtirildi!");
+        }
+
+        function removeCheck(idx) {
+            globalDatabase.paymentChecks.splice(idx, 1);
+            renderAdminDashboard();
+            saveToCloud();
+        }
+
+        function clearLogs() { globalDatabase.systemLogs = []; renderAdminDashboard(); saveToCloud(); }
+
+        function openPaymentModal() { updateTariffSelects(); document.getElementById('paymentModal').classList.remove('hidden'); document.getElementById('paymentModal').classList.add('flex'); }
+        function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); document.getElementById('paymentModal').classList.remove('flex'); }
+
+        function openHelpModal() { document.getElementById('helpModal').classList.remove('hidden'); document.getElementById('helpModal').classList.add('flex'); }
+        function closeHelpModal() { document.getElementById('helpModal').classList.add('hidden'); document.getElementById('helpModal').classList.remove('flex'); }
+
+        async function sendHelpMessage() {
+            let text = document.getElementById('helpMessageText').value.trim();
+            if(!text) return;
+            await sendToTelegram(`💬 Murojaat:\n👤 ${currentSession.name} (${currentSession.phone})\n📝 ${text}`);
+            closeHelpModal(); showActionModal("Yuborildi", "Xabaringiz adminga yetkazildi!");
+        }
+
+        function openForgotModal() { document.getElementById('forgotModal').classList.remove('hidden'); document.getElementById('forgotModal').classList.add('flex'); }
+        function closeForgotModal() { document.getElementById('forgotModal').classList.add('hidden'); document.getElementById('forgotModal').classList.remove('flex'); }
+
+        async function sendForgotRequest() {
+            let phone = document.getElementById('forgotPhone').value.trim();
+            if(!phone) { showActionModal("Xatolik", "Telefon raqamingizni kiriting!"); return; }
+            await sendToTelegram(`🔑 Parolni tiklash so'rovi:\n📞 Tel: ${phone}`);
+            closeForgotModal();
+            showActionModal("Yuborildi", "Parolni tiklash so'rovi adminga yuborildi!");
+        }
+
         syncWithCloud();
-        document.getElementById('statTotalClients').innerText = globalDatabase.clientsList.length;
-        document.getElementById('statPendingChecks').innerText = globalDatabase.paymentChecks.length;
-        document.getElementById('checkBadge').innerText = globalDatabase.paymentChecks.length;
-
-        let searchVal = document.getElementById('adminSearchClient').value.toLowerCase();
-        let cList = document.getElementById('adminClientsList');
-        let filteredClients = globalDatabase.clientsList.filter(c => c.name.toLowerCase().includes(searchVal) || c.phone.includes(searchVal));
-        
-        cList.innerHTML = filteredClients.length === 0 ? `<span class="text-[11px] text-slate-400 py-4">Mijozlar topilmadi</span>` : '';
-        filteredClients.forEach((c) => {
-            let statusColor = c.status === 'Bloklangan' ? 'text-red-400 bg-red-500/10' : (c.status === 'Muddati tugagan' ? 'text-amber-400 bg-amber-500/10' : 'text-green-400 bg-green-500/10');
-            cList.innerHTML += `<div class="flex items-center justify-between bg-slate-900/90 p-3.5 rounded-2xl border border-green-500/20 text-left shadow"><div><span class="text-xs font-bold text-green-400">${c.name}</span><p class="text-[10px] text-slate-400">Tel: ${c.phone} | Fayllar: ${c.filesCount || 0} ta</p><span class="text-[9px] ${statusColor} px-2 py-0.5 rounded-md mt-1 inline-block font-semibold">${c.status || 'Faol'} | Tarif: ${c.tariff || 'Test'}</span></div><div class="flex flex-col gap-1.5"><button type="button" onclick="openEditClientModal('${c.phone}')" class="bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-400 px-2.5 py-1 rounded-xl text-[10px] transition">Sozlash</button><button type="button" onclick="deleteClient('${c.phone}')" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2.5 py-1 rounded-xl text-[10px] transition">O'chirish</button></div></div>`;
-        });
-
-        let chList = document.getElementById('adminChecksList');
-        chList.innerHTML = globalDatabase.paymentChecks.length === 0 ? `<span class="text-[11px] text-slate-400 py-6">To'lov cheklari mavjud emas</span>` : '';
-        globalDatabase.paymentChecks.forEach((chk, idx) => {
-            chList.innerHTML += `<div class="flex flex-col gap-2.5 bg-slate-900/90 p-4 rounded-2xl border border-amber-500/30 text-left shadow"><span class="text-xs font-bold text-green-400">${chk.name} (${chk.phone}) — <span class="text-amber-400">${chk.tariff}</span></span><span class="text-[10px] text-slate-400">Yuborilgan vaqti: ${chk.date}</span><div class="flex gap-2 pt-1"><button type="button" onclick="approveCheck(${idx})" class="w-full bg-green-600 hover:bg-green-500 text-slate-950 font-extrabold py-2 rounded-xl text-[10px] transition">Tasdiqlash (Tarif berish)</button><button type="button" onclick="removeCheck(${idx})" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-4 py-2 rounded-xl text-[10px] font-semibold transition">Rad etish</button></div></div>`;
-        });
-
-        let tList = document.getElementById('adminTariffsList');
-        tList.innerHTML = '';
-        globalDatabase.tariffsList.forEach((t, i) => {
-            tList.innerHTML += `<div class="flex items-center justify-between bg-slate-900/90 p-3.5 rounded-2xl border border-green-500/20 text-left shadow"><div><span class="text-xs font-bold text-green-400">${t.name}</span><p class="text-[10px] text-slate-400">Narxi: ${t.price}</p></div><div class="flex gap-1.5"><button type="button" onclick="openEditTariffModal(${i})" class="bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-400 px-2.5 py-1 rounded-xl text-[10px] transition">Tahrirlash</button><button type="button" onclick="deleteTariff(${i})" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2.5 py-1 rounded-xl text-[10px] transition">O'chirish</button></div></div>`;
-        });
-
-        let aList = document.getElementById('adminAdminsList');
-        aList.innerHTML = '';
-        globalDatabase.adminList.forEach((a, i) => {
-            aList.innerHTML += `<div class="flex items-center justify-between bg-slate-900/90 p-3.5 rounded-2xl border border-red-500/20 text-left shadow"><span class="text-xs font-bold text-red-400">${a.name} (${a.phone})</span>${globalDatabase.adminList.length > 1 ? `<button type="button" onclick="deleteAdmin(${i})" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2.5 py-1 rounded-xl text-[10px] transition">O'chirish</button>` : ''}</div>`;
-        });
-
-        let lList = document.getElementById('adminLogsList');
-        lList.innerHTML = globalDatabase.systemLogs.length === 0 ? `<span class="text-[11px] text-slate-400">Loglar bo'sh</span>` : '';
-        globalDatabase.systemLogs.forEach(l => {
-            lList.innerHTML += `<div class="text-[10px] text-slate-300 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">[${l.date}] ${l.text}</div>`;
-        });
-    }
-
-    function saveSystemSettings() {
-        MASTER_BOT_TOKEN = document.getElementById('settingBotToken').value.trim();
-        MASTER_CHAT_ID = document.getElementById('settingChatId').value.trim();
-        showActionModal("Muvaffaqiyatli", "Tizim sozlamalari saqlandi!");
-        addLog("Tizim sozlamalari yangilandi");
-    }
-
-    function openAddTariffModal() {
-        editingTariffIdx = null;
-        document.getElementById('tariffModalTitle').innerText = "Yangi Tarif Qo'shish";
-        document.getElementById('newTariffName').value = '';
-        document.getElementById('newTariffPrice').value = '';
-        document.getElementById('addTariffModal').classList.remove('hidden'); document.getElementById('addTariffModal').classList.add('flex');
-    }
-
-    let editingTariffIdx = null;
-    let editingPhone = null;
-
-    function openEditTariffModal(idx) {
-        editingTariffIdx = idx;
-        let t = globalDatabase.tariffsList[idx];
-        document.getElementById('tariffModalTitle').innerText = "Tarifni Tahrirlash";
-        document.getElementById('newTariffName').value = t.name;
-        document.getElementById('newTariffPrice').value = t.price;
-        document.getElementById('addTariffModal').classList.remove('hidden'); document.getElementById('addTariffModal').classList.add('flex');
-    }
-
-    function closeAddTariffModal() { document.getElementById('addTariffModal').classList.add('hidden'); document.getElementById('addTariffModal').classList.remove('flex'); }
-
-    function saveTariff() {
-        let name = document.getElementById('newTariffName').value.trim();
-        let price = document.getElementById('newTariffPrice').value.trim();
-        if(!name || !price) { showActionModal("Xatolik", "Barcha maydonlarni to'ldiring!"); return; }
-        if(editingTariffIdx !== null) {
-            globalDatabase.tariffsList[editingTariffIdx] = { name, price };
-        } else {
-            globalDatabase.tariffsList.push({ name, price });
-        }
-        closeAddTariffModal(); renderAdminDashboard(); updateTariffSelects();
-        saveToCloud();
-        showActionModal("Muvaffaqiyatli", "Tarif muvaffaqiyatli saqlandi!");
-    }
-
-    function deleteTariff(idx) {
-        if(globalDatabase.tariffsList.length <= 1) { showActionModal("Xatolik", "Kamida bitta tarif qolishi kerak!"); return; }
-        globalDatabase.tariffsList.splice(idx, 1);
-        renderAdminDashboard(); updateTariffSelects();
-        saveToCloud();
-    }
-
-    function openAddClientModal() { document.getElementById('addClientModal').classList.remove('hidden'); document.getElementById('addClientModal').classList.add('flex'); }
-    function closeAddClientModal() { document.getElementById('addClientModal').classList.add('hidden'); document.getElementById('addClientModal').classList.remove('flex'); }
-
-    function saveNewClient() {
-        let name = document.getElementById('newClientName').value.trim();
-        let phone = document.getElementById('newClientPhone').value.trim();
-        let pass = document.getElementById('newClientPass').value.trim();
-        let status = document.getElementById('newClientStatus').value;
-        if(!name || !phone || !pass) { showActionModal("Xatolik", "Maydonlarni to'ldiring!"); return; }
-        let defTariff = globalDatabase.tariffsList.length > 0 ? globalDatabase.tariffsList[0].name : "Test rejim";
-        globalDatabase.clientsList.push({ name, phone, pass, tariff: defTariff, status, filesCount: 0 });
-        closeAddClientModal(); renderAdminDashboard();
-        addLog(`Mijoz qo'shildi: ${name}`);
-        saveToCloud();
-        sendToTelegram(`👤 Yangi mijoz qo'shildi:\nIsm: ${name}\nTel: ${phone}`);
-        showActionModal("Muvaffaqiyatli", "Mijoz qo'shildi va ma'lumotlar yangilandi!");
-    }
-
-    function deleteClient(phone) {
-        globalDatabase.clientsList = globalDatabase.clientsList.filter(c => c.phone !== phone);
-        renderAdminDashboard(); addLog(`Mijoz o'chirildi: ${phone}`);
-        saveToCloud();
-    }
-
-    function openEditClientModal(phone) {
-        editingPhone = phone;
-        let c = globalDatabase.clientsList.find(x => x.phone === phone);
-        document.getElementById('editClientTargetName').innerText = c.name + " (" + c.phone + ")";
-        document.getElementById('editClientStatusSelect').value = c.status || 'Faol';
         updateTariffSelects();
-        document.getElementById('editClientTariffSelect').value = c.tariff || (globalDatabase.tariffsList[0] ? globalDatabase.tariffsList[0].name : '');
-        document.getElementById('editClientModal').classList.remove('hidden'); document.getElementById('editClientModal').classList.add('flex');
-    }
-
-    function closeEditClientModal() { document.getElementById('editClientModal').classList.add('hidden'); document.getElementById('editClientModal').classList.remove('flex'); }
-
-    function confirmEditClient() {
-        let c = globalDatabase.clientsList.find(x => x.phone === editingPhone);
-        if(c) {
-            c.status = document.getElementById('editClientStatusSelect').value;
-            c.tariff = document.getElementById('editClientTariffSelect').value;
-        }
-        closeEditClientModal(); renderAdminDashboard(); addLog(`Mijoz sozlandi: ${c.name}`);
-        saveToCloud();
-    }
-
-    function openAddAdminModal() { document.getElementById('addAdminModal').classList.remove('hidden'); document.getElementById('addAdminModal').classList.add('flex'); }
-    function closeAddAdminModal() { document.getElementById('addAdminModal').classList.add('hidden'); document.getElementById('addAdminModal').classList.remove('flex'); }
-
-    function saveNewAdmin() {
-        let name = document.getElementById('newAdminName').value.trim();
-        let phone = document.getElementById('newAdminPhone').value.trim();
-        let pass = document.getElementById('newAdminPass').value.trim();
-        if(!name || !phone || !pass) return;
-        globalDatabase.adminList.push({ name, phone, pass });
-        closeAddAdminModal(); renderAdminDashboard();
-        saveToCloud();
-    }
-
-    function deleteAdmin(idx) {
-        if(globalDatabase.adminList.length <= 1) return;
-        globalDatabase.adminList.splice(idx, 1);
-        renderAdminDashboard();
-        saveToCloud();
-    }
-
-    async function sendPaymentCheck() {
-        let tariff = document.getElementById('tariffSelect').value;
-        let fileInputElem = document.getElementById('checkImageInput');
-        let file = fileInputElem.files[0];
-        if(!file) { showActionModal("Xatolik", "Chek faylini (skrinshotini) yuklab bering!"); return; }
-        
-        globalDatabase.paymentChecks.unshift({ name: currentSession.name, phone: currentSession.phone, tariff, date: new Date().toLocaleString() });
-        closePaymentModal(); renderAdminDashboard(); 
-        saveToCloud();
-        showActionModal("Yuborildi", "To'lov cheki adminga yuborildi! Tez orada tasdiqlanadi.");
-
-        try {
-            let formData = new FormData();
-            formData.append("chat_id", MASTER_CHAT_ID);
-            formData.append("document", file);
-            formData.append("caption", `💳 Yangi to'lov cheki keldi!\n👤 Mijoz: ${currentSession.name}\n📞 Tel: ${currentSession.phone}\n📦 Tanlangan tarif: ${tariff}`);
-            await fetch(`https://api.telegram.org/bot${MASTER_BOT_TOKEN}/sendDocument`, { method: 'POST', body: formData });
-        } catch (e) {}
-    }
-
-    function approveCheck(idx) {
-        let chk = globalDatabase.paymentChecks[idx];
-        let c = globalDatabase.clientsList.find(x => x.phone === chk.phone);
-        if(c) { c.tariff = chk.tariff; c.status = 'Faol'; }
-        globalDatabase.paymentChecks.splice(idx, 1);
-        renderAdminDashboard(); addLog(`To'lov tasdiqlandi: ${chk.name} (${chk.tariff})`);
-        saveToCloud();
-        showActionModal("Tasdiqlandi", "Mijozga tanlangan tarif berildi va statusi faollashtirildi!");
-    }
-
-    function removeCheck(idx) {
-        globalDatabase.paymentChecks.splice(idx, 1);
-        renderAdminDashboard();
-        saveToCloud();
-    }
-
-    function clearLogs() { 
-        globalDatabase.systemLogs = []; 
-        renderAdminDashboard(); 
-        saveToCloud();
-    }
-
-    function openPaymentModal() {
-        updateTariffSelects();
-        document.getElementById('paymentModal').classList.remove('hidden'); document.getElementById('paymentModal').classList.add('flex');
-    }
-    function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); document.getElementById('paymentModal').classList.remove('flex'); }
-
-    function openHelpModal() { document.getElementById('helpModal').classList.remove('hidden'); document.getElementById('helpModal').classList.add('flex'); }
-    function closeHelpModal() { document.getElementById('helpModal').classList.add('hidden'); document.getElementById('helpModal').classList.remove('flex'); }
-
-    async function sendHelpMessage() {
-        let text = document.getElementById('helpMessageText').value.trim();
-        if(!text) return;
-        await sendToTelegram(`💬 Murojaat:\n👤 ${currentSession.name} (${currentSession.phone})\n📝 ${text}`);
-        closeHelpModal(); showActionModal("Yuborildi", "Xabaringiz adminga yetkazildi!");
-    }
-
-    function openForgotModal() { document.getElementById('forgotModal').classList.remove('hidden'); document.getElementById('forgotModal').classList.add('flex'); }
-    function closeForgotModal() { document.getElementById('forgotModal').classList.add('hidden'); document.getElementById('forgotModal').classList.remove('flex'); }
-
-    async function sendForgotRequest() {
-        let phone = document.getElementById('forgotPhone').value.trim();
-        if(!phone) { showActionModal("Xatolik", "Telefon raqamingizni kiriting!"); return; }
-        await sendToTelegram(`🔑 Parolni tiklash so'rovi:\n📞 Tel: ${phone}`);
-        closeForgotModal();
-        showActionModal("Yuborildi", "Parolni tiklash so'rovi adminga yuborildi!");
-    }
-
-    syncWithCloud();
-    updateTariffSelects();
     </script>
 </body>
 </html>
